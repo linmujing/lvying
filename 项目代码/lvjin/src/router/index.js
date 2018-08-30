@@ -8,9 +8,9 @@ const router = new Router({
   	{
       path: '/',
       meta:{
-        title:'首页',
+        title:'律瀛教育网站',
       },
-      component:  resolve => require(['@/view/index/index'],resolve),
+      component:  resolve => require(['@/view/shopMall/index'],resolve),
     },
     {
       path: '*',
