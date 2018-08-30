@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="container">
 		<div class="header">
 			<div class="top">
 				<div class="center clearfix">
@@ -57,6 +57,9 @@
 	}
 </script>
 <style lang='less' scoped>
+	.container{
+		background:#fff;
+	}
 	.center{
 		width:1200px;margin:0 auto;font-size: 12px;
 	}

@@ -1,6 +1,7 @@
 <template>
-    <div>
+    <div class="container">
     	<Header></Header>
+        <router-view></router-view>
     	<Footer></Footer>
     </div>
 </template>
@@ -24,5 +25,7 @@ export default {
 }
 </script>
 <style scoped lang='less'>
-    
+.container{
+    background: #f5f5f5;
+}
 </style>

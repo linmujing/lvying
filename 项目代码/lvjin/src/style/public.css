@@ -42,3 +42,9 @@ a:hover{color: #00AA88;}
 /*头部输入框样式*/
 .search_box .ivu-input{height: 50px;border-radius:25px;padding:15px;font-size: 14px;}
 .search_box .ivu-input-icon{font-size:30px;color:#00AA88;line-height:50px;right:10px}
+
+/*内容居中容器*/
+.box_center_1200{
+   width:1200px;
+   margin:0 auto; 
+}
