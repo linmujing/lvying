@@ -1,0 +1,74 @@
+<template>
+	<div>
+		<div class="header">
+			<div class="top">
+				<div class="center clearfix">
+					<div class="float_left">
+						<a class="color_title">亲，请登录</a>
+						<a class="padding_left_25">注册</a>
+					</div>
+					<div class="float_right">
+						<ul class="list_unstyled ul_inline">
+							<li>
+								<router-link tag="a" target="_blank" to="">我的中心</router-link>
+							</li>
+							<li>
+								<router-link tag="a" target="_blank" to="">购物车</router-link>
+							</li>
+							<li>
+								<router-link tag="a" target="_blank" to="">手机XXX</router-link>
+							</li>
+							<li>
+								<router-link tag="a" target="_blank" to="">律瀛商城</router-link>
+							</li>
+							<li>
+								<router-link tag="a" target="_blank" to="">提供商入口</router-link>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="center clearfix search">
+				<div class="float_left pointer">
+					<img src="../assets/logo.png" @click="jump"/>
+				</div>
+				<div class="float_right padding">
+					<Input search placeholder="视频/音频/合同" class="search_box"/>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+<script>
+	export default {
+		data() {
+			return {
+				
+			}
+		},
+		methods:{
+			jump() {
+                this.$router.push({path:'/'})
+            },
+		},
+		mounted(){
+			
+		}
+	}
+</script>
+<style lang='less' scoped>
+	.center{
+		width:1200px;margin:0 auto;font-size: 12px;
+	}
+	.top{
+		background: #F5F5F5;padding: 11px 0;
+		li{margin-left: 40px;}
+	}
+	.search{
+		padding: 20px 0;
+		.padding{padding-top: 6px;}
+		.search_box{
+			width: 580px;
+		}
+	}
+</style>

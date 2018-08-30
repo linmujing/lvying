@@ -3,8 +3,42 @@
     margin:0;
 }
 body{
-    font-size:12px;
+    font-size:14px;
 }
 li{
 	list-style-type: none;
 }
+a{color:#666666;}
+a:hover{color: #00AA88;}
+
+/******字体大小*******/
+.font_12{font-size: 12px;}
+.font_16{font-size: 16px;}
+
+/******字体颜色*******/
+.color_title{color: #00AA88;}
+.color_999{color: #999;}
+.color_999:hover{color: #999;}
+
+/******margin*******/
+.margin_top_10{margin-top: 10px;}
+
+/******padding*******/
+.padding_left_25{padding-left: 25px;}
+
+/******浮动*******/
+.float_left{float:left;}
+.float_right{float:right;}
+/*清除浮动*/
+.clearfix:before,.clearfix:after{display:table;content:" ";clear:both}
+
+/******取消ul默认样式*******/
+.list_unstyled{list-style: none;}
+.ul_inline>li{float: left;}
+
+/*鼠标形状*/
+.pointer{cursor:pointer}
+
+/*头部输入框样式*/
+.search_box .ivu-input{height: 50px;border-radius:25px;padding:15px;font-size: 14px;}
+.search_box .ivu-input-icon{font-size:30px;color:#00AA88;line-height:50px}
