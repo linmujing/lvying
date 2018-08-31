@@ -8,7 +8,7 @@
 						<a class="padding_left_25">注册</a>
 					</div>
 					<div class="float_right">
-						<ul class="list_unstyled ul_inline">
+						<ul class="list_unstyled ul_inline clearfix">
 							<li>
 								<router-link tag="a" target="_blank" to="">我的中心</router-link>
 							</li>

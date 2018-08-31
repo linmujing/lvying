@@ -13,10 +13,11 @@ a:hover{color: #00AA88;}
 
 /******字体大小*******/
 .font_12{font-size: 12px;}
-.font_16{font-size: 16px;}
+.font_18{font-size: 18px;}
 
 /******字体颜色*******/
 .color_title{color: #00AA88;}
+.color_fff{color: #fff;}
 .color_999{color: #999;}
 .color_999:hover{color: #999;}
 

@@ -7,13 +7,13 @@ Vue.use(Router)
 const router = new Router({
   
   routes: [
-  	// {
-    //   path: '/',
-    //   meta:{
-    //     title:'律瀛教育网站',
-    //   },
-    //   component:  resolve => require(['@/view/shopMall/index'],resolve),
-    // },
+  	{
+      path: '/',
+      meta:{
+        title:'律瀛教育网站',
+      },
+      component:  resolve => require(['@/view/shopMall/index'],resolve),
+    },
     {
       path: '/',
       name:'Index',
