@@ -26,7 +26,7 @@ export default {
 }
 </script>
 <style scoped lang='less'>
-.container{
-    background: #f5f5f5;
-}
+/*.container{*/
+    /*background: #f5f5f5;*/
+/*}*/
 </style>
