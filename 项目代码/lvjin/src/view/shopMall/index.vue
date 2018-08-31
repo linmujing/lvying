@@ -4,6 +4,7 @@
         <router-view></router-view>
     	<NavBar></NavBar>
     	<Footer></Footer>
+		
     </div>
 </template>
 <script>
