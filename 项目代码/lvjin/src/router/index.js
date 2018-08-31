@@ -7,6 +7,7 @@ Vue.use(Router)
 const router = new Router({
   
   routes: [
+	{path: '/', redirect: 'shopMallIdex'},
   	{
       path: '/',
       meta:{
@@ -24,6 +25,13 @@ const router = new Router({
           component:resolve => require(['@/view/shopCart/shoppingCart'],resolve),
           meta:{
             title:'购物车',
+          },
+        },
+        {
+          path: '/shopMallIdex',
+          component:resolve => require(['@/view/shopMall/shopMallIdex'],resolve),
+          meta:{
+            title:'首页',
           },
         }
       ]
