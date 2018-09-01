@@ -36,10 +36,17 @@ const router = new Router({
           },
         },
         {
-          path: '/IndustryDynamic',
-          component:resolve => require(['@/view/shopMall/IndustryDynamic'],resolve),
+          path: '/industryDynamic',
+          component:resolve => require(['@/view/shopMall/industryDynamic'],resolve),
           meta:{
             title:'行业动态',
+          },
+        },
+        {
+          path: '/videoCourse',
+          component:resolve => require(['@/view/shopMall/videoCourse'],resolve),
+          meta:{
+            title:'视频课程',
           },
         }
       ]

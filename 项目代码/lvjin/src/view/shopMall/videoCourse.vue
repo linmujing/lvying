@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :nowIndex="0"></NavBar>
+    <NavBar :nowIndex="2"></NavBar>
     <Banner></Banner>
     <!--热门推荐-->
     <div class="content">
@@ -18,10 +18,7 @@
               <div class="float_left width_290px height_170 padding_left_25">
                 <p class="font_18 font_weight_bold">审核同业禁止协议</p>
                 <div class="twoline_ellipsis margin_top_10 color_666">为了让孩子进入更好的学校读书，经过精挑细选，王女士花费重金近一千万元购买了一套学区房，为了让孩子进入更好的学校读书，经过精挑细选，王女士花费重金近一千万元购买了一套学区房，为了让孩子进入更好的学校读书，经过精挑细选，王女士花费重金近一千万元购买了一套学区房，</div>
-                <div class="text_right margin_top_5">
-                  <span class="color_title">查看详情》</span>
-                </div>
-                <div class="clearfix">
+                <div class="clearfix margin_top_10">
                   <div class="float_left">
                     <span class="font_20 color_title">￥500.00</span>
                   </div>
@@ -29,9 +26,15 @@
                     <span class="padding_left_25 color_999 line_height_30px">1234人看过</span>
                   </div>
                 </div>
-                <div class="margin_top_5">
-                  <Button type="warning" shape="circle">加入购物车</Button>
-                  <Button type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
+                <div class="margin_top_15 clearfix">
+                  <p class="pointer float_left">
+                    <Icon type="ios-headset-outline" size="26"/>
+                    <span class="font_16 color_666 vertical_middle">试听</span>
+                  </p>
+                  <div class="float_left margin_left_10">
+                    <Button type="warning" shape="circle">加入购物车</Button>
+                    <Button type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -57,9 +60,13 @@
           <div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px">立二拆四案辩护人，著名主持人丛薇、著名演员黄奕、王希维、苏青、谢惠清、于琳相关案件代理人。盈科在发展中坚持"以人为本"的人才战略。</div>
           <div class="text_right margin_top_5"><span class="color_title">查看详情》</span></div>
           <div class="margin_top_15 clearfix">
-            <p class="pointer float_left">
-              <span class="font_20 color_title">￥500.00</span>
-            </p>
+            <div class="pointer float_left">
+              <p class="float_left inline_block"><span class="font_20 color_title">￥500.00</span></p>
+              <p class="float_left pointer margin_left_30 padding_top_3">
+                <Icon type="ios-headset-outline" size="26"/>
+                <span class="font_16 color_666 vertical_middle">试听</span>
+              </p>
+            </div>
             <div class="float_right">
               <Button type="warning" shape="circle">加入购物车</Button>
               <Button type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>

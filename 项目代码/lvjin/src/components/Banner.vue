@@ -29,6 +29,6 @@
 <style lang='less' scoped>
   .carousel{
     width: 100%;
-    height: 540px%;
+    /*height: 540px;*/
   }
 </style>

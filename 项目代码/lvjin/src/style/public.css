@@ -40,12 +40,14 @@ a:hover{color: #00AA88;}
 .all_width{width: 100%;}
 
 .line_height_25px{line-height: 25px;}
+.line_height_30px{line-height: 30px;}
 /******高度*******/
 .all_height{height: 100%;}
 .height_40px{height: 40px;}
 
 /******字体颜色*******/
 .color_title{color: #00AA88;}
+.hover_title:hover{color: #00AA88;}
 .color_fff{color: #fff;}
 .color_fff:hover{color: #fff;}
 .color_999{color: #999;}
@@ -64,8 +66,11 @@ a:hover{color: #00AA88;}
 .margin_top_20{margin-top: 20px;}
 .margin_top_30{margin-top: 30px;}
 
+.margin_bottom_20{margin-bottom: 20px}
+
 .margin_left_10{margin-left: 10px;}
 .margin_left_20{margin-left: 20px;}
+.margin_left_30{margin-left: 30px;}
 
 .margin_right_10{margin-right: 10px;}
 .margin_right_20{margin-right: 20px;}
@@ -74,11 +79,12 @@ a:hover{color: #00AA88;}
 
 /******padding*******/
 .padding_20{padding: 20px;}
-
+.padding_top_3{padding-top: 3px;}
 .padding_top_20{padding-top: 20px;}
 .padding_top_30{padding-top: 30px;}
 
 .padding_left_10{padding-left: 10px;}
+.padding_left_20{padding-left: 20px;}
 .padding_left_25{padding-left: 25px;}
 
 .padding_right_10{padding-right: 10px;}
@@ -103,6 +109,7 @@ a:hover{color: #00AA88;}
 .relative{position: relative;}
 
 .block{display: block;}
+.hide{display: none;}
 .inline_block{display: inline-block;}
 /*头部输入框样式*/
 .search_box .ivu-input{height: 50px;border-radius:25px;padding:15px;font-size: 14px;}

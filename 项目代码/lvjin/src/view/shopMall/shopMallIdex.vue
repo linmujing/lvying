@@ -1,6 +1,6 @@
 <template>
     <div class="bg_white">
-    <NavBar></NavBar>
+    <NavBar :nowIndex="0"></NavBar>
     <Banner></Banner>
     <!--视频推荐-->
 		<div class="content">
@@ -199,7 +199,7 @@ export default {
 </script>
 <style scoped lang='less'>
 	.content{
-		width:1200px;margin:0 auto;
+		width:1200px;margin:0 auto;min-width: 1200px;
 		.width_48{width: 48%;}
 		.videoBox{width: 270px;height: 170px;border:1px solid #999999;}
 		.height_170{height: 170px;}
