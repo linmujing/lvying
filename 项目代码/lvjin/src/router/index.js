@@ -8,6 +8,15 @@ const router = new Router({
   
   routes: [
 
+	{path: '/', redirect: 'shopMallIdex'},
+  	{
+      path: '/',
+      meta:{
+        title:'律瀛教育网站',
+      },
+      component:  resolve => require(['@/view/shopMall/index'],resolve),
+    },
+
     {
       path: '/',
       name:'Index',
@@ -18,6 +27,13 @@ const router = new Router({
           component:resolve => require(['@/view/shopCart/shoppingCart'],resolve),
           meta:{
             title:'购物车',
+          },
+        },
+        {
+          path: '/shopMallIdex',
+          component:resolve => require(['@/view/shopMall/shopMallIdex'],resolve),
+          meta:{
+            title:'首页',
           },
         }
       ]

@@ -13,7 +13,7 @@
 								<router-link tag="a" target="_blank" to="">我的中心</router-link>
 							</li>
 							<li>
-								<router-link tag="a" target="_blank" to="">购物车</router-link>
+								<router-link tag="a" target="_blank" to="/shoppingCart">购物车</router-link>
 							</li>
 							<li>
 								<router-link tag="a" target="_blank" to="">手机XXX</router-link>

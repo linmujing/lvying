@@ -13,19 +13,77 @@ a:hover{color: #00AA88;}
 
 /******字体大小*******/
 .font_12{font-size: 12px;}
+.font_16{font-size: 16px;}
 .font_18{font-size: 18px;}
+.font_20{font-size: 20px;}
+
+/******文本*******/
+.text_center{text-align: center}
+.text_left{text-align: left}
+.text_right{text-align: right}
+
+.font_weight_bold{font-weight : bold;}
+.vertical_middle{vertical-align: middle;}
+.text_ellipsis{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+.twoline_ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+	-webkit-line-clamp: 2;
+	/* autoprefixer: off*/
+	-webkit-box-orient: vertical;
+	/* autoprefixer: on*/
+    white-space: normal;
+}
+
+/******宽度*******/
+.all_width{width: 100%;}
+
+.line_height_25px{line-height: 25px;}
+/******高度*******/
+.all_height{height: 100%;}
+.height_40px{height: 40px;}
 
 /******字体颜色*******/
 .color_title{color: #00AA88;}
 .color_fff{color: #fff;}
+.color_fff:hover{color: #fff;}
 .color_999{color: #999;}
 .color_999:hover{color: #999;}
+.color_666{color: #666;}
+
+/******背景颜色*******/
+.bg_title{background: #00AA88;}
+.bg_white{background: #FFFFFF;}
+.bg_f5{background: #F5F5F5;}
 
 /******margin*******/
+.margin_top_5{margin-top: 5px;}
 .margin_top_10{margin-top: 10px;}
+.margin_top_15{margin-top: 15px;}
+.margin_top_20{margin-top: 20px;}
+.margin_top_30{margin-top: 30px;}
+
+.margin_left_10{margin-left: 10px;}
+.margin_left_20{margin-left: 20px;}
+
+.margin_right_10{margin-right: 10px;}
+.margin_right_20{margin-right: 20px;}
+.margin_right_40{margin-right: 40px;}
 
 /******padding*******/
+.padding_20{padding: 20px;}
+
+.padding_top_20{padding-top: 20px;}
+.padding_top_30{padding-top: 30px;}
+
+.padding_left_10{padding-left: 10px;}
 .padding_left_25{padding-left: 25px;}
+
+.padding_right_10{padding-right: 10px;}
+
+.padding_bottom_20{padding-bottom: 20px;}
+.padding_bottom_30{padding-bottom: 30px;}
 
 /******浮动*******/
 .float_left{float:left;}
@@ -40,6 +98,11 @@ a:hover{color: #00AA88;}
 /*鼠标形状*/
 .pointer{cursor:pointer}
 
+/******定位*******/
+.relative{position: relative;}
+
+.block{display: block;}
+.inline_block{display: inline-block;}
 /*头部输入框样式*/
 .search_box .ivu-input{height: 50px;border-radius:25px;padding:15px;font-size: 14px;}
 .search_box .ivu-input-icon{font-size:30px;color:#00AA88;line-height:50px;right:10px}
