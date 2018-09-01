@@ -8,7 +8,7 @@ const router = new Router({
   
   routes: [
 
-	{path: '/', redirect: 'shopMallIdex'},
+	  {path: '/', redirect: 'shopMallIdex'},
   	{
       path: '/',
       meta:{
@@ -37,13 +37,6 @@ const router = new Router({
           },
         }
       ]
-    },
-  	{
-      path: '/',
-      meta:{
-        title:'律瀛教育网站',
-      },
-      component:  resolve => require(['@/view/shopMall/index'],resolve),
     },
     {
       path: '*',
