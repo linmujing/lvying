@@ -107,5 +107,8 @@ export default {
     .width_560px{width: 560px;}
     .width_290px{width: 290px;}
     .border{border:1px solid #999999;}
+    /*商城模块*/
+    .title{color: #00AA88;font-size: 18px;border-left: 3px solid #00AA88; padding-left: 10px;}
+    .more{color: #999;line-height: 26px;}
 	}
 </style>

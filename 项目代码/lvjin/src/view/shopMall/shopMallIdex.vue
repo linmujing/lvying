@@ -210,6 +210,9 @@ export default {
     .width_230px{width: 230px;}
 		.border{border:1px solid #999999;}
 		.mallBox{width: 275px;height: 450px;border: 1px solid #efefef;}
+    /*商城模块*/
+    .title{color: #00AA88;font-size: 18px;border-left: 3px solid #00AA88; padding-left: 10px;}
+    .more{color: #999;line-height: 26px;}
 	}
   .partner{padding:60px 0;}
 
