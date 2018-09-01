@@ -18,7 +18,7 @@
                 <div v-for="item in 4" >
                   <div class="font_18">法律</div>
                   <ul class="list_unstyled ul_inline clearfix margin_bottom_20">
-                    <li v-for="item in 10" class="margin_top_5 margin_right_30 pointer hover_title">入职申请表</li>
+                    <li v-for="item in 10" @click="toDynamic(index)" class="margin_top_5 margin_right_30 pointer hover_title">入职申请表</li>
                   </ul>
                 </div>
               </div>
@@ -51,14 +51,20 @@
         this.showBox = true;
         this.showMask = true;
       },
+      //显示下拉菜单
       overShow (i) {
         console.log(i);
         this.showItemBox = true;
       },
+      //隐藏下拉
       hideMask(){
         this.showMask = false;
         this.showBox = false;
         this.showItemBox = false;
+      },
+      //跳转
+      toDynamic(index){
+        this.$router.push({path:'/industryDynamicList'})
       }
 		},
 		mounted(){

@@ -120,4 +120,11 @@ a:hover{color: #00AA88;}
    width:1200px;
    margin:0 auto; 
 }
+/*修改分页样式*/
+.container .ivu-page-item{background: #F5F5F5;}
+.container .ivu-page-next, .ivu-page-prev{background: #F5F5F5;}
+.container .ivu-page-next:hover a,.container .ivu-page-prev:hover a,.container .ivu-page-item:hover a,.container .ivu-page-item-active a,.container .ivu-page-item-active:hover a{color: #00AA88;}
+.container .ivu-page-item:hover,.container .ivu-page-item-active {border-color: #00AA88;}
+.container .ivu-page-disabled a {color: #ccc !important;}
+
 

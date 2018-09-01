@@ -39,14 +39,21 @@ const router = new Router({
           path: '/industryDynamic',
           component:resolve => require(['@/view/shopMall/industryDynamic'],resolve),
           meta:{
-            title:'行业动态',
+            title:'',
+          },
+        },
+        {
+          path: '/industryDynamicList',
+          component:resolve => require(['@/view/shopMall/industryDynamicList'],resolve),
+          meta:{
+            title:'',
           },
         },
         {
           path: '/videoCourse',
           component:resolve => require(['@/view/shopMall/videoCourse'],resolve),
           meta:{
-            title:'视频课程',
+            title:'',
           },
         }
       ]
