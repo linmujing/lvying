@@ -7,7 +7,7 @@ Vue.use(Router)
 const router = new Router({
   
   routes: [
-	{path: '/', redirect: 'IndustryDynamic'},
+	  {path: '/', redirect: 'shopMallIdex'},
   	{
       path: '/',
       meta:{
@@ -15,6 +15,7 @@ const router = new Router({
       },
       component:  resolve => require(['@/view/shopMall/index'],resolve),
     },
+
     {
       path: '/',
       name:'Index',
@@ -43,7 +44,6 @@ const router = new Router({
         }
       ]
     },
-
     {
       path: '*',
       name: '404',
