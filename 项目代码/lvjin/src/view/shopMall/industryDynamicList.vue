@@ -55,7 +55,7 @@
     <div class="center_box">
       <ul class="list_unstyled ul_inline clearfix">
         <li v-for="item in 12" class="listBox bg_white">
-          <div class="height_210px all_width"></div>
+          <div @click="jumpDetail" class="height_210px all_width"></div>
           <div class="list_item">
             <div class="font_18 font_weight_bold text_ellipsis">审核同业禁止协议</div>
             <div class="margin_top_10 clearfix color_999">
@@ -79,12 +79,8 @@
 	</div>
 </template>
 <script>
-import NavBar from '../../components/NavBar.vue'
-import Banner from '../../components/Banner.vue'
 export default {
     components : {
-      NavBar,
-      Banner
     },
     data() {
         return {
@@ -96,7 +92,9 @@ export default {
         
     },
     methods: {
-
+      jumpDetail(){
+        this.$router.push({path:'/industryDynamicDetail'})
+      }
     }
 }
 </script>

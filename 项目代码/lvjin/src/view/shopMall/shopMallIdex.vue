@@ -1,6 +1,6 @@
 <template>
     <div class="bg_white">
-    <NavBar :nowIndex="0"></NavBar>
+    <NavBar></NavBar>
     <Banner></Banner>
     <!--视频推荐-->
 		<div class="content">

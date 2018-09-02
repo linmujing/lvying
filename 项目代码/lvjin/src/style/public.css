@@ -60,11 +60,13 @@ a:hover{color: #00AA88;}
 .bg_f5{background: #F5F5F5;}
 
 /******margin*******/
+.margin_15{margin: 15px}
 .margin_top_5{margin-top: 5px;}
 .margin_top_10{margin-top: 10px;}
 .margin_top_15{margin-top: 15px;}
 .margin_top_20{margin-top: 20px;}
 .margin_top_30{margin-top: 30px;}
+.margin_top_50{margin-top: 50px;}
 
 .margin_bottom_20{margin-bottom: 20px}
 
@@ -79,7 +81,9 @@ a:hover{color: #00AA88;}
 
 /******padding*******/
 .padding_20{padding: 20px;}
+.padding_15{padding: 15px;}
 .padding_top_3{padding-top: 3px;}
+.padding_top_10{padding-top: 10px;}
 .padding_top_20{padding-top: 20px;}
 .padding_top_30{padding-top: 30px;}
 
@@ -89,6 +93,7 @@ a:hover{color: #00AA88;}
 
 .padding_right_10{padding-right: 10px;}
 
+.padding_bottom_10{padding-bottom: 10px;}
 .padding_bottom_20{padding-bottom: 20px;}
 .padding_bottom_30{padding-bottom: 30px;}
 
@@ -126,5 +131,7 @@ a:hover{color: #00AA88;}
 .container .ivu-page-next:hover a,.container .ivu-page-prev:hover a,.container .ivu-page-item:hover a,.container .ivu-page-item-active a,.container .ivu-page-item-active:hover a{color: #00AA88;}
 .container .ivu-page-item:hover,.container .ivu-page-item-active {border-color: #00AA88;}
 .container .ivu-page-disabled a {color: #ccc !important;}
-
+/*修改tip样式*/
+.detailBox .ivu-tooltip-light .ivu-tooltip-inner{color: #f09105;border: 1px solid #f09105}
+.detailBox .ivu-tooltip-light.ivu-tooltip-popper[x-placement^=right] .ivu-tooltip-arrow{border-right-color:#f09105}
 

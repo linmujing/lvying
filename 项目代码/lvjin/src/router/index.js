@@ -50,6 +50,13 @@ const router = new Router({
           },
         },
         {
+          path: '/industryDynamicDetail',
+          component:resolve => require(['@/view/shopMall/industryDynamicDetail'],resolve),
+          meta:{
+            title:'',
+          },
+        },
+        {
           path: '/videoCourse',
           component:resolve => require(['@/view/shopMall/videoCourse'],resolve),
           meta:{
