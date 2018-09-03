@@ -69,6 +69,20 @@ const router = new Router({
           meta:{
             title:'',
           },
+        },
+        {
+          path: '/videoCourseList',
+          component:resolve => require(['@/view/shopMall/videoCourseList'],resolve),
+          meta:{
+            title:'',
+          },
+        },
+        {
+          path: '/videoCourseDetail',
+          component:resolve => require(['@/view/shopMall/videoCourseDetail'],resolve),
+          meta:{
+            title:'',
+          },
         }
       ]
     },

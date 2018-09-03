@@ -25,6 +25,7 @@ a:hover{color: #00AA88;}
 .font_weight_bold{font-weight : bold;}
 .vertical_middle{vertical-align: middle;}
 .text_ellipsis{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+.text_justify{text-justify: inherit;}
 .twoline_ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -38,13 +39,15 @@ a:hover{color: #00AA88;}
 
 /******宽度*******/
 .all_width{width: 100%;}
+.width_50{width: 50%;}
 
-.line_height_25px{line-height: 25px;}
-.line_height_30px{line-height: 30px;}
 /******高度*******/
 .all_height{height: 100%;}
 .height_40px{height: 40px;}
 
+.line_height_25px{line-height: 25px;}
+.line_height_30px{line-height: 30px;}
+.line_height_32px{line-height: 32px;}
 /******字体颜色*******/
 .color_title{color: #00AA88;}
 .hover_title:hover{color: #00AA88;}
@@ -69,6 +72,7 @@ a:hover{color: #00AA88;}
 .margin_top_50{margin-top: 50px;}
 
 .margin_bottom_20{margin-bottom: 20px}
+.margin_bottom_30{margin-bottom: 30px}
 
 .margin_left_10{margin-left: 10px;}
 .margin_left_20{margin-left: 20px;}
