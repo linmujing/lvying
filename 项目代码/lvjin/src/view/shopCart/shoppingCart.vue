@@ -1,107 +1,109 @@
 <template>
-    <div class="shopping_cart_container box_center_1200">
+    <div class="bg_f5">
+        <div class="shopping_cart_container box_center_1200">
 
-        <div class="title">
-            <span>我的购物车：共 {{cartDate.cartList.length}} 门课程</span>
-        </div>
-
-        <div class="list_box" v-if="cartDate.cartList.length">
-            <!-- 购物车列表头部 -->
-            <div class="list_header padding_left_14">
-                <Row>
-                    <Col span="5">
-                        <Checkbox v-model="cartDate.listState"  @click.prevent.native="setAllCheckboxChange">
-                            <span class="padding_left_5">全选</span>
-                        </Checkbox>
-                    </Col>
-                    <Col span="9"><span>课程名称</span></Col>
-                    <Col span="4"><span class="block_center">单价（元）</span></Col>
-                    <Col span="4"><span class="block_center" >数量</span></Col>
-                    <Col span="2"><span  class="block_center">操作</span></Col>
-                </Row>
+            <div class="title">
+                <span>我的购物车：共 {{cartDate.cartList.length}} 门课程</span>
             </div>
-            
-            <!-- 购物车列表 -->
-            <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="items.id">
-                <li>
-                    <div class="item_title padding_left_14">
-                        <Checkbox  v-model="items.itemState" @click.prevent.native="checkboxChange(index1)" >
-                            <span class="padding_left_5"> {{items.itemTitle}} </span>
-                        </Checkbox>
-                    </div>
-                    <ul class="item_list">
-                        <li class="padding_left_14" v-for="(item, index2) in items.items" :key="item.id">
-                            <Row>
-                                <Col span="5">
-                                    <Checkbox v-model="item.state" @click.prevent.native="checkboxChange(index1, index2)" > 
-                                    </Checkbox>
-                                    <span class="item_list_img">
-                                        <img :src="item.imgSrc">
-                                    </span>
-                                </Col>
-                                <Col span="9">
-                                    <Row>
-                                        <Col span="6"></Col>
-                                        <Col span="18"><span class="item_list_describe">{{item.describe}}</span></Col>
-                                    </Row>
-                                </Col>
-                                <Col span="4"><span  class="block_center">{{item.price}}</span></Col>
-                                <Col span="4">
-                                    <div class="relative">
-                                        <!-- 加减数量 -->
-                                       <div class="number_add_reduce" >
-                                           <span class="reduce"  @click="reduceNumber" onselectstart="return false" :data-index1="index1" :data-index2="index2"
-                                           >-</span><b class="number_value">{{item.num}}</b><span class="add" @click="addNumber" onselectstart="return false" 
-                                            :data-index1="index1" :data-index2="index2">+</span>
-                                       </div> 
-                                    </div>
-                                    
-                                </Col>
-                                <!-- 删除单个 -->
-                                <Col span="2"><span class="item_list_delete block_center"><img src="../../assets/images/icon/cart_delete.png" alt="" @click="deleteItem(index1, index2)"></span></Col>
-                            </Row>
-                        </li>
-                    </ul>
-                    <div class="item_total padding_right_24">该机构小计： {{items.itemTotal}}</div>
-                </li>
-            </ul>
-            <!-- 其他操作 -->
-            <div class="list_operate padding_left_14">
-                <Row>
-                    <Col span="2">
-                        <Checkbox v-model="cartDate.listState"  @click.prevent.native="setAllCheckboxChange">
-                            <span class="padding_left_5" >全选</span>
-                        </Checkbox>
-                    </Col>
-                    <Col span="10"><span class="pointer list_delete" @click="deleteAllItem" >删除所选课程</span></Col>
-                    <Col span="9">
-                        <div class="all_total">
-                            <h4>合计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
-                            <p>(若购买享有优惠，相应金额将在订单结算页面减扣)</p>
+
+            <div class="list_box" v-if="cartDate.cartList.length">
+                <!-- 购物车列表头部 -->
+                <div class="list_header padding_left_14">
+                    <Row>
+                        <Col span="5">
+                            <Checkbox v-model="cartDate.listState"  @click.prevent.native="setAllCheckboxChange">
+                                <span class="padding_left_5">全选</span>
+                            </Checkbox>
+                        </Col>
+                        <Col span="9"><span>课程名称</span></Col>
+                        <Col span="4"><span class="block_center">单价（元）</span></Col>
+                        <Col span="4"><span class="block_center" >数量</span></Col>
+                        <Col span="2"><span  class="block_center">操作</span></Col>
+                    </Row>
+                </div>
+                
+                <!-- 购物车列表 -->
+                <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="items.id">
+                    <li>
+                        <div class="item_title padding_left_14">
+                            <Checkbox  v-model="items.itemState" @click.prevent.native="checkboxChange(index1)" >
+                                <span class="padding_left_5"> {{items.itemTitle}} </span>
+                            </Checkbox>
                         </div>
-                    </Col>
-                    <Col span="3"><span class="list_balance">去结算</span></Col>
-                </Row>
+                        <ul class="item_list">
+                            <li class="padding_left_14" v-for="(item, index2) in items.items" :key="item.id">
+                                <Row>
+                                    <Col span="5">
+                                        <Checkbox v-model="item.state" @click.prevent.native="checkboxChange(index1, index2)" > 
+                                        </Checkbox>
+                                        <span class="item_list_img">
+                                            <img :src="item.imgSrc">
+                                        </span>
+                                    </Col>
+                                    <Col span="9">
+                                        <Row>
+                                            <Col span="6"></Col>
+                                            <Col span="18"><span class="item_list_describe">{{item.describe}}</span></Col>
+                                        </Row>
+                                    </Col>
+                                    <Col span="4"><span  class="block_center">{{item.price}}</span></Col>
+                                    <Col span="4">
+                                        <div class="relative">
+                                            <!-- 加减数量 -->
+                                        <div class="number_add_reduce" >
+                                            <span class="reduce"  @click="reduceNumber" onselectstart="return false" :data-index1="index1" :data-index2="index2"
+                                            >-</span><b class="number_value">{{item.num}}</b><span class="add" @click="addNumber" onselectstart="return false" 
+                                                :data-index1="index1" :data-index2="index2">+</span>
+                                        </div> 
+                                        </div>
+                                        
+                                    </Col>
+                                    <!-- 删除单个 -->
+                                    <Col span="2"><span class="item_list_delete block_center"><img src="../../assets/images/icon/cart_delete.png" alt="" @click="deleteItem(index1, index2)"></span></Col>
+                                </Row>
+                            </li>
+                        </ul>
+                        <div class="item_total padding_right_24">该机构小计： {{items.itemTotal}}</div>
+                    </li>
+                </ul>
+                <!-- 其他操作 -->
+                <div class="list_operate padding_left_14">
+                    <Row>
+                        <Col span="2">
+                            <Checkbox v-model="cartDate.listState"  @click.prevent.native="setAllCheckboxChange">
+                                <span class="padding_left_5" >全选</span>
+                            </Checkbox>
+                        </Col>
+                        <Col span="10"><span class="pointer list_delete" @click="deleteAllItem" >删除所选课程</span></Col>
+                        <Col span="9">
+                            <div class="all_total">
+                                <h4>合计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
+                                <p>(若购买享有优惠，相应金额将在订单结算页面减扣)</p>
+                            </div>
+                        </Col>
+                        <Col span="3"><span class="list_balance">去结算</span></Col>
+                    </Row>
+                </div>
             </div>
+
+            <!-- 购物车为空 -->
+            <div class="not_has_store" v-if="!cartDate.cartList.length">
+                <img src="../../assets/images/image/cart_not.png" alt="">
+            </div>
+
+            <!-- 删除弹框 -->
+            <Modal v-model="modelDate.deleteModelValue" width="480" footer-hide >
+                <div style="height:140px;line-height:140px;font-size:16px;" >
+                    <p>确定从购物车中删除所选课程吗？</p>
+                </div>
+                <div style="padding: 0 0 20px 200px; "> 
+                    <Button shape="circle" type="success" size="large" @click="deleteModelOk">确定删除</Button>
+                    <span style="width:40px;display:inline-block;"></span>
+                    <Button shape="circle" style="background:#a5a5a5;color:#fff;"  size="large" @click="modelDate.deleteModelValue = false">取消</Button>
+                </div>
+            </Modal>
+
         </div>
-
-        <!-- 购物车为空 -->
-        <div class="not_has_store" v-if="!cartDate.cartList.length">
-            <img src="../../assets/images/image/cart_not.png" alt="">
-        </div>
-
-        <!-- 删除弹框 -->
-        <Modal v-model="modelDate.deleteModelValue" width="480" footer-hide >
-            <div style="height:140px;line-height:140px;font-size:16px;" >
-                <p>确定从购物车中删除所选课程吗？</p>
-            </div>
-            <div style="padding: 0 0 20px 200px; "> 
-                <Button shape="circle" type="success" size="large" @click="deleteModelOk">确定删除</Button>
-                <span style="width:40px;display:inline-block;"></span>
-                <Button shape="circle" style="background:#a5a5a5;color:#fff;"  size="large" @click="modelDate.deleteModelValue = false">取消</Button>
-            </div>
-        </Modal>
-
     </div>
 </template>
 <script>
@@ -423,6 +425,14 @@ export default {
     }
 }
 </script>
+
+<style>
+    /* iview Model样式修改 */
+    .ivu-modal .ivu-modal-content{
+        border-radius: 0;
+    }
+
+</style>
 
 <style scoped lang='less'>
 

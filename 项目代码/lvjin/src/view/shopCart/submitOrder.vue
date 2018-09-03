@@ -1,148 +1,179 @@
 <template>
-    <div class="box_center_1200">
+    <div class="bg_f5 padding_top_20">
+        <div class="box_center_1200">
 
-        <!-- 订单地址 #submitType#-->
-        <div class="order_address" v-if="!submitType">
+            <!-- 订单地址 #submitType#-->
+            <div class="order_address" v-if="!submitType">
 
-            <!-- 添加地址 -->
-            <!-- <div class="address_add"><span class="address_btn" @click="addressData.addressModelValue = true"> <img src="../../assets/images/icon/address_add.png" alt=""> <i>添加收货地址</i> </span></div> -->
+                <!-- 添加地址 地址列表为空时展示-->
+                <div class="address_add" v-if="addressData.addressList.length == 0"><span class="address_btn" @click="openAddressModel"> <img src="../../assets/images/icon/address_add.png" alt=""> <i>添加收货地址</i> </span></div>
 
-            <!-- 地址列表 -->
-            <div class="address_box">
-                <Row>
-                    <Col span="3"><span class="block_center address_box_title">收件人信息：</span></Col>
-                    <Col span="21">
-                    <div style="display:inline-block;position:relative;">
-                        <ul class="address_box_list">
-                            <li v-for="(items, index1) in addressData.addressList" :key="items.id">
-                                <Row class="address_li_top">
-                                    <Col span="12"><span>{{items.name}}</span> </Col>
-                                    <Col span="12" class="text_right"><span >{{items.phone}}</span></Col>
-                                </Row>
-                                <p class="twoline_ellipsis">{{items.content}}</p>
-                                <span class="address_li_adit">编辑</span>
-                            </li>
-                        </ul>
-                        <span  class="address_btn" style="position:absolute;right:-120px;bottom:0px;" @click="addressData.addressModelValue = true"> <img src="../../assets/images/icon/address_add.png" alt=""> <i>添加收货地址</i> </span>
-                    </div>
-
-                        
-                    </Col>
-                </Row>
-            </div>
-
-            <!-- 订单添加地址弹框 -->
-            <Modal v-model="addressData.addressModelValue" width="480" footer-hide >
-                <div style="height:140px;line-height:140px;font-size:16px;" >
-                    <p>确定从购物车中删除所选课程吗？</p>
-                </div>
-                <div style="padding: 0 0 20px 200px; "> 
-                    <Button shape="circle" type="success" size="large" @click="deleteModelOk">确定删除</Button>
-                    <span style="width:40px;display:inline-block;"></span>
-                    <Button shape="circle" style="background:#a5a5a5;color:#fff;"  size="large" @click="addressData.addressModelValue = false">取消</Button>
-                </div>
-            </Modal>
-
-        </div>
-
-        <!-- 订单部分 -->
-        <div class="shopping_cart_container">
-            <div class="list_box" >
-
-                <!-- 确认订单信息提示 #submitType#-->
-                <div class="padding_top_30 font_12" v-if="submitType">
-                    <div class="padding_bottom_30">
-                        <div>手机号：{{personData.phone}}</div> 
-                        <div class="padding_bottom_30"><img style="width:14px;position:relative;top:2px;" src="../../assets/images/icon/prompt_icon.png"  alt=""><span> 购买后不支持退款、转让，请确认开课时间或有效期后再提交订单。</span> </div>
-                    </div>
-                    <p class="font_16" style="line-height:40px;">确认订单信息</p>
-                </div>
-
-                <!-- 订单列表头部 #submitType#-->
-                <div class="list_header padding_left_14" :style="{background: submitType ? '#fafafa':''}">
+                <!-- 地址列表 -->
+                <div class="address_box">
                     <Row>
-                        <Col span="4"><div style="height:1px;"></div></Col>
-                        <Col span="7"><span>课程名称</span></Col>
-                        <Col span="3"><span class="block_center">单价（元）</span></Col>
-                        <Col span="4"><span class="block_center">数量</span></Col>
-                        <Col span="4"><span class="block_center">优惠（元）</span></Col>
-                        <Col span="2"><span class="block_center">小计（元）</span></Col>
+                        <Col span="3"><span class="block_center address_box_title">收件人信息：</span></Col>
+                        <Col span="21">
+                            <div style="display:inline-block;position:relative;">
+                                <ul class="address_box_list">
+                                    <li v-for="(items, index1) in addressData.addressList" :key="index1">
+                                        <Row class="address_li_top">
+                                            <Col span="12"><span>{{items.name}}</span> </Col>
+                                            <Col span="12" class="text_right"><span >{{items.phone}}</span></Col>
+                                        </Row>
+                                        <p class="twoline_ellipsis">{{items.address +" " + items.addressDetail +" " + items.postCode }}</p>
+                                        <span class="address_li_adit" @click="aditAddressItem(index1)">编辑</span>
+                                    </li>
+                                </ul>
+                                <span  class="address_btn" style="position:absolute;right:-120px;bottom:0px;" @click="openAddressModel"> <img src="../../assets/images/icon/address_add.png" alt=""> <i>添加收货地址</i> </span>
+                            </div>
+                        </Col>
                     </Row>
                 </div>
-                
-                <!-- 订单列表 -->
-                <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="items.id">
-                    <li>
-                        <div v-if="submitType" class="item_title padding_left_14"> {{items.itemTitle}} </div>
-                        <ul class="item_list">
-                            <!-- 列表 #submitType# 调整背景色-->
-                            <li class="padding_left_14" v-for="(item, index2) in items.items" :key="item.id" v-bind:class="[ submitType ? '':'active']">
-                                <Row>
-                                    <Col span="4">
-                                        <span class="item_list_img">
-                                            <img :src="item.imgSrc">
-                                        </span>
-                                    </Col>
-                                    <Col span="7">
-                                        <Row>
-                                            <Col span="24">
-                                                <div class="item_list_describe">
-                                                    <p >{{item.describe}}</p>
-                                                </div>
-                                            </Col>
-                                        </Row>
-                                    </Col>
-                                    <Col span="3"><span class="block_center">{{item.price}}</span></Col>
-                                    <Col span="4">
-                                        <div class="relative">
-                                            <!-- 加减数量 -->
-                                        <div class="number_add_reduce" >
-                                            <span class="reduce"  @click="reduceNumber" onselectstart="return false" :data-index1="index1" :data-index2="index2"
-                                            >-</span><b class="number_value">{{item.num}}</b><span class="add" @click="addNumber" onselectstart="return false" 
-                                                :data-index1="index1" :data-index2="index2">+</span>
-                                        </div> 
-                                        </div>
-                                        
-                                    </Col>
-                                    <!-- 优惠券  #submitType#-->
-                                    <Col span="4">
-                                        <!-- 可选状态 -->
-                                        <span class="block_center item_coupon" style="line-height:20px;padding-top:45px;" v-if="submitType">        
-                                            <i class="item_coupon" >{{item.itemCoupon}}  </i>                              
-                                             <Select v-model="item.itemCoupon" size="small" style="width:100px">
-                                                <Option v-for="itemC in item.itemCouponList" :value="itemC.value" :key="itemC.value">{{ itemC.label }}</Option>
-                                            </Select>
-                                        </span>
-                                        <!-- 不可选状态 -->
-                                        <span class="block_center item_list_describe" v-if="!submitType">        
-                                            <p class="item_coupon" >{{item.itemCoupon}}  </p>                              
-                                        </span>
-                                    </Col>
-                                    <!-- 小计 -->
-                                    <Col span="2"><span class="block_center">{{items.itemTotal}}</span></Col>
-                                </Row>
-                            </li>
-                        </ul>
-                        <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： {{items.itemTotal}}</div>
-                        <!-- 其他操作  #submitType#-->
-                        <div class="item_shipping_methods padding_left_14" v-if="!submitType">配送方式： {{items.shippingMethods}}</div>
-                    </li>
-                </ul>
-                <!-- 其他操作 #submitType#-->
-                <div class="list_operate padding_left_14" v-if="!submitType">
-                    <div class="all_total padding_right_24">
-                        <h4>总计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
+
+                <!-- 订单添加地址弹框 -->
+                <Modal v-model="addressData.addressModelValue" width="680" footer-hide >
+                    <p slot="header" style="background:#f8f8f8;">
+                        <span class="font_18" style="font-weight:400;">新增收货地址</span>
+                    </p>
+                    <!-- 地址信息输入框 -->
+                    <div>
+                        <div class="input_box" >
+                            <span class="input_box_span" >收件人：</span>
+                            <Input v-model="addressData.addressModelData.name"  size="large" clearable style="width: 280px" />
+                        </div>
+                        <div class="input_box" >
+                            <span class="input_box_span" >手机号码：</span>
+                            <Input v-model="addressData.addressModelData.phone"  size="large" clearable style="width: 280px" />
+                        </div>
+                        <div class="input_box" >
+                            <span class="input_box_span" >所在地区：</span>
+                            <div class="input_box_select" >
+                                <Select v-model="addressSelectData.province"  size="large" style="width:150px">
+                                    <Option v-for="item in addressSelectData.provinceList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                                <Select v-model="addressSelectData.city"  size="large" style="width:150px">
+                                    <Option v-for="item in addressSelectData.cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                                <Select v-model="addressSelectData.county"  size="large" style="width:150px">
+                                    <Option v-for="item in addressSelectData.countyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                                </Select>
+                            </div>  
+                        </div>
+                        <div class="input_box" >
+                            <span class="input_box_span" >详细地址：</span>
+                            <Input v-model="addressData.addressModelData.addressDetail"  size="large" clearable style="width: 480px" />
+                        </div>
+                        <div class="input_box" >
+                            <span class="input_box_span" >邮编：</span>
+                            <Input v-model="addressData.addressModelData.postCode"  size="large" clearable style="width: 280px" />
+                        </div>
+                    </div>
+                    <div style="padding: 30px 0 20px 100px; "> 
+                        <Button shape="circle" type="success" size="large" @click="addAddressItem">确认新增收货地址</Button>
+                    </div>
+                </Modal>
+
+            </div>
+
+            <!-- 订单部分 -->
+            <div class="shopping_cart_container">
+                <div class="list_box" >
+
+                    <!-- 确认订单信息提示 #submitType#-->
+                    <div class="padding_top_30 font_12" v-if="submitType">
+                        <div class="padding_bottom_30">
+                            <div>手机号：{{personData.phone}}</div> 
+                            <div class="padding_bottom_30"><img style="width:14px;position:relative;top:2px;" src="../../assets/images/icon/prompt_icon.png"  alt=""><span> 购买后不支持退款、转让，请确认开课时间或有效期后再提交订单。</span> </div>
+                        </div>
+                        <p class="font_16" style="line-height:40px;">确认订单信息</p>
+                    </div>
+
+                    <!-- 订单列表头部 #submitType#-->
+                    <div class="list_header padding_left_14" :style="{background: submitType ? '#fafafa':''}">
+                        <Row>
+                            <Col span="4"><div style="height:1px;"></div></Col>
+                            <Col span="7"><span>课程名称</span></Col>
+                            <Col span="3"><span class="block_center">单价（元）</span></Col>
+                            <Col span="4"><span class="block_center">数量</span></Col>
+                            <Col span="4"><span class="block_center">优惠（元）</span></Col>
+                            <Col span="2"><span class="block_center">小计（元）</span></Col>
+                        </Row>
+                    </div>
+                    
+                    <!-- 订单列表 -->
+                    <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="items.id">
+                        <li>
+                            <div v-if="submitType" class="item_title padding_left_14"> {{items.itemTitle}} </div>
+                            <ul class="item_list">
+                                <!-- 列表 #submitType# 调整背景色-->
+                                <li class="padding_left_14" v-for="(item, index2) in items.items" :key="item.id" v-bind:class="[ submitType ? '':'active']">
+                                    <Row>
+                                        <Col span="4">
+                                            <span class="item_list_img">
+                                                <img :src="item.imgSrc">
+                                            </span>
+                                        </Col>
+                                        <Col span="7">
+                                            <Row>
+                                                <Col span="24">
+                                                    <div class="item_list_describe">
+                                                        <p >{{item.describe}}</p>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                        <Col span="3"><span class="block_center">{{item.price}}</span></Col>
+                                        <Col span="4">
+                                            <div class="relative">
+                                                <!-- 加减数量 -->
+                                            <div class="number_add_reduce" >
+                                                <span class="reduce"  @click="reduceNumber" onselectstart="return false" :data-index1="index1" :data-index2="index2"
+                                                >-</span><b class="number_value">{{item.num}}</b><span class="add" @click="addNumber" onselectstart="return false" 
+                                                    :data-index1="index1" :data-index2="index2">+</span>
+                                            </div> 
+                                            </div>
+                                            
+                                        </Col>
+                                        <!-- 优惠券  #submitType#-->
+                                        <Col span="4">
+                                            <!-- 可选状态 -->
+                                            <span class="block_center item_coupon" style="line-height:20px;padding-top:45px;" v-if="submitType">        
+                                                <i class="item_coupon" >{{item.itemCoupon}}  </i>                              
+                                                <Select v-model="item.itemCoupon" size="small" style="width:100px">
+                                                    <Option v-for="itemC in item.itemCouponList" :value="itemC.value" :key="itemC.value">{{ itemC.label }}</Option>
+                                                </Select>
+                                            </span>
+                                            <!-- 不可选状态 -->
+                                            <span class="block_center item_list_describe" v-if="!submitType">        
+                                                <p class="item_coupon" >{{item.itemCoupon}}  </p>                              
+                                            </span>
+                                        </Col>
+                                        <!-- 小计 -->
+                                        <Col span="2"><span class="block_center">{{items.itemTotal}}</span></Col>
+                                    </Row>
+                                </li>
+                            </ul>
+                            <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： {{items.itemTotal}}</div>
+                            <!-- 其他操作  #submitType#-->
+                            <div class="item_shipping_methods padding_left_14" v-if="!submitType">配送方式： {{items.shippingMethods}}</div>
+                        </li>
+                    </ul>
+                    <!-- 其他操作 #submitType#-->
+                    <div class="list_operate padding_left_14" v-if="!submitType">
+                        <div class="all_total padding_right_24">
+                            <h4>总计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 提交订单块 -->
-        <div class="sumbit_block">
-            <div class="padding_right_24 font_18">实付金额：<b class="">{{cartDate.listTotal}}</b></div>
-            <p class="padding_right_24"><Button shape="circle" type="warning" size="large" @click="submitOrderClick">提交订单</Button></p>
-        </div>
+            <!-- 提交订单块 -->
+            <div class="sumbit_block">
+                <div class="padding_right_24 font_18">实付金额：<b class="">{{cartDate.listTotal}}</b></div>
+                <p class="padding_right_24"><Button shape="circle" type="warning" size="large" @click="submitOrderClick">提交订单</Button></p>
+            </div>
 
+        </div>
     </div>
 </template>
 <script>
@@ -269,20 +300,41 @@ export default {
                 //收货地址数据列表
                 addressList:[
                 {
-                    id:'',
+                    id: 1,
                     name:'律师之家',
                     phone:'15874252525',
-                    content:'这里是地址，可能会有很多文字，很多文字好多行这里是地址，可能会有很多文字，很多文字好多行'
+                    address: '湖南省 长沙市 芙蓉区',
+                    addressDetail: '芙蓉大道 中心街 23号',
+                    postCode: '10010',
                 }
                 ],
-                // 收货地址弹框
+                //收货地址弹框
                 addressModelValue: false,
+                //收货地址新增或者编辑
+                addOrAdit:true,
+                //编辑时地址下标
+                aditAddressIndex: 0,
+                //收货地址弹框绑定值
                 addressModelData:{
-
+                    name: '' ,
+                    phone: '',
+                    address: '',
+                    addressDetail: '',
+                    postCode: '',
                 }
 
             },
 
+            /*地址数据模型 省 市 县*/
+            addressSelectData:{ 
+                province: '1',
+                city: '2',
+                county: '3',
+                provinceList: [{ value: '1', label: '湖南'}],
+                cityList: [{ value: '1', label: '长沙'}],
+                countyList: [{ value: '1', label: '芙蓉区'}]
+            },
+            
             /*个人信息*/
             personData:{
                 phone: '15632145484'
@@ -375,6 +427,102 @@ export default {
 
         },
 
+        /*地址功能块*/
+        //新增地址
+        addAddressItem(){
+            
+            //获取地址数据模型
+            let Data =  this.addressSelectData;
+            //收货地址弹框绑定值
+            let modelData =  this.addressData.addressModelData;
+
+            if( Data.county == "" ){     this.$Message.warning('地址填写不完整！'); return ;  };
+            if( Data.name == "" ){     this.$Message.warning('收件人名不能为空'); return ;     }
+            if( Data.addressDetail == "" ){     this.$Message.warning('地址详情不能为空！'); return ;     }
+
+            //设置收货地址弹框绑定值地址
+            this.addressData.addressModelData.address = Data.province + " " + Data.city + " " + Data.county;
+
+            //判断保存地址还是修改地址
+            if(!this.addressData.addOrAdit){
+
+                this.addressData.addressList.push({
+                    id: 1,
+                    name: modelData.name,
+                    phone: modelData.phone,
+                    address: modelData.address,
+                    addressDetail: modelData.addressDetail ,
+                    postCode: modelData.postCode,
+                })
+                
+                this.$Message.success('新增成功！')
+
+            }else{
+
+                let Index =  this.addressData.aditAddressIndex ;
+
+                //编辑修改选择的地址
+                this.addressData.addressList[Index] = {
+                    id: 1,
+                    name: modelData.name,
+                    phone: modelData.phone,
+                    address: modelData.address,
+                    addressDetail: modelData.addressDetail ,
+                    postCode: modelData.postCode,
+                };
+
+                this.addressData.addOrAdit = false;
+
+                this.$Message.success('修改成功！')
+
+            }
+
+            this.addressData.addressModelValue = false;
+
+        },
+        // 打开地址
+        openAddressModel(){
+
+            this.addressData.addressModelData = {
+                name: '' ,
+                phone: '',
+                address: '',
+                addressDetail: '',
+                postCode: '',
+            };
+
+            this.addressSelectData.province = "";
+            this.addressSelectData.city = "";
+            this.addressSelectData.county = ""; 
+
+            this.addressData.addressModelValue = true;
+            
+        },
+        // 编辑地址
+        aditAddressItem(index){
+
+            this.addressData.addOrAdit = true;
+
+            this.addressData.addressModelData = {
+                name: this.addressData.addressList[index].name ,
+                phone: this.addressData.addressList[index].phone,
+                address: this.addressData.addressList[index].address,
+                addressDetail: this.addressData.addressList[index].addressDetail,
+                postCode: this.addressData.addressList[index].postCode,
+            };
+
+            // 地址设置
+            let arr = this.addressData.addressList[index].address.split(" ");
+
+            this.addressSelectData.province = arr[0];
+            this.addressSelectData.city = arr[1];
+            this.addressSelectData.county = arr[2]; 
+
+            console.log(this.addressSelectData)
+            this.addressData.addressModelValue = true;
+
+        },
+
         /*订单提交*/   
         submitOrderClick(){
 
@@ -384,14 +532,45 @@ export default {
     }
 }
 </script>
+<style>
+     .ivu-modal .ivu-modal-header {
+        border-bottom:0;
+        padding: 10px 16px;
+        height:60px;
+        line-height: 50px;
+        background: #f8f8f8;
+    }  
+    .ivu-modal .ivu-modal-content{
+        border-radius: 0;
+    }
+    .ivu-modal-close .ivu-icon-ios-close{
+        top:5px;
+    } 
+    .input_box{
+        height:40px;
+        line-height:40px;
+        font-size:16px;
+        margin-top:20px;
+    }
+    .input_box_span{
+        display:inline-block;
+        width:100px;
+        text-align:right;
+        padding-right:10px;
+        font-size: 16px;
+    }
+    .input_box_select{
+        display: inline-block;
+    }
+</style>
 <style scoped lang='less'>
 
     //引入订单共用less文件
     @import './shopCart.less'; 
 
+
     /**订单地址**/ 
     .order_address{
-        margin-top:20px;
         background:#fff;
 
         .address_add{
