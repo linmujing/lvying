@@ -1,6 +1,13 @@
 <template>
     <div class="bg_white">
-    <NavBar></NavBar>
+    <!--导航栏-->
+    <div class="nav">
+      <ul class="list_unstyled ul_inline clearfix font_18 navbar box_center_1200">
+        <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(index)'>
+          <a href="javascript:void(0)" class="color_fff listItem">{{item}}</a>
+        </li>
+      </ul>
+    </div>
     <Banner></Banner>
     <!--视频推荐-->
 		<div class="content">
@@ -184,16 +191,19 @@ export default {
     },
     data() {
         return {
-
-
+          navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
+          curIndex: 0,
         }
         
     },
     methods: {
-		  tabToggle: function(index){
-        this.nowIndex = index;
-      }
-
+      // 导航鼠标悬停
+      tabClick(index){
+        this.curIndex = index;
+        this.$router.push({
+          path:'/industryDynamicList'
+        })
+      },
     }
 }
 </script>
@@ -215,5 +225,13 @@ export default {
     .more{color: #999;line-height: 26px;}
 	}
   .partner{padding:60px 0;}
-
+  .nav {
+    background: #00AA88;
+    height: 67px;
+    .navbar>li{
+      width: 180px;text-align: center;
+      >a{width:100%;line-height: 67px;display: inline-block;}
+      .listItem:hover{background: #f09105}
+    }
+  }
 </style>
