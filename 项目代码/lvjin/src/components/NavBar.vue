@@ -64,7 +64,9 @@
       },
       //跳转
       toDynamic(index){
-        this.$router.push({path:'/industryDynamicList'})
+        this.$router.push({
+        	path:'/industryDynamicList'
+    	})
       }
 		},
 		mounted(){
@@ -79,7 +81,7 @@
   .nav{
     background: #00AA88;height: 67px;
     .center{
-      width:1200px;margin:0 auto;
+      width:1200px;margin:0 auto;background: #00AA88;
       .navbar>li{
         width: 180px;text-align: center;
         >a{padding: 20px;display: inline-block;}

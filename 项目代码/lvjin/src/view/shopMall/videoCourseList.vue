@@ -4,17 +4,17 @@
       <!--面包屑-->
       <div class="padding_top_20 padding_bottom_20">
         <div class="tagBox inline_block">
-          <span class="color_666">行业动态管控</span>
+          <span class="color_666">视频课程</span>
           <Icon type="ios-arrow-down" color="#666"/>
         </div>
         <Icon type="ios-arrow-forward" />
         <div class="tagBox inline_block">
-          <span class="color_666">劳动（企业）</span>
+          <span class="color_666">劳动</span>
           <Icon type="ios-arrow-down" color="#666"/>
         </div>
         <Icon type="ios-arrow-forward" />
         <div class="tagBox inline_block">
-          <span class="color_666">项目启动</span>
+          <span class="color_666">入职管理</span>
           <Icon type="ios-arrow-down" color="#666"/>
         </div>
         <div class="inline_block padding_left_10">
@@ -62,8 +62,15 @@
               <div class="float_left width_50 text_ellipsis">立二拆四案辩护人</div>
               <div class="float_right">1234人看过</div>
             </div>
-            <div class="margin_top_15 clearfix">
-              <div class="float_left font_20 color_title">￥500.00</div>
+            <div class="clearfix margin_top_5">
+            	<div class="float_left font_20 color_title">￥500.00</div>
+            	<div class="float_right color_666 line_height_30px text_ellipsis width_50 text_right">盈科律师事务所</div>
+            </div>
+            <div class="margin_top_10 clearfix">
+              <p class="pointer float_left">
+								<Icon type="ios-headset-outline" size="30"/>
+								<span class="font_16 color_666 vertical_middle">试听</span>
+							</p>
               <div class="float_right">
                 <Button type="success" shape="circle" class="bg_title">立即购买</Button>
               </div>
@@ -93,7 +100,7 @@ export default {
     },
     methods: {
       jumpDetail(){
-        this.$router.push({path:'/industryDynamicDetail'})
+        this.$router.push({path:'/videoCourseDetail'})
       }
     }
 }
@@ -107,7 +114,7 @@ export default {
   .center_box{
     width: 1240px;margin: 0 auto;
     .listBox{
-      width: 280px;height: 350px;border: 1px solid #e6e6e6;margin: 30px 15px 0 15px;box-sizing: border-box;
+      width: 280px;height: 380px;border: 1px solid #e6e6e6;margin: 30px 15px 0 15px;box-sizing: border-box;
       .height_210px{height: 210px;}
       .list_item{padding: 20px 10px;}
     }
