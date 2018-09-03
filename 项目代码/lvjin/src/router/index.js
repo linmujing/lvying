@@ -7,7 +7,6 @@ Vue.use(Router)
 const router = new Router({
   
   routes: [
-
 	  {path: '/', redirect: 'shopMallIdex'},
   	{
       path: '/',
@@ -41,6 +40,34 @@ const router = new Router({
           component:resolve => require(['@/view/shopMall/shopMallIdex'],resolve),
           meta:{
             title:'首页',
+          },
+        },
+        {
+          path: '/industryDynamic',
+          component:resolve => require(['@/view/shopMall/industryDynamic'],resolve),
+          meta:{
+            title:'',
+          },
+        },
+        {
+          path: '/industryDynamicList',
+          component:resolve => require(['@/view/shopMall/industryDynamicList'],resolve),
+          meta:{
+            title:'',
+          },
+        },
+        {
+          path: '/industryDynamicDetail',
+          component:resolve => require(['@/view/shopMall/industryDynamicDetail'],resolve),
+          meta:{
+            title:'',
+          },
+        },
+        {
+          path: '/videoCourse',
+          component:resolve => require(['@/view/shopMall/videoCourse'],resolve),
+          meta:{
+            title:'',
           },
         }
       ]

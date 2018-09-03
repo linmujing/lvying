@@ -1,5 +1,5 @@
 <template>
-	<div class="container">
+	<div class="content">
 		<div class="header">
 			<div class="top">
 				<div class="center clearfix">
@@ -57,14 +57,14 @@
 	}
 </script>
 <style lang='less' scoped>
-	.container{
+	.content{
 		background:#fff;
 	}
 	.center{
-		width:1200px;margin:0 auto;font-size: 12px;
+		width:1200px;margin:0 auto;font-size: 12px;min-width: 1200px;
 	}
 	.top{
-		background: #F5F5F5;padding: 11px 0;
+		background: #F5F5F5;padding: 11px 0;width: 100%;
 		li{margin-left: 40px;}
 	}
 	.search{

@@ -1,23 +1,8 @@
 <template>
     <div class="bg_white">
-		<div class="nav">
-			<div class="center relative"> 
-				<ul class="list_unstyled ul_inline clearfix font_18 navbar">
-					<li class="pointer" :class='{cur: index == nowIndex}' v-for="(item,index) in tabParams" @click='tabToggle(index)'>
-						<a href="javascript:void(0)" class="color_fff">{{item}}</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div class="banner">
-			<Carousel  radius-dot v-model="value" autoplay loop>
-		        <CarouselItem v-for="(item,index) in 3" :key="index">
-		            <div class="carousel">
-		            	<img src="../../assets/images/image/banner.png" class="all_width">
-		            </div>
-		        </CarouselItem>
-		    </Carousel>
-		</div>
+    <NavBar></NavBar>
+    <Banner></Banner>
+    <!--视频推荐-->
 		<div class="content">
 			<div class="padding_top_30 padding_bottom_30 clearfix">
 				<div class="float_left width_48">
@@ -83,6 +68,7 @@
 		<div>
 			<img src="../../assets/images/image/bg.png" class="block all_width">
 		</div>
+    <!--行业动态管控-->
 		<div class="content padding_top_30 padding_bottom_30">
 			<div class="clearfix">
 				<div class="float_left">
@@ -111,6 +97,7 @@
 				</li>
 			</ul>
 		</div>
+    <!--法律动态管控-->
 		<div class="bg_f5">
 			<div class="content padding_top_30 padding_bottom_30">
 				<div class="clearfix">
@@ -143,6 +130,7 @@
 				</ul>
 			</div>
 		</div>
+    <!--律瀛商城-->
 		<div class="content padding_top_30 padding_bottom_30">
 			<div class="clearfix">
 				<div class="float_left">
@@ -172,59 +160,60 @@
 			    </Row>
 			</div>
 		</div>
+    <!--合作伙伴-->
+    <div class="bg_f5">
+      <div class="content partner">
+        <div class="color_666 font_18 text_center">合作伙伴</div>
+        <div class="color_999 margin_top_10 text_center">我们具有充分的实力，为客户提供高效快捷优质，公平公正的法律服务，以最诚恳和严谨的态度为客户提供专业化的法律服务。​</div>
+        <div class="margin_top_30">
+          <ul class="list_unstyled ul_inline clearfix">
+            <li v-for="(item,index) in 5" class="width_230px height_88px border margin_right_10"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
 	</div>
 </template>
 <script>
-
+  import NavBar from '../../components/NavBar.vue'
+  import Banner from '../../components/Banner.vue'
 export default {
     components : {
+      NavBar,
+      Banner
     },
     data() {
         return {
-        	value: 0,
-        	nowIndex: 0,
-        	tabParams: ['行业动态管控', '法律动态管控', '视频课程', '音频课程'],
+
+
         }
         
     },
     methods: {
-		tabToggle: function(index){
-            this.nowIndex = index;
-        }
+		  tabToggle: function(index){
+        this.nowIndex = index;
+      }
 
     }
 }
 </script>
 <style scoped lang='less'>
 	.content{
-		width:1200px;margin:0 auto;
+		width:1200px;margin:0 auto;min-width: 1200px;
 		.width_48{width: 48%;}
-		.title{color: #00AA88;font-size: 18px;border-left: 3px solid #00AA88; padding-left: 10px;}
-		.more{color: #999;line-height: 26px;}
 		.videoBox{width: 270px;height: 170px;border:1px solid #999999;}
 		.height_170{height: 170px;}
-		.height_310px{height: 310px;}
+    .height_310px{height: 310px;}
+    .height_88px{height: 88px;}
 		.width_560px{width: 560px;}
 		.width_900px{width: 900px;}
+    .width_230px{width: 230px;}
 		.border{border:1px solid #999999;}
 		.mallBox{width: 275px;height: 450px;border: 1px solid #efefef;}
+    /*商城模块*/
+    .title{color: #00AA88;font-size: 18px;border-left: 3px solid #00AA88; padding-left: 10px;}
+    .more{color: #999;line-height: 26px;}
 	}
-	.navbar .cur{
-		background: #F09105;
-	}
-	.nav{
-		background: #00AA88;
-		.center{
-			width:1200px;margin:0 auto;
-			>ul>li{
-				width: 180px;
-				text-align: center;
-				>a{padding: 20px;display: inline-block;}
-			}
-		}
-	}
-	.carousel{
-		width: 100%;
-		height: 540px%;
-	}
+  .partner{padding:60px 0;}
+
 </style>

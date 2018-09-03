@@ -1,0 +1,116 @@
+<template>
+  <div class="bg_f5">
+    <div class="content">
+      <!--面包屑-->
+      <div class="padding_top_20 padding_bottom_20">
+        <div class="tagBox inline_block">
+          <span class="color_666">行业动态管控</span>
+          <Icon type="ios-arrow-down" color="#666"/>
+        </div>
+        <Icon type="ios-arrow-forward" />
+        <div class="tagBox inline_block">
+          <span class="color_666">劳动（企业）</span>
+          <Icon type="ios-arrow-down" color="#666"/>
+        </div>
+        <Icon type="ios-arrow-forward" />
+        <div class="tagBox inline_block">
+          <span class="color_666">项目启动</span>
+          <Icon type="ios-arrow-down" color="#666"/>
+        </div>
+        <div class="inline_block padding_left_10">
+          共找到<span class="color_title">271</span>门课程
+        </div>
+      </div>
+      <!--课程-->
+      <div class="padding_15 bg_white">
+        课程：<span class="color_title">全部</span> (271)
+      </div>
+      <!--排序-->
+      <div class="padding_15 bg_white margin_top_15">
+        <ul class="list_unstyled ul_inline clearfix">
+          <li class="color_title margin_right_30 pointer">
+            <span>综合排序</span>
+            <Icon v-if="sort" type="ios-arrow-up" />
+            <Icon v-else type="ios-arrow-down" />
+          </li>
+          <li class="margin_right_30 pointer">
+            <span>销量</span>
+            <Icon v-if="sale" type="ios-arrow-up" />
+            <Icon v-else type="ios-arrow-down" />
+          </li>
+          <li class="margin_right_30 pointer">
+            <span>满意度</span>
+            <Icon v-if="satisfaction" type="ios-arrow-up" />
+            <Icon v-else type="ios-arrow-down" />
+          </li>
+          <li class="pointer">
+            <span>价格</span>
+            <Icon v-if="price" type="ios-arrow-up" />
+            <Icon v-else type="ios-arrow-down" />
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!--列表-->
+    <div class="center_box">
+      <ul class="list_unstyled ul_inline clearfix">
+        <li v-for="item in 12" class="listBox bg_white">
+          <div @click="jumpDetail" class="height_210px all_width"></div>
+          <div class="list_item">
+            <div class="font_18 font_weight_bold text_ellipsis">审核同业禁止协议</div>
+            <div class="margin_top_10 clearfix color_999">
+              <div class="float_left">立二拆四案辩护人</div>
+              <div class="float_left">1234人看过</div>
+            </div>
+            <div class="margin_top_15 clearfix">
+              <div class="float_left font_20 color_title">￥500.00</div>
+              <div class="float_right">
+                <Button type="success" shape="circle" class="bg_title">立即购买</Button>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <!--分页-->
+     <div class="margin_80">
+       <Page :total="100" prev-text="上一页" next-text="下一页" />
+     </div>
+    </div>
+	</div>
+</template>
+<script>
+export default {
+    components : {
+    },
+    data() {
+        return {
+          sort: true,
+          sale: false,
+          satisfaction: false,
+          price: false,
+        }
+        
+    },
+    methods: {
+      jumpDetail(){
+        this.$router.push({path:'/industryDynamicDetail'})
+      }
+    }
+}
+</script>
+<style scoped lang='less'>
+  .content{
+    width: 1210px;margin: 0 auto;
+    .tagBox{border: 1px dashed #00AA88;padding: 5px 8px;}
+    .padding_15{padding: 15px;}
+  }
+  .center_box{
+    width: 1240px;margin: 0 auto;
+    .listBox{
+      width: 280px;height: 350px;border: 1px solid #e6e6e6;margin: 30px 15px 0 15px;box-sizing: border-box;
+      .height_210px{height: 210px;}
+      .list_item{padding: 20px 10px;}
+    }
+    .margin_80{padding: 80px;text-align: center}
+  }
+</style>
