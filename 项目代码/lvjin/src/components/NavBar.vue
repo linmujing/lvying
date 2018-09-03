@@ -2,32 +2,40 @@
 	<div class="">
     <div class="nav">
       <div class="center relative">
+
         <ul class="list_unstyled ul_inline clearfix font_18 navbar">
-          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in tabParams" @click='tabToggle(index)'>
-            <a href="javascript:void(0)" class="color_fff">{{item}}</a>
+          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navDataModel" :key="index" @mouseover='tabHover(index)'>
+            <a href="javascript:void(0)" class="color_fff">{{item.title}}</a>
           </li>
         </ul>
-        <div v-show="showBox" class="listBox">
+
+        <div class="listBox">
           <div class="">
-            <div v-for="(item,index) in 3">
-              <div @mouseover="overShow(index)" class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
-                <span class="float_left color_fff font_18">法律（企业）</span>
+
+            <div v-for="(items,index) in navDataModel[curIndex].lists" :key="index">
+
+              <div @mouseover="tabItemsHover(index)" class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
+                <span class="float_left color_fff font_18">{{items.title}}</span>
                 <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
               </div>
-              <div v-show="showItemBox" class="itemBox bg_white width_1000px">
-                <div v-for="item in 4" >
-                  <div class="font_18">法律</div>
+
+              <div class="itemBox bg_white width_1000px">
+                <div v-for="(item,index2) in navDataModel[curIndex].lists[itemsIndex].items " :key="index2">
+                  <div class="font_18">{{item.title}}</div>
+
                   <ul class="list_unstyled ul_inline clearfix margin_bottom_20">
-                    <li v-for="item in 10" @click="toDynamic(index)" class="margin_top_5 margin_right_30 pointer hover_title">入职申请表</li>
+                    <li v-for="( i, index3) in item.arr" :key="index3" class="margin_top_5 margin_right_30 pointer hover_title">{{i}}</li>
                   </ul>
+
                 </div>
               </div>
+
             </div>
+
           </div>
         </div>
       </div>
     </div>
-    <div v-show="showMask" @click="hideMask" class="mask" v-bind:style="{height: bodyHeight + 'px'}"></div>
 	</div>
 </template>
 <script>
@@ -36,9 +44,107 @@
 	  props:['nowIndex'],
 		data() {
 			return {
-			  bodyHeight: document.documentElement.clientHeight,
-			  curIndex:this.nowIndex,
-        tabParams: ['行业动态管控', '法律动态管控', '视频课程', '音频课程'],
+
+
+        /*导航栏数据模型*/ 
+        navDataModel:[
+          {
+            title: "行业动态管控",
+            lists:[
+              {
+                title: "法律（企业）",
+                items:[
+                  {
+                    title: "法律",
+                    arr:["入职申请表" ,"入职申请表"]
+                  },
+                  {
+                    title: "法律",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              },
+              {
+                title: "法律（企业）",
+                items:[
+                  {
+                    title: "法律",
+                    arr:["入职申请表" ,"入职申请表"]
+                  },
+                  {
+                    title: "法律",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              },
+              {
+                title: "法律（企业）",
+                items:[
+                  {
+                    title: "法律",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              },
+              {
+                title: "法律（企业）",
+                items:[
+                  {
+                    title: "法律",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            title: "法律动态管控",
+            lists:[
+              {
+                title: "法律（企业）",
+                items:[
+                  {
+                    title: "法律",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            title: "视频课程",
+            lists:[
+              {
+                title: "法律（企业）",
+                items:[
+                  {
+                    title: "法律",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            title: "音频课程",
+            lists:[
+              {
+                title: "法律（企业）",
+                items:[
+                  {
+                    title: "法律",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        // 当前悬停位置
+        curIndex: 0,
+        // 二级标题悬停
+        itemsIndex:0,
+        
         showBox: false,
         showItemBox: false,
         showMask: false,
@@ -46,6 +152,19 @@
 			}
 		},
 		methods:{
+      // 导航鼠标悬停
+      tabHover(index){
+
+        this.curIndex = index;
+
+      },
+      // 二级导航鼠标悬停
+      tabItemsHover(index){
+
+        this.itemsIndex = index;
+
+      },
+
       tabToggle: function(index){
         this.curIndex = index;
         this.showBox = true;
