@@ -1,0 +1,62 @@
+
+    
+    /*颜色变量*/
+    @color_f8cca4 : #f8cca4;    // 轻橙色
+    @color_f09105 : #f09105;    // 深橙色
+    @color_cccccc : #cccccc;
+    @color_e6e6e6 : #e6e6e6;
+    @color_333 : #333;
+    @color_666 : #666;
+    
+    /**通用**/
+    div{
+        box-sizing: border-box;
+    }
+    i{
+        font-style: normal;
+    }
+    .block_center{
+        display: block;
+        text-align: center;
+    }
+    .border_bottom_1{
+        border-bottom:1px dotted @color_e6e6e6;
+    }
+
+    //数字加减小组件
+    .number_add_reduce{
+        width: 80px;
+        height:22px;
+        border:1px solid @color_cccccc;
+        font-size: 12px;
+        position: relative;
+        top:59px;
+        line-height: 22px;
+        margin: 0 auto;
+        
+        overflow: hidden;
+
+        span,b{
+            display: inline-block;
+            text-align: center;
+        }
+        span{
+            width:17px;
+            cursor: pointer;
+            line-height: 18px;
+        }
+        input{
+            display: inline-block;
+            width:100%;
+            border:0;
+            height:20px;
+            text-align: center;
+            position: relative;
+            top:-1px;
+        }
+        .number_value{
+            width:44px;
+            border-left: 1px solid @color_cccccc;
+            border-right: 1px solid @color_cccccc;
+        }
+    }

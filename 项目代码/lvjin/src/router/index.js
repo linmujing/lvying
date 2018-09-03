@@ -30,6 +30,13 @@ const router = new Router({
           },
         },
         {
+          path: '/submitOrder',
+          component:resolve => require(['@/view/shopCart/submitOrder'],resolve),
+          meta:{
+            title:'提交订单',
+          },
+        },
+        {
           path: '/shopMallIdex',
           component:resolve => require(['@/view/shopMall/shopMallIdex'],resolve),
           meta:{

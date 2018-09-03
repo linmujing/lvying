@@ -14,10 +14,10 @@
                             <span class="padding_left_5">全选</span>
                         </Checkbox>
                     </Col>
-                    <Col span="10"><span>课程名称</span></Col>
-                    <Col span="4"><span>单价（元）</span></Col>
-                    <Col span="4"><span>数量</span></Col>
-                    <Col span="1"><span>操作</span></Col>
+                    <Col span="9"><span>课程名称</span></Col>
+                    <Col span="4"><span class="block_center">单价（元）</span></Col>
+                    <Col span="4"><span class="block_center" >数量</span></Col>
+                    <Col span="2"><span  class="block_center">操作</span></Col>
                 </Row>
             </div>
             
@@ -39,13 +39,13 @@
                                         <img :src="item.imgSrc">
                                     </span>
                                 </Col>
-                                <Col span="10">
+                                <Col span="9">
                                     <Row>
                                         <Col span="6"></Col>
                                         <Col span="18"><span class="item_list_describe">{{item.describe}}</span></Col>
                                     </Row>
                                 </Col>
-                                <Col span="4"><span>{{item.price}}</span></Col>
+                                <Col span="4"><span  class="block_center">{{item.price}}</span></Col>
                                 <Col span="4">
                                     <div class="relative">
                                         <!-- 加减数量 -->
@@ -58,7 +58,7 @@
                                     
                                 </Col>
                                 <!-- 删除单个 -->
-                                <Col span="1"><span class="item_list_delete"><img src="../../assets/images/icon/cart_delete.png" alt="" @click="deleteItem(index1, index2)"></span></Col>
+                                <Col span="2"><span class="item_list_delete block_center"><img src="../../assets/images/icon/cart_delete.png" alt="" @click="deleteItem(index1, index2)"></span></Col>
                             </Row>
                         </li>
                     </ul>
@@ -76,7 +76,7 @@
                     <Col span="10"><span class="pointer list_delete" @click="deleteAllItem" >删除所选课程</span></Col>
                     <Col span="9">
                         <div class="all_total">
-                            <h4>合计：<b class="font_size_16"> {{cartDate.listTotal}} </b></h4>
+                            <h4>合计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
                             <p>(若购买享有优惠，相应金额将在订单结算页面减扣)</p>
                         </div>
                     </Col>
@@ -119,14 +119,14 @@ export default {
                 //全部删除状态
                 listDeleteState: false,
                 //总价格
-                listTotal: 0,
+                listTotal: 0.00,
                 //大列表
                 cartList:[
                     {
                         index1: 0,
                         itemState: false,
                         itemTitle: '机构法院',
-                        itemTotal: 0,
+                        itemTotal: 0.00,
                         //小列表
                         items:[
                             {
@@ -151,7 +151,7 @@ export default {
                         index1: 0,
                         itemState: false,
                         itemTitle: '机构法院',
-                        itemTotal: 0,
+                        itemTotal: 0.00,
                         //小列表
                         items:[
                             {
@@ -211,7 +211,7 @@ export default {
             let index1 =  e.target.getAttribute("data-index1"), 
                 index2 =  e.target.getAttribute("data-index2"); 
 
-            if (this.count<=1){
+            if (this.cartDate.cartList[index1].items[index2].num<=1){
 
                 this.$Message.warning('受不了啦，宝贝不能再减少啦')
 
@@ -399,7 +399,7 @@ export default {
                     }
 
                     //判断小列表是否还有商品,没有就删除
-                    if(this.cartDate.cartList[index1].items.length == 0){
+                    if(this.cartDate.cartList[x].items.length == 0){
 
                         this.cartDate.cartList.splice(x,1);
 
@@ -423,70 +423,12 @@ export default {
     }
 }
 </script>
+
 <style scoped lang='less'>
 
-    /**通用**/
-    div{
-        box-sizing: border-box;
-    }
-    .padding_left_5{
-        padding-left: 5px;
-    } 
-    .padding_left_14{
-        padding-left: 14px;
-    }
-    .padding_right_24{
-        padding-right: 24px;
-    }
-    .font_size_16{
-        font-size: 16px;
-    }
+    //引入购物车共用less文件
+    @import './shopCart.less'; 
 
-    //数字加减小组件
-    .number_add_reduce{
-        width: 80px;
-        height:22px;
-        border:1px solid #ccc;
-        font-size: 12px;
-        position: relative;
-        top:59px;
-        line-height: 22px;
-        left:-20px;
-        
-        overflow: hidden;
-
-        span,b{
-            display: inline-block;
-            text-align: center;
-        }
-        span{
-            width:17px;
-            cursor: pointer;
-            line-height: 18px;
-        }
-        input{
-            display: inline-block;
-            width:100%;
-            border:0;
-            height:20px;
-            text-align: center;
-            position: relative;
-            top:-1px;
-        }
-        .number_value{
-            width:44px;
-            border-left: 1px solid #ccc;
-            border-right: 1px solid #ccc;
-        }
-    }
-
-    //修改iview model 
-    .ivu-modal-header {
-        border-bottom:0;
-    }
-    .ivu-modal-footer{
-        display: none;
-    }
 
     /**容器**/ 
     .shopping_cart_container{
@@ -516,6 +458,10 @@ export default {
                 background: #fafafa;
                 height: 50px;
                 line-height: 50px;
+                
+                *{
+                    color: @color_666;
+                }
             }
 
             // 购物车列表
@@ -528,7 +474,7 @@ export default {
                 }
                 .item_list>li{
                     line-height: 140px;
-                    border:1px solid #e6e6e6;
+                    border:1px solid @color_e6e6e6;
                     border-bottom:0;
                 }
                 .item_list_img img{
@@ -546,8 +492,11 @@ export default {
                     height:60px;
                     line-height: 60px;
                     text-align: right;
-                    border:1px solid #e6e6e6;
+                    border:1px solid @color_e6e6e6;
                     background:#fafafa;
+                }
+                *{
+                    color: @color_333;
                 }
             }
 
@@ -574,7 +523,7 @@ export default {
                     }
                 }
                 .list_balance{
-                    background: #ccc;
+                    background: @color_cccccc;
                     font-size: 20px;
                     width:136px;
                     position: absolute;
