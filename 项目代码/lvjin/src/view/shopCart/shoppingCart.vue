@@ -1,5 +1,5 @@
 <template>
-    <div class="bg_f5">
+    <div class="bg_f5 padding_top_30 padding_bottom_80">
         <div class="shopping_cart_container box_center_1200">
 
             <div class="title">
@@ -442,9 +442,6 @@ export default {
 
     /**容器**/ 
     .shopping_cart_container{
-
-        margin-top:20px;
-        margin-bottom:96px;
         background:#fff;
 
         //购物车标题
@@ -487,11 +484,15 @@ export default {
                     border:1px solid @color_e6e6e6;
                     border-bottom:0;
                 }
+                .item_list_img{
+                    display: inline-block;
+                    text-align: center;
+                    width:100px;
+                }
                 .item_list_img img{
                     vertical-align: middle;
                     height: 100px;
-                    width: 80px;
-                    margin-left:30px;
+
                 }
                 .item_list_delete img{
                     vertical-align: middle;

@@ -36,6 +36,13 @@ const router = new Router({
           },
         },
         {
+          path: '/shopGoPay',
+          component:resolve => require(['@/view/shopCart/shopGoPay'],resolve),
+          meta:{
+            title:'去支付',
+          },
+        },
+        {
           path: '/shopMallIdex',
           component:resolve => require(['@/view/shopMall/shopMallIdex'],resolve),
           meta:{

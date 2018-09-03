@@ -1,5 +1,5 @@
 <template>
-    <div class="bg_f5 padding_top_20">
+    <div class="bg_f5 padding_top_30 padding_bottom_80">
         <div class="box_center_1200">
 
             <!-- 订单地址 #submitType#-->
@@ -20,7 +20,7 @@
                                             <Col span="12"><span>{{items.name}}</span> </Col>
                                             <Col span="12" class="text_right"><span >{{items.phone}}</span></Col>
                                         </Row>
-                                        <p class="twoline_ellipsis">{{items.address +" " + items.addressDetail +" " + items.postCode }}</p>
+                                        <p class="twoline_ellipsis">{{items.province.label +" " + items.city.label +" " + items.county.label +" " + items.addressDetail +" " + items.postCode }}</p>
                                         <span class="address_li_adit" @click="aditAddressItem(index1)">编辑</span>
                                     </li>
                                 </ul>
@@ -48,13 +48,13 @@
                         <div class="input_box" >
                             <span class="input_box_span" >所在地区：</span>
                             <div class="input_box_select" >
-                                <Select v-model="addressSelectData.province"  size="large" style="width:150px">
+                                <Select v-model="addressSelectData.province.value"  size="large" style="width:150px">
                                     <Option v-for="item in addressSelectData.provinceList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Select v-model="addressSelectData.city"  size="large" style="width:150px">
+                                <Select v-model="addressSelectData.city.value"  size="large" style="width:150px">
                                     <Option v-for="item in addressSelectData.cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
-                                <Select v-model="addressSelectData.county"  size="large" style="width:150px">
+                                <Select v-model="addressSelectData.county.value"  size="large" style="width:150px">
                                     <Option v-for="item in addressSelectData.countyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                                 </Select>
                             </div>  
@@ -284,17 +284,6 @@ export default {
                 ],
             },   
 
-            /*删除提示弹框对象*/
-            modelDate:{
-                //弹框开关
-                deleteModelValue:false,
-                //删除类型  删除单个 = a  删除选中 = b
-                deleteType: 'a',
-                //下标
-                index1:0,
-                index2:0
-            },
-
             /*收货地址数据*/
             addressData:{
                 //收货地址数据列表
@@ -303,7 +292,9 @@ export default {
                     id: 1,
                     name:'律师之家',
                     phone:'15874252525',
-                    address: '湖南省 长沙市 芙蓉区',
+                    province: { value: '1', label: '湖南省'},
+                    city: { value: '1', label: '长沙市'},
+                    county: { value: '1', label: '芙蓉区'},
                     addressDetail: '芙蓉大道 中心街 23号',
                     postCode: '10010',
                 }
@@ -318,7 +309,9 @@ export default {
                 addressModelData:{
                     name: '' ,
                     phone: '',
-                    address: '',
+                    province: { value: '1', label: '湖南省'},
+                    city: { value: '1', label: '长沙市'},
+                    county: { value: '1', label: '芙蓉区'},
                     addressDetail: '',
                     postCode: '',
                 }
@@ -327,9 +320,9 @@ export default {
 
             /*地址数据模型 省 市 县*/
             addressSelectData:{ 
-                province: '1',
-                city: '2',
-                county: '3',
+                province: { value: '', label: ''},
+                city: { value: '', label: ''},
+                county: { value: '', label: ''},
                 provinceList: [{ value: '1', label: '湖南'}],
                 cityList: [{ value: '1', label: '长沙'}],
                 countyList: [{ value: '1', label: '芙蓉区'}]
@@ -443,14 +436,16 @@ export default {
             //设置收货地址弹框绑定值地址
             this.addressData.addressModelData.address = Data.province + " " + Data.city + " " + Data.county;
 
-            //判断保存地址还是修改地址
-            if(!this.addressData.addOrAdit){
+            //判断是新增地址还是修改地址
+            if(this.addressData.addOrAdit){
 
                 this.addressData.addressList.push({
                     id: 1,
                     name: modelData.name,
                     phone: modelData.phone,
-                    address: modelData.address,
+                    province: { value: '1', label: '湖南省'},
+                    city: { value: '1', label: '长沙市'},
+                    county: { value: '1', label: '芙蓉区'},
                     addressDetail: modelData.addressDetail ,
                     postCode: modelData.postCode,
                 })
@@ -466,12 +461,14 @@ export default {
                     id: 1,
                     name: modelData.name,
                     phone: modelData.phone,
-                    address: modelData.address,
+                    province: modelData.province,
+                    city: modelData.city,
+                    county: modelData.county,
                     addressDetail: modelData.addressDetail ,
                     postCode: modelData.postCode,
                 };
 
-                this.addressData.addOrAdit = false;
+                this.addressData.addOrAdit = true;
 
                 this.$Message.success('修改成功！')
 
@@ -480,45 +477,51 @@ export default {
             this.addressData.addressModelValue = false;
 
         },
-        // 打开地址
+        // 新增打开地址
         openAddressModel(){
 
             this.addressData.addressModelData = {
                 name: '' ,
                 phone: '',
-                address: '',
+                province: { value: '', label: ''},
+                city: { value: '', label: ''},
+                county: { value: '', label: ''},
                 addressDetail: '',
                 postCode: '',
             };
 
-            this.addressSelectData.province = "";
-            this.addressSelectData.city = "";
-            this.addressSelectData.county = ""; 
+            this.addressSelectData.province = { value: '', label: ''};
+            this.addressSelectData.city = { value: '', label: ''};
+            this.addressSelectData.county = { value: '', label: ''}; 
 
             this.addressData.addressModelValue = true;
             
         },
-        // 编辑地址
+        // 编辑打开地址
         aditAddressItem(index){
 
-            this.addressData.addOrAdit = true;
+            //设置编辑地址
+            this.addressData.addOrAdit = false;
+
+            this.addressData.aditAddressIndex =index;
+    
+            let Item = this.addressData.addressList[index];
 
             this.addressData.addressModelData = {
-                name: this.addressData.addressList[index].name ,
-                phone: this.addressData.addressList[index].phone,
-                address: this.addressData.addressList[index].address,
-                addressDetail: this.addressData.addressList[index].addressDetail,
-                postCode: this.addressData.addressList[index].postCode,
+                name: Item.name ,
+                phone: Item.phone,
+                province: Item.province,
+                city: Item.city,
+                county: Item.county,
+                addressDetail: Item.addressDetail,
+                postCode: Item.postCode,
             };
 
             // 地址设置
-            let arr = this.addressData.addressList[index].address.split(" ");
+            this.addressSelectData.province = Item.province;
+            this.addressSelectData.city = Item.city;
+            this.addressSelectData.county = Item.county; 
 
-            this.addressSelectData.province = arr[0];
-            this.addressSelectData.city = arr[1];
-            this.addressSelectData.county = arr[2]; 
-
-            console.log(this.addressSelectData)
             this.addressData.addressModelValue = true;
 
         },
@@ -613,7 +616,8 @@ export default {
                     box-shadow: 1px 1px 2px @color_e6e6e6;
                     cursor: pointer;
                     position: relative;
-                    margin-right:20px;
+                    margin-right: 10px;
+                    vertical-align: middle;
 
                     &:hover{
                         box-shadow: 1px 1px 8px @color_e6e6e6;
@@ -678,11 +682,14 @@ export default {
                     border-bottom:1px solid @color_e6e6e6;
                     background: #fafafa
                 }
+                .item_list_img{
+                    display: inline-block;
+                    width: 100px;
+                    text-align: center;
+                }
                 .item_list_img img{
                     vertical-align: middle;
                     height: 100px;
-                    width: 80px;
-                    margin-left:30px;
                 }
                 .item_list_describe{
                     display:table;
@@ -739,7 +746,6 @@ export default {
     /**订单提交**/ 
     .sumbit_block{
         margin-top:20px;
-        margin-bottom:80px;
         padding:30px 14px;
         background:#fff;
         text-align: right;
