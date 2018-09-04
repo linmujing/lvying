@@ -54,7 +54,7 @@ const router = new Router({
           children: [
             {
               path: '/myOrder',
-              component:resolve => require(['@/view/personCenter/myOrder/myOrder'],resolve),
+              component:resolve => require(['@/view/personCenter/myOrder'],resolve),
               meta:{
                 title:'我的订单',
               },
