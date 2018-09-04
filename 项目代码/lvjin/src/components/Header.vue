@@ -33,7 +33,13 @@
 					<img src="../assets/logo.png" @click="jump"/>
 				</div>
 				<div class="float_right padding">
-					<Input search placeholder="视频/音频/合同" class="search_box"/>
+					<div v-if="loginStatus > 0">
+						<Input search placeholder="视频/音频/合同" class="search_box"/>
+					</div>
+					<div v-else-if="loginStatus === 0" class="margin_top_10">
+						<Button shape="circle" class="width_80px">登录</Button>
+						<Button type="success" shape="circle" class="margin_left_10 bg_title width_80px">注册</Button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -41,9 +47,11 @@
 </template>
 <script>
 	export default {
+		props:['isLogin'],
 		data() {
 			return {
-				
+				//登录页面
+				loginStatus: this.isLogin
 			}
 		},
 		methods:{
@@ -59,6 +67,7 @@
 <style lang='less' scoped>
 	.content{
 		background:#fff;
+		.width_80px{width: 80px;}
 	}
 	.center{
 		width:1200px;margin:0 auto;font-size: 12px;min-width: 1200px;
