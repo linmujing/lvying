@@ -182,11 +182,9 @@
 	</div>
 </template>
 <script>
-  import NavBar from '../../components/NavBar.vue'
   import Banner from '../../components/Banner.vue'
 export default {
     components : {
-      NavBar,
       Banner
     },
     data() {
@@ -197,12 +195,23 @@ export default {
         
     },
     methods: {
-      // 导航鼠标悬停
+      // 导航鼠标点击
       tabClick(index){
         this.curIndex = index;
-        this.$router.push({
-          path:'/industryDynamicList'
-        })
+        switch(index){
+        	case 0:
+        	case 1:
+	    		this.$router.push({
+		          path:'/industryDynamic'
+		       	})
+	    		break;
+    		case 2:
+    		case 3:
+	    		this.$router.push({
+		          path:'/videoCourse'
+		        })
+	    		break;
+        }
       },
     }
 }
