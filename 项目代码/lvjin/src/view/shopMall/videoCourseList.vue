@@ -3,19 +3,19 @@
     <div class="content">
       <!--面包屑-->
       <div class="padding_top_20 padding_bottom_20">
-        <div class="tagBox inline_block">
-          <span class="color_666">视频课程</span>
-          <Icon type="ios-arrow-down" color="#666"/>
+        <div class="tagBox inline_block pointer color_666">
+          <span class="">视频课程</span>
+          <Icon type="ios-arrow-down"/>
         </div>
         <Icon type="ios-arrow-forward" />
-        <div class="tagBox inline_block">
-          <span class="color_666">劳动</span>
-          <Icon type="ios-arrow-down" color="#666"/>
+        <div class="tagBox inline_block pointer color_666">
+          <span class="">劳动</span>
+          <Icon type="ios-arrow-down"/>
         </div>
         <Icon type="ios-arrow-forward" />
-        <div class="tagBox inline_block">
-          <span class="color_666">入职管理</span>
-          <Icon type="ios-arrow-down" color="#666"/>
+        <div class="tagBox inline_block color_666">
+          <span class="">项目启动</span>
+          <Icon type="ios-arrow-down"/>
         </div>
         <div class="inline_block padding_left_10">
           共找到<span class="color_title">271</span>门课程

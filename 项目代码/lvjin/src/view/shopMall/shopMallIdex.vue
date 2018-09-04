@@ -190,14 +190,12 @@ export default {
     data() {
         return {
           navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
-          curIndex: 0,
         }
         
     },
     methods: {
       // 导航鼠标点击
       tabClick(index){
-        this.curIndex = index;
         switch(index){
         	case 0:
         	case 1:

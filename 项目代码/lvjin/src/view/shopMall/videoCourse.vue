@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :nowIndex="2"></NavBar>
+    <NavBar :nowIndex="2" :showItem='true'></NavBar>
     <Banner></Banner>
     <!--热门推荐-->
     <div class="content">

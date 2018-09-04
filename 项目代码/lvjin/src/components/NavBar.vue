@@ -7,22 +7,22 @@
 	            <a href="javascript:void(0)" class="color_fff tabHover">{{item.title}}</a>
 	          </li>
 	        </ul>
-	        <div class="listBox">
+	        <div v-show="showItem" class="listBox">
 	          <div class="">
 	
 	            <div v-for="(items,index) in navDataModel[curIndex].lists" :key="index">
 	
-	              <div @mouseover="tabItemsHover(index)" class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
+	              <div @mouseover="tabItemsHover(index)" @click="jumpDown(index)" class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
 	                <span class="float_left color_fff font_18">{{items.title}}</span>
 	                <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
 	              </div>
 	
 	              <div v-show="showBox" class="itemBox bg_white width_1000px">
 	                <div v-for="(item,index2) in navDataModel[curIndex].lists[itemsIndex].items " :key="index2">
-	                  <div class="font_18">{{item.title}}</div>
+	                  <div @click="jumpDown(index)" class="font_18 pointer hover_title">{{item.title}}</div>
 	
 	                  <ul class="list_unstyled ul_inline clearfix margin_bottom_20">
-	                    <li v-for="( i, index3) in item.arr" :key="index3" class="margin_top_5 margin_right_30 pointer hover_title">{{i}}</li>
+	                    <li @click="jumpDown(index)" v-for="( i, index3) in item.arr" :key="index3" class="margin_top_5 margin_right_30 pointer hover_title">{{i}}</li>
 	                  </ul>
 	
 	                </div>
@@ -40,7 +40,7 @@
 <script>
 
 	export default {
-	  props:['nowIndex'],
+	  props:['nowIndex','showItem'],
 		data() {
 			return {
 
@@ -150,6 +150,7 @@
 	      // 导航鼠标点击
 	      tabClick(index){
 	        this.curIndex = index;
+	        console.log(index)
 	        switch(index){
 	        	case 0:
 	        	case 1:
@@ -171,11 +172,23 @@
         this.itemsIndex = index;
 
       },
-      //跳转
-      toDynamic(index){
-        this.$router.push({
-        	path:'/industryDynamicList'
-    	})
+      //跳转jumpDown
+      jumpDown(index){
+      	var i = this.curIndex;
+        switch(i){
+        	case 0:
+        	case 1:
+	    		this.$router.push({
+		          path:'/industryDynamicDetail'
+		       	})
+	    		break;
+    		case 2:
+    		case 3:
+	    		this.$router.push({
+		          path:'/videoCourseList'
+		        })
+	    		break;
+        }
       }
 		},
 		mounted(){
