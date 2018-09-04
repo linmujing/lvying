@@ -21,6 +21,8 @@ const router = new Router({
       name:'Index',
       component: resolve => require(['@/view/shopMall/index'],resolve) ,
       children: [
+
+        /**购物车模块**/ 
         {
           path: '/shoppingCart',
           component:resolve => require(['@/view/shopCart/shoppingCart'],resolve),
@@ -42,6 +44,23 @@ const router = new Router({
             title:'去支付',
           },
         },
+        /**个人中心模块**/
+        {
+          path: '/personCenter',
+          component:resolve => require(['@/view/personCenter/personCenter'],resolve),
+          meta:{
+            title:'个人中心',
+          },
+          children: [
+            {
+              path: '/myOrder',
+              component:resolve => require(['@/view/personCenter/myOrder/myOrder'],resolve),
+              meta:{
+                title:'我的订单',
+              },
+            },
+          ]
+        }, 
         {
           path: '/shopMallIdex',
           component:resolve => require(['@/view/shopMall/shopMallIdex'],resolve),
