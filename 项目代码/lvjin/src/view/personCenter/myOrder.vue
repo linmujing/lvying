@@ -35,21 +35,26 @@
 
             <!-- 订单list列表 -->
             <ul class="order_list padding_left_20 padding_right_20">
-                <li class="order_list_item" v-for="(items, index) in orderData.orderList" :key="index" v-if="index < 5">
-                    <Col span="8"> 
-                        <div class="item_td padding_left_20 text_left">
-                            <p>
-                                {{items.startTime}} <span>订单号：{{items.orderId}}</span><br>
-                                <span class="text_ellipsis" style="color:#666;display:inline-block;width:300px;" :title="items.title">{{items.title}}</span>
+                <li class="order_list_item" v-for="(items, index) in orderData.orderList" :key="index" v-if="index < 5" :style="{height: 90 * items.items.length + 'px' }">
+                    <Col span="16"> 
+                        <div v-for="(item, index2) in items.items" :key="index2">
+                            <Col span="12"> 
+                                <div class="item_td padding_left_20 text_left">
+                                    <p>
+                                        {{item.startTime}} <span>订单号：{{item.orderId}}</span><br>
+                                        <span class="text_ellipsis" style="color:#666;display:inline-block;width:300px;" :title="item.title">{{item.title}}</span>
 
-                            </p>
+                                    </p>
+                                </div>
+                            </Col>
+                            <Col span="6"><div class="item_td"><p>{{item.price}}</p>    </div> </Col>
+                            <Col span="6"><div class="item_td"><p>{{item.total}}</p></div> </Col>
                         </div>
+
                     </Col>
-                    <Col span="4"> <div class="item_td"><p>{{items.price}}</p>    </div></Col>
-                    <Col span="4"> <div class="item_td"><p>{{items.total}}</p></div></Col>
                     <Col span="4"> 
                         <div class="item_td">
-                            <p>
+                            <p :style="{height: 90 * items.items.length + 'px' }">
                             {{items.payStateText}} <br>
                             <Button type="text" shape="circle" v-if="items.payStateText == '待发货'" 
                                 style="width:80px;height:26px;line-height:5px;padding:0" >查看物流</Button>
@@ -58,7 +63,7 @@
                     </Col>
                     <Col span="4"> 
                         <div class="item_td">
-                            <p>
+                            <p :style="{height: 90 * items.items.length + 'px' }">
                                 <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
                                     v-if="items.payStateText != '待付款'" >{{items.operation}}</Button>
 
@@ -77,7 +82,7 @@
                 </li>
             </ul>
             <!-- 订单分页 -->
-            <div class="list_page">
+            <div class="list_page" v-if="orderData.orderList.length > 5 ">
                 <Page :total="orderData.pageData.total" :current="orderData.pageData.current"   :page-size="orderData.pageData.pageSize"  
                     @on-change="changeOrderPage" size="small" show-total show-elevator />
             </div>
@@ -135,81 +140,103 @@ export default {
                 // 订单数据
                 orderList:[
                     {
-                        title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
-                        startTime: '2018-08-51 16:00:00',
-                        orderId: '2018080511600',
-                        price: '100.00',
-                        number: '1',
-                        total: '100.00',
                         payState: '',
                         payStateText: '待付款',
-                        operation: '去支付'
+                        operation: '去支付',
+                        items:[{
+                            title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                            startTime: '2018-08-51 16:00:00',
+                            orderId: '2018080511600',
+                            price: '100.00',
+                            number: '1',
+                            total: '100.00',
+                        },
+                        {
+                            title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                            startTime: '2018-08-51 16:00:00',
+                            orderId: '2018080511600',
+                            price: '100.00',
+                            number: '1',
+                            total: '100.00',
+                        }],
                     },
                     {
-                        title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
-                        startTime: '2018-08-51 16:00:00',
-                        orderId: '2018080511600',
-                        price: '100.00',
-                        number: '1',
-                        total: '100.00',
                         payState: '',
                         payStateText: '已关闭',
-                        operation: '重新购买'
+                        operation: '重新购买',
+                        items:[{
+                            title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                            startTime: '2018-08-51 16:00:00',
+                            orderId: '2018080511600',
+                            price: '100.00',
+                            number: '1',
+                            total: '100.00',
+                        }],
                     },
                     {
-                        title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
-                        startTime: '2018-08-51 16:00:00',
-                        orderId: '2018080511600',
-                        price: '100.00',
-                        number: '1',
-                        total: '100.00',
                         payState: '',
                         payStateText: '待评价',
-                        operation: '去评价'
+                        operation: '去评价',
+                        items:[{
+                            title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                            startTime: '2018-08-51 16:00:00',
+                            orderId: '2018080511600',
+                            price: '100.00',
+                            number: '1',
+                            total: '100.00',
+                        }],
                     },
                     {
-                        title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
-                        startTime: '2018-08-51 16:00:00',
-                        orderId: '2018080511600',
-                        price: '100.00',
-                        number: '1',
-                        total: '100.00',
                         payState: '',
                         payStateText: '待发货',
-                        operation: '退款'
+                        operation: '退款',
+                        items:[{
+                            title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                            startTime: '2018-08-51 16:00:00',
+                            orderId: '2018080511600',
+                            price: '100.00',
+                            number: '1',
+                            total: '100.00',
+                        }],
                     },
                     {
-                        title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
-                        startTime: '2018-08-51 16:00:00',
-                        orderId: '2018080511600',
-                        price: '100.00',
-                        number: '1',
-                        total: '100.00',
                         payState: '',
                         payStateText: '已付款',
-                        operation: '待发货'
+                        operation: '待发货',
+                        items:[{
+                            title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                            startTime: '2018-08-51 16:00:00',
+                            orderId: '2018080511600',
+                            price: '100.00',
+                            number: '1',
+                            total: '100.00',
+                        }],
                     },
                     {
-                        title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
-                        startTime: '2018-08-51 16:00:00',
-                        orderId: '2018080511600',
-                        price: '100.00',
-                        number: '1',
-                        total: '100.00',
                         payState: '',
                         payStateText: '待发货',
-                        operation: '待收货'
+                        operation: '待收货',
+                        items:[{
+                            title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                            startTime: '2018-08-51 16:00:00',
+                            orderId: '2018080511600',
+                            price: '100.00',
+                            number: '1',
+                            total: '100.00',
+                        }],
                     },
                     {
-                        title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
-                        startTime: '2018-08-51 16:00:00',
-                        orderId: '2018080511600',
-                        price: '100.00',
-                        number: '1',
-                        total: '100.00',
                         payState: '',
                         payStateText: '已成功',
-                        operation: '去支付'
+                        operation: '去支付',
+                        items:[{
+                            title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                            startTime: '2018-08-51 16:00:00',
+                            orderId: '2018080511600',
+                            price: '100.00',
+                            number: '1',
+                            total: '100.00',
+                        }],
                     }
                 ],
                 // 分页
@@ -367,20 +394,21 @@ export default {
         .order_list{
 
             >li{
-                height: 90px;
+                min-height: 90px;
                 border-bottom: 1px solid @color_e6e6e6;
                 background: @color_fafafa; 
                 text-align: center;
                 .item_td{
                     display: table;
                     width:100%;
-                    height: 90px;
+                    min-height: 90px;
 
                     p{
                         display:table-cell;
                         vertical-align:middle;
                         line-height:1.5;
                         width:100%;
+                        position: relative;
                     }
                 }
                 .text_left{
