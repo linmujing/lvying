@@ -61,6 +61,22 @@ const router = new Router({
             },
           ]
         }, 
+        /**用户登录**/
+       	{
+          path: '/userLogin',
+          component:resolve => require(['@/view/user/userLogin'],resolve),
+          meta:{
+            title:'用户登录',
+          },
+        },
+        {
+          path: '/userRegister',
+          component:resolve => require(['@/view/user/userRegister'],resolve),
+          meta:{
+            title:'用户注册',
+          },
+        },
+        /**商城模块**/
         {
           path: '/shopMallIdex',
           component:resolve => require(['@/view/shopMall/shopMallIdex'],resolve),
