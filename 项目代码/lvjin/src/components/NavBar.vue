@@ -1,8 +1,8 @@
 <template>
 	<div class="">
-	    <div class="nav">
+	    <div class="nav" style="position:relative;z-index:10000;">
 	      <div class="center relative">
-			<ul class="list_unstyled ul_inline clearfix font_18 navbar">
+					<ul class="list_unstyled ul_inline clearfix font_18 navbar">
 	          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navDataModel" :key="index" @click='tabClick(index)'>
 	            <a href="javascript:void(0)" class="color_fff tabHover">{{item.title}}</a>
 	          </li>
@@ -12,12 +12,13 @@
 	
 	            <div v-for="(items,index) in navDataModel[curIndex].lists" :key="index">
 	
-	              <div @mouseover="tabItemsHover(index)" @click="jumpDown(index)" class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
+	              <div @mouseover="boxMouseOver(index)" @click="jumpDown(index)" 
+										class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
 	                <span class="float_left color_fff font_18">{{items.title}}</span>
 	                <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
 	              </div>
 	
-	              <div v-show="showBox" class="itemBox bg_white width_1000px">
+	              <div v-show="showBox" class="itemBox bg_white width_1000px" >
 	                <div v-for="(item,index2) in navDataModel[curIndex].lists[itemsIndex].items " :key="index2">
 	                  <div @click="jumpDown(index)" class="font_18 pointer hover_title">{{item.title}}</div>
 	
@@ -35,6 +36,8 @@
 	        
 	      </div>
 	    </div>
+
+			<div class="mask"  v-show="showBox"  @mouseover="boxMouseOut" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;"></div>
 	</div>
 </template>
 <script>
@@ -45,104 +48,105 @@
 			return {
 
 			showBox: false,
-	        /*导航栏数据模型*/ 
-	        navDataModel:[
-	          {
-	            title: "行业动态管控",
-	            lists:[
-	              {
-	                title: "行业（企业）",
-	                items:[
-	                  {
-	                    title: "行业",
-	                    arr:["入职申请表" ,"入职申请表"]
-	                  },
-	                  {
-	                    title: "行业",
-	                    arr:["入职申请表" ,"入职申请表"]
-	                  }
-	                ]
-	              },
-	              {
-	                title: "行业（企业）",
-	                items:[
-	                  {
-	                    title: "行业",
-	                    arr:["入职申请表" ,"入职申请表"]
-	                  },
-	                  {
-	                    title: "行业",
-	                    arr:["入职申请表" ,"入职申请表"]
-	                  }
-	                ]
-	              },
-	              {
-	                title: "行业（企业）",
-	                items:[
-	                  {
-	                    title: "行业",
-	                    arr:["入职申请表" ,"入职申请表"]
-	                  }
-	                ]
-	              },
-	              {
-	                title: "行业（企业）",
-	                items:[
-	                  {
-	                    title: "行业",
-	                    arr:["入职申请表" ,"入职申请表"]
-	                  }
-	                ]
-	              }
-	            ]
-	          },
-	          {
-	            title: "法律动态管控",
-	            lists:[
-	              {
-	                title: "法律（企业）",
-	                items:[
-	                  {
-	                    title: "法律",
-	                    arr:["入职申请表" ,"入职申请表"]
-	                  }
-	                ]
-	              }
-	            ]
-	          },
-	          {
-	            title: "视频课程",
-	            lists:[
-	              {
-	                title: "视频课程",
-	                items:[
-	                  {
-	                    title: "",
-	                    arr:["入职申请表" ,"入职申请表"]
-	                  }
-	                ]
-	              }
-	            ]
-	          },
-	          {
-	            title: "音频课程",
-	            lists:[
-	              {
-	                title: "音频课程",
-	                items:[
-	                  {
-	                    title: "",
-	                    arr:["入职申请表" ,"入职申请表"]
-	                  }
-	                ]
-	              }
-	            ]
-	          }
-	        ],
-	        // 当前悬停位置
-	        curIndex: this.nowIndex,
-	        // 二级标题悬停
-	        itemsIndex:0,
+
+			// 当前悬停位置
+			curIndex: this.nowIndex,
+			// 二级标题悬停
+			itemsIndex:0,
+			/*导航栏数据模型*/ 
+			navDataModel:[
+				{
+					title: "行业动态管控",
+					lists:[
+						{
+							title: "行业（企业）",
+							items:[
+								{
+									title: "行业",
+									arr:["入职申请表" ,"入职申请表"]
+								},
+								{
+									title: "行业",
+									arr:["入职申请表" ,"入职申请表"]
+								}
+							]
+						},
+						{
+							title: "行业（企业）",
+							items:[
+								{
+									title: "行业",
+									arr:["入职申请表" ,"入职申请表"]
+								},
+								{
+									title: "行业",
+									arr:["入职申请表" ,"入职申请表"]
+								}
+							]
+						},
+						{
+							title: "行业（企业）",
+							items:[
+								{
+									title: "行业",
+									arr:["入职申请表" ,"入职申请表"]
+								}
+							]
+						},
+						{
+							title: "行业（企业）",
+							items:[
+								{
+									title: "行业",
+									arr:["入职申请表" ,"入职申请表"]
+								}
+							]
+						}
+					]
+				},
+				{
+					title: "法律动态管控",
+					lists:[
+						{
+							title: "法律（企业）",
+							items:[
+								{
+									title: "法律",
+									arr:["入职申请表" ,"入职申请表"]
+								}
+							]
+						}
+					]
+				},
+				{
+					title: "视频课程",
+					lists:[
+						{
+							title: "视频课程",
+							items:[
+								{
+									title: "",
+									arr:["入职申请表" ,"入职申请表"]
+								}
+							]
+						}
+					]
+				},
+				{
+					title: "音频课程",
+					lists:[
+						{
+							title: "音频课程",
+							items:[
+								{
+									title: "",
+									arr:["入职申请表" ,"入职申请表"]
+								}
+							]
+						}
+					]
+				}
+			],
 
 			}
 		},
@@ -167,11 +171,16 @@
 	        }
 	      },
       // 二级导航鼠标悬停
-      tabItemsHover(index){
-		this.showBox = true;
+      boxMouseOver(index){
+				this.showBox = true;
         this.itemsIndex = index;
 
-      },
+			},
+			//鼠标移除
+			boxMouseOut(){
+				this.showBox = false;
+			},
+
       //跳转jumpDown
       jumpDown(index){
       	var i = this.curIndex;

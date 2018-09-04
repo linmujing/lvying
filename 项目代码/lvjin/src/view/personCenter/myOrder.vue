@@ -86,7 +86,7 @@
 
         <!-- 没有订单 -->
         <div class="order_has_not" v-if="orderData.orderList.length == 0 ">
-            <img src="../../../assets/images/image/order_not.png" width="100px" alt="">
+            <img src="../../assets/images/image/order_not.png" width="100px" alt="">
         </div>
 
         <!-- 订单操作弹框 -->
@@ -305,7 +305,7 @@ export default {
 <style scoped lang='less'>
 
     //引入订单共用less文件
-    @import '../../shopCart/shopCart.less'; 
+    @import '../shopCart/shopCart.less'; 
 
     // 页面title
     .order_title{
