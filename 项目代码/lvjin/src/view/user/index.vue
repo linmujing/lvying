@@ -1,10 +1,7 @@
 <template>
     <div class="container">
-    	<Header :isLogin='1'></Header>
+    	<Header :isLogin='0'></Header>
         <router-view></router-view>
-
-    	<!-- <NavBar></NavBar> -->
-
     	<Footer></Footer>
 		
     </div>
@@ -29,7 +26,4 @@ export default {
 }
 </script>
 <style scoped lang='less'>
-/*.container{*/
-    /*background: #f5f5f5;*/
-/*}*/
 </style>
