@@ -4,13 +4,13 @@
 			<div class="top">
 				<div class="center clearfix">
 					<div class="float_left">
-						<a class="color_title">亲，请登录</a>
-						<a class="padding_left_25">注册</a>
+						<router-link tag="a" target="_blank" to="/userLogin" class="color_title">亲，请登录</router-link>
+						<router-link tag="a" target="_blank" to="/userRegister" class="padding_left_25">注册</router-link>
 					</div>
 					<div class="float_right">
 						<ul class="list_unstyled ul_inline clearfix">
 							<li>
-								<router-link tag="a" target="_blank" to="">我的中心</router-link>
+								<router-link tag="a" target="_blank" to="/personCenter">我的中心</router-link>
 							</li>
 							<li>
 								<router-link tag="a" target="_blank" to="/shoppingCart">购物车</router-link>

@@ -17,7 +17,9 @@
 						<div class="float_left">
 							<span class="title">视频推荐</span>
 						</div>
-						<div class="float_right more pointer">更多》</div>
+						<div class="float_right more pointer">
+							<router-link tag="a" target="_blank" to="/videoCourseList">更多》</router-link>
+						</div>
 					</div>
 					<div v-for="item in 2" class="margin_top_20 clearfix">
 						<div class="float_left videoBox"></div>
@@ -46,7 +48,9 @@
 						<div class="float_left">
 							<span class="title">音频推荐</span>
 						</div>
-						<div class="float_right more pointer">更多》</div>
+						<div class="float_right more pointer">
+							<router-link tag="a" target="_blank" to="/videoCourseList">更多》</router-link>
+						</div>
 					</div>
 					<div v-for="item in 2" class="margin_top_20 clearfix">
 						<div class="float_left videoBox"></div>
