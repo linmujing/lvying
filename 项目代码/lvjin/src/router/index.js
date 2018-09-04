@@ -44,6 +44,7 @@ const router = new Router({
             title:'去支付',
           },
         },
+
         /**个人中心模块**/
         {
           path: '/personCenter',
@@ -53,7 +54,7 @@ const router = new Router({
           },
           children: [
             {
-              path: '/myOrder',
+              path: '/personCenter/myOrder',
               component:resolve => require(['@/view/personCenter/myOrder'],resolve),
               meta:{
                 title:'我的订单',
@@ -61,6 +62,14 @@ const router = new Router({
             },
           ]
         }, 
+        {
+          path: '/refundMoney',
+          component:resolve => require(['@/view/personCenter/refundMoney'],resolve),
+          meta:{
+            title:'退款',
+          },
+        },
+
         /**用户登录**/
        	{
           path: '/userLogin',

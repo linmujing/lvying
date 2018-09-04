@@ -14,7 +14,6 @@
     
 
     /**通用**/
-
     div{
         box-sizing: border-box;
     }
@@ -68,5 +67,29 @@
             width:44px;
             border-left: 1px solid @color_cccccc;
             border-right: 1px solid @color_cccccc;
+        }
+    }
+
+    // 页面title
+    .order_title{
+        height: 48px;
+        line-height: 48px;
+        background: @color_fafafa;
+
+        span{
+            display: inline-block;
+            width: 122px;
+            text-align: center;
+            border-bottom:2px solid @color_00aa88;
+        }
+    }
+
+    .table_block{
+        display: table;
+
+        .td_block{
+            display:table-cell;
+            vertical-align:middle;
+            line-height:1.5;
         }
     }

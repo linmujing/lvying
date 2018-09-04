@@ -33,54 +33,56 @@
                 </Row>
             </div>
 
-            <!-- 订单list列表 -->
-            <ul class="order_list padding_left_20 padding_right_20">
-                <li class="order_list_item" v-for="(items, index) in orderData.orderList" :key="index" v-if="index < 5" :style="{height: 90 * items.items.length + 'px' }">
-                    <Col span="16"> 
-                        <div v-for="(item, index2) in items.items" :key="index2">
-                            <Col span="12"> 
-                                <div class="item_td padding_left_20 text_left">
-                                    <p>
-                                        {{item.startTime}} <span>订单号：{{item.orderId}}</span><br>
-                                        <span class="text_ellipsis" style="color:#666;display:inline-block;width:300px;" :title="item.title">{{item.title}}</span>
+            <div :class="[ lisionOrderScroll() ? 'order_scroll':'']">
+                <!-- 订单list列表 -->
+                <ul class="order_list padding_left_20 padding_right_20">
+                    <li class="order_list_item" v-for="(items, index) in orderData.orderList" :key="index" v-if="index < 5" :style="{height: 90 * items.items.length + 'px' }">
+                        <Col span="16"> 
+                            <div v-for="(item, index2) in items.items" :key="index2">
+                                <Col span="12"> 
+                                    <div class="item_td padding_left_20 text_left">
+                                        <p>
+                                            {{item.startTime}} <span>订单号：{{item.orderId}}</span><br>
+                                            <span class="text_ellipsis" style="color:#666;display:inline-block;width:300px;" :title="item.title">{{item.title}}</span>
 
-                                    </p>
-                                </div>
-                            </Col>
-                            <Col span="6"><div class="item_td"><p>{{item.price}}</p>    </div> </Col>
-                            <Col span="6"><div class="item_td"><p>{{item.total}}</p></div> </Col>
-                        </div>
+                                        </p>
+                                    </div>
+                                </Col>
+                                <Col span="6"><div class="item_td"><p>{{item.price}}</p>    </div> </Col>
+                                <Col span="6"><div class="item_td"><p>{{item.total}}</p></div> </Col>
+                            </div>
 
-                    </Col>
-                    <Col span="4"> 
-                        <div class="item_td">
-                            <p :style="{height: 90 * items.items.length + 'px' }">
-                            {{items.payStateText}} <br>
-                            <Button type="text" shape="circle" v-if="items.payStateText == '待发货'" 
-                                style="width:80px;height:26px;line-height:5px;padding:0" >查看物流</Button>
-                            </p>
-                        </div>
-                    </Col>
-                    <Col span="4"> 
-                        <div class="item_td">
-                            <p :style="{height: 90 * items.items.length + 'px' }">
-                                <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                    v-if="items.payStateText != '待付款'" >{{items.operation}}</Button>
+                        </Col>
+                        <Col span="4"> 
+                            <div class="item_td">
+                                <p :style="{height: 90 * items.items.length + 'px' }">
+                                {{items.payStateText}} <br>
+                                <Button type="text" shape="circle" v-if="items.payStateText == '待发货'" 
+                                    style="width:80px;height:26px;line-height:5px;padding:0" >查看物流</Button>
+                                </p>
+                            </div>
+                        </Col>
+                        <Col span="4"> 
+                            <div class="item_td">
+                                <p :style="{height: 90 * items.items.length + 'px' }">
+                                    <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
+                                        v-if="items.payStateText != '待付款'" >{{items.operation}}</Button>
 
-                                    <!-- 待付款取消订单 -->
-                                <Button type="warning" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                    v-if="items.payStateText == '待付款'" >{{items.operation}}</Button>
-                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
-                                    v-if="items.payStateText == '待付款'" @click="openModel(index)" >取消订单</Button>
+                                        <!-- 待付款取消订单 -->
+                                    <Button type="warning" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
+                                        v-if="items.payStateText == '待付款'" >{{items.operation}}</Button>
+                                        <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
+                                        v-if="items.payStateText == '待付款'" @click="openModel(index)" >取消订单</Button>
 
-                                    <!-- 已关闭删除订单 -->
-                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
-                                    v-if="items.payStateText == '已关闭'" @click="openModel(index)" >删除订单</Button>
-                            </p>
-                        </div>
-                    </Col>
-                </li>
-            </ul>
+                                        <!-- 已关闭删除订单 -->
+                                        <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
+                                        v-if="items.payStateText == '已关闭'" @click="openModel(index)" >删除订单</Button>
+                                </p>
+                            </div>
+                        </Col>
+                    </li>
+                </ul>
+            </div>
             <!-- 订单分页 -->
             <div class="list_page" v-if="orderData.orderList.length > 5 ">
                 <Page :total="orderData.pageData.total" :current="orderData.pageData.current"   :page-size="orderData.pageData.pageSize"  
@@ -283,6 +285,23 @@ export default {
             this.orderData.pageData.current = value;
 
         },
+        //监听订单数量添加滚动事件
+        lisionOrderScroll(){
+
+            //当页面订单商品数量大于5条时，就给列表添加滚动
+            let n = 0;
+            let data = this.orderData.orderList;
+
+            for(let i = 0 ; i < data.length ; i++ ){
+                for(let k = 0 ; k < data[i].items.length; k++ ){
+                    n++;
+                }
+            }
+
+            if(n > 5){
+                return true;
+            }
+        },
 
         /**订单功能弹框**/
         // 确定
@@ -333,19 +352,6 @@ export default {
 
     //引入订单共用less文件
     @import '../shopCart/shopCart.less'; 
-
-    // 页面title
-    .order_title{
-        height: 48px;
-        line-height: 48px;
-        background: @color_fafafa;
-
-        span{
-            display: inline-block;
-            width: 122px;
-            text-align: center;
-        }
-    }
 
     // 订单类型
     .order_type{
@@ -430,6 +436,12 @@ export default {
         img{
             width: 260px;
         }
+    }
+    // order滚动设置
+    .order_scroll{
+        height: 450px;
+        width: 100%;
+        overflow-y: scroll;
     }
 
     
