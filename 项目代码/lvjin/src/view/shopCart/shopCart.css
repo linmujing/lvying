@@ -61,6 +61,7 @@ i {
   width: 122px;
   text-align: center;
   border-bottom: 2px solid #00aa88;
+  font-size: 16px;
 }
 .table_block {
   display: table;

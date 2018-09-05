@@ -69,7 +69,14 @@ const router = new Router({
             title:'退款',
           },
         },
-
+        {
+          path: '/checkLogistics',
+          component:resolve => require(['@/view/personCenter/checkLogistics'],resolve),
+          meta:{
+            title:'查看物流',
+          },
+        },
+        
         /**商城模块**/
         {
           path: '/shopMallIdex',
