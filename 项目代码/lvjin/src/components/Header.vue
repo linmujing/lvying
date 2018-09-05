@@ -4,8 +4,10 @@
 			<div class="top">
 				<div class="center clearfix">
 					<div class="float_left">
-						<router-link tag="a" target="_blank" to="/userLogin" class="color_title">亲，请登录</router-link>
-						<router-link tag="a" target="_blank" to="/userRegister" class="padding_left_25">注册</router-link>
+						<router-link tag="a" target="_blank" to="/user/userLogin">
+							<span class="color_title">亲，请登录</span>
+						</router-link>
+						<router-link tag="a" target="_blank" to="/user/userRegister" class="padding_left_25">注册</router-link>
 					</div>
 					<div class="float_right">
 						<ul class="list_unstyled ul_inline clearfix">
@@ -37,8 +39,8 @@
 						<Input search placeholder="视频/音频/合同" class="search_box"/>
 					</div>
 					<div v-else-if="loginStatus === 0" class="margin_top_10">
-						<Button shape="circle" class="width_80px">登录</Button>
-						<Button type="success" shape="circle" class="margin_left_10 bg_title width_80px">注册</Button>
+						<Button @click="login" shape="circle" class="width_80px">登录</Button>
+						<Button @click="register" type="success" shape="circle" class="margin_left_10 bg_title width_80px">注册</Button>
 					</div>
 				</div>
 			</div>
@@ -55,8 +57,17 @@
 			}
 		},
 		methods:{
+			//logo链接到首页
 			jump() {
                 this.$router.push({path:'/'})
+            },
+            //登录按钮
+            login() {
+                this.$router.push({path:'/user/userLogin'})
+            },
+            //注册按钮
+            register() {
+                this.$router.push({path:'/user/userRegister'})
             },
 		},
 		mounted(){
