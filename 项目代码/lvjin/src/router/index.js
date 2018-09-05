@@ -137,26 +137,57 @@ const router = new Router({
     },
     /**用户登录**/
     {
-      path: '/userLogin',
+      path: '/user',
       meta:{
         title:'用户登录',
       },
       component:  resolve => require(['@/view/user/index'],resolve),
       children: [
        	{
-          path: '/userLogin',
+          path: 'userLogin',
           component:resolve => require(['@/view/user/userLogin'],resolve),
           meta:{
             title:'用户登录',
-          },
+          }
         },
         {
-          path: '/userRegister',
+          path: 'userRegister',
           component:resolve => require(['@/view/user/userRegister'],resolve),
           meta:{
             title:'用户注册',
-          },
+          }
         },
+        {
+          path: 'forgotPwd',
+          component:resolve => require(['@/view/user/forgotPwd'],resolve),
+          meta:{
+            title:'忘记密码',
+          }
+        },
+        {
+          path: 'forgotPwdStep',
+          component:resolve => require(['@/view/user/forgotPwdStep'],resolve),
+          meta:{
+            title:'忘记密码',
+          }
+        }
+      ]
+    },
+    /**提供商**/
+    {
+      path: '/supplier',
+      meta:{
+        title:'提供商登录',
+      },
+      component:  resolve => require(['@/view/supplier/index'],resolve),
+      children: [
+       	{
+          path: 'supplierLogin',
+          component:resolve => require(['@/view/supplier/supplierLogin'],resolve),
+          meta:{
+            title:'提供商登录',
+          }
+        }
       ]
     },
     {
@@ -168,7 +199,7 @@ const router = new Router({
       component: resolve => require(['@/view/404'],resolve)
     }
   ],
-  mode: 'history'
+mode: 'history'
 })
 
 router.beforeEach((to,form,next) =>{ 
