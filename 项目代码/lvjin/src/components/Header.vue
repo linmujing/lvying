@@ -24,7 +24,7 @@
 								<router-link tag="a" target="_blank" to="">律瀛商城</router-link>
 							</li>
 							<li>
-								<router-link tag="a" target="_blank" to="">提供商入口</router-link>
+								<router-link tag="a" target="_blank" to="/supplier/supplierLogin">提供商入口</router-link>
 							</li>
 						</ul>
 					</div>
@@ -35,7 +35,7 @@
 					<img src="../assets/logo.png" @click="jump"/>
 				</div>
 				<div class="float_right padding">
-					<div v-if="loginStatus > 0">
+					<div v-if="loginStatus == 1">
 						<Input search placeholder="视频/音频/合同" class="search_box"/>
 					</div>
 					<div v-else-if="loginStatus === 0" class="margin_top_10">

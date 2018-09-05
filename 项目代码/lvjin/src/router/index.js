@@ -173,6 +173,23 @@ const router = new Router({
         }
       ]
     },
+    /**提供商**/
+    {
+      path: '/supplier',
+      meta:{
+        title:'提供商登录',
+      },
+      component:  resolve => require(['@/view/supplier/index'],resolve),
+      children: [
+       	{
+          path: 'supplierLogin',
+          component:resolve => require(['@/view/supplier/supplierLogin'],resolve),
+          meta:{
+            title:'提供商登录',
+          }
+        }
+      ]
+    },
     {
       path: '*',
       name: '404',
