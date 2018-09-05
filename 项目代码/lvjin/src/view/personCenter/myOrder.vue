@@ -68,15 +68,15 @@
                                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
                                         v-if="items.payStateText != '待付款'" >{{items.operation}}</Button>
 
-                                        <!-- 待付款取消订单 -->
+                                    <!-- 待付款取消订单 -->
                                     <Button type="warning" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
                                         v-if="items.payStateText == '待付款'" >{{items.operation}}</Button>
-                                        <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
-                                        v-if="items.payStateText == '待付款'" @click="openModel(index)" >取消订单</Button>
+                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
+                                    v-if="items.payStateText == '待付款'" @click="openModel(index)" >取消订单</Button>
 
-                                        <!-- 已关闭删除订单 -->
-                                        <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
-                                        v-if="items.payStateText == '已关闭'" @click="openModel(index)" >删除订单</Button>
+                                    <!-- 已关闭删除订单 -->
+                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
+                                    v-if="items.payStateText == '已关闭'" @click="openModel(index)" >删除订单</Button>
                                 </p>
                             </div>
                         </Col>

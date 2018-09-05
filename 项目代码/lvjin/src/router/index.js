@@ -59,6 +59,12 @@ const router = new Router({
               meta:{
                 title:'我的订单',
               },
+            },{
+              path: '/personCenter/myCoupon',
+              component:resolve => require(['@/view/personCenter/myCoupon'],resolve),
+              meta:{
+                title:'我的优惠券',
+              },
             },
           ]
         }, 
@@ -67,6 +73,13 @@ const router = new Router({
           component:resolve => require(['@/view/personCenter/refundMoney'],resolve),
           meta:{
             title:'退款',
+          },
+        },
+        {
+          path: '/checkLogistics',
+          component:resolve => require(['@/view/personCenter/checkLogistics'],resolve),
+          meta:{
+            title:'查看物流',
           },
         },
 

@@ -16,6 +16,9 @@ i {
 .color_f09105 {
   color: #f09105;
 }
+.color_ccc {
+  color: #ccc;
+}
 .number_add_reduce {
   width: 80px;
   height: 22px;
@@ -61,6 +64,7 @@ i {
   width: 122px;
   text-align: center;
   border-bottom: 2px solid #00aa88;
+  font-size: 16px;
 }
 .table_block {
   display: table;
