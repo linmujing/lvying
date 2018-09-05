@@ -9,7 +9,8 @@
                 <!-- 查看物流标题 -->
                 <div class="order_title"><span>查看物流</span></div>
 
-                <div class="logistics_box">
+                <!-- 带参数查看物流 -->
+                <div class="logistics_box" v-if="pageState !='c'">
                     <Col :span="9">
                         <div class="logistics_detail">
                             <p class="title">物流信息</p>
@@ -32,6 +33,27 @@
                                 <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" >重新购买</Button>
                                 <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0">删除订单</Button>
                             </p>
+                        </div>
+                    </Col>
+                </div>
+
+                <!-- 普通查看物流 -->
+                <div class="logistics_box" v-if="pageState =='c'">
+                    <Col :span="11">
+                        <div class="logistics_detail">
+                            <p class="title">物流信息</p>
+                            <div class="item_box"><span>物流单号：</span><div>{{logisticsData.id}}</div></div>
+                            <div class="item_box"><span>发货地址：</span><div>{{logisticsData.deliveryAddress}}</div></div>
+                            <div class="item_box"><span>收货人：</span><div><b>{{logisticsData.person}}</b>  </div></div>
+                            <div class="item_box"><span>收货地址：</span><div>{{logisticsData.collectAddress}}</div></div>
+                        </div>
+                    </Col>
+                    <Col :span="13">
+                        <div class="store_list">
+                            <div class="store_item">
+                                <p class="img_box"><img src="../../assets/images/image/cart_book.png" alt=""></p>
+                                <span>500 * 1</span>
+                            </div>
                         </div>
                     </Col>
                 </div>
@@ -65,6 +87,7 @@ export default {
                 orderStateText:'待付款',
             },
 
+            
             
         }
         
@@ -103,6 +126,7 @@ export default {
         height: 750px;
         background: #fff;
         
+        // 带参数查看物流
         .logistics_box{
             padding:30px 20px;
             font-size: 14px;
@@ -113,7 +137,6 @@ export default {
                 height: 234px;
             }
             .logistics_detail{
-                border-right:0;
 
                 .title{
                     height: 40px;
@@ -131,7 +154,7 @@ export default {
                     }
                     >div{
                         display: inline-block; 
-                        width: 320px;
+                        width: 80%;
                     }
                 }
             }
@@ -139,9 +162,42 @@ export default {
             //订单信息
             .order_detail{
                 text-align: center;
+                border-left:0;
 
                 p{
                     line-height: 34px;
+                }
+            }
+        }
+
+        // 普通查看物流
+        .store_list{
+
+            .store_item{
+                display: inline-block;
+                width: 230px;
+                padding-left: 50px;
+               text-align: center;
+
+                .img_box{
+                    height: 160px;
+                    border:1px solid @color_e6e6e6;
+
+                    position: relative;
+
+                    img{
+                        display: block;
+                        width:50%;
+                        margin: auto auto;
+                        position: absolute;
+                        top:0;
+                        bottom:0;
+                        left:0;
+                        right:0;
+                    }
+                }
+                span{
+                        line-height: 40px;
                 }
             }
         }

@@ -74,7 +74,7 @@ export default {
 
     // 通用
     .height_900{
-        height: 900px;
+        min-height: 900px;
     }
 
     // 个人中心
