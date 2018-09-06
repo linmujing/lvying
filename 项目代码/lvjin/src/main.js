@@ -5,11 +5,13 @@ import App from './App'
 import router from './router'
 import iView from 'iview'
 
-//解决ie9浏览器兼容问题
+//解决ie9+浏览器兼容问题
 import 'babel-polyfill';
 
 // 使用iview的 CSS
-import 'iview/dist/styles/iview.css'    
+// import 'iview/dist/styles/iview.css';    
+// 使用iview的 修改主体样式
+import '../my-theme/dist/iview.css';
 
 Vue.use(iView);
 
