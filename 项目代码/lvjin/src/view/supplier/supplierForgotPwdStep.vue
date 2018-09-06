@@ -7,18 +7,23 @@
               <Col span="14">
                 <div class="padding_90 border_right">
 
-                  <div class="margin_top_50">
+                  <div class="margin_top_30">
                     <Form ref="formValidate" :model="formRight" :rules="ruleValidate" label-position="right" :label-width="100">
                       <FormItem label="手机号" prop="phone">
                         <Input v-model="formRight.phone" size="large" placeholder="请输入手机号" style="width: 300px"></Input>
                       </FormItem>
-                      <FormItem label="验证码" prop="code">
-                        <Input v-model="formRight.code" size="large" placeholder="请输入验证码" style="width: 200px"></Input>
+                      <FormItem label="手机验证码" prop="code">
+                        <Input v-model="formRight.code" size="large" placeholder="请输入手机验证码" style="width: 200px"></Input>
                         <span class="get_code">验证码</span>
-                        <span class="font_12 pointer color_link padding_left_5">看不清？换一张</span>
+                      </FormItem>
+                      <FormItem label="新密码" prop="pwd">
+                        <Input v-model="formRight.pwd" size="large" placeholder="请输入密码" style="width: 300px"></Input>
+                      </FormItem>
+                      <FormItem label="确认密码" prop="rePwd">
+                        <Input v-model="formRight.rePwd" size="large" placeholder="请输入重复密码" style="width: 300px"></Input>
                       </FormItem>
                       <FormItem style="width: 260px">
-                        <Button @click="nextStep('formValidate')" size="large" type="success" shape="circle" class="all_width bg_title">下一步</Button>
+                        <Button @click="nextStep('formValidate')" size="large" type="success" shape="circle" class="all_width bg_title">完成并登陆</Button>
                       </FormItem>
                     </Form>
                   </div>
@@ -58,10 +63,20 @@ export default {
     components : {
     },
     data() {
+        const passwordSure = (rule, value, callback) => {
+          let self = this;
+          if (value != self.formRight.pwd ){
+            callback(new Error('密码不一致'))
+          } else {
+            callback();
+          }
+        };
         return {
        		formRight: {
                 phone: '',
-                code: ''
+                code: '',
+                pwd: '',
+                rePwd: '',
            	},
             ruleValidate: {
                 phone: [
@@ -69,6 +84,14 @@ export default {
                 ],
                 code: [
                 	{ required: true, message: '验证码不能为空', trigger: 'blur' }
+                ],
+                pwd: [
+                  { required: true, message: '密码不能为空!', trigger: 'blur' },
+                  {type:'string',min:6,message: '请输入6-20位数字、字母、标点符号组合密码!', trigger: 'blur'},
+                ],
+                rePwd: [
+                  { required: true, message: '确认密码不能为空!', trigger: 'blur' },
+                  {validator:passwordSure,trigger: 'blur'}
                 ]
             }
         }
@@ -79,7 +102,7 @@ export default {
 		nextStep (name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    this.$router.push({path:'/supplier/supplierForgotPwdStep'});
+                    this.$router.push({path:'/user/forgotPwdStep'});
                 } else {
                     this.$Message.error('Fail!');
                 }

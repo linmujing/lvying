@@ -53,7 +53,7 @@
 			curIndex: this.nowIndex,
 			// 二级标题悬停
 			itemsIndex:0,
-			/*导航栏数据模型*/ 
+			/*导航栏数据模型*/
 			navDataModel:[
 				{
 					title: "行业动态管控",
@@ -151,25 +151,44 @@
 			}
 		},
 		methods:{
-	      // 导航鼠标点击
-	      tabClick(index){
-	        this.curIndex = index;
-	        console.log(index)
-	        switch(index){
-	        	case 0:
-	        	case 1:
-		    		this.$router.push({
-			          path:'/industryDynamic'
-			       	})
-		    		break;
-	    		case 2:
-	    		case 3:
-		    		this.$router.push({
-			          path:'/videoCourse'
-			        })
-		    		break;
-	        }
-	      },
+      // 导航鼠标点击
+      tabClick(index){
+        this.curIndex = index;
+        switch(index){
+          case 0:
+            this.$router.push({
+              name:'industryDynamic',
+              params: {
+                typeId: 0
+              }
+            })
+            break;
+          case 1:
+            this.$router.push({
+              name:'industryDynamic',
+              params: {
+                typeId: 1
+              }
+            })
+            break;
+          case 2:
+            this.$router.push({
+              name:'videoCourse',
+              params: {
+                typeId: 2
+              }
+            })
+            break;
+          case 3:
+            this.$router.push({
+              name:'videoCourse',
+              params: {
+                typeId: 3
+              }
+            })
+            break;
+        }
+      },
       // 二级导航鼠标悬停
       boxMouseOver(index){
 				this.showBox = true;
@@ -201,7 +220,7 @@
       }
 		},
 		mounted(){
-
+      console.log(this.nowIndex)
 		}
 	}
 </script>

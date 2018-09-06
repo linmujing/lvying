@@ -225,6 +225,22 @@ const router = new Router({
           meta:{
             title:'提供商认证状态',
           }
+        },
+        {
+          path: 'supplierForgotPwd',
+          name: 'supplierForgotPwd',
+          component:resolve => require(['@/view/supplier/supplierForgotPwd'],resolve),
+          meta:{
+            title:'忘记密码',
+          }
+        },
+        {
+          path: 'supplierForgotPwdStep',
+          name: 'supplierForgotPwdStep',
+          component:resolve => require(['@/view/supplier/supplierForgotPwdStep'],resolve),
+          meta:{
+            title:'忘记密码',
+          }
         }
       ]
     },

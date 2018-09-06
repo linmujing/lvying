@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :nowIndex="2" :showItem='true'></NavBar>
+    <NavBar :nowIndex="typeId" :showItem='true'></NavBar>
     <Banner></Banner>
     <!--热门推荐-->
     <div class="content">
@@ -87,12 +87,16 @@ export default {
     },
     data() {
         return {
-
+          typeId: this.$route.params.typeId,
         }
         
     },
     methods: {
 
+    },
+    mounted(){
+      //获取页面传参
+      // this.typeId = this.$route.params.typeId;
     }
 }
 </script>
