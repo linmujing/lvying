@@ -187,6 +187,13 @@ const router = new Router({
           meta:{
             title:'提供商登录',
           }
+        },
+        {
+          path: 'supplierRegister',
+          component:resolve => require(['@/view/supplier/supplierRegister'],resolve),
+          meta:{
+            title:'提供商注册',
+          }
         }
       ]
     },
