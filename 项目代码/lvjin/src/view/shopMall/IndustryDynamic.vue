@@ -86,7 +86,10 @@ export default {
     },
     methods: {
 
-    }
+    },
+    mounted(){
+			console.log(this.$route.params.typeId)
+		}
 }
 </script>
 <style scoped lang='less'>

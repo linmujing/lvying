@@ -12,7 +12,7 @@
 					        <FormItem label="密码" prop="pwd">
 					            <Input v-model="formRight.pwd" size="large" placeholder="请输入密码" style="width: 270px"></Input>
 				            	<div>
-				            		<router-link tag="a" to="/user/forgotPwd" class="padding_left_10">
+				            		<router-link tag="a" to="/supplier/supplierForgotPwd" class="padding_left_10">
 				            			<span class="color_link">忘记密码？</span>
 				            		</router-link>
 				            	</div>

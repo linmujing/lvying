@@ -138,6 +138,11 @@ export default {
     }
 }
 </script>
+<style>
+	/*修改tip样式*/
+	.detailBox .ivu-tooltip-light .ivu-tooltip-inner{color: #f09105;border: 1px solid #f09105}
+	.detailBox .ivu-tooltip-light.ivu-tooltip-popper[x-placement^=right] .ivu-tooltip-arrow{border-right-color:#f09105}
+</style>
 <style scoped lang='less'>
   .detailBox{
     .width_100px{width: 100px;}

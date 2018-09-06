@@ -204,13 +204,19 @@ export default {
         	case 0:
         	case 1:
 	    		this.$router.push({
-		          path:'/industryDynamic'
+		          name:'industryDynamic',
+		          params: {
+		          	typeId: 11111
+		          }
 		       	})
 	    		break;
     		case 2:
     		case 3:
 	    		this.$router.push({
-		          path:'/videoCourse'
+		          name:'videoCourse',
+		          params: {
+		          	typeId: 22222
+		          }
 		        })
 	    		break;
         }
