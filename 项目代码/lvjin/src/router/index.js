@@ -24,21 +24,21 @@ const router = new Router({
 
         /**购物车模块**/ 
         {
-          path: '/shoppingCart',
+          path: 'shoppingCart',
           component:resolve => require(['@/view/shopCart/shoppingCart'],resolve),
           meta:{
             title:'购物车',
           },
         },
         {
-          path: '/submitOrder',
+          path: 'submitOrder',
           component:resolve => require(['@/view/shopCart/submitOrder'],resolve),
           meta:{
             title:'提交订单',
           },
         },
         {
-          path: '/shopGoPay',
+          path: 'shopGoPay',
           component:resolve => require(['@/view/shopCart/shopGoPay'],resolve),
           meta:{
             title:'去支付',
@@ -47,20 +47,20 @@ const router = new Router({
 
         /**个人中心模块**/
         {
-          path: '/personCenter',
+          path: 'personCenter',
           component:resolve => require(['@/view/personCenter/personCenter'],resolve),
           meta:{
             title:'个人中心',
           },
           children: [
             {
-              path: '/personCenter/myOrder',
+              path: 'myOrder',
               component:resolve => require(['@/view/personCenter/myOrder'],resolve),
               meta:{
                 title:'我的订单',
               },
             },{
-              path: '/personCenter/myCoupon',
+              path: 'myCoupon',
               component:resolve => require(['@/view/personCenter/myCoupon'],resolve),
               meta:{
                 title:'我的优惠券',
@@ -69,14 +69,14 @@ const router = new Router({
           ]
         }, 
         {
-          path: '/refundMoney',
+          path: 'refundMoney',
           component:resolve => require(['@/view/personCenter/refundMoney'],resolve),
           meta:{
             title:'退款',
           },
         },
         {
-          path: '/checkLogistics',
+          path: 'checkLogistics',
           component:resolve => require(['@/view/personCenter/checkLogistics'],resolve),
           meta:{
             title:'查看物流',
