@@ -3,13 +3,13 @@
     <div class="order_box padding_bottom_30">
 
         <!-- 资料标题    -->
-        <div class="order_title font_16 border_bottom_1">
-            <span :class="[pageState == 0 ? 'active': '']" @click="changePage(0)" >我的资料</span>
-            <span :class="[pageState == 1 ? 'active': '']" @click="changePage(1)" >收货地址</span>
+        <div class="order_title font_16 border_bottom_1" >
+            <span :class="[profileState == 0 ? 'active': '']" @click="changePage(0)" >我的资料</span>
+            <span :class="[profileState == 1 ? 'active': '']" @click="changePage(1)" >收货地址</span>
         </div>
 
         <!-- 个人资料 -->
-        <div class="profile_box">
+        <div class="profile_box" v-if="profileState == 0">
             <div class="input_box">
                 <span>我的名字：</span>
                 <Input v-model="profileData.name" size="large" placeholder="请输入昵称" style="width:200px;padding-right:10px;" />
@@ -52,19 +52,23 @@
             </div>
         </div>
 
-
+        <div  v-if="profileState == 1">
+            <Address :pState="0"></Address>
+        </div>
     </div>
 </template>
-<script>
 
+<script>
+import Address from '../../components/Address.vue'
 export default {
     components : {
+        Address
     },
     data() {
         return {
 
             // 判断页面是资料页面还是收货地址 0：我的资料  1：收货地址
-            pageState: 0,
+            profileState: 1,
 
             /*资料对象*/
             profileData:{
@@ -84,7 +88,7 @@ export default {
         /*切换页面组件*/
         changePage(state){
 
-            this.pageState = state;
+            this.profileState = state;
 
         }
 

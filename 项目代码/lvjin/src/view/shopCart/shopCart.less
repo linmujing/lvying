@@ -90,6 +90,7 @@
         }
     }
 
+    // table布局
     .table_block{
         display: table;
 
@@ -97,5 +98,30 @@
             display:table-cell;
             vertical-align:middle;
             line-height:1.5;
+        }
+    }
+
+    // 图片居中
+    .img_middle_center{
+        position: relative;
+
+        img{
+            height: 80%;
+            position: absolute;
+            top:0;
+            bottom:0;
+            left:0;
+            right:0;
+            margin:auto;
+        }
+    }
+
+    // 文字鼠标悬停改变颜色
+    .text_hover_color{
+        color: @color_00aa88;
+        transition: 0.5s;
+        cursor: pointer;
+        &:hover{
+            color: #666;
         }
     }

@@ -1,12 +1,12 @@
 <template>
-    <div class="bg_f5 padding_top_30 padding_bottom_80">
-        <div class="box_center_1200">
+    <div class="bg_f5 padding_top_30 padding_bottom_80" >
+        <div class="box_center_1200" v-show="!addressData.addressPageShow">
 
             <!-- 订单地址 #submitType#-->
             <div class="order_address" v-if="!submitType">
 
                 <!-- 添加地址 地址列表为空时展示-->
-                <div class="address_add" v-if="addressData.addressList.length == 0"><span class="address_btn" @click="openAddressModel"> <img src="../../assets/images/icon/address_add.png" alt=""> <i>添加收货地址</i> </span></div>
+                <div class="address_add" v-if="addressData.addressList.length == 0"><span class="address_btn" @click="addressData.addressPageShow = true"> <img src="../../assets/images/icon/address_add.png" alt=""> <i>添加收货地址</i> </span></div>
 
                 <!-- 地址列表 -->
                 <div class="address_box">
@@ -21,10 +21,13 @@
                                             <Col span="12" class="text_right"><span >{{items.phone}}</span></Col>
                                         </Row>
                                         <p class="twoline_ellipsis">{{items.province.label +" " + items.city.label +" " + items.county.label +" " + items.addressDetail +" " + items.postCode }}</p>
-                                        <span class="address_li_adit" @click="aditAddressItem(index1)">编辑</span>
+                                        <span class="address_li_adit text_hover_color" @click="aditAddressItem(index1)">编辑</span>
                                     </li>
                                 </ul>
-                                <span  class="address_btn" style="position:absolute;right:-120px;bottom:0px;" @click="openAddressModel"> <img src="../../assets/images/icon/address_add.png" alt=""> <i>添加收货地址</i> </span>
+                                <span  class="address_btn" style="position:absolute;right:-120px;bottom:0px;" @click="addressData.addressPageShow = true"> 
+                                    <!-- <img src="../../assets/images/icon/address_add.png" alt="">  -->
+                                    <i class="text_hover_color">修改收货地址</i> 
+                                </span>
                             </div>
                         </Col>
                     </Row>
@@ -174,30 +177,41 @@
             </div>
 
         </div>
+
+        <!-- 地址列表 -->
+        <div class="box_center_1200" style="background:#fff;padding:0 0 20px 0;" v-show="addressData.addressPageShow">
+            <!-- 标题    -->
+            <div class="order_title font_16" >
+                <span >选择地址</span>
+                <i class="text_hover_color padding_right_20 float_right" @click="addressData.addressPageShow = false" >关闭</i>
+            </div>
+            <Address :pState="1" @hidebox="listenAddressChoose" ></Address>
+        </div>
     </div>
 </template>
 <script>
-
+import Address from '../../components/Address.vue'
 export default {
     components : {
+        Address
     },
     data() {
         return {
 
             /*提交订单页面类型*/
-            // true  : 去结算提交  解释：当页面为去结算提交时，可以修改数量，可以选择优惠券
-            // false : 去结算后修改状态  解释：不可以修改数量，不可以选择优惠券，但是可以选择地址
+            //  true  : 去结算提交  解释：当页面为去结算提交时，可以修改数量，可以选择优惠券
+            //  false : 去结算后修改状态  解释：不可以修改数量，不可以选择优惠券，但是可以选择地址
             submitType: false,
 
             /*订单数据*/
             cartDate:{
-                //全部列表状态
+                // 全部列表状态
                 listState: false,
-                //全部删除状态
+                // 全部删除状态
                 listDeleteState: false,
-                //总价格
+                // 总价格
                 listTotal: 0.00,
-                //大列表
+                // 大列表
                 cartList:[
                     {
                         index1: 0,
@@ -205,7 +219,7 @@ export default {
                         itemTitle: '机构法院',
                         itemTotal: 0.00,
                         shippingMethods: '快递免邮',
-                        //小列表
+                        // 小列表
                         items:[
                             {
                                 index2: 0,
@@ -247,7 +261,7 @@ export default {
                         itemTitle: '机构法院',
                         itemTotal: 0.00,
                         shippingMethods: '快递免邮',
-                        //小列表
+                        // 小列表
                         items:[
                             {
                                 index2: 0,
@@ -286,7 +300,10 @@ export default {
 
             /*收货地址数据*/
             addressData:{
-                //收货地址数据列表
+                // 地址列表隐藏与展示
+                addressPageShow: false,
+
+                // 收货地址数据列表
                 addressList:[
                 {
                     id: 1,
@@ -299,13 +316,11 @@ export default {
                     postCode: '10010',
                 }
                 ],
-                //收货地址弹框
+                // 收货地址弹框
                 addressModelValue: false,
-                //收货地址新增或者编辑
-                addOrAdit:true,
-                //编辑时地址下标
+                // 编辑时地址下标
                 aditAddressIndex: 0,
-                //收货地址弹框绑定值
+                // 收货地址弹框绑定值
                 addressModelData:{
                     name: '' ,
                     phone: '',
@@ -339,22 +354,22 @@ export default {
     methods: {
 
         /*加减小组件*/
-        //加
+        // 加
         addNumber:function(e){
 
-            // 获取商品下标
+            //  获取商品下标
             let index1 =  e.target.getAttribute("data-index1"), 
                 index2 =  e.target.getAttribute("data-index2"); 
             
             this.cartDate.cartList[index1].items[index2].num ++;
 
-            //计算小计与合计
+            // 计算小计与合计
             this.calculatePrice();
         },
-        //减
+        // 减
         reduceNumber:function(e){
 
-            // 获取商品下标
+            //  获取商品下标
             let index1 =  e.target.getAttribute("data-index1"), 
                 index2 =  e.target.getAttribute("data-index2"); 
 
@@ -372,24 +387,24 @@ export default {
 
             }
 
-            //计算小计与合计
+            // 计算小计与合计
             this.calculatePrice();
 
         },
 
         /*订单数据计算*/    
-        //计算小计与合计
+        // 计算小计与合计
         calculatePrice(){
 
-            //获取商品个数
+            // 获取商品个数
             let m = this.cartDate.cartList.length;
 
-            //计算小计
+            // 计算小计
             for(let x = 0 ; x < m ; x++){
   
                 let n = this.cartDate.cartList[x].items.length;
 
-                //重置小计
+                // 重置小计
                 this.cartDate.cartList[x].itemTotal = 0;
 
                 for(let i = 0 ; i < n ; i++){
@@ -404,10 +419,10 @@ export default {
 
             }
 
-            //重置合计
+            // 重置合计
             this.cartDate.listTotal = 0;
             
-            //计算合计
+            // 计算合计
             for(let i = 0 ; i < m ; i++){
                 
                 let item = this.cartDate.cartList[i];
@@ -421,87 +436,43 @@ export default {
         },
 
         /*地址功能块*/
-        //新增地址
+        // 新增地址
         addAddressItem(){
             
-            //获取地址数据模型
+            // 获取地址数据模型
             let Data =  this.addressSelectData;
-            //收货地址弹框绑定值
+            // 收货地址弹框绑定值
             let modelData =  this.addressData.addressModelData;
 
             if( Data.county == "" ){     this.$Message.warning('地址填写不完整！'); return ;  };
             if( Data.name == "" ){     this.$Message.warning('收件人名不能为空'); return ;     }
             if( Data.addressDetail == "" ){     this.$Message.warning('地址详情不能为空！'); return ;     }
 
-            //设置收货地址弹框绑定值地址
+            // 设置收货地址弹框绑定值地址
             this.addressData.addressModelData.address = Data.province + " " + Data.city + " " + Data.county;
 
-            //判断是新增地址还是修改地址
-            if(this.addressData.addOrAdit){
+            let Index =  this.addressData.aditAddressIndex ;
 
-                this.addressData.addressList.push({
-                    id: 1,
-                    name: modelData.name,
-                    phone: modelData.phone,
-                    province: { value: '1', label: '湖南省'},
-                    city: { value: '1', label: '长沙市'},
-                    county: { value: '1', label: '芙蓉区'},
-                    addressDetail: modelData.addressDetail ,
-                    postCode: modelData.postCode,
-                })
-                
-                this.$Message.success('新增成功！')
+            // 编辑修改选择的地址
+            this.addressData.addressList[Index] = {
+                id: 1,
+                name: modelData.name,
+                phone: modelData.phone,
+                province: modelData.province,
+                city: modelData.city,
+                county: modelData.county,
+                addressDetail: modelData.addressDetail ,
+                postCode: modelData.postCode,
+            };
 
-            }else{
-
-                let Index =  this.addressData.aditAddressIndex ;
-
-                //编辑修改选择的地址
-                this.addressData.addressList[Index] = {
-                    id: 1,
-                    name: modelData.name,
-                    phone: modelData.phone,
-                    province: modelData.province,
-                    city: modelData.city,
-                    county: modelData.county,
-                    addressDetail: modelData.addressDetail ,
-                    postCode: modelData.postCode,
-                };
-
-                this.addressData.addOrAdit = true;
-
-                this.$Message.success('修改成功！')
-
-            }
+            this.$Message.success('修改成功！')
 
             this.addressData.addressModelValue = false;
 
         },
-        // 新增打开地址
-        openAddressModel(){
 
-            this.addressData.addressModelData = {
-                name: '' ,
-                phone: '',
-                province: { value: '', label: ''},
-                city: { value: '', label: ''},
-                county: { value: '', label: ''},
-                addressDetail: '',
-                postCode: '',
-            };
-
-            this.addressSelectData.province = { value: '', label: ''};
-            this.addressSelectData.city = { value: '', label: ''};
-            this.addressSelectData.county = { value: '', label: ''}; 
-
-            this.addressData.addressModelValue = true;
-            
-        },
-        // 编辑打开地址
+        //  编辑打开地址
         aditAddressItem(index){
-
-            //设置编辑地址
-            this.addressData.addOrAdit = false;
 
             this.addressData.aditAddressIndex =index;
     
@@ -517,7 +488,7 @@ export default {
                 postCode: Item.postCode,
             };
 
-            // 地址设置
+            //  地址设置
             this.addressSelectData.province = Item.province;
             this.addressSelectData.city = Item.city;
             this.addressSelectData.county = Item.county; 
@@ -526,8 +497,19 @@ export default {
 
         },
 
+        // 监听地址选择
+        listenAddressChoose(data){
+
+            this.addressData.addressList = [];
+            this.addressData.addressList.push(data);
+
+            this.addressData.addressPageShow = false;
+
+        },
+
         /*订单提交*/   
-        submitOrderClick(){
+        submitOrderClick(){   
+
 
         }
         
@@ -568,7 +550,7 @@ export default {
 </style>
 <style scoped lang='less'>
 
-    //引入订单共用less文件
+    // 引入订单共用less文件
     @import './shopCart.less'; 
 
 
@@ -582,9 +564,6 @@ export default {
             text-align: center;
         }
         .address_btn{
-            &:hover{
-                cursor: pointer;
-                opacity: 0.8;}
             img{
                 vertical-align: middle;
                 margin-right: 5px;
@@ -635,11 +614,6 @@ export default {
                     position: absolute;
                     right:20px;
                     bottom:10px;
-                    transition: 0.5s;
-
-                    &:hover{
-                        color: @color_f8cca4;
-                    }
                 }
             }
         }
@@ -650,11 +624,11 @@ export default {
         margin-top:20px;
         background:#fff;
 
-        // 订单盒子
+        //  订单盒子
         .list_box{
             margin: 0 16px;
             
-            // 头部
+            //  头部
             .list_header{
                 height: 60px;
                 line-height: 60px;
@@ -664,7 +638,7 @@ export default {
                 }
             }
 
-            // 订单列表
+            //  订单列表
             .list_content{
                 padding-bottom:10px;
 
@@ -727,7 +701,7 @@ export default {
                 }
             }
 
-            // 订单列表操作
+            //  订单列表操作
             .list_operate{
                 height: 70px;
                 line-height: 70px;
@@ -742,6 +716,7 @@ export default {
             }
         }
     }
+
 
     /**订单提交**/ 
     .sumbit_block{

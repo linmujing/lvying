@@ -108,18 +108,27 @@ const router = new Router({
           ]
         }, 
         {
-          path: 'refundMoney',
-          name: 'refundMoney',
+          path: 'personCenter/refundMoney',
+          name: 'personCenter/refundMoney',
           component:resolve => require(['@/view/personCenter/refundMoney'],resolve),
           meta:{
             title:'退款',
           },
         },
         {
-          path: 'checkLogistics',
+          path: 'personCenter/checkLogistics',
+          name: 'personCenter/checkLogistics',
           component:resolve => require(['@/view/personCenter/checkLogistics'],resolve),
           meta:{
             title:'查看物流',
+          },
+        },
+        {
+          path: 'personCenter/goComment',
+          name: 'personCenter/goComment',
+          component:resolve => require(['@/view/personCenter/goComment'],resolve),
+          meta:{
+            title:'发表评论',
           },
         },
 
