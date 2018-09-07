@@ -42,12 +42,12 @@
                         <i>{{refundData.Money}}</i>
                    </div>
                    <div class="input_box relative">
-                        <span >退款说明：</span> 
+                        <span  style="vertical-align:top;">退款说明：</span> 
                         <Input v-model="refundData.Explain" type="textarea" style="width:500px;" :rows="6"  />
                    </div>
                     <div class="input_box">
                         <span style="width:80px;"></span>
-                        <Button type="success" size="large" shape="circle" style="background:#a5a5a5;width:100px;" >提交</Button>
+                        <Button type="success" size="large" shape="circle" style=";width:100px;" >提交</Button>
                    </div>
                 </div>
 

@@ -345,6 +345,9 @@ export default {
     .ivu-modal-close .ivu-icon-ios-close{
         top:-5px;
     } 
+    .ivu-icon-ios-close:before{
+        content: "\F178";
+    }
 
 </style>
 
@@ -424,9 +427,14 @@ export default {
         }
         // 订单分页
         .list_page{
-            text-align: right;
+            float: right;
             padding-right:20px;
             padding-top:30px;
+        }
+        &:after{
+            display: block;
+            content: '';
+            clear: both;
         }
     }
     // order为空判断

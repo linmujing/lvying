@@ -9,9 +9,7 @@ import iView from 'iview'
 import 'babel-polyfill';
 
 // 使用iview的 CSS
-// import 'iview/dist/styles/iview.css';    
-// 使用iview的 修改主体样式
-import '../my-theme/dist/iview.css';
+import 'iview/dist/styles/iview.css';    
 
 Vue.use(iView);
 

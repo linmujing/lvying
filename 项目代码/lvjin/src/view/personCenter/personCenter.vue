@@ -41,11 +41,12 @@ export default {
                 navIndex: 0,
                 // 导航栏
                 personNav:[
-                    { text: '我的资料', url: ''},
-                    { text: '我的优惠券', url: ''},
-                    { text: '我的订单', url: ''},
-                    { text: '售后服务', url: ''},
-                    { text: '我的评论', url: ''},
+                    { text: '我的课程', url: 'myCourse'},
+                    { text: '我的资料', url: 'myProfile'},
+                    { text: '我的优惠券', url: 'myCoupon'},
+                    { text: '我的订单', url: 'myOrder'},
+                    { text: '售后服务', url: 'myAfterService'},
+                    { text: '我的评论', url: 'myComment'},
                 ]
             }
             
@@ -58,6 +59,12 @@ export default {
         changeNav(index){
 
             this.personNavData.navIndex = index;
+
+            // 跳转
+            let Url = this.personNavData.personNav[index].url;
+
+            //this.$router.push({ path: Url, query: {id: '11'}})
+            this.$router.push({ name: Url, params: {id: '11'}})
 
         }
 

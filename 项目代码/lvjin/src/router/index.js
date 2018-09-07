@@ -25,6 +25,7 @@ const router = new Router({
         /**购物车模块**/ 
         {
           path: 'shoppingCart',
+          name: 'shoppingCart',
           component:resolve => require(['@/view/shopCart/shoppingCart'],resolve),
           meta:{
             title:'购物车',
@@ -32,6 +33,7 @@ const router = new Router({
         },
         {
           path: 'submitOrder',
+          name: 'submitOrder',
           component:resolve => require(['@/view/shopCart/submitOrder'],resolve),
           meta:{
             title:'提交订单',
@@ -39,6 +41,7 @@ const router = new Router({
         },
         {
           path: 'shopGoPay',
+          name: 'shopGoPay',
           component:resolve => require(['@/view/shopCart/shopGoPay'],resolve),
           meta:{
             title:'去支付',
@@ -48,28 +51,65 @@ const router = new Router({
         /**个人中心模块**/
         {
           path: 'personCenter',
+          name: 'personCenter',
           component:resolve => require(['@/view/personCenter/personCenter'],resolve),
           meta:{
             title:'个人中心',
           },
           children: [
             {
+              path: 'myProfile',
+              name: 'myProfile',
+              component:resolve => require(['@/view/personCenter/myProfile'],resolve),
+              meta:{
+                title:'我的资料',
+              },
+            },
+            {
+              path: 'myCourse',
+              name: 'myCourse',
+              component:resolve => require(['@/view/personCenter/myCourse'],resolve),
+              meta:{
+                title:'我的课程',
+              },
+            },
+            {
               path: 'myOrder',
+              name: 'myOrder',
               component:resolve => require(['@/view/personCenter/myOrder'],resolve),
               meta:{
                 title:'我的订单',
               },
-            },{
+            },
+            {
               path: 'myCoupon',
+              name: 'myCoupon',
               component:resolve => require(['@/view/personCenter/myCoupon'],resolve),
               meta:{
                 title:'我的优惠券',
-              },
+              }
+            },
+            {
+              path: 'myComment',
+              name: 'myComment',
+              component:resolve => require(['@/view/personCenter/myComment'],resolve),
+              meta:{
+                title:'我的评论',
+              }
+            },
+            {
+              path: 'myAfterService',
+              name: 'myAfterService',
+              component:resolve => require(['@/view/personCenter/myAfterService'],resolve),
+              meta:{
+                title:'我的售后服务',
+              }
             },
           ]
         }, 
         {
           path: 'refundMoney',
+          name: 'refundMoney',
           component:resolve => require(['@/view/personCenter/refundMoney'],resolve),
           meta:{
             title:'退款',
