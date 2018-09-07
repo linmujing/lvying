@@ -105,6 +105,14 @@ export default {
     }
 }
 </script>
+<style type="text/css">
+	/*修改分页样式*/
+	.ivu-page-item{background: #F5F5F5;}
+	.ivu-page-next, .ivu-page-prev{background: #F5F5F5;}
+	.ivu-page-next:hover a,.ivu-page-prev:hover a,.ivu-page-item:hover a,.ivu-page-item-active a,.ivu-page-item-active:hover a{color: #00AA88;}
+	.ivu-page-item:hover,.ivu-page-item-active {border-color: #00AA88;}
+	.ivu-page-disabled a {color: #ccc !important;}
+</style>
 <style scoped lang='less'>
   .content{
     width: 1210px;margin: 0 auto;

@@ -126,6 +126,7 @@ const router = new Router({
         /**商城模块**/
         {
           path: '/shopMallIdex',
+          name: 'shopMallIdex',
           component:resolve => require(['@/view/shopMall/shopMallIdex'],resolve),
           meta:{
             title:'首页',
@@ -133,6 +134,7 @@ const router = new Router({
         },
         {
           path: '/industryDynamic',
+          name: 'industryDynamic',
           component:resolve => require(['@/view/shopMall/industryDynamic'],resolve),
           meta:{
             title:'',
@@ -140,6 +142,7 @@ const router = new Router({
         },
         {
           path: '/industryDynamicList',
+          name: 'industryDynamicList',
           component:resolve => require(['@/view/shopMall/industryDynamicList'],resolve),
           meta:{
             title:'',
@@ -147,6 +150,7 @@ const router = new Router({
         },
         {
           path: '/industryDynamicDetail',
+          name: 'industryDynamicDetail',
           component:resolve => require(['@/view/shopMall/industryDynamicDetail'],resolve),
           meta:{
             title:'',
@@ -154,6 +158,7 @@ const router = new Router({
         },
         {
           path: '/videoCourse',
+          name: 'videoCourse',
           component:resolve => require(['@/view/shopMall/videoCourse'],resolve),
           meta:{
             title:'',
@@ -161,6 +166,7 @@ const router = new Router({
         },
         {
           path: '/videoCourseList',
+          name: 'videoCourseList',
           component:resolve => require(['@/view/shopMall/videoCourseList'],resolve),
           meta:{
             title:'',
@@ -168,6 +174,7 @@ const router = new Router({
         },
         {
           path: '/videoCourseDetail',
+          name: 'videoCourseDetail',
           component:resolve => require(['@/view/shopMall/videoCourseDetail'],resolve),
           meta:{
             title:'',
@@ -178,6 +185,7 @@ const router = new Router({
     /**用户登录**/
     {
       path: '/user',
+      name: 'user',
       meta:{
         title:'用户登录',
       },
@@ -185,6 +193,7 @@ const router = new Router({
       children: [
        	{
           path: 'userLogin',
+          name: 'userLogin',
           component:resolve => require(['@/view/user/userLogin'],resolve),
           meta:{
             title:'用户登录',
@@ -192,6 +201,7 @@ const router = new Router({
         },
         {
           path: 'userRegister',
+          name: 'userRegister',
           component:resolve => require(['@/view/user/userRegister'],resolve),
           meta:{
             title:'用户注册',
@@ -199,6 +209,7 @@ const router = new Router({
         },
         {
           path: 'forgotPwd',
+          name: 'forgotPwd',
           component:resolve => require(['@/view/user/forgotPwd'],resolve),
           meta:{
             title:'忘记密码',
@@ -206,6 +217,7 @@ const router = new Router({
         },
         {
           path: 'forgotPwdStep',
+          name: 'forgotPwdStep',
           component:resolve => require(['@/view/user/forgotPwdStep'],resolve),
           meta:{
             title:'忘记密码',
@@ -216,6 +228,7 @@ const router = new Router({
     /**提供商**/
     {
       path: '/supplier',
+      name: '/supplier',
       meta:{
         title:'提供商登录',
       },
@@ -223,9 +236,50 @@ const router = new Router({
       children: [
        	{
           path: 'supplierLogin',
+           name: 'supplierLogin',
           component:resolve => require(['@/view/supplier/supplierLogin'],resolve),
           meta:{
             title:'提供商登录',
+          }
+        },
+        {
+          path: 'supplierRegister',
+          name: 'supplierRegister',
+          component:resolve => require(['@/view/supplier/supplierRegister'],resolve),
+          meta:{
+            title:'提供商注册',
+          }
+        },
+        {
+          path: 'approver',
+          name: 'approver',
+          component:resolve => require(['@/view/supplier/approver'],resolve),
+          meta:{
+            title:'提供商认证审核',
+          }
+        },
+        {
+          path: 'approverStatus',
+          name: 'approverStatus',
+          component:resolve => require(['@/view/supplier/approverStatus'],resolve),
+          meta:{
+            title:'提供商认证状态',
+          }
+        },
+        {
+          path: 'supplierForgotPwd',
+          name: 'supplierForgotPwd',
+          component:resolve => require(['@/view/supplier/supplierForgotPwd'],resolve),
+          meta:{
+            title:'忘记密码',
+          }
+        },
+        {
+          path: 'supplierForgotPwdStep',
+          name: 'supplierForgotPwdStep',
+          component:resolve => require(['@/view/supplier/supplierForgotPwdStep'],resolve),
+          meta:{
+            title:'忘记密码',
           }
         }
       ]
