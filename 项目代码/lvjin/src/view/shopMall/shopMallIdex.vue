@@ -201,37 +201,37 @@ export default {
       // 导航鼠标点击
       tabClick(index){
         switch(index){
-        	case 0:
+          case 0:
             this.$router.push({
-              name:'industryDynamic',
-              params: {
+              path:'/industryDynamic',
+              query: {
                 typeId: 0
               }
             })
             break;
-        	case 1:
-	    		  this.$router.push({
-              name:'industryDynamic',
-              params: {
+          case 1:
+            this.$router.push({
+              path:'/industryDynamic',
+              query: {
                 typeId: 1
               }
             })
-	    		break;
-    		case 2:
-          this.$router.push({
-            name:'videoCourse',
-            params: {
-              typeId: 2
-            }
-          })
-          break;
-    		case 3:
-	    		  this.$router.push({
-		          name:'videoCourse',
-		          params: {
-		          	typeId: 3
-		          }
-		        })
+            break;
+          case 2:
+            this.$router.push({
+              path:'videoCourse',
+              query: {
+                typeId: 2
+              }
+            })
+            break;
+          case 3:
+            this.$router.push({
+              path:'videoCourse',
+              query: {
+                typeId: 3
+              }
+            })
 	    		break;
         }
       },

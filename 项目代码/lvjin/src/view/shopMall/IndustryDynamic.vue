@@ -80,7 +80,8 @@ export default {
     },
     data() {
         return {
-          typeId: this.$route.params.typeId,
+
+          typeId: parseInt(this.$route.query.typeId),
         }
         
     },
@@ -88,8 +89,7 @@ export default {
 
     },
     mounted(){
-      //获取页面传参
-      // this.typeId = this.$route.params.typeId;
+      console.log(this.$route.query.typeId)
 		}
 }
 </script>

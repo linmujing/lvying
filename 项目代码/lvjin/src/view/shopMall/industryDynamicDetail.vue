@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :nowIndex="0" :showItem='false'></NavBar>
+    <NavBar :nowIndex="typeId" :showItem='false'></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
@@ -22,9 +22,13 @@
           </div>
           <div class="margin_top_30">
             <span class="color_title font_20">￥500.00</span>
-            <Tooltip content="特价仅剩4天6小时35分钟" theme="light" placement="right" class="tip">
+            <div class="inline_block relative">
               <del class="color_999 font_20 padding_left_20">￥800.00</del>
-            </Tooltip>
+              <div class="tooltip">
+                <div class="triangle"></div>
+                <div class="tooltip_txt">特价仅剩4天6小时35分钟</div>
+              </div>
+            </div>
           </div>
           <div class="margin_top_50">
             <Button size="large" type="warning" shape="circle">加入购物车</Button>
@@ -33,12 +37,14 @@
         </Col>
       </Row>
       <!--简介-->
-      <div class="margin_top_50">
-        <div id="detail1" class="bg_f5 clearfix border_e6">
-          <a href="#detail1" @click="anchorBtn(0)" :class="{cur:isCur == 0}" class="inline_block padding_20_15 width_150px">简介</a>
-          <a href="#detail2" @click="anchorBtn(1)" :class="{cur:isCur == 1}" class="inline_block padding_20_15">全程动态管控系统</a>
-          <a href="#detail3" @click="anchorBtn(2)" :class="{cur:isCur == 2}" class="inline_block padding_20_15 width_150px">评价</a>
-        </div>
+      <div id="detail1" class="margin_top_50">
+        <Affix>
+          <div class="bg_f5 clearfix border_e6">
+            <a href="#detail1" @click="anchorBtn(0)" :class="{cur:isCur == 0}" class="inline_block padding_20_15 width_150px">简介</a>
+            <a href="#detail2" @click="anchorBtn(1)" :class="{cur:isCur == 1}" class="inline_block padding_20_15">全程动态管控系统</a>
+            <a href="#detail3" @click="anchorBtn(2)" :class="{cur:isCur == 2}" class="inline_block padding_20_15 width_150px">评价</a>
+          </div>
+        </Affix>
         <div class="padding_20 margin_bottom_20">
           <Row class="margin_top_10">
             <Col span="2" class="font_weight_bold">适应企业</Col>
@@ -51,9 +57,16 @@
         </div>
       </div>
       <!--全程动态管控系统-->
-      <div>
-        <div id="detail2" class="font_weight_bold bg_f5 border_e6 padding_15">全程动态管控系统</div>
-        <div class="margin_top_10">
+      <div id="detail2">
+        <div class="font_weight_bold bg_f5 border_e6 padding_15">全程动态管控系统</div>
+        <div class="">
+          <div class="margin_left_20 margin_top_30 margin_bottom_30 font_18">
+            <div class="inline_block" v-for="(item,index) in 3" @click="classBtn(index)">
+              <span class="pointer" :class="{color_title: classCur == index}">项目启动文件</span>
+              <Icon v-show="index != 2" type="ios-arrow-round-forward" size="30"/>
+            </div>
+          </div>
+
           <div v-for="item in 3" class="margin_15 border_bottom_e6 padding_bottom_10">
             <p class="font_18">1.1.1专项服务合同</p>
             <div class="margin_left_30 margin_top_10 clearfix">
@@ -64,28 +77,29 @@
               </div>
             </div>
           </div>
+
         </div>
         <div class="text_center padding_top_20 padding_bottom_30">
         	<span class="pointer">查看更多》</span>
         </div>
       </div>
       <!--评价-->
-      <div class="margin_top_20">
-        <div id="detail3" class="font_weight_bold bg_f5 border_e6 padding_15">评价（4）</div>
+      <div id="detail3" class="margin_top_20">
+        <div class="font_weight_bold bg_f5 border_e6 padding_15">评价（4）</div>
         <div class="padding_15">
         	<span>评分：</span>
         	<Rate show-text allow-half disabled v-model="valueCustomText">
 		        <span style="color: #f5a623">{{ valueCustomText }}</span>
 		      </Rate>
         </div>
-        <div class="bg_f5 border_e6 padding_10_15">
-        	<ul class="list_unstyled ul_inline clearfix color_666">
-        		<li @click="evaluateBtn(0)" :class="{active:isActive == 0}" class="pointer margin_right_20">全部（4）</li>
-        		<li @click="evaluateBtn(1)" :class="{active:isActive == 1}" class="pointer margin_right_20">好评（4）</li>
-        		<li @click="evaluateBtn(2)" :class="{active:isActive == 2}" class="pointer margin_right_20">中评（4）</li>
-        		<li @click="evaluateBtn(3)" :class="{active:isActive == 3}" class="pointer ">差评（4）</li>
-        	</ul>
-        </div>
+        <!--<div class="bg_f5 border_e6 padding_10_15">-->
+        	<!--<ul class="list_unstyled ul_inline clearfix color_666">-->
+        		<!--<li @click="evaluateBtn(0)" :class="{active:isActive == 0}" class="pointer margin_right_20">全部（4）</li>-->
+        		<!--<li @click="evaluateBtn(1)" :class="{active:isActive == 1}" class="pointer margin_right_20">好评（4）</li>-->
+        		<!--<li @click="evaluateBtn(2)" :class="{active:isActive == 2}" class="pointer margin_right_20">中评（4）</li>-->
+        		<!--<li @click="evaluateBtn(3)" :class="{active:isActive == 3}" class="pointer ">差评（4）</li>-->
+        	<!--</ul>-->
+        <!--</div>-->
         <div class="margin_bottom_20">
 	    		<Row v-for="(item,index) in 3" :key="index" class="padding_15 line">
 	            <Col span="3">
@@ -120,21 +134,32 @@ export default {
     },
     data() {
         return {
+          //星星评分
           valueCustomText: 3.8,
           isCur: 0,
           isActive: 0,
+          classCur: 0,
+          //类型id
+          typeId: this.$route.query.typeId,
         }
-        
+
     },
     methods: {
     	//详情
 			anchorBtn(i){
 				this.isCur = i;
 			},
+      //课程
+      classBtn(i){
+        this.classCur = i;
+      },
 			//评价
 			evaluateBtn(i){
 				this.isActive = i;
 			}
+    },
+    mounted(){
+      console.log(this.$route.query.twoPage)
     }
 }
 </script>
@@ -145,6 +170,7 @@ export default {
 </style>
 <style scoped lang='less'>
   .detailBox{
+    .width_60px{width: 60px;}
     .width_100px{width: 100px;}
     .width_150px{width: 150px;}
     .width_600px{width: 600px;}
@@ -160,5 +186,4 @@ export default {
     .bg_a5{background: #A5A5A5;border: 1px solid #A5A5A5;}
     .line{border-bottom: 1px dashed #EDEDED;}
   }
-
 </style>

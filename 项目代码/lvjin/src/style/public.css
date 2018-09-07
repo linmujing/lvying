@@ -148,3 +148,42 @@ a:hover{color: #00AA88;}
 .detailBox .ivu-tooltip-light .ivu-tooltip-inner{color: #f09105;border: 1px solid #f09105}
 .detailBox .ivu-tooltip-light.ivu-tooltip-popper[x-placement^=right] .ivu-tooltip-arrow{border-right-color:#f09105}
 
+/*气泡提示*/
+.tooltip {
+  position: absolute;
+  top: -4px;
+  right: -220px;
+}
+.triangle{
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-right-color: #f09105;
+  top: 50%;
+  left: -6px;
+  margin-top: -7px;
+  border-width: 7px 7px 7px 0;
+}
+.triangle:after{
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 1px;
+  border-top: 6px solid transparent;
+  border-right: 6px solid #FFFFFF;
+  border-bottom: 6px solid transparent;
+}
+.tooltip_txt{
+  max-width: 250px;
+  min-height: 34px;
+  color: #f09105;
+  border: 1px solid #f09105;
+  padding: 8px 12px;
+  border-radius: 4px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.2);
+  white-space: nowrap;
+}
+
+

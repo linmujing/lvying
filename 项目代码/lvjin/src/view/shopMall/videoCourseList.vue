@@ -102,6 +102,9 @@ export default {
       jumpDetail(){
         this.$router.push({path:'/videoCourseDetail'})
       }
+    },
+    mounted(){
+      console.log(this.$route.query.twoPage)
     }
 }
 </script>

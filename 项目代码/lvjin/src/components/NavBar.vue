@@ -12,7 +12,7 @@
 	
 	            <div v-for="(items,index) in navDataModel[curIndex].lists" :key="index">
 	
-	              <div @mouseover="boxMouseOver(index)" @click="jumpDown(index)" 
+	              <div @mouseover="boxMouseOver(index)" @click="jumpDown(1)"
 										class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
 	                <span class="float_left color_fff font_18">{{items.title}}</span>
 	                <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
@@ -20,10 +20,10 @@
 	
 	              <div v-show="showBox" class="itemBox bg_white width_1000px" >
 	                <div v-for="(item,index2) in navDataModel[curIndex].lists[itemsIndex].items " :key="index2">
-	                  <div @click="jumpDown(index)" class="font_18 pointer hover_title">{{item.title}}</div>
+	                  <div @click="jumpDown(2)" class="font_18 pointer hover_title">{{item.title}}</div>
 	
 	                  <ul class="list_unstyled ul_inline clearfix margin_bottom_20">
-	                    <li @click="jumpDown(index)" v-for="( i, index3) in item.arr" :key="index3" class="margin_top_5 margin_right_30 pointer hover_title">{{i}}</li>
+	                    <li @click="jumpDown(3)" v-for="( i, index3) in item.arr" :key="index3" class="margin_top_5 margin_right_30 pointer hover_title">{{i}}</li>
 	                  </ul>
 	
 	                </div>
@@ -125,9 +125,13 @@
 							title: "视频课程",
 							items:[
 								{
-									title: "",
-									arr:["入职申请表" ,"入职申请表"]
-								}
+									title: "视频课程",
+									// arr:["入职申请表" ,"入职申请表"]
+								},
+                {
+                  title: "视频课程2",
+                  // arr:["入职申请表" ,"入职申请表"]
+                }
 							]
 						}
 					]
@@ -139,9 +143,13 @@
 							title: "音频课程",
 							items:[
 								{
-									title: "",
-									arr:["入职申请表" ,"入职申请表"]
-								}
+									title: "视频课程",
+									// arr:["入职申请表" ,"入职申请表"]
+								},
+                {
+                  title: "视频课程2",
+                  // arr:["入职申请表" ,"入职申请表"]
+                }
 							]
 						}
 					]
@@ -157,32 +165,32 @@
         switch(index){
           case 0:
             this.$router.push({
-              name:'industryDynamic',
-              params: {
+              path:'/industryDynamic',
+              query: {
                 typeId: 0
               }
             })
             break;
           case 1:
             this.$router.push({
-              name:'industryDynamic',
-              params: {
+              path:'/industryDynamic',
+              query: {
                 typeId: 1
               }
             })
             break;
           case 2:
             this.$router.push({
-              name:'videoCourse',
-              params: {
+              path:'videoCourse',
+              query: {
                 typeId: 2
               }
             })
             break;
           case 3:
             this.$router.push({
-              name:'videoCourse',
-              params: {
+              path:'videoCourse',
+              query: {
                 typeId: 3
               }
             })
@@ -201,26 +209,50 @@
 			},
 
       //跳转jumpDown
-      jumpDown(index){
-      	var i = this.curIndex;
-        switch(i){
-        	case 0:
-        	case 1:
-	    		this.$router.push({
-		          path:'/industryDynamicDetail'
-		       	})
-	    		break;
-    		case 2:
-    		case 3:
-	    		this.$router.push({
-		          path:'/videoCourseList'
-		        })
-	    		break;
+      jumpDown(id){
+        var typeid = this.curIndex;
+        switch(typeid){
+          case 0:
+            this.$router.push({
+              path:'industryDynamicDetail',
+              query: {
+                typeId: 0,
+                twoPage: id
+              }
+            })
+            break;
+          case 1:
+            this.$router.push({
+              path:'industryDynamicDetail',
+              query: {
+                typeId: 1,
+                twoPage: id
+              }
+            })
+            break;
+          case 2:
+            this.$router.push({
+              path:'videoCourseList',
+              query: {
+                typeId: 2,
+                twoPage: id
+              }
+            })
+            break;
+          case 3:
+            this.$router.push({
+              path:'videoCourseList',
+              query: {
+                typeId: 3,
+                twoPage: id
+              }
+            })
+            break;
         }
       }
 		},
 		mounted(){
-      console.log(this.nowIndex)
+
 		}
 	}
 </script>
