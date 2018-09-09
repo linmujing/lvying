@@ -188,6 +188,30 @@ const router = new Router({
           meta:{
             title:'',
           },
+        },
+        {
+          path: '/lvyingMall',
+          name: 'lvyingMall',
+          component:resolve => require(['@/view/shopMall/lvyingMall'],resolve),
+          meta:{
+            title:'律瀛商城',
+          },
+        },
+        {
+          path: '/bookDetail',
+          name: 'bookDetail',
+          component:resolve => require(['@/view/shopMall/bookDetail'],resolve),
+          meta:{
+            title:'商品详情',
+          },
+        },
+        {
+          path: 'supplier/supplierStore',
+          name: 'supplier/supplierStore',
+          component:resolve => require(['@/view/supplier/supplierStore'],resolve),
+          meta:{
+            title:'提供商店铺',
+          },
         }
       ]
     },

@@ -24,7 +24,7 @@
             <span class="color_title font_20">￥500.00</span>
             <div class="inline_block relative">
               <del class="color_999 font_20 padding_left_20">￥800.00</del>
-              <div class="tooltip">
+              <div v-if="detailId != 3" class="tooltip">
                 <div class="triangle"></div>
                 <div class="tooltip_txt">特价仅剩4天6小时35分钟</div>
               </div>
@@ -72,8 +72,13 @@
             <div class="margin_left_30 margin_top_10 clearfix">
               <span>视频音频详细讲解详细讲解</span>
               <div class="float_right">
-                <Button size="small" shape="circle" class="bg_a5 color_fff">查看详情</Button>
-                <Button size="small" type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
+                <Button v-if="detailId == 1 || detailId == 2" size="small" shape="circle" class="bg_a5 color_fff">查看详情</Button>
+                <Button v-if="detailId == 1 || detailId == 2" size="small" type="success" shape="circle" class="bg_title">立即购买</Button>
+                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">视频</Button>
+                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">音频</Button>
+                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">文字</Button>
+                <Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
+                <Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>
               </div>
             </div>
           </div>
@@ -141,6 +146,7 @@ export default {
           classCur: 0,
           //类型id
           typeId: this.$route.query.typeId,
+          detailId: this.$route.query.twoPage,
         }
 
     },
@@ -164,9 +170,7 @@ export default {
 }
 </script>
 <style>
-	/*修改tip样式*/
-	.detailBox .ivu-tooltip-light .ivu-tooltip-inner{color: #f09105;border: 1px solid #f09105}
-	.detailBox .ivu-tooltip-light.ivu-tooltip-popper[x-placement^=right] .ivu-tooltip-arrow{border-right-color:#f09105}
+
 </style>
 <style scoped lang='less'>
   .detailBox{

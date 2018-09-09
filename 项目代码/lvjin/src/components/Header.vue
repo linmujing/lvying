@@ -21,7 +21,7 @@
 								<router-link tag="a" target="_blank" to="">手机XXX</router-link>
 							</li>
 							<li>
-								<router-link tag="a" target="_blank" to="">律瀛商城</router-link>
+								<router-link tag="a" target="_blank" to="/lvyingMall">律瀛商城</router-link>
 							</li>
 							<li>
 								<router-link tag="a" target="_blank" to="/supplier/supplierLogin">提供商入口</router-link>

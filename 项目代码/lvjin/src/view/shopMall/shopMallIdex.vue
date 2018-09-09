@@ -159,13 +159,13 @@
 			            	<div class="font_18 text_ellipsis margin_top_20">常见民事纠纷裁判思路与规则</div>
 			            	<div class="color_666 text_ellipsis margin_top_10">常见民事纠纷裁判思路与规则</div>
 			            	<div class="margin_top_15 clearfix">
-								<p class="pointer float_left">
-									<span class="font_20 color_title">￥500.00</span>
-								</p>
-								<div class="float_right margin_left_20">
-									<Button type="success" shape="circle" class="bg_title">立即购买</Button>
-								</div>
-							</div>
+                      <p class="pointer float_left">
+                        <span class="font_20 color_title">￥500.00</span>
+                      </p>
+                      <div class="float_right margin_left_20">
+                        <Button type="success" shape="circle" class="bg_title">立即购买</Button>
+                      </div>
+                    </div>
 			            </div>
 			        </Col>
 			    </Row>

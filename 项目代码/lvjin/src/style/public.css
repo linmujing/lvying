@@ -11,6 +11,15 @@ li{
 a{color:#333333;}
 a:hover{color: #00AA88;}
 
+.button_title{
+  border: 1px solid #00aa88;
+  color: #00aa88;
+  width: 64px;
+}
+.button_title:hover{
+  border: 1px solid #00aa88;
+  color: #00aa88;
+}
 /******字体大小*******/
 .font_12{font-size: 12px;}
 .font_16{font-size: 16px;}
