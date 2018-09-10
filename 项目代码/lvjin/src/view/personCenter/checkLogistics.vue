@@ -61,7 +61,6 @@
 
 
         </div>
-        <div><Button type="success" size="large" shape="circle" @click="pageChange">查看页面</Button></div>
     </div>
 </template>
 <script>
@@ -97,22 +96,28 @@ export default {
 
            switch(this.pageState){
                 case 'a': 
-                    this.pageState = 'b';
-                    this.logisticsData.orderStateText = '已关闭';
-                    break; 
-                case 'b': 
-                    this.pageState = 'c'; 
-                    
-                    break;
-                case 'c': 
                     this.pageState = 'a';
                     this.logisticsData.orderStateText = '待付款';
+                    break; 
+                case 'b': 
+                    this.pageState = 'b'; 
+                    this.logisticsData.orderStateText = '已关闭';
+                    break;
+                case 'c': 
+                    this.pageState = 'c';
                     break;
            }
 
 
        }
 
+    },
+    mounted(){
+        // 获取页面类型
+        this.pageState = this.$route.params.state;
+
+        // 监听页面变化
+        this.pageChange();
     }
 }
 </script>

@@ -58,7 +58,7 @@
                                 <p :style="{height: 90 * items.items.length + 'px' }">
                                 {{items.payStateText}} <br>
                                 <Button type="text" shape="circle" v-if="items.payStateText == '待发货'" 
-                                    style="width:80px;height:26px;line-height:5px;padding:0" >查看物流</Button>
+                                    style="width:80px;height:26px;line-height:5px;padding:0" @click="checkLogistics" >查看物流</Button>
                                 </p>
                             </div>
                         </Col>
@@ -66,11 +66,11 @@
                             <div class="item_td">
                                 <p :style="{height: 90 * items.items.length + 'px' }">
                                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                        v-if="items.payStateText != '待付款'" >{{items.operation}}</Button>
+                                        v-if="items.payStateText != '待付款'" @click="jumpPage(index)">{{items.operation}}</Button>
 
                                     <!-- 待付款取消订单 -->
                                     <Button type="warning" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                        v-if="items.payStateText == '待付款'" >{{items.operation}}</Button>
+                                        v-if="items.payStateText == '待付款'" @click="jumpPage(index)">{{items.operation}}</Button>
                                     <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
                                     v-if="items.payStateText == '待付款'" @click="openModel(index)" >取消订单</Button>
 
@@ -145,6 +145,7 @@ export default {
                         payState: '',
                         payStateText: '待付款',
                         operation: '去支付',
+                        routerUrl:'personCenter/checkLogistics',
                         items:[{
                             title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
                             startTime: '2018-08-51 16:00:00',
@@ -166,6 +167,7 @@ export default {
                         payState: '',
                         payStateText: '已关闭',
                         operation: '重新购买',
+                        routerUrl:'personCenter/checkLogistics',
                         items:[{
                             title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
                             startTime: '2018-08-51 16:00:00',
@@ -179,6 +181,7 @@ export default {
                         payState: '',
                         payStateText: '待评价',
                         operation: '去评价',
+                        routerUrl:'personCenter/goComment',
                         items:[{
                             title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
                             startTime: '2018-08-51 16:00:00',
@@ -192,6 +195,7 @@ export default {
                         payState: '',
                         payStateText: '待发货',
                         operation: '退款',
+                        routerUrl:'personCenter/refundMoney',
                         items:[{
                             title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
                             startTime: '2018-08-51 16:00:00',
@@ -326,6 +330,29 @@ export default {
 
             this.orderModelData.modelValue = false;
 
+        },
+
+        /* 页面跳转 */
+        //@param index 获取当前点击的元素下标
+        jumpPage(index){
+            console.log(index)
+            // 路由
+            let Url = this.orderData.orderList[index].routerUrl;
+            let param = {};
+
+            switch(this.orderData.orderList[index].payStateText){
+
+                case '待付款':  param = {state: 'a'}; break;
+                case '已关闭':  param = {state: 'b'}; break;
+                case '待发货':  param = {state: 'a'}; break;
+            }
+
+            this.$router.push({ name: Url, params: param })
+
+        },
+        // 查看物流
+        checkLogistics(){
+            this.$router.push({ name: 'personCenter/checkLogistics', params: {state: 'c'}})
         }
     }
 }

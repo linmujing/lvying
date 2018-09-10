@@ -81,7 +81,7 @@
                                 <p>(若购买享有优惠，相应金额将在订单结算页面减扣)</p>
                             </div>
                         </Col>
-                        <Col span="3"><span class="list_balance">去结算</span></Col>
+                        <Col span="3"><span class="list_balance" :class="[cartDate.listTotal != 0 ?'active' :'']" @click="goBuy">去结算</span></Col>
                     </Row>
                 </div>
             </div>
@@ -418,9 +418,16 @@ export default {
             //计算小计与合计
             this.calculatePrice();
 
-        }
+        },
 
-        
+        // 去结算页面
+        goBuy(){
+
+            // 去结算页面
+            this.$router.push({ name: 'submitOrder', params: { type: true} })
+
+        }
+   
 
     }
 }
@@ -543,6 +550,10 @@ export default {
                     text-align: center;
                     font-weight: 700;
                     cursor: pointer;
+                }
+                .list_balance.active{
+                    background: #f09105;
+                    color: #fff;
                 }
             }
         }

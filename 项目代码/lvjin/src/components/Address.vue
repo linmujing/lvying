@@ -10,19 +10,19 @@
                     邮编：<span>{{items.postCode}}</span>
                 </div>
                 <p class="text_right">
-                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
+                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0"
                         @click="aditAddressItem(index1)" >编辑</Button>
-                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0;color:red;"
+                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0;color:red;"
                         @click="deleteAddress(index1)" >删除</Button>
                     
                 </p>
                 <span class="choose_address" v-if="addressState == 1"> 
-                    <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" @click="chooseAddressItem(index1)" >选择</Button>
+                    <Button type="success" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0" @click="chooseAddressItem(index1)" >选择</Button>
                 </span>
 
             </li>
             <li class="new_add">
-                <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
+                <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0"
                         @click="openAddressModel" >新增地址</Button>
             </li>
         </ul>

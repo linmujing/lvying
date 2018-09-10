@@ -1,0 +1,14 @@
+
+
+/* 单选radio */
+.ivu-radio-inner:after{
+    background-color: #00aa88;
+}
+/* 多选checkbox */
+.ivu-radio-checked .ivu-radio-inner{
+    border-color: #00aa88;
+}
+.ivu-checkbox-checked .ivu-checkbox-inner{
+    border-color: #00aa88;
+    background-color: #00aa88;
+}

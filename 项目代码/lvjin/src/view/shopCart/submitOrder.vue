@@ -173,7 +173,7 @@
             <!-- 提交订单块 -->
             <div class="sumbit_block">
                 <div class="padding_right_24 font_18">实付金额：<b class="">{{cartDate.listTotal}}</b></div>
-                <p class="padding_right_24"><Button shape="circle" type="warning" size="large" @click="submitOrderClick">提交订单</Button></p>
+                <p class="padding_right_24"><Button shape="circle" type="warning" size="large" @click="submitOrderClick">{{submitType ? '确定订单' : '提交订单'}}</Button></p>
             </div>
 
         </div>
@@ -509,11 +509,21 @@ export default {
 
         /*订单提交*/   
         submitOrderClick(){   
-
-
+            
+            if(this.submitType){
+                this.submitType = false;
+            }else{
+                // 去结算页面
+                this.$router.push({ name: 'shopGoPay', params: { type: true} })
+            }
+            
         }
         
 
+    },
+    mounted(){
+        // 获取页面类型
+        this.submitType = this.$route.params.type;
     }
 }
 </script>

@@ -10,6 +10,8 @@ import 'babel-polyfill';
 
 // 使用iview的 CSS
 import 'iview/dist/styles/iview.css';    
+// 使用iview的 CSS
+import '../my-theme/custom.css';   
 
 Vue.use(iView);
 

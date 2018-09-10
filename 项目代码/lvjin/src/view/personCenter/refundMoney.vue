@@ -175,6 +175,12 @@ export default {
 
        }
 
+    },
+    mounted(){
+        // 获取页面类型
+        this.pageState = this.$route.params.state;
+
+
     }
 }
 </script>
