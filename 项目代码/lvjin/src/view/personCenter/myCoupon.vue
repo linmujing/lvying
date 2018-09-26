@@ -39,7 +39,7 @@
             </div>
         </div>
 
-        <!-- 使用说明 -->
+        <!-- 使用说明
         <div class="coupon_explain padding_left_20 padding_top_30 padding_bottom_30"  v-if="couponData.couponList.length > 0 ">
             <p class="font_16" style="color:#000">优惠券使用说明</p>
             <div>
@@ -50,7 +50,7 @@
                 一笔订单只能使用一张平台优惠券。平台券无法叠加使用；平台券可与机构发布的优惠券叠加使用；课程券与同一课程的折扣无法叠加使用<br>
                 在个别特殊促销活动中，优惠券无法与其他优惠（如拼团、秒杀等）叠加使用。请以具体的活动规则为准
             </div>
-        </div>
+        </div> -->
 
         <!-- 没有优惠券 -->
         <div class="order_has_not color_ccc" v-if="couponData.couponList.length == 0 ">

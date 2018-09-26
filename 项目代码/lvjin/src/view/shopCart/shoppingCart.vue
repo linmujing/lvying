@@ -43,7 +43,11 @@
                                     <Col span="9">
                                         <Row>
                                             <Col span="6"></Col>
-                                            <Col span="18"><span class="item_list_describe">{{item.describe}}</span></Col>
+                                            <Col span="18">
+                                                <div class="item_list_describe"> 
+                                                     <p >{{item.describe}}</p>
+                                                </div>
+                                            </Col>
                                         </Row>
                                     </Col>
                                     <Col span="4"><span  class="block_center">{{item.price}}</span></Col>
@@ -144,7 +148,7 @@ export default {
                                 state: false,
                                 price: '101.01',
                                 num: 1,
-                                describe: '暂无',
+                                describe: '很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字',
                                 imgSrc: require('../../assets/images/image/cart_book.png')
                             }
                         ]
@@ -242,6 +246,21 @@ export default {
             if(index2 != undefined){
 
                 this.cartDate.cartList[index1].items[index2].state = !this.cartDate.cartList[index1].items[index2].state;
+
+                // 当前集合是否全部选中
+                let states = true ; 
+
+                for(let i = 0 ; i < this.cartDate.cartList[index1].items.length; i++){
+
+                    if(!this.cartDate.cartList[index1].items[i].state){
+
+                        states = false;
+
+                    }
+
+                }
+
+                this.cartDate.cartList[index1].itemState = states;
 
             }else{
 
@@ -500,6 +519,17 @@ export default {
                     vertical-align: middle;
                     height: 100px;
 
+                }
+                .item_list_describe{
+                    display:table;
+                    height:140px;
+                    overflow: hidden;
+
+                    p{
+                        display:table-cell;
+                        vertical-align:middle;
+                        line-height:1.5;
+                    }
                 }
                 .item_list_delete img{
                     vertical-align: middle;

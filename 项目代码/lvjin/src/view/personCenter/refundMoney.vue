@@ -62,6 +62,7 @@
                 <!-- 退款金额 -->
                 <div style="border-bottom:1px solid #e6e6e6;line-height:30px;margin:20px;">
                     <p>退款金额：{{refundDataHandle.Money}}</p>
+                    <p>退款编号：{{refundDataSuccess.code}}</p>
                     <p>退款微信：{{refundDataHandle.wechat}}</p>
                 </div>
 
@@ -94,6 +95,7 @@
                 <!-- 退款金额 -->
                 <div style="border-bottom:1px solid #e6e6e6;line-height:30px;margin:20px;">
                     <p>退款金额：{{refundDataSuccess.Money}}</p>
+                    <p>退款编号：{{refundDataSuccess.code}}</p>
                     <p>退款微信：{{refundDataSuccess.wechat}}</p>
                 </div>
 
@@ -150,13 +152,15 @@ export default {
             /*退款处理中*/
             refundDataHandle:{
                 Money: 0,
-                wechat: '666'
+                wechat: '666',
+                code: '20183652555',
             },
 
             /*退款成功*/
             refundDataSuccess:{
                 Money: 0,
                 wechat: '666',
+                code: '20183652555',
                 date: '2018-12-01 12:00:00'
             }
             

@@ -120,7 +120,7 @@ export default {
                                 price: 88.01,
                                 num: 1,
                                 describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字',
-                                validityPeriod: '180天有效',
+                                validityPeriod: '永久有效',
                                 imgSrc: require('../../assets/images/image/cart_book.png')
                             },
                             {
@@ -129,7 +129,7 @@ export default {
                                 price: 101.01,
                                 num: 1,
                                 describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                                validityPeriod: '180天有效',
+                                validityPeriod: '永久有效',
                                 imgSrc: require('../../assets/images/image/cart_book.png')
                             }
                         ]
@@ -148,7 +148,7 @@ export default {
                                 price: 88.01,
                                 num: 1,
                                 describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                                validityPeriod: '180天有效',
+                                validityPeriod: '永久有效',
                                 imgSrc: require('../../assets/images/image/cart_book.png')
                             },
                             {
@@ -157,7 +157,7 @@ export default {
                                 price: 101.01,
                                 num: 1,
                                 describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                                validityPeriod: '180天有效',
+                                validityPeriod: '永久有效',
                                 imgSrc: require('../../assets/images/image/cart_book.png')
                             }
                         ]

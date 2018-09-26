@@ -9,31 +9,34 @@
                 <!-- 发表评价标题 -->
                 <div class="order_title"><span>发表评价</span></div>
 
-                <!-- 评价头部 -->
-                <div class="comment_header padding_left_20 padding_top_40">
-                    <span class="img_box img_middle_center"><img src="../../assets/images/image/cart_book.png" alt=""></span>
-                    <span class="comment_type" :class=" [commentData.typeValue == items.value ? 'color_f09105':'' ]"  v-for="(items, index) in commentData.typeList" :key="index"   
-                        @click="commentData.typeValue = items.value" >{{items.text}}</span>
-                </div>
-
-                <!-- 评价内容 -->
-                <div class="comment_remark padding_left_20 padding_top_20 padding_right_20">
-
-                    <Input v-model="commentData.commentRemark" type="textarea" style="width:100%;" placeholder="宝贝满足你的期待吗？" :rows="15"  />
-                    <div class="remark_img"><span class=""><img src="../../assets/images/icon/img_up.png" alt=""></span></div>
-
-                </div>
-
-                <!-- 店铺评分 -->
-                <div class="comment_grade padding_left_20 padding_top_40">
-                    <p class="font_16">店铺评分</p>
-                    <div class="padding_left_10 padding_top_20">
-                        <span class="padding_right_10" >描述相符</span> <Rate clearable v-model="commentData.gradeValue1" /> 
+                <div v-for="(item, index) in commentData.list" :key="index">
+                    <!-- 评价头部 -->
+                    <div class="comment_header padding_left_20 padding_top_40">
+                        <span class="img_box img_middle_center"><img :src="item.imgsrc" alt=""></span>
+                        <!-- <span class="comment_type" :class=" [commentData.typeValue == items.value ? 'color_f09105':'' ]"  v-for="(items, index) in commentData.typeList" :key="index"   
+                            @click="commentData.typeValue = items.value" >{{items.text}}</span> -->
                     </div>
-                    <div class="padding_left_10 padding_top_20">
-                        <span class="padding_right_10">帮助程度</span> <Rate clearable v-model="commentData.gradeValue2" /> 
+
+                    <!-- 评价内容 -->
+                    <div class="comment_remark padding_left_20 padding_top_20 padding_right_20">
+
+                        <Input v-model="item.commentRemark" type="textarea" style="width:100%;" placeholder="宝贝满足你的期待吗？" :rows="15"  />
+                        <div class="remark_img"><span class=""><img src="../../assets/images/icon/img_up.png" alt=""></span></div>
+
+                    </div>
+
+                    <!-- 店铺评分 -->
+                    <div class="comment_grade padding_left_20 padding_top_40">
+                        <p class="font_16">商品评分</p>
+                        <div class="padding_left_10 padding_top_20">
+                            <span class="padding_right_10" >描述相符</span> <Rate clearable v-model="item.gradeValue1" /> 
+                        </div>
+                        <div class="padding_left_10 padding_top_20">
+                            <span class="padding_right_10">帮助程度</span> <Rate clearable v-model="item.gradeValue2" /> 
+                        </div>
                     </div>
                 </div>
+                
 
                 <div class="padding_left_20 padding_top_40 padding_bottom_40">
                      <Button type="success" size="large" shape="circle" style=";width:100px;"  @click="commentData.modelValue = true" >发布</Button>
@@ -66,19 +69,22 @@ export default {
 
             /* 发表评价商品数据 */
             commentData:{
-                // 评价类型值
-                typeValue:'',
-                // 评价类型
-                typeList:[
-                    {text: '好评', value: '1'},
-                    {text: '中评', value: '2'},
-                    {text: '差评', value: '3'},
-                ],
-                // 评价
-                commentRemark:'',
-                // 评分
-                gradeValue1:0,
-                gradeValue2:0,
+                // // 评价类型值
+                // typeValue:'',
+                // // 评价类型
+                // typeList:[
+                //     {text: '好评', value: '1'},
+                //     {text: '中评', value: '2'},
+                //     {text: '差评', value: '3'},
+                // ],
+                list:[{
+                    imgsrc: require('../../assets/images/image/cart_book.png'),
+                    // 评价
+                    commentRemark:'',
+                    // 评分
+                    gradeValue1:0,
+                    gradeValue2:0,
+                }],
 
                 // 发布弹框
                 modelValue: false
