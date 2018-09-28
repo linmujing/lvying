@@ -18,7 +18,12 @@
 								<router-link tag="a" target="_blank" to="/shoppingCart">购物车</router-link>
 							</li>
 							<li>
-								<router-link tag="a" target="_blank" to="">手机XXX</router-link>
+                <Poptip v-model="visible" trigger="hover">
+                  <a>手机XXX</a>
+                  <div slot="content">
+                    <img src="../assets/logo.png">
+                  </div>
+                </Poptip>
 							</li>
 							<li>
 								<router-link tag="a" target="_blank" to="/lvyingMall">律瀛商城</router-link>
@@ -71,7 +76,7 @@
             },
 		},
 		mounted(){
-			
+
 		}
 	}
 </script>

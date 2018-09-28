@@ -10,6 +10,8 @@ li{
 }
 a{color:#333333;}
 a:hover{color: #00AA88;}
+.container a{color:#333333;}
+.container a:hover{color: #00AA88;}
 
 .button_title{
   border: 1px solid #00aa88;
@@ -33,9 +35,9 @@ a:hover{color: #00AA88;}
 
 .font_weight_bold{font-weight : bold;}
 .vertical_middle{vertical-align: middle;}
-.text_ellipsis{overflow: hidden !important;white-space: nowrap;text-overflow: ellipsis;}
+.container .text_ellipsis{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 .text_justify{text-justify: inherit;}
-.twoline_ellipsis {
+.container .twoline_ellipsis {
     overflow: hidden !important;
     text-overflow: ellipsis;
     display: -webkit-box;

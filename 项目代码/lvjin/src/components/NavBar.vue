@@ -4,7 +4,7 @@
 	      <div class="center relative">
 					<ul class="list_unstyled ul_inline clearfix font_18 navbar">
 	          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navDataModel" :key="index" @click='tabClick(index)'>
-	            <a href="javascript:void(0)" class="color_fff tabHover">{{item.title}}</a>
+	            <span class="color_fff tabHover">{{item.title}}</span>
 	          </li>
 	        </ul>
 	        <div v-show="showItem" class="listBox">
@@ -266,8 +266,8 @@
       width:1200px;margin:0 auto;background: #00AA88;
       .navbar>li{
         width: 180px;text-align: center;
-        >a{width:100%;line-height: 67px;display: inline-block;}
-        >a:hover{background: #f09105;}
+        >span{width:100%;line-height: 67px;display: inline-block;}
+        >span:hover{background: #f09105;}
       }
     }
     .listBox{
