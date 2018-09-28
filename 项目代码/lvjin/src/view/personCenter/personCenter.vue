@@ -63,12 +63,20 @@ export default {
             // 跳转
             let Url = this.personNavData.personNav[index].url;
 
-            //this.$router.push({ path: Url, query: {id: '11'}})
-            this.$router.push({ name: Url, params: {id: '11'}})
+            this.$router.push({ path: Url, query: {id: '11'}})
+            // this.$router.push({ name: Url, params: {id: '11'}})
 
         }
 
-        
+    },
+    mounted(){
+
+        // 初次点击页面
+        if(this.personNavData.navIndex == 0){
+
+            this.$router.push({ name:'myCourse' })
+
+        }
 
     }
 }

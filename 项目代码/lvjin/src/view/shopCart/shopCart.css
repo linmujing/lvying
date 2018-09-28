@@ -13,11 +13,17 @@ i {
 .border_bottom_1 {
   border-bottom: 1px dotted #e6e6e6;
 }
+.border_top_1 {
+  border-top: 1px dotted #e6e6e6;
+}
 .color_f09105 {
   color: #f09105;
 }
 .color_ccc {
   color: #ccc;
+}
+.transition_05 {
+  transition: 0.5s;
 }
 .number_add_reduce {
   width: 80px;

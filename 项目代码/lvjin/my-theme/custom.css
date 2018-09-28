@@ -12,3 +12,9 @@
     border-color: #00aa88;
     background-color: #00aa88;
 }
+
+/* 多选checkbox */
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    background-color: #00aa88;
+    border-color: #00aa88;
+}

@@ -5,15 +5,14 @@
             <div class="title">
                 <span>我的购物车：共 {{cartDate.cartList.length}} 门课程</span>
             </div>
-
             <div class="list_box" v-if="cartDate.cartList.length">
                 <!-- 购物车列表头部 -->
                 <div class="list_header padding_left_14">
                     <Row>
                         <Col span="5">
-                            <Checkbox v-model="cartDate.listState"  @click.prevent.native="setAllCheckboxChange">
+                            <el-checkbox v-model="cartDate.listState"  @click.prevent.native="setAllCheckboxChange">
                                 <span class="padding_left_5">全选</span>
-                            </Checkbox>
+                            </el-checkbox>
                         </Col>
                         <Col span="9"><span>课程名称</span></Col>
                         <Col span="4"><span class="block_center">单价（元）</span></Col>
@@ -26,16 +25,16 @@
                 <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="items.id">
                     <li>
                         <div class="item_title padding_left_14">
-                            <Checkbox  v-model="items.itemState" @click.prevent.native="checkboxChange(index1)" >
+                            <el-checkbox  v-model="items.itemState" @click.prevent.native="checkboxChange(index1)" >
                                 <span class="padding_left_5"> {{items.itemTitle}} </span>
-                            </Checkbox>
+                            </el-checkbox>
                         </div>
                         <ul class="item_list">
                             <li class="padding_left_14" v-for="(item, index2) in items.items" :key="item.id">
                                 <Row>
                                     <Col span="5">
-                                        <Checkbox v-model="item.state" @click.prevent.native="checkboxChange(index1, index2)" > 
-                                        </Checkbox>
+                                        <el-checkbox v-model="item.state" @click.prevent.native="checkboxChange(index1, index2)" > 
+                                        </el-checkbox>
                                         <span class="item_list_img">
                                             <img :src="item.imgSrc">
                                         </span>
@@ -74,9 +73,9 @@
                 <div class="list_operate padding_left_14">
                     <Row>
                         <Col span="2">
-                            <Checkbox v-model="cartDate.listState"  @click.prevent.native="setAllCheckboxChange">
+                            <el-checkbox v-model="cartDate.listState"  @click.prevent.native="setAllCheckboxChange">
                                 <span class="padding_left_5" >全选</span>
-                            </Checkbox>
+                            </el-checkbox>
                         </Col>
                         <Col span="10"><span class="pointer list_delete" @click="deleteAllItem" >删除所选课程</span></Col>
                         <Col span="9">
@@ -273,6 +272,28 @@ export default {
                 }
 
             }
+             
+
+            // 当前集合是否全部选中
+            let AllStates = true ; 
+
+            let All = this.cartDate.cartList ;
+
+            for(let i = 0 ; i < All.length; i++ ){
+
+                for(let x = 0 ; x < All[i].items.length; x++){
+                    
+                    if(!All[i].items[x].state){
+
+                        AllStates = false;
+
+                    }
+
+                }
+
+            }
+
+            this.cartDate.listState = AllStates;
 
             //计算小计与合计
             this.calculatePrice();

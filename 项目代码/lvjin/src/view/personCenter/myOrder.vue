@@ -35,51 +35,144 @@
 
             <div :class="[ lisionOrderScroll() ? 'order_scroll':'']">
                 <!-- 订单list列表 -->
-                <ul class="order_list padding_left_20 padding_right_20">
-                    <li class="order_list_item" v-for="(items, index) in orderData.orderList" :key="index" v-if="index < 5" :style="{height: 90 * items.items.length + 'px' }">
-                        <Col span="16"> 
-                            <div v-for="(item, index2) in items.items" :key="index2">
-                                <Col span="12"> 
-                                    <div class="item_td padding_left_20 text_left">
-                                        <p>
-                                            {{item.startTime}} <span>订单号：{{item.orderId}}</span><br>
-                                            <span class="text_ellipsis" style="color:#666;display:inline-block;width:300px;" :title="item.title">{{item.title}}</span>
+                <ul class="order_list padding_left_20">
+                    <li class="order_list_item" v-for="(items, index) in orderData.orderList" :key="index"  v-if="index < 5">
+                        <!-- 普通订单 -->
+                        <div v-if="!items.activeOrder" :style="{height: 90 * items.items.length + 'px' }">
+                            <Col span="16"> 
+                                <div v-for="(item, index2) in items.items" :key="index2">
+                                    <Col span="12"> 
+                                        <div class="item_td padding_left_20 text_left">
+                                            <p>
+                                                {{item.startTime}} <span>订单号：{{item.orderId}}</span><br>
+                                                <span class="text_ellipsis" style="color:#666;display:inline-block;width:300px;" :title="item.title">{{item.title}}</span>
 
+                                            </p>
+                                        </div>
+                                    </Col>
+                                    <Col span="6"><div class="item_td"><p>{{item.price}}</p>    </div> </Col>
+                                    <Col span="6"><div class="item_td"><p>{{item.total}}</p></div> </Col>
+                                </div>
+
+                            </Col>
+                            <Col span="4"> 
+                                <div class="item_td">
+                                    <p :style="{height: 90 * items.items.length + 'px' }">
+                                    {{items.payStateText}} <br>
+                                    <Button type="text" shape="circle" v-if="items.payStateText == '待发货'" 
+                                        style="width:80px;height:26px;line-height:5px;padding:0" @click="checkLogistics" >查看物流</Button>
+                                    </p>
+                                </div>
+                            </Col>
+                            <Col span="4"> 
+                                <div class="item_td">
+                                    <p :style="{height: 90 * items.items.length + 'px' }">
+                                        <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
+                                            v-if="items.payStateText != '待付款'" @click="jumpPage(index)">{{items.operation}}</Button>
+
+                                        <!-- 待付款取消订单 -->
+                                        <Button type="warning" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
+                                            v-if="items.payStateText == '待付款'" @click="jumpPage(index)">{{items.operation}}</Button>
+                                        <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
+                                        v-if="items.payStateText == '待付款'" @click="openModel(index)" >取消订单</Button>
+
+                                        <!-- 已关闭删除订单 -->
+                                        <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
+                                        v-if="items.payStateText == '已关闭'" @click="openModel(index)" >删除订单</Button>
+                                    </p>
+                                </div>
+                            </Col>
+                        </div>
+                        
+                        <!-- 活动订单 -->
+                        <div v-if="items.activeOrder" >
+                            <!-- 活动包主体 -->
+                            <div style="height:90px;">
+                                <Col span="16"> 
+                                    <div>
+                                        <Col span="12"> 
+                                            <div class="item_td padding_left_20 text_left">
+                                                <p>
+                                                    <span> {{items.startTime}} 订单号：{{items.orderId}}</span><br>
+                                                    <span class="text_hover_color" style="display:inline-block;line-height:36px;" @click="items.activeShow = !items.activeShow">
+                                                        <i>各种组合包</i> 
+                                                        <span class="transition_05" style="display:inline-block; transform-origin:center center;" 
+                                                            :style="{transform:items.activeShow ? 'rotate(90deg)' : 'rotate(0deg)'}">
+                                                            <Icon  size="22" type="ios-arrow-forward"  />
+                                                        </span>
+                                                    </span>
+
+                                                </p>
+                                            </div>
+                                        </Col>
+                                        <Col span="6"><div class="item_td"><p></p>    </div> </Col>
+                                        <Col span="6"><div class="item_td"><p>{{items.itemTotal}}</p>    </div> </Col>
+                                    </div>
+
+                                </Col>
+                                <Col span="4"> 
+                                    <div class="item_td">
+                                        <p>
+                                              
                                         </p>
                                     </div>
                                 </Col>
-                                <Col span="6"><div class="item_td"><p>{{item.price}}</p>    </div> </Col>
-                                <Col span="6"><div class="item_td"><p>{{item.total}}</p></div> </Col>
+                                <Col span="4"> 
+                                    <div class="item_td">
+                                        <p >
+                                            <!-- 当后台给的状态都改变了，才显示去评价 -->
+                                            <!-- <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
+                                                v-if="items.payStateText != '待付款'" @click="jumpPage(index)">{{items.operation}}</Button> -->
+                                        </p>
+                                    </div>
+                                </Col>
+                            </div>
+                            
+                            <!-- 活动包可展开内容 -->
+                            <div v-show="items.activeShow" >
+                                <div v-for="(item, index2) in items.items" :key="index2">
+                                    <div class="margin_left_20 border_bottom_1 border_top_1" style="text-align:left;line-height:40px;">{{item.itemsTitle}}</div>
+                                    <div  :style="{height: 90 * item.lists.length + 'px' }">
+                                        <div v-for="(son, index3) in item.lists" :key="index3"  >
+                                            <Col span="16"> 
+                                                <div >
+                                                    <Col span="12"> 
+                                                        <div class="item_td padding_left_20 text_left">
+                                                            <p>
+                                                                <span class="text_ellipsis" style="color:#666;display:inline-block;width:300px;" :title="son.title">{{son.title}}</span>
+
+                                                            </p>
+                                                        </div>
+                                                    </Col>
+                                                    <Col span="6"><div class="item_td"><p>{{son.price}}</p>    </div> </Col>
+                                                    <Col span="6"><div class="item_td"><p>{{son.total}}</p></div> </Col>
+                                                </div>
+
+                                            </Col>
+                                            <Col span="4"> 
+                                                <div class="item_td">
+                                                    <p >
+                                                    {{son.payStateText}} <br>
+                                                    <Button type="text" shape="circle" v-if="son.payStateText == '待发货'" 
+                                                        style="width:80px;height:26px;line-height:5px;padding:0" @click="checkLogistics" >查看物流</Button>
+                                                    </p>
+                                                </div>
+                                            </Col>
+                                            <Col span="4"> 
+                                                <div class="item_td">
+                                                    <p >
+                                                        <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
+                                                            v-if="son.payStateText" @click="jumpPage(index)">{{son.operation}}</Button>
+                                                    </p>
+                                                </div>
+                                            </Col>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                        </Col>
-                        <Col span="4"> 
-                            <div class="item_td">
-                                <p :style="{height: 90 * items.items.length + 'px' }">
-                                {{items.payStateText}} <br>
-                                <Button type="text" shape="circle" v-if="items.payStateText == '待发货'" 
-                                    style="width:80px;height:26px;line-height:5px;padding:0" @click="checkLogistics" >查看物流</Button>
-                                </p>
-                            </div>
-                        </Col>
-                        <Col span="4"> 
-                            <div class="item_td">
-                                <p :style="{height: 90 * items.items.length + 'px' }">
-                                    <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                        v-if="items.payStateText != '待付款'" @click="jumpPage(index)">{{items.operation}}</Button>
-
-                                    <!-- 待付款取消订单 -->
-                                    <Button type="warning" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                        v-if="items.payStateText == '待付款'" @click="jumpPage(index)">{{items.operation}}</Button>
-                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
-                                    v-if="items.payStateText == '待付款'" @click="openModel(index)" >取消订单</Button>
-
-                                    <!-- 已关闭删除订单 -->
-                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0"
-                                    v-if="items.payStateText == '已关闭'" @click="openModel(index)" >删除订单</Button>
-                                </p>
-                            </div>
-                        </Col>
+                        </div>
+                       
                     </li>
                 </ul>
             </div>
@@ -142,6 +235,7 @@ export default {
                 // 订单数据
                 orderList:[
                     {
+                        activeOrder: false,
                         payState: '',
                         payStateText: '待付款',
                         operation: '去支付',
@@ -164,6 +258,72 @@ export default {
                         }],
                     },
                     {
+                        activeOrder: true,
+                        activeTitle: '组合包名称',
+                        itemTotal: '300.00',
+                        activeShow: false,
+                        startTime: '2018-08-51 16:00:00',
+                        orderId: '2018080511600',
+                        payState: '',
+                        payStateText: '待评价',
+                        operation: '去评价',
+                        routerUrl:'personCenter/goComment',
+                        items:[
+                            {
+                                itemsTitle: 'a律师事务所',
+                                lists:[
+                                    {
+                                        title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                                        startTime: '2018-08-51 16:00:00',
+                                        orderId: '2018080511600',
+                                        price: '100.00',
+                                        number: '1',
+                                        total: '100.00',
+                                    },
+                                    {
+                                        title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                                        startTime: '2018-08-51 16:00:00',
+                                        orderId: '2018080511600',
+                                        price: '100.00',
+                                        number: '1',
+                                        total: '100.00',
+                                        payStateText: '待发货',
+                                        operation: '退款',
+                                        routerUrl:'personCenter/refundMoney',
+                                    }
+                                ],
+                            },
+                            {
+                                itemsTitle: 'b律师事务所',
+                                lists:[
+                                    {
+                                        title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                                        startTime: '2018-08-51 16:00:00',
+                                        orderId: '2018080511600',
+                                        price: '100.00',
+                                        number: '1',
+                                        total: '100.00',
+
+                                    },
+                                    {
+                                        title: '法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程法律顾问课程',
+                                        startTime: '2018-08-51 16:00:00',
+                                        orderId: '2018080511600',
+                                        price: '100.00',
+                                        number: '1',
+                                        total: '100.00',
+                                        payStateText: '待发货',
+                                        operation: '退款',
+                                        routerUrl:'personCenter/refundMoney',
+                                    }
+                                ],
+                            }
+
+                        ]
+                        
+                    },
+                    {
+                        activeOrder: false,
                         payState: '',
                         payStateText: '已关闭',
                         operation: '重新购买',
@@ -178,6 +338,7 @@ export default {
                         }],
                     },
                     {
+                        activeOrder: false,
                         payState: '',
                         payStateText: '待评价',
                         operation: '去评价',
@@ -192,6 +353,7 @@ export default {
                         }],
                     },
                     {
+                        activeOrder: false,
                         payState: '',
                         payStateText: '待发货',
                         operation: '退款',
@@ -206,6 +368,7 @@ export default {
                         }],
                     },
                     {
+                        activeOrder: false,
                         payState: '',
                         payStateText: '已付款',
                         operation: '待发货',
@@ -219,6 +382,7 @@ export default {
                         }],
                     },
                     {
+                        activeOrder: false,
                         payState: '',
                         payStateText: '待发货',
                         operation: '待收货',
@@ -232,6 +396,7 @@ export default {
                         }],
                     },
                     {
+                        activeOrder: false,
                         payState: '',
                         payStateText: '已成功',
                         operation: '去支付',
@@ -247,7 +412,7 @@ export default {
                 ],
                 // 分页
                 pageData:{
-                    total: 7,
+                    total: 8,
                     pageSize: 5,
                     current: 1
                 }
@@ -329,6 +494,13 @@ export default {
         closeModel(){
 
             this.orderModelData.modelValue = false;
+
+        },
+        // 活动包展示
+        //@param index 获取当前活动包下标
+        showActive(index){
+
+            this.orderData.orderList[index].activeShow = !this.orderData.orderList[index].activeShow;
 
         },
 
