@@ -274,7 +274,7 @@ export default {
             }
              
 
-            // 当前集合是否全部选中
+            // 所有选项是否全部选中
             let AllStates = true ; 
 
             let All = this.cartDate.cartList ;
