@@ -58,6 +58,16 @@ export default {
         /*个人中心导航栏切换*/
         changeNav(index){
 
+            // 导航状态更改
+            this.$store.commit('personCenter/NavIndex', index);
+
+            this.jump(index)
+
+        },
+        // 跳转页面
+        //@param index 跳转下标
+        jump(index){
+            
             this.personNavData.navIndex = index;
 
             // 跳转
@@ -65,18 +75,20 @@ export default {
 
             this.$router.push({ path: Url, query: {id: '11'}})
             // this.$router.push({ name: Url, params: {id: '11'}})
-
         }
 
     },
     mounted(){
+        
+        // 获取导航栏状态
+        let index = this.$store.state.personCenter.navIndex;
 
-        // 初次点击页面
-        if(this.personNavData.navIndex == 0){
+        this.jump(index)
 
-            this.$router.push({ name:'myCourse' })
+        console.log(this.$store)
 
-        }
+    },
+    computed: {
 
     }
 }
