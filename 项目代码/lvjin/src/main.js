@@ -7,8 +7,10 @@ import App from './App'
 import router from './router'
 import iView from 'iview'
 
+
 //解决ie9+浏览器兼容问题
 import 'babel-polyfill';
+
 
 // 使用iview的 CSS
 import 'iview/dist/styles/iview.css'; 
@@ -16,6 +18,7 @@ import 'iview/dist/styles/iview.css';
 import 'element-ui/lib/theme-chalk/index.css'
 // 修改UI框架css样式
 import '../my-theme/custom.css'; 
+
 
 // 启用
 Vue.use(Vuex)
@@ -32,6 +35,14 @@ Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Checkbox)
 Vue.use(Upload)
+
+
+// 视频播放器插件
+import VideoPlayer from 'vue-video-player'
+
+Vue.use(VideoPlayer);
+import "video.js/dist/video-js.css";
+import "vue-video-player/src/custom-theme.css";
 
 
 Vue.config.productionTip = false

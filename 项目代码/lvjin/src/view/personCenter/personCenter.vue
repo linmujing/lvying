@@ -23,14 +23,15 @@
                     </Col>
                 </Row>
             </div>
-
+            <Video></Video>   
         </div>
     </div>
 </template>
 <script>
-
+import Video from '../../components/Video.vue'
 export default {
     components : {
+        Video
     },
     data() {
         return {
@@ -57,7 +58,7 @@ export default {
 
         /*个人中心导航栏切换*/
         changeNav(index){
-
+            
             // 导航状态更改
             this.$store.commit('personCenter/NavIndex', index);
 
@@ -73,8 +74,7 @@ export default {
             // 跳转
             let Url = this.personNavData.personNav[index].url;
 
-            this.$router.push({ path: Url, query: {id: '11'}})
-            // this.$router.push({ name: Url, params: {id: '11'}})
+            this.$router.push({ name: Url, params: {id: '11'}})
         }
 
     },
@@ -84,8 +84,6 @@ export default {
         let index = this.$store.state.personCenter.navIndex;
 
         this.jump(index)
-
-        console.log(this.$store)
 
     },
     computed: {
