@@ -138,17 +138,20 @@ export default {
 
             //当页面课程商品数量大于5条时，就给列表添加滚动
             let n = 0;
+
             let data = this.courseData.orderList;
 
             for(let i = 0 ; i < data.length ; i++ ){
+
                 for(let k = 0 ; k < data[i].items.length; k++ ){
+
                     n++;
+
                 }
+
             }
 
-            if(n > 6){
-                return true;
-            }
+            if(n > 6){ return true }
         },
 
         //
@@ -156,8 +159,7 @@ export default {
     },
     mounted(){
 
-        //console.log(this.$route.query)
-        console.log(this.$route.params)
+
        
 
     }

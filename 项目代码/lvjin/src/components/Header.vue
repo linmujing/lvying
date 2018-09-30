@@ -58,7 +58,8 @@
 		data() {
 			return {
 				//登录页面
-				loginStatus: this.isLogin
+				loginStatus: this.isLogin,
+				visible:''
 			}
 		},
 		methods:{
