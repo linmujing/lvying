@@ -69,12 +69,6 @@ export default {
     }
 }
 </script>
-<style type="text/css">
-	.ivu-tabs-nav .ivu-tabs-tab-active,.ivu-tabs-nav .ivu-tabs-tab:hover{color: #00AA88;}
-	.ivu-tabs-ink-bar{background: #00AA88;}
-	.ivu-tabs-nav{width: 100%;}
-	.ivu-tabs-nav .ivu-tabs-tab{width: 50%;text-align: center;font-size: 24px;}
-</style>
 <style scoped lang='less'>
 	/*登录框样式*/
 	.login_box{

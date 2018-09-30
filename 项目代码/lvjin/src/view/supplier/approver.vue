@@ -149,7 +149,7 @@ export default {
             this.$Message.warning({
                 content: '上传图片过大，最大不能超过10M'
             });
-        },
+        }
     }
 }
 </script>

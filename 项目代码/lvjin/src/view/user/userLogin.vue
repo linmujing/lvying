@@ -101,6 +101,12 @@ export default {
     }
 }
 </script>
+<style type="text/css">
+	.container .ivu-tabs-nav .ivu-tabs-tab-active,.container .ivu-tabs-nav .ivu-tabs-tab:hover{color: #00AA88;}
+	.container .ivu-tabs-ink-bar{background: #00AA88;}
+	.container .ivu-tabs-nav{width: 100%;}
+	.container .ivu-tabs-nav .ivu-tabs-tab{width: 50%;text-align: center;font-size: 24px;}
+</style>
 <style scoped lang='less'>
 	/*获取验证码*/
 	.get_code{background: #E6E6E6;display: inline-block;width: 97px;text-align: center;}
