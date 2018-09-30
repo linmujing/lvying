@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
+  <div id="container_id" class="container" :class="[videoControl.fullScreen ? 'full_screen' : '']">
 
     <!-- 视频容器  -->
-    <div class="player">
+    <div class="player" @mousemove="onMouseShow"  :class="[videoControl.fullScreen ? 'full_screen_player' : '']">
       <video-player class="video-player vjs-custom-skin"
                     ref="videoPlayer"
                     :playsinline="true"
@@ -24,11 +24,11 @@
     </div>
 
     <!-- 视频控制器 -->
-    <div class="video_control text_center">
+    <div class="video_control text_center" v-show="videoControl.isShow">
         <Row>
             <Col span="3">
                 <!-- 上一个 -->
-                <span class="video_control_icon">
+                <span class="video_control_icon" @click="previousClick">
                     <span class="vjs-icon-previous-item"></span>
                 </span>
                 <!-- 开关 -->
@@ -45,7 +45,7 @@
                     <span class="vjs-icon-play"></span>
                 </span>
                 <!-- 下一个 -->
-                <span class="video_control_icon">
+                <span class="video_control_icon" @click="nextClict">
                     <span class="vjs-icon-next-item"></span>
                 </span>
 
@@ -81,22 +81,23 @@
             </Col>
             <Col span="1">
                 <span class="video_control_icon">
-                    <span class="vjs-icon-fullscreen-enter" v-show="videoControl.fullScreen" @click="fullScreenHandle"></span>
-                    <span class="vjs-icon-fullscreen-exit" v-show="!videoControl.fullScreen" @click="fullScreenHandle"></span>
+                    <span class="vjs-icon-fullscreen-enter" v-show="!videoControl.fullScreen" @click="fullScreenHandle"></span>
+                    <span class="vjs-icon-fullscreen-exit" v-show="videoControl.fullScreen" @click="fullScreenHandle"></span>
                 </span>
             </Col>
         </Row>
     </div>
 
     <!-- 侧边栏容器 -->
-    <div class="video_menu" :class="[videoMenu.Off ? 'video_menu_active' : '']" :style="{height:videoMenu.clientHeight + 'px'}">
+    <div class="video_menu" :class="[videoMenu.Off ? 'video_menu_active' : '']" 
+        v-show="videoControl.isShow">
 
         <!-- 侧边栏开关 -->
         <div class="video_menu_btn video_menu_off" @click="videoMenu.Off = false" v-show="videoMenu.Off">
            <span><Icon type="md-reorder" size="26" /></span>
         </div>
         <div class="video_menu_btn video_menu_close" @click="videoMenu.Off = true" v-show="!videoMenu.Off">
-            <span style="position:relative;left:-5px;"><Icon type="ios-arrow-forward" size="22"  /></span>
+            <span style="position:absolute;left:-5px;top:45%;"><Icon type="ios-arrow-forward" size="22"  /></span>
         </div>
 
         <!-- 视频内容列表 -->
@@ -139,13 +140,11 @@ export default {
                 aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
                 fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
                 sources: [
-                    {
-                    type: "video/mp4",
-                    // mp4
-                    src: "http://vjs.zencdn.net/v/oceans.mp4"
-                    // webm
-                    // src: "https://cdn.theguardian.tv/webM/2015/07/20/150716YesMen_synd_768k_vp8.webm"
-                    }
+                    // {
+                    //     type: "video/mp4",
+                    //     // mp4
+                    //     src: "http://vjs.zencdn.net/v/oceans.mp4"
+                    // }
                 ],
                 poster: "poster.jpg", //你的封面地址
                 width: document.documentElement.clientWidth,
@@ -159,8 +158,10 @@ export default {
                 }
             },
 
-            // 视频控制器
+            // 视频控制器参数
             videoControl: {
+                // 控制器开关
+                isShow: false,
                 // 时间进度
                 timeProgress: 0,
                 // 总时间秒数
@@ -174,29 +175,52 @@ export default {
                 // 视频开关
                 videoOff: true,
                 // 全屏
-                fullScreen: true,
+                fullScreen: false,
+                // 记录当前播放视频的位置
+                videoIndex1: 0,
+                videoIndex2: 0,
 
             },
 
             // 视频列表菜单
             videoMenu:{
                 Off: true,
-                clientHeight: 0,
                 lists:[
                     {
                         title: '大章节',
                         items:[
                             {
                                 text: '01 小章节列表',
-                                isActive: false
+                                isActive: false,
+                                videoSource:[
+                                    {
+                                        type: "video/mp4",
+                                        // mp4
+                                        src: "http://221.228.226.23/11/t/j/v/b/tjvbwspwhqdmgouolposcsfafpedmb/sh.yinyuetai.com/691201536EE4912BF7E4F1E2C67B8119.mp4"
+                                    },                  
+                                ]
                             },
                             {
                                 text: '02 小章节列表',
-                                isActive: false
+                                isActive: false,
+                                videoSource:[
+                                    {
+                                        type: "video/mp4",
+                                        // mp4
+                                        src: "http://221.228.226.5/14/z/w/y/y/zwyyobhyqvmwslabxyoaixvyubmekc/sh.yinyuetai.com/4599015ED06F94848EBF877EAAE13886.mp4"
+                                    },
+                                ]
                             },
                             {
                                 text: '03 小章节列表',
-                                isActive: false
+                                isActive: false,
+                                videoSource:[
+                                    {
+                                        type: "video/mp4",
+                                        // mp4
+                                        src: "http://221.228.226.5/15/t/s/h/v/tshvhsxwkbjlipfohhamjkraxuknsc/sh.yinyuetai.com/88DC015DB03C829C2126EEBBB5A887CB.mp4"
+                                    }
+                                ]
                             },
                         ]
                     },
@@ -205,20 +229,41 @@ export default {
                         items:[
                             {
                                 text: '01 小章节列表',
-                                isActive: false
+                                isActive: false,
+                                videoSource:[
+                                    {
+                                        type: "video/mp4",
+                                        // mp4
+                                        src: "http://221.228.226.23/11/t/j/v/b/tjvbwspwhqdmgouolposcsfafpedmb/sh.yinyuetai.com/691201536EE4912BF7E4F1E2C67B8119.mp4"
+                                    },                  
+                                ]
                             },
                             {
                                 text: '02 小章节列表',
-                                isActive: false
+                                isActive: false,
+                                videoSource:[
+                                    {
+                                        type: "video/mp4",
+                                        // mp4
+                                        src: "http://221.228.226.5/14/z/w/y/y/zwyyobhyqvmwslabxyoaixvyubmekc/sh.yinyuetai.com/4599015ED06F94848EBF877EAAE13886.mp4"
+                                    },
+                                ]
                             },
                             {
                                 text: '03 小章节列表',
-                                isActive: false
+                                isActive: false,
+                                videoSource:[
+                                    {
+                                        type: "video/mp4",
+                                        // mp4
+                                        src: "http://221.228.226.5/15/t/s/h/v/tshvhsxwkbjlipfohhamjkraxuknsc/sh.yinyuetai.com/88DC015DB03C829C2126EEBBB5A887CB.mp4"
+                                    }
+                                ]
                             },
                         ]
                     }
                 ]
-            }
+            },
         };
     },
     components: {
@@ -229,15 +274,24 @@ export default {
     methods: {
 
         /** 视频方法 **/
-        // 视频播放
+        // 视频播放 *
         onPlayerPlay(player) {
+
+            this.player.play(); 
+
+            // 没有播放源提示
+            if( this.playerOptions.sources.length == 0 ){
+
+                this.$Message.warning('对不起，当前没有播放源！');
+
+                return false;
+
+            }
 
             this.videoControl.videoOff = false; 
 
-            this.player.play();  
-
         },
-        // 视频暂停
+        // 视频暂停 *
         onPlayerPause(player) {
 
             this.videoControl.videoOff = true; 
@@ -245,18 +299,7 @@ export default {
             this.player.pause();  
 
         },
-        // 播放错误
-        onError(e){
-            // this.haserror=false;
-            // if(this.videoURL != ''){
-            //     this.playState='replay';
-            //     this.haserror=true;
-            // }
-        },
-
-        onPlayerEnded(player) {
-            // console.log('player ended!', player)
-        },
+        // 播放前获取总时间 *
         onPlayerLoadeddata(player) {
 
             // console.log('player Loadeddata!', player) 
@@ -268,20 +311,7 @@ export default {
             this.videoControl.timesecond = player.duration();  
 
         },
-        // 等待中
-        onPlayerWaiting(player) {
-            // console.log('player Waiting!', player)
-            console.log(player)
-        },
-        // 播放中
-        onPlayerPlaying(player) {
-
-            // console.log('player Playing!', player)
-            console.log(player)
-
-
-        },
-        // 同步获取视频时间参数
+        // 同步获取视频时间参数 *
         onPlayerTimeupdate(player) {
 
             // 获取时间进度
@@ -291,36 +321,53 @@ export default {
             this.videoControl.timeDivider = this.changeTimeBox(player.currentTime());     
             
         },
-        onPlayerCanplay(player) {
-            // console.log('player Canplay!', player)
+        // 初始设置 *
+        playerReadied(player) {
+            player.currentTime(0.1) ;
+        },
 
+        // 播放错误
+        onError(e){
 
+             this.$Message.warning('对不起，当前没有播放源');
 
         },
+        onPlayerEnded(player) {
+            // console.log('player ended!', player)
+        },
+        // 等待中
+        onPlayerWaiting(player) {
+            // console.log('player Waiting!', player)
+            //console.log(player)
+        },
+        // 播放中
+        onPlayerPlaying(player) {
+            // console.log('player Playing!', player)
+            //console.log(player)
+        },
+        onPlayerCanplay(player) {
+            // console.log('player Canplay!', player)
+        },
         onPlayerCanplaythrough(player) {
-            // console.log('player Canplaythrough!', player)
+            console.log('player Canplaythrough!', player)
+            
         },
         //  or listen state event
         playerStateChanged(player) {
-
            // console.log(player);
-
         },
-        // 初始设置 player is ready
-        playerReadied(player) {
 
-            player.currentTime(0.1) ;
-
-        },
 
         /** 控制器方法 **/
         // 获取视频固定参数
         getVideoParam(){
 
-            // 获取视频菜单列表高度
-            this.videoMenu.clientHeight = this.$refs.videoPlayer.$el.clientHeight;
+            // 设置默认播放源
+            if(this.videoMenu.lists[0].items[0].videoSource.length > 0 ){
 
-            console.log(this.$refs.videoPlayer.tag)
+                this.playerOptions.sources = this.videoMenu.lists[0].items[0].videoSource;
+
+            }
 
         },
         // 时间进度
@@ -349,25 +396,152 @@ export default {
             return this.videoControl.volume  ;
 
         },
- 
-        // 全屏  
+        // 上一集
+        previousClick(){
+
+            // 重置播放键
+            this.videoControl.videoOff = true;
+
+            let index1 = this.videoControl.videoIndex1;
+            let index2 = this.videoControl.videoIndex2;
+
+            // 先判断视频地址是否还存在  
+            if( index2 > 0 ){
+
+                this.videoControl.videoIndex2--;
+
+            }
+            else if( index1 > 0 )
+            {
+                
+                this.videoControl.videoIndex1--;
+
+                this.videoControl.videoIndex2 = this.videoMenu.lists[this.videoControl.videoIndex1].items.length-1;
+
+            }else{
+                
+                this.$Message.warning('没有了');
+
+                return false;
+            }
+
+            // 压入视频
+            this.changeItem(this.videoControl.videoIndex1, this.videoControl.videoIndex2)
+            
+        },
+        // 下一集
+        nextClict(){
+
+            // 重置播放键
+            this.videoControl.videoOff = true;
+
+            let index1 = this.videoControl.videoIndex1;
+            let index2 = this.videoControl.videoIndex2;
+
+            // 先判断视频地址是否还存在  
+            if( index2 < this.videoMenu.lists[index1].items.length-1 ){
+
+                this.videoControl.videoIndex2++;
+
+            }
+            else if( index1 < this.videoMenu.lists.length-1 )
+            {
+                
+                this.videoControl.videoIndex1++;
+
+                this.videoControl.videoIndex2 = 0;
+
+            }else{
+                
+                this.$Message.warning('没有了');
+
+                return false;
+            }
+
+            // 压入视频
+            this.changeItem(this.videoControl.videoIndex1, this.videoControl.videoIndex2)
+
+        },
+        // 监听鼠标悬停事件
+        onMouseShow(){
+
+            // 防止多次触发定时器
+            if(!this.videoControl.isShow){
+
+                this.videoControl.isShow = true;
+
+                let timer = null;
+
+                timer = setTimeout(()=>{this.videoControl.isShow = false;},5000)
+
+            }
+
+        },
+        // 全屏控制  
         fullScreenHandle(player){  
 
-            if(!this.player.isFullscreen()){ 
+            this.videoControl.fullScreen = !this.videoControl.fullScreen;
 
-                this.player.requestFullscreen(); 
+            if(this.videoControl.fullScreen){
 
-                this.player.isFullscreen(true);  
+                document.body.style.overflow='hidden';
 
-            }else{  
+                this.launchFullScreen();
 
-                this.player.exitFullscreen();  
+            }else{
 
-                this.player.isFullscreen(false);  
+                document.body.style.overflow='';
 
-            }  
+                this.exitFullscreen();
+
+            } 
 
         }, 
+        // 进入全屏
+        launchFullScreen() {
+
+            var docElm = document.documentElement;
+            //W3C
+            if(docElm.requestFullscreen) {
+            docElm.requestFullscreen();
+            }
+
+            //FireFox
+            else if(docElm.mozRequestFullScreen) {
+            docElm.mozRequestFullScreen();
+            }
+
+            //Chrome等
+            else if(docElm.webkitRequestFullScreen) {
+            docElm.webkitRequestFullScreen();
+            }
+
+            //IE11
+            else if(elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+            }
+
+        },
+        // 退出全屏
+        exitFullscreen() { 
+            
+            if (document.exitFullscreen) {
+            document.exitFullscreen();
+            }
+            //FireFox
+            else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+            }
+            //Chrome等
+            else if (document.webkitCancelFullScreen) {
+            document.webkitCancelFullScreen();
+            }
+            //IE11
+            else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+            }
+
+        },
 
 
         /** 侧边栏 **/
@@ -392,6 +566,9 @@ export default {
             }
 
             this.videoMenu.lists[index].items[index2].isActive = true;
+
+            // 压入视频
+            this.playerOptions.sources = this.videoMenu.lists[index].items[index2].videoSource;
 
         },
 
@@ -422,6 +599,7 @@ export default {
             return this.$refs.videoPlayer.player;
             
         }
+
     },
     mounted(){
 
@@ -429,7 +607,6 @@ export default {
         this.getVideoParam();
         
         console.log(this.$refs.videoPlayer.player)
-
 
     },
 };
@@ -459,6 +636,24 @@ export default {
         min-height: 100%;
         position: relative;
         overflow: hidden;
+    }
+    // 全屏
+    .full_screen{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width:100vw;
+        height: 100vh;
+        z-index:10000;
+        background:#000;
+    }
+    .full_screen_player{
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom:0;
+        right:0;
+        margin:auto;
     }
 
     // 视频控制器
@@ -492,6 +687,7 @@ export default {
         top:0;
         right:0;
         width:232px;
+        height:100%;
         background:#1E242C;
         transition: 0.5s;
         z-index: 998;
@@ -499,7 +695,7 @@ export default {
         // 侧边栏开关
         .video_menu_btn{
             position: absolute;
-            top:50%;
+            top:45%;
             left:-44px;
             width:26px;
             height:26px; 
@@ -513,7 +709,6 @@ export default {
             width:14px;
             left:0;
             top:0;
-            padding-top:130%;
             border-left:1px solid #585858;
             border-right:1px solid #585858;
             color:#585858;
