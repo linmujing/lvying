@@ -10,7 +10,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/api': { 
+          target: 'http://114.115.133.96:8899/law-web-api/',//设置你调用的接口域名和端口号 
+          changeOrigin: true,     //跨域                                
+          pathRewrite: {                                             
+            '^/api': '/'  
+          }
+      }
+    },
 
     // Various Dev Server settings
     host: '0.0.0.0', // can be overwritten by process.env.HOST

@@ -159,7 +159,12 @@ export default {
     },
     mounted(){
 
+        // 获取商品列表
+        this.$api.getProductList({ merchantCode: 0}).then(function (res) {
 
+            console.log(res)
+
+        })
        
 
     }

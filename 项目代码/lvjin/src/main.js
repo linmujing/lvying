@@ -6,10 +6,17 @@ import store from './store/index'
 import App from './App'
 import router from './router'
 import iView from 'iview'
+import axios from 'axios'
 
 
 //解决ie9+浏览器兼容问题
 import 'babel-polyfill';
+
+
+// 引入接口配置文件
+import * as api from './api/api'
+Vue.prototype.$api = api
+Vue.prototype.$axios = axios
 
 
 // 使用iview的 CSS
@@ -18,7 +25,6 @@ import 'iview/dist/styles/iview.css';
 import 'element-ui/lib/theme-chalk/index.css'
 // 修改UI框架css样式
 import '../my-theme/custom.css'; 
-
 
 // 启用
 Vue.use(Vuex)
