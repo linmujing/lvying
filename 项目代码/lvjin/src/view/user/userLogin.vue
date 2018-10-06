@@ -5,8 +5,8 @@
 	        <TabPane label="密码登录" name="psdLogin">
 	        	<div class="margin_top_50">
 	        		<Form ref="formValidate" :model="formRight" :rules="ruleValidate" label-position="right" :label-width="100">
-				        <FormItem label="用户名" prop="name">
-				            <Input v-model="formRight.name" size="large" placeholder="请输入用户名" style="width: 300px"></Input>
+				        <FormItem label="手机号" prop="name">
+				            <Input v-model="formRight.name" size="large" placeholder="请输入手机号" style="width: 300px"></Input>
 				        </FormItem>
 				        <FormItem label="密码" prop="pwd">
 				            <Input v-model="formRight.pwd" size="large" placeholder="请输入密码" style="width: 300px"></Input>
@@ -23,10 +23,10 @@
 	        	<div class="margin_top_50">
 	        		<Form ref="formValidate1" :model="formRight1" :rules="ruleValidate1" label-position="right" :label-width="100">
 				        <FormItem label="手机号" prop="phone">
-				            <Input v-model="formRight.name" size="large" placeholder="请输入手机号" style="width: 300px"></Input>
+				            <Input v-model="formRight1.name" size="large" placeholder="请输入手机号" style="width: 300px"></Input>
 				        </FormItem>
 				        <FormItem label="验证码" prop="code">
-				            <Input v-model="formRight.code" size="large" placeholder="请输入手机验证码" style="width: 200px"></Input>
+				            <Input v-model="formRight1.code" size="large" placeholder="请输入手机验证码" style="width: 200px"></Input>
 				            <Button @click="getCode(60)" :disabled="getCodeDisabled" class="get_code"  size="large">获取验证码</Button>
 				        </FormItem>
 				        <FormItem style="width: 260px">
@@ -52,7 +52,7 @@ export default {
             //密码登录验证
             ruleValidate: {
                 name: [
-                    { required: true, message: '用户名不能为空', trigger: 'blur' }
+                    { required: true, message: '手机号不能为空', trigger: 'blur' }
                 ],
                 pwd: [
                 	{ required: true, message: '密码不能为空', trigger: 'blur' }
@@ -66,7 +66,7 @@ export default {
             //密码登录验证
             ruleValidate1: {
                 phone: [
-                    { required: true, message: '用户名不能为空', trigger: 'blur' }
+                    { required: true, message: '手机号不能为空', trigger: 'blur' }
                 ],
                 code: [
                 	{ required: true, message: '密码不能为空', trigger: 'blur' }
@@ -80,6 +80,27 @@ export default {
     methods: {
     	//密码登录
 		pwdSubmit (name) {
+
+            // 正则验证手机号
+            if((/^1(3|4|5|7|8)\d{9}$/.test(this.formRight))){
+
+                this.$Message.error('请填写正确的手机号!');
+                return;
+
+            }
+
+
+            // 判断手机号是否已被注册
+            this.$api.verifyCiPhone({ 'ciPhone': '15874025525' }).then(function (res) {
+                console.log(res)
+                if(res.code == 200){
+                    this.$Message.error('该手机号已被注册!');
+                    return;
+                }
+
+            })
+
+
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     this.$Message.success('Success!');
@@ -98,6 +119,8 @@ export default {
                 }
             })
         },
+        // 密码登录
+
     }
 }
 </script>
