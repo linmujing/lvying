@@ -112,7 +112,7 @@ export default {
                 return;
 
               }
-              let reg = new RegExp(/^1(3|4|5|7|8)\d{9}$/);
+              let reg = new RegExp(/^1[3456789]\d{9}$/);
 
               // 正则验证手机号
               if( !reg.test(this.formRight.phone) ){

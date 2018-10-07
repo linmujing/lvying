@@ -4,6 +4,7 @@
   const state = {
     // 用户数据
     UserData: {} ,
+    SupplierData: {}
   }
   
   // getters
@@ -23,6 +24,12 @@
 
         state.UserData = n;
   
+    },
+    // 保存提供商数据
+    saveSupplierData(state, n) {
+
+      state.SupplierData = n;
+
     },
   }
   

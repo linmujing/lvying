@@ -59,7 +59,7 @@
 					        </FormItem>
 					        <FormItem>
 					        	<div>
-					        		<Checkbox>我已认真阅读并同意《XXXXX》</Checkbox></a>
+					        		<Checkbox v-model="isAgree">我已认真阅读并同意《XXXXX》</Checkbox>
 					        	</div>
 					            <Button @click="submit('formValidate')" size="large" type="success" shape="circle" class="all_width bg_title margin_top_10" style="width: 200px">提交</Button>
 					        </FormItem>
@@ -91,6 +91,19 @@ export default {
           callback();
         }
       };
+      var validatePhone = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('机构电话不可为空'));
+        } else {
+          if (value !== '') {
+            var reg =/^((0\d{2,3}-\d{7,8})|(1[345678]\d{9}))$/;
+            if(!reg.test(value)){
+              callback(new Error('请输入正确的手机号或者座机号格式为：0000-0000000'));
+            }
+          }
+          callback();
+        }
+      };
       return {
         formRight: {
             name: '',
@@ -104,26 +117,27 @@ export default {
         //资料验证
         ruleValidate: {
             name: [
-                { required: true, message: '姓名不能为空!', trigger: 'blur' }
+              { required: true, message: '姓名不能为空!', trigger: 'blur' }
             ],
             email: [
               { required: true, message: '邮箱不能为空!', trigger: 'blur' },
               { validator: validateEmail, trigger: 'blur' }
             ],
             addr: [
-                { required: true, message: '请选择所在地区', trigger: 'blur' }
+              { required: true, message: '请选择所在地区', trigger: 'blur' }
             ],
             orgName: [
-                { required: true, message: '律所/机构不能为空!', trigger: 'blur' }
+              { required: true, message: '律所/机构不能为空!', trigger: 'blur' }
             ],
             orgTel: [
-                { required: true, message: '律所/机构电话不能为空!', trigger: 'blur' }
+              { required: true, message: '律所/机构电话不能为空!', trigger: 'blur' },
+              { validator: validatePhone, trigger: 'blur' }
             ],
             orgAddr: [
-                { required: true, message: '律所/机构所在地址不能为空!', trigger: 'blur' }
+              { required: true, message: '律所/机构所在地址不能为空!', trigger: 'blur' }
             ],
             idcard: [
-                { required: true, message: '证件号不能为空!', trigger: 'blur' }
+              { required: true, message: '证件号不能为空!', trigger: 'blur' }
             ]
         },
         //验证码按钮
@@ -139,31 +153,85 @@ export default {
                 label: '长沙'
             }
         ],
+        // 商户编号
+        merchantCode: '',
+        // 资质扫描件
+        materialUrl: '',
+        // 个人资料
+        personIntroduce: '',
+        // 同意协议
+        isAgree: false
       }
+    },
+    mounted(){
+      console.log(this.$store.state.userData.SupplierData)
     },
     methods: {
     	//密码登录
-		submit (name) {
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                    this.$router.push({path:'/supplier/approverStatus'});
-                } else {
-                    this.$Message.error('Fail!');
+		  submit (name) {
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            // 阅读协议
+            if(!this.isAgree){
+
+              this.$Message.error('请阅读协议!');
+              return;
+
+            }
+            // 资质扫描件验证
+            if( materialUrl !== '' ){
+
+              this.$Message.error('请上传资质扫描件验证');
+              return;
+
+            }
+            let params = this.$Qs.stringify({ 'merchantCode': this.merchantCode, 'realName': this.formRight.name, 'email': this.formRight.email, 'orgTel': this.formRight.orgTel, 'orgName': this.formRight.orgName, 'orgRegin': this.formRight.addr, 'orgAddress': this.formRight.orgAddr, 'lawerRegistrationNo': this.formRight.idcard, 'materialUrl': this.formRight.materialUrl, 'personIntroduce': this.formRight.personIntroduce });
+            this.$Loading.start();
+            // 商户资料完善
+            this.$api.saveMerchantInfo( params )
+
+              .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                  this.$Message.success(res.data.message);
+                  // this.$router.push({path:'/supplier/approverStatus'});
+
+                  //跳转函数*************************************************
+
+                }else if (res.data.code == 500){
+
+                  this.$Message.warning(res.data.message);
+
                 }
-            })
-        },
-        //图片格式
-        handleFormatError (file) {
-            this.$Message.warning({
-                content: '图片格式只能为jpg、png、gif!'
-            });
-        },
-        //图片上传尺寸
-        handleMaxSize (file) {
-            this.$Message.warning({
-                content: '上传图片过大，最大不能超过10M'
-            });
-        }
+                this.$Loading.finish();
+
+              })
+              .catch((error) => {
+
+                this.$Loading.error();
+                console.log('发生错误！', error);
+
+              });
+          } else {
+            this.$Message.error('请完善信息');
+          }
+        })
+      },
+      //图片格式
+      handleFormatError (file) {
+        this.$Message.warning({
+          content: '图片格式只能为jpg、png、gif!'
+        });
+      },
+      //图片上传尺寸
+      handleMaxSize (file) {
+        this.$Message.warning({
+          content: '上传图片过大，最大不能超过10M'
+        });
+      }
     }
 }
 </script>

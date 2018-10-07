@@ -250,6 +250,10 @@ export default {
             if(res.data.code == 200){
 
               this.$Message.success(res.data.message);
+              // 存储用户信息
+              this.$store.commit('userData/saveSupplierData', res.data.content);
+              // console.log(this.$store.state.userData.SupplierData)
+              // this.$router.push({ name: '', params: {id: id}})
 
               //跳转函数*************************************************
 
