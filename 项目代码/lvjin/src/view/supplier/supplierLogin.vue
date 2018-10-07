@@ -10,9 +10,9 @@
 					            <Input v-model="formRight.phone" size="large" placeholder="请输入手机号码" style="width: 270px"></Input>
 					        </FormItem>
 					        <FormItem label="密码" prop="pwd">
-					            <Input v-model="formRight.pwd" size="large" placeholder="请输入密码" style="width: 270px"></Input>
+					            <Input type="password" v-model="formRight.pwd" size="large" placeholder="请输入密码" style="width: 270px"></Input>
 				            	<div>
-				            		<router-link tag="a" to="/supplier/supplierForgotPwd" class="padding_left_10">
+				            		<router-link tag="a" to="/supplier/supplierForgotPwdStep" class="padding_left_10">
 				            			<span class="color_link">忘记密码？</span>
 				            		</router-link>
 				            	</div>
@@ -50,33 +50,73 @@ export default {
     components : {
     },
     data() {
-        return {
-       		formRight: {
-                phone: '',
-                pwd: ''
-            },
-            //密码登录验证
-            ruleValidate: {
-                phone: [
-                    { required: true, message: '手机号码不能为空', trigger: 'blur' }
-                ],
-                pwd: [
-                	{ required: true, message: '密码不能为空', trigger: 'blur' }
-                ]
-            },
+      var validateMobilePhone = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('手机号不能为空'));
+        } else {
+          if (value !== '') {
+            var reg=/^1[3456789]\d{9}$/;
+            if(!reg.test(value)){
+              callback(new Error('请输入有效的手机号码'));
+            }
+          }
+          callback();
         }
+      };
+      return {
+        formRight: {
+          phone: '',
+          pwd: ''
+        },
+        //密码登录验证
+        ruleValidate: {
+          phone: [
+            { required: true, message: '手机号不能为空', trigger: 'blur' },
+            { validator: validateMobilePhone, trigger: 'blur' }
+          ],
+          pwd: [
+            { required: true, message: '密码不能为空', trigger: 'blur' }
+          ]
+        },
+      }
     },
     methods: {
-    	//密码登录
-		submit (name) {
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                    this.$Message.success('Success!');
-                } else {
-                    this.$Message.error('Fail!');
+    	//登录
+      submit (name) {
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            let params = this.$Qs.stringify({ 'merchantPhone': this.formRight.phone, 'passWord': this.formRight.pwd });
+            this.$Loading.start();
+            // 商户登陆
+            this.$api.merchantLogin( params )
+
+              .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                  this.$Message.success(res.data.message);
+
+                  //跳转函数*************************************************
+
+                }else if (res.data.code == 500){
+
+                  this.$Message.warning(res.data.message);
+
                 }
-            })
-        },
+                this.$Loading.finish();
+
+              })
+              .catch((error) => {
+
+                this.$Loading.error();
+                console.log('发生错误！', error);
+
+              });
+          }
+        })
+      },
     }
 }
 </script>

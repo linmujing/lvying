@@ -8,7 +8,7 @@
 	        					
 						<Form ref="formValidate" :model="formRight" :rules="ruleValidate" label-position="right" :label-width="100">
 					        <FormItem label="真实姓名" prop="name">
-					            <Input v-model="formRight.name" size="large" placeholder="请输入手机号码" style="width: 300px"></Input>
+					            <Input v-model="formRight.name" size="large" placeholder="请输入真实姓名" style="width: 300px"></Input>
 					        </FormItem>
 					        <FormItem label="电子邮箱" prop="email">
 					            <Input v-model="formRight.email" size="large" placeholder="请输入电子邮箱" style="width: 300px"></Input>
@@ -78,54 +78,68 @@ export default {
     components : {
     },
     data() {
-        return {
-       		formRight: {
-                name: '',
-                email: '',
-                addr: [],
-                orgName: '',
-                orgTel: '',
-                orgAddr: '',
-                idcard: ''
-            },
-            //资料验证
-            ruleValidate: {
-                name: [
-                    { required: true, message: '姓名不能为空!', trigger: 'blur' }
-                ],
-                email: [
-                	{ required: true, message: '邮箱不能为空!', trigger: 'blur' }
-                ],
-                addr: [
-                    { required: true, message: '请选择所在地区', trigger: 'blur' }
-                ],
-                orgName: [
-                    { required: true, message: '律所/机构不能为空!', trigger: 'blur' }
-                ],
-                orgTel: [
-                    { required: true, message: '律所/机构电话不能为空!', trigger: 'blur' }
-                ],
-                orgAddr: [
-                    { required: true, message: '律所/机构所在地址不能为空!', trigger: 'blur' }
-                ],
-                idcard: [
-                    { required: true, message: '证件号不能为空!', trigger: 'blur' }
-                ]
-            },
-            //验证码按钮
-            getCodeDisabled: true,
-            //城市列表
-            cityList: [
-                {
-                    value: '天津',
-                    label: '天津'
-                },
-                {
-                    value: '长沙',
-                    label: '长沙'
-                }
-            ],
+      var validateEmail = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请正确填写邮箱'));
+        } else {
+          if (value !== '') {
+            var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+            if(!reg.test(value)){
+              callback(new Error('请输入有效的邮箱'));
+            }
+          }
+          callback();
         }
+      };
+      return {
+        formRight: {
+            name: '',
+            email: '',
+            addr: [],
+            orgName: '',
+            orgTel: '',
+            orgAddr: '',
+            idcard: ''
+        },
+        //资料验证
+        ruleValidate: {
+            name: [
+                { required: true, message: '姓名不能为空!', trigger: 'blur' }
+            ],
+            email: [
+              { required: true, message: '邮箱不能为空!', trigger: 'blur' },
+              { validator: validateEmail, trigger: 'blur' }
+            ],
+            addr: [
+                { required: true, message: '请选择所在地区', trigger: 'blur' }
+            ],
+            orgName: [
+                { required: true, message: '律所/机构不能为空!', trigger: 'blur' }
+            ],
+            orgTel: [
+                { required: true, message: '律所/机构电话不能为空!', trigger: 'blur' }
+            ],
+            orgAddr: [
+                { required: true, message: '律所/机构所在地址不能为空!', trigger: 'blur' }
+            ],
+            idcard: [
+                { required: true, message: '证件号不能为空!', trigger: 'blur' }
+            ]
+        },
+        //验证码按钮
+        getCodeDisabled: true,
+        //城市列表
+        cityList: [
+            {
+                value: '天津',
+                label: '天津'
+            },
+            {
+                value: '长沙',
+                label: '长沙'
+            }
+        ],
+      }
     },
     methods: {
     	//密码登录

@@ -14,13 +14,13 @@
                       </FormItem>
                       <FormItem label="手机验证码" prop="code">
                         <Input v-model="formRight.code" size="large" placeholder="请输入手机验证码" style="width: 200px"></Input>
-                        <span class="get_code">验证码</span>
+                        <Button @click="sendVerifyCiPhone" :disabled="isSend" class="get_code"  size="large"> {{isSendText}} </Button>
                       </FormItem>
                       <FormItem label="新密码" prop="pwd">
-                        <Input v-model="formRight.pwd" size="large" placeholder="请输入密码" style="width: 300px"></Input>
+                        <Input type="password" v-model="formRight.pwd" size="large" placeholder="请输入密码" style="width: 300px"></Input>
                       </FormItem>
                       <FormItem label="确认密码" prop="rePwd">
-                        <Input v-model="formRight.rePwd" size="large" placeholder="请输入重复密码" style="width: 300px"></Input>
+                        <Input type="password" v-model="formRight.rePwd" size="large" placeholder="请输入重复密码" style="width: 300px"></Input>
                       </FormItem>
                       <FormItem style="width: 260px">
                         <Button @click="nextStep('formValidate')" size="large" type="success" shape="circle" class="all_width bg_title">完成并登陆</Button>
@@ -63,51 +63,213 @@ export default {
     components : {
     },
     data() {
-        const passwordSure = (rule, value, callback) => {
-          let self = this;
-          if (value != self.formRight.pwd ){
-            callback(new Error('密码不一致'))
-          } else {
-            callback();
-          }
-        };
-        return {
-       		formRight: {
-                phone: '',
-                code: '',
-                pwd: '',
-                rePwd: '',
-           	},
-            ruleValidate: {
-                phone: [
-                    { required: true, message: '用户名不能为空', trigger: 'blur' }
-                ],
-                code: [
-                	{ required: true, message: '验证码不能为空', trigger: 'blur' }
-                ],
-                pwd: [
-                  { required: true, message: '密码不能为空!', trigger: 'blur' },
-                  {type:'string',min:6,message: '请输入6-20位数字、字母、标点符号组合密码!', trigger: 'blur'},
-                ],
-                rePwd: [
-                  { required: true, message: '确认密码不能为空!', trigger: 'blur' },
-                  {validator:passwordSure,trigger: 'blur'}
-                ]
-            }
+      const passwordSure = (rule, value, callback) => {
+        let self = this;
+        if (value != self.formRight.pwd ){
+          callback(new Error('密码不一致'))
+        } else {
+          callback();
         }
+      };
+      var validateMobilePhone = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('手机号不能为空'));
+        } else {
+          if (value !== '') {
+            var reg=/^1[3456789]\d{9}$/;
+            if(!reg.test(value)){
+              callback(new Error('请输入有效的手机号码'));
+            }
+          }
+          callback();
+        }
+      };
+      return {
+        formRight: {
+          phone: '',
+          code: '',
+          pwd: '',
+          rePwd: '',
+        },
+        ruleValidate: {
+          phone: [
+            { required: true, message: '手机号不能为空', trigger: 'blur' },
+            {validator: validateMobilePhone, trigger: 'blur'}
+          ],
+          code: [
+            { required: true, message: '验证码不能为空', trigger: 'blur' }
+          ],
+          pwd: [
+            { required: true, message: '密码不能为空!', trigger: 'blur' },
+            {type:'string',min:6,message: '请输入6-20位数字、字母、标点符号组合密码!', trigger: 'blur'},
+          ],
+          rePwd: [
+            { required: true, message: '确认密码不能为空!', trigger: 'blur' },
+            {validator:passwordSure,trigger: 'blur'}
+          ]
+        },
+        //验证码按钮
+        isSend: false,
+        isSendText: '获取验证码',
+      }
         
     },
     methods: {
     	//下一步
-		nextStep (name) {
-            this.$refs[name].validate((valid) => {
-                if (valid) {
-                    this.$router.push({path:'/user/forgotPwdStep'});
-                } else {
-                    this.$Message.error('Fail!');
+		  nextStep (name) {
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            let params = this.$Qs.stringify({ 'merchantPhone': this.formRight.phone, 'passWord': this.formRight.pwd, 'smsCode': this.formRight.code });
+            this.$Loading.start();
+            // 商户密码找回
+            this.$api.merchantResetPassWord( params )
+
+              .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                  this.$Message.success(res.data.message);
+                  // 完成并登陆
+                  this.loginFn(this.formRight.phone, this.formRight.pwd)
+
+                }else if (res.data.code == 500){
+
+                  this.$Message.warning(res.data.message);
+
                 }
-            })
+                this.$Loading.finish();
+
+              })
+              .catch((error) => {
+
+                this.$Loading.error();
+                console.log('发生错误！', error);
+
+              });
+          }
+        })
+      },
+      // 发送短信验证码
+      sendVerifyCiPhone(){
+        // 正则验证手机号
+        if(!(/^1[3456789]\d{9}$/.test(this.formRight.phone ))){
+
+          this.$Message.error('请填写正确的手机号!');
+          return;
+
         }
+        this.$Loading.start();
+        // 判断手机号是否已注册
+        this.$api.verifyMerchantPhone( this.$Qs.stringify({ 'merchantPhone':  this.formRight.phone }) )
+
+          .then( (res) => {
+
+            console.log(res)
+
+            if(res.data.code == 200){
+
+              // 发送验证码
+              this.$api.sendSms( this.$Qs.stringify({ 'phoneNo': this.formRight.phone, 'type': '2' }) )
+
+                .then( (res) => {
+
+                  console.log(res)
+
+                  if(res.data.code == 200){
+
+                    this.sendTimeOut();
+
+                  }
+
+                })
+              return;
+
+            }else if(res.data.code == 500){
+
+              this.$Message.error('该帐号尚未注册!');
+
+            }
+
+            this.$Loading.finish();
+
+          })
+          .catch((error) => {
+
+            this.$Loading.error();
+            console.log('发生错误！', error);
+
+          });
+
+      },
+
+      // 发送短信计时器
+      sendTimeOut(){
+
+        let timer = 60;
+
+        this.isSend = true;
+
+        let t = null;
+
+        t = setInterval(()=>{
+
+          if(timer > 0){
+
+            timer-- ;
+            this.isSendText = timer + 'S';
+
+          }else{
+
+            this.isSendText = '重新获取';
+            this.isSend = false;
+            clearInterval(t);
+            return ;
+
+          }
+
+        },1000)
+
+      },
+
+      // 登录
+      //@param merchantPhone 电话号码
+      //@param passWord 密码
+      loginFn( merchantPhone, passWord){
+
+        let params = this.$Qs.stringify({ 'merchantPhone': merchantPhone, 'passWord': passWord });
+        this.$Loading.start();
+        // 商户登陆
+        this.$api.merchantLogin( params )
+
+          .then( (res) => {
+
+            console.log(res)
+
+            if(res.data.code == 200){
+
+              this.$Message.success(res.data.message);
+
+              //跳转函数*************************************************
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+            this.$Loading.finish();
+
+          })
+          .catch((error) => {
+
+            this.$Loading.error();
+            console.log('发生错误！', error);
+
+          });
+
+      },
+
     }
 }
 </script>

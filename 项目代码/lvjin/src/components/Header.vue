@@ -59,7 +59,7 @@
 			return {
 				//登录页面
 				loginStatus: this.isLogin,
-				visible:''
+				visible:false
 			}
 		},
 		methods:{
