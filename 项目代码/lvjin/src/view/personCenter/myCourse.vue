@@ -167,8 +167,9 @@ export default {
 
         });
 
+        console.log(this.$Qs.stringify({ 'productCode': 0} ))
         // 获取商品详情
-        this.$api.getProductInfo({ 'productCode': 0}).then(function (res) {
+        this.$api.getProductInfo( this.$Qs.stringify({ 'productCode': 0} )).then(function (res) {
 
             console.log(res)
 

@@ -7,6 +7,7 @@ import App from './App'
 import router from './router'
 import iView from 'iview'
 import axios from 'axios'
+import Qs from 'qs'
 
 
 //解决ie9+浏览器兼容问题
@@ -17,7 +18,7 @@ import 'babel-polyfill';
 import * as api from './api/api'
 Vue.prototype.$api = api
 Vue.prototype.$axios = axios
-
+Vue.prototype.$Qs = Qs
 
 // 使用iview的 CSS
 import 'iview/dist/styles/iview.css'; 

@@ -1,6 +1,5 @@
 import { Promise } from 'es6-promise';
 import axios from 'axios';
-import qs from 'qs'
 
 
 var instance = axios.create({
@@ -8,7 +7,7 @@ var instance = axios.create({
     // baseURL: 'http://114.115.133.96:8899/law-web-api/', // 正式环境
     baseURL: "/api/",                                      // 本地环境
     timeout: 5000,                                // 请求超时设置
-    headers: { "Accept": "application/json" }
+    headers: { "Accept": "application/json" },
 });
 
 
