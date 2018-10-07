@@ -54,11 +54,11 @@ export const getBannerList = params => { return instance.post(`system/banner/get
 
 /** 购物车 **/ 
 //添加商品到购物车
-export const addCat = params => { return instance.post(`customer/cat/addCat`, params ); };
+export const addCart = params => { return instance.post(`customer/cart/addCat`, params ); };
 //删除购物车中商品
-export const deleteCat = params => { return instance.post(`customer/cat/deleteCat`, params ); };
+export const deleteCart = params => { return instance.post(`customer/cart/deleteCart`, params ); };
 //获取我的购物车列表
-export const catGetCouponList = params => { return instance.post(`customer/cat/getCouponList`, params ); };
+export const catGetCartList = params => { return instance.post(`customer/cart/getCartList`, params ); };
 
 /** 地址 **/ 
 //获取会员地址列表
