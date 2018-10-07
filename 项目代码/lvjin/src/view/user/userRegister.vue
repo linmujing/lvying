@@ -284,9 +284,9 @@ export default {
         //@param ciPhone 电话号码
         //@param passWord 密码
         //@param smsCode 手机验证码
-        loginFn( ciPhone, passWord, smsCode){
+        loginFn( ciPhone, passWord){
 
-            this.$api.login( this.$Qs.stringify({ 'ciPhone': ciPhone, 'passWord': passWord, 'smsCode': smsCode  }) )
+            this.$api.login( this.$Qs.stringify({ 'ciPhone': ciPhone, 'passWord': passWord }) )
 
             .then( (res) => {
 
@@ -295,6 +295,11 @@ export default {
                 if(res.data.code == 200){
 
                     this.$Message.success(res.data.message);
+
+                    // 存储用户信息
+                    this.$store.commit('userData/saveUserData', res.data.content);
+                    // console.log(this.$store.state.userData.UserData)
+                    // this.$router.push({ name: '', params: {id: id}})
 
                     //跳转函数*************************************************
 

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import personCenter from './modules/personCenter'
+import userData from './modules/userData'
 
 Vue.use(Vuex)
 
@@ -9,6 +10,7 @@ export default new Vuex.Store({
   modules: {
 
     personCenter,
+    userData
 
   }
 })

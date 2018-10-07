@@ -10,7 +10,7 @@
 				        </FormItem>
 				        <FormItem label="密码" prop="pwd">
 				            <Input v-model="formRight.pwd" type="password" size="large" placeholder="请输入密码" style="width: 300px"></Input>
-			            	<router-link tag="a" to="/user/forgotPwd" class="padding_left_10">忘记密码？</router-link>
+			            	<router-link tag="a" to="/user/forgotPwdStep" class="padding_left_10">忘记密码？</router-link>
 				        </FormItem>
 				        <FormItem style="width: 260px">
 				            <Button @click="pwdSubmit(true)" size="large" type="success" shape="circle" class="all_width bg_title">登录</Button>
@@ -140,7 +140,7 @@ export default {
                 }else if (res.data.code == 200){
                     
                     if(isPassWord){
-                        console.log(1)
+   
                         this.loginFn(this.formRight.name, this.formRight.pwd, '');
 
                     }else{
@@ -172,6 +172,11 @@ export default {
                 if(res.data.code == 200){
 
                     this.$Message.success(res.data.message);
+
+                    // 存储用户信息
+                    this.$store.commit('userData/saveUserData', res.data.content);
+                    // console.log(this.$store.state.userData.UserData)
+                    // this.$router.push({ name: '', params: {id: id}})
 
                     //跳转函数*************************************************
 
