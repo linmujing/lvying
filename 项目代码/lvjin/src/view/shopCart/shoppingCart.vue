@@ -180,6 +180,14 @@ export default {
                 ],
             },   
 
+            /*购物车列表参数*/
+            cartParams:{
+                pageNo: 1,
+                pageSize: 30,
+                dataSize: 0 ,
+                ciCode: ''
+            },
+
             /*删除提示弹框对象*/
             modelDate:{
                 //弹框开关
@@ -466,8 +474,51 @@ export default {
             // 去结算页面
             this.$router.push({ name: 'submitOrder', params: { type: true} })
 
-        }
+        },
    
+        /**数据**/
+        // 获取购物车列表
+        catGetCouponList(){
+
+            let param = this.$Qs.stringify({ 'pageNo': this.cartParams.pageNo, 'pageSize': this.cartParams.pageSize , 'ciCode': this.cartParams.ciCode }) ;
+
+            this.$api.catGetCartList( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                   
+
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+                this.$Loading.finish();
+
+            })
+            .catch((error) => {
+
+                this.$Loading.error();
+                console.log('发生错误！', error);
+
+            });
+ 
+
+        }
+
+    },
+    mounted(){
+
+        // 获取用户cicode
+        this.cartParams.ciCode = 12; //this.$store.state.userData.UserData.ciCode ;
+
+        // 获取购物车列表
+        this.catGetCouponList()
 
     }
 }
