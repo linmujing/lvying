@@ -21,11 +21,11 @@ Vue.prototype.$axios = axios
 Vue.prototype.$Qs = Qs
 
 // 使用iview的 CSS
-import 'iview/dist/styles/iview.css'; 
+import 'iview/dist/styles/iview.css';
 // 使用element的 CSS
 import 'element-ui/lib/theme-chalk/index.css'
 // 修改UI框架css样式
-import '../my-theme/custom.css'; 
+import '../my-theme/custom.css';
 
 // 启用
 Vue.use(Vuex)
@@ -34,9 +34,10 @@ Vue.use(iView);
 // 引用部分element组件
 // import Element from 'element-ui'
 // Vue.use(Element)
-import { Input, Select, Option, Form, FormItem, Checkbox, Upload  } from 'element-ui'
+import { Input, Select, Cascader, Option, Form, FormItem, Checkbox, Upload  } from 'element-ui'
 Vue.use(Input)
 Vue.use(Select)
+Vue.use(Cascader)
 Vue.use(Option)
 Vue.use(Form)
 Vue.use(FormItem)

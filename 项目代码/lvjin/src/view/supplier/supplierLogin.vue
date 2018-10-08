@@ -27,7 +27,7 @@
 		            			<span class="color_title">立即注册</span>
 		            		</router-link>
 					    </div>
-					    <div class="text_center margin_top_10"> 
+					    <div class="text_center margin_top_10">
 					    	<span class="line"></span>
 					    	<span class="inline_block">使用合作账号登录</span>
 					    	<span class="line"></span>
@@ -98,13 +98,14 @@ export default {
 
                   this.$Message.success(res.data.message);
                   // 存储用户信息
-                  this.$store.commit('userData/saveSupplierData', res.data.content);
+                  sessionStorage.setItem("SupplierData", JSON.stringify(res.data.content));
+                  // this.$store.commit('userData/saveSupplierData', res.data.content);
                   // console.log(this.$store.state.userData.SupplierData)
                   // this.$router.push({ name: '', params: {id: id}})
 
                   //跳转函数*************************************************
 
-                }else if (res.data.code == 500){
+                }else{
 
                   this.$Message.warning(res.data.message);
 

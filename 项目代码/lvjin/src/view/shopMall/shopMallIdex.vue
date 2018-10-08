@@ -4,7 +4,7 @@
     <div class="nav">
       <ul class="list_unstyled ul_inline clearfix font_18 navbar box_center_1200">
         <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(index)'>
-          <span class="color_fff listItem">{{item}}</span>
+          <span class="color_fff listItem">{{item.catName}}</span>
         </li>
       </ul>
     </div>
@@ -195,9 +195,45 @@ export default {
         return {
           navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
         }
-        
+
+    },
+    mounted(){
+      this.getNavTitle()
     },
     methods: {
+      // 获取导航标题
+      getNavTitle(){
+        // 获取产品分类列表
+        this.$api.getProductCatList( this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 }) )
+
+          .then( (res) => {
+
+            if(res.data.code == 200){
+
+              var result = res.data.content.list;
+              var navTitle = []
+              console.log(result)
+              for(var i=0;i<result.length;i++){
+                var obj = {}
+                if(result[i].parentId === '0'){
+                  obj.catCode = result[i].catCode
+                  obj.catName = result[i].catName
+                  navTitle.push(obj)
+                }
+              }
+              console.log(navTitle)
+              this.navDataModel = navTitle
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
       // 导航鼠标点击
       tabClick(index){
         switch(index){
