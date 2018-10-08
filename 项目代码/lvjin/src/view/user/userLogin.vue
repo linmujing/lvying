@@ -152,6 +152,12 @@ export default {
                 }
 
             })
+            .catch((error) => {
+
+                this.$Loading.error();
+                console.log('发生错误！', error);
+
+            });
 
         },
 

@@ -160,40 +160,7 @@ export default {
     mounted(){
 
 
-        // 获取商品列表
-        this.$api.getProductList({ 'merchantCode': 0 }).then(function (res) {
-
-            console.log(res)
-
-        });
-
-        console.log(this.$Qs.stringify({ 'productCode': 0} ))
-        // 获取商品详情
-        this.$api.getProductInfo( this.$Qs.stringify({ 'productCode': 0} )).then(function (res) {
-
-            console.log(res)
-
-        })
-        
-        // 添加商品到购物车
-        this.$api.addCat({ 'ciCode': '0', 'productCode': '0'}).then(function (res) {
-
-            console.log(res)
-
-        })  
-        // 删除购物车中商品
-        this.$api.deleteCat({ 'recordId':'0' }).then(function (res) {
-
-            console.log(res)
-
-        })  
-
-         // 删除购物车中商品
-        this.$api.getCouponList({ 'ciCode': '9'}).then(function (res) {
-
-            console.log(res)
-
-        })         
+       
 
     }
 }

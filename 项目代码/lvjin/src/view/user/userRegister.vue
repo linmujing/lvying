@@ -195,9 +195,7 @@ export default {
         },
 
         // 发送短信验证码
-        sendVerifyCiPhone(){
-            
-            this.$Loading.start();
+        sendVerifyCiPhone(){      
 
             // 正则验证手机号
             if(!(/^1(3|4|5|7|8)\d{9}$/.test(this.formRight.phone ))){
@@ -206,8 +204,9 @@ export default {
                 return;
 
             }
-            this.sendTimeOut();
 
+            this.$Loading.start();
+            
             // 判断手机号是否已注册
             this.$api.verifyCiPhone( this.$Qs.stringify({ 'ciPhone':  this.formRight.phone }) )
 
