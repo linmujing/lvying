@@ -45,7 +45,7 @@
                     <span class="vjs-icon-play"></span>
                 </span>
                 <!-- 下一个 -->
-                <span class="video_control_icon" @click="nextClict">
+                <span class="video_control_icon" @click="nextClick">
                     <span class="vjs-icon-next-item"></span>
                 </span>
 
@@ -167,9 +167,9 @@ export default {
                 // 总时间秒数
                 timesecond: 0,
                 // 当前播放时间
-                timeDivider: '00:00:00',
+                timeDivider: '00:00',
                 // 总时间
-                timeDuration: '00:00:00',
+                timeDuration: '00:00',
                 // 音量
                 volume: 50,
                 // 视频开关
@@ -430,7 +430,7 @@ export default {
             
         },
         // 下一集
-        nextClict(){
+        nextClick(){
 
             // 重置播放键
             this.videoControl.videoOff = true;
@@ -578,6 +578,7 @@ export default {
         changeTimeBox(timer){
 
             function p(s){ return s < 10 ? '0' + s : s } ;
+            function ps(s){ return s == 0 ? '' : s + ':'} ;
 
             var h = timer > 3600 ? parseInt(timer/3600) : 0;
 
@@ -585,7 +586,7 @@ export default {
 
             var s = parseInt(timer - h*3600 - m*60);
 
-            var now =  p(h) + ':' + p(m) + ":" + p(s);
+            var now =  ps(h) + p(m) + ":" + p(s);
 
             return now;
 
@@ -623,6 +624,9 @@ export default {
     }
     .ivu-slider-wrap {
         background-color: #ccc;
+    }
+    .ivu-slider-bar{
+        background: #059E7F;
     }
 </style>
 <style scoped lang='less'>

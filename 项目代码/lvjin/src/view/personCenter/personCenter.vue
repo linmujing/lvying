@@ -23,15 +23,18 @@
                     </Col>
                 </Row>
             </div>
-            <Video></Video>   
+            <!-- <Video></Video>    -->
+            <Audio></Audio>
         </div>
     </div>
 </template>
 <script>
 import Video from '../../components/Video.vue'
+import Audio from '../../components/Audio.vue'
 export default {
     components : {
-        Video
+        Video,
+        Audio
     },
     data() {
         return {
