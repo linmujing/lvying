@@ -78,10 +78,11 @@
           </div>
         </li>
       </ul>
-      <!--分页-->
-     <div class="margin_80">
-       <Page :total="100" prev-text="上一页" next-text="下一页" />
-     </div>
+      <!-- 订单分页 -->
+      <div class="margin_80">
+        <Page :total="total" :current="current"   :page-size="pageSize"
+              @on-change="changeOrderPage" show-total show-elevator />
+      </div>
     </div>
 	</div>
 </template>
@@ -95,26 +96,32 @@ export default {
           sale: false,
           satisfaction: false,
           price: false,
+          total: 0,
+          current: 1,
+          pageSize: 12,
+          productList: []
         }
 
     },
     mounted(){
       console.log(this.$route.query.twoPage)
-      this.getProductList()
+      this.getProductList(1)
     },
     methods: {
       jumpDetail(){
         this.$router.push({path:'/videoCourseDetail'})
       },
       // 获取商品展示
-      getProductList(){
+      getProductList(page){
         // 获取产品分类列表
-        this.$api.getProductList( this.$Qs.stringify({'pageNo': 1, 'pageSize': 30}) )
+        this.$api.getProductList( this.$Qs.stringify({'pageNo': page, 'pageSize': 12, 'productCat': '10001'}) )
 
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
 
+              this.productList = res.data.content.list
+              this.total = res.data.content.count
 
             }else if (res.data.code == 500){
 
@@ -126,6 +133,11 @@ export default {
           .catch((error) => {
             console.log('发生错误！', error);
           });
+      },
+      /**分页**/
+      //@param value 返回当前页码
+      changeOrderPage(value){
+        this.getProductList(value)
       },
     }
 }
