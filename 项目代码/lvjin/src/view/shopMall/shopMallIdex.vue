@@ -3,7 +3,7 @@
     <!--导航栏-->
     <div class="nav">
       <ul class="list_unstyled ul_inline clearfix font_18 navbar box_center_1200">
-        <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(index)'>
+        <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(item.catCode,index)'>
           <span class="color_fff listItem">{{item.catName}}</span>
         </li>
       </ul>
@@ -199,18 +199,19 @@ export default {
     },
     mounted(){
       this.getNavTitle()
+      this.getBannerList()
     },
     methods: {
       // 获取导航标题
       getNavTitle(){
         // 获取产品分类列表
-        this.$api.getProductCatList( this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 }) )
+        this.$api.getProductCatList()
 
           .then( (res) => {
 
             if(res.data.code == 200){
 
-              var result = res.data.content.list;
+              var result = res.data.content;
               var navTitle = []
               console.log(result)
               for(var i=0;i<result.length;i++){
@@ -221,7 +222,6 @@ export default {
                   navTitle.push(obj)
                 }
               }
-              console.log(navTitle)
               this.navDataModel = navTitle
             }else if (res.data.code == 500){
 
@@ -234,41 +234,71 @@ export default {
             console.log('发生错误！', error);
           });
       },
+      // 获取商品展示
+      getBannerList(){
+        // 获取产品分类列表
+        this.$api.getBannerList( this.$Qs.stringify({'appType': 1, 'pageLocat': 1}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
       // 导航鼠标点击
-      tabClick(index){
-        switch(index){
-          case 0:
+      tabClick(catCode,index){
+        console.log(index)
+        switch(catCode){
+          case '10001':
             this.$router.push({
               path:'/industryDynamic',
               query: {
-                typeId: 0
+                typeId: index
               }
             })
             break;
-          case 1:
+          case '10002':
             this.$router.push({
               path:'/industryDynamic',
               query: {
-                typeId: 1
+                typeId: index
               }
             })
             break;
-          case 2:
+          case '10003':
             this.$router.push({
               path:'videoCourse',
               query: {
-                typeId: 2
+                typeId: index
               }
             })
             break;
-          case 3:
+          case '10004':
             this.$router.push({
               path:'videoCourse',
               query: {
-                typeId: 3
+                typeId: index
               }
             })
 	    		break;
+          case '10005':
+            this.$router.push({
+              path:'lvyingMall',
+              query: {
+                typeId: index
+              }
+            })
+            break;
         }
       },
     }

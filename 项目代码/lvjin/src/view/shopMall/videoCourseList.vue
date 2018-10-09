@@ -96,15 +96,37 @@ export default {
           satisfaction: false,
           price: false,
         }
-        
+
+    },
+    mounted(){
+      console.log(this.$route.query.twoPage)
+      this.getProductList()
     },
     methods: {
       jumpDetail(){
         this.$router.push({path:'/videoCourseDetail'})
-      }
-    },
-    mounted(){
-      console.log(this.$route.query.twoPage)
+      },
+      // 获取商品展示
+      getProductList(){
+        // 获取产品分类列表
+        this.$api.getProductList( this.$Qs.stringify({'pageNo': 1, 'pageSize': 30}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
     }
 }
 </script>

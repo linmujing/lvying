@@ -31,7 +31,7 @@
 				<div class="padding_20">
 					<div>Copyright © 2012-2018 www.ximalaya.com lnc.ALL Rights Reserved</div>
 					<div class="margin_top_10">上海证大喜马拉雅网络科技有限公司 版权所有</div>
-				</div> 
+				</div>
 			</div>
 		</div>
 	</div>
@@ -40,12 +40,35 @@
 	export default {
 		data() {
 			return {
-				
+
 			}
 		},
 		mounted(){
-			
-		}
+      // this.getNavigationList()
+		},
+    methods:{
+      // 获取下导航展示
+      getNavigationList(){
+        this.$api.getNavigationList( this.$Qs.stringify({'navigationName': '2'}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+              this.navigationList = res.content
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+
+    }
 	}
 </script>
 <style lang='less' scoped>

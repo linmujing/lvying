@@ -59,10 +59,34 @@
 			return {
 				//登录页面
 				loginStatus: this.isLogin,
-				visible:false
+				visible:false,
+        navigationList: []
 			}
 		},
+    mounted(){
+      // this.getNavigationList()
+    },
 		methods:{
+      // 获取上导航展示
+      getNavigationList(){
+        this.$api.getNavigationList( this.$Qs.stringify({'navigationName': '1'}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+              this.navigationList = res.content
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
 			//logo链接到首页
 			jump() {
                 this.$router.push({path:'/'})
@@ -75,9 +99,6 @@
             register() {
                 this.$router.push({path:'/user/userRegister'})
             },
-		},
-		mounted(){
-
 		}
 	}
 </script>
