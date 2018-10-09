@@ -10,6 +10,11 @@
                     邮编：<span>{{items.postCode}}</span>
                 </div>
                 <p class="text_right">
+
+                    <div class="float_left" style="position:relative;" v-show="false">
+                        <div style="width:100%;height:100%;position:absolute;left:0top:0;z-index:10;" v-show="items.isDefalut" ></div>
+                        <Checkbox v-model="items.isDefalut" label="设置默认地址" > 设置默认地址 </Checkbox>
+                    </div>
                     <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0"
                         @click="aditAddressItem(index1)" >编辑</Button>
                     <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0;color:red;"
@@ -65,6 +70,10 @@
                     <span class="input_box_span" >邮编：</span>
                     <Input v-model="addressData.addressModelData.postCode"  size="large" clearable style="width: 280px" />
                 </div>
+                <div class="input_box" v-show="false">
+                    <span class="input_box_span" >默认地址：</span>
+                    <Checkbox v-model="addressData.addressModelData.isDefalut" label="设置默认地址" ></Checkbox>
+                </div>
             </div>
             <div style="padding: 30px 0 20px 100px; "> 
                 <Button shape="circle" type="success" size="large" @click="addAddressItem">确认收货地址</Button>
@@ -107,6 +116,7 @@
                         county: { value: '1', label: '芙蓉区'},
                         addressDetail: '芙蓉大道 中心街 23号',
                         postCode: '10010',
+                        isDefalut: false
                     }
                     ],
                     // 收货地址弹框
@@ -124,6 +134,7 @@
                         county: { value: '1', label: '芙蓉区'},
                         addressDetail: '',
                         postCode: '',
+                        isDefalut: false
                     },
                     //  删除弹框
                     deleteModel:{
@@ -142,6 +153,11 @@
                     cityList: [{ value: '1', label: '长沙'}],
                     countyList: [{ value: '1', label: '芙蓉区'}]
                 },
+
+                // 用户信息
+                userData: {
+                    ciCode: ''
+                }
 			}
 		},
 		methods:{
@@ -275,12 +291,125 @@
                 // 将选中的值传递给父组件
                 this.$emit('hidebox', this.addressData.addressList[index]);
 
+            },
+
+            /*地址数据*/
+            // 获取地址列表
+            getAddressData(){
+
+                let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 , 'ciCode': 12 }) ;
+
+                this.$Loading.start();
+
+                this.$api.getAddressList( param )
+
+                .then( (res) => {
+
+                    console.log(res)
+
+                    if(res.data.code == 200){
+
+                        if(res.data.content.count == 0){
+
+                            this.addressData.addressList = [];
+                            return;
+
+                        }
+
+                        let data = res.data.content.list;
+
+                        this.addressData.addressList = [];
+
+                        for(let i = 0 ; i < data.length; i++){
+
+                            this.addressData.addressList.push({
+                                id: data[i].id,
+                                name:  data[i].addressPersonName,
+                                phone:  data[i].addressPhone,
+                                province:  data[i].province,
+                                city:  data[i].city,
+                                county:  data[i].zone,
+                                addressDetail:  data[i].address,
+                                postCode:  data[i].addressCode,
+                                isDefalut:  data[i].isDefalut,
+                            })
+
+                        }
+
+
+                    }else{
+
+                        this.$Message.warning(res.data.message);
+
+                    }
+
+                    this.$Loading.finish();
+
+                })
+                .catch((error) => {
+
+                    this.$Loading.error();
+                    console.log('发生错误！', error);
+
+                });
+            },
+            // 新增地址
+            addAddressItem(){
+
+                // 获取弹框数据
+                let data = this.addressData.addressModelData;
+
+                let param = this.$Qs.stringify({ 
+                    "ciCode": this.userData.ciCode,
+                    "addressCode": data.postCode,
+                    "addressPersonName":data.name,
+                    "addressPhone": data.phone,
+                    "province": data.province,
+                    "zone": data.county,
+                    "city": data.city,
+                    "address": data.addressDetail,
+                    }) ;
+
+                this.$Loading.start();
+
+                this.$api.saveAddress( param )
+
+                .then( (res) => {
+
+                    console.log(res)
+
+                    if(res.data.code == 200){
+
+                       
+
+
+                    }else{
+
+                        this.$Message.warning(res.data.message);
+
+                    }
+
+                    this.$Loading.finish();
+
+                })
+                .catch((error) => {
+
+                    this.$Loading.error();
+                    console.log('发生错误！', error);
+
+                });
             }
         },
         mounted(){
 
             // 页面判断
             this.addressState = this.pState;
+
+            // 获取用户信息
+            this.userData.ciCode = 12 ;//this.$store.state.userData.UserData.ciCode ;
+
+            // 获取用户地址列表
+            this.getAddressData();
 
         }
 	}
@@ -317,7 +446,7 @@
                 line-height: 30px;
                 position: relative;
 
-                div{
+                >div{
                     width:80%;
                 }
                 span{
