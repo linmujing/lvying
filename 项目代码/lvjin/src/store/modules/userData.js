@@ -3,7 +3,10 @@
 
   const state = {
     // 用户数据
-    UserData: {} ,
+    ciphone: window.sessionStorage.getItem("ciphone"),
+    cicode: window.sessionStorage.getItem("cicode"),
+
+    
     SupplierData: {}
   }
   
@@ -22,7 +25,11 @@
     // 保存用户数据
     saveUserData(state, n) {
 
-        state.UserData = n;
+        state.ciphone = n.ciPhone;
+        state.cicode = n.ciCode;
+
+        window.sessionStorage.setItem("ciphone", n.ciPhone)
+        window.sessionStorage.setItem("cicode", n.ciCode)
   
     },
     // 保存提供商数据

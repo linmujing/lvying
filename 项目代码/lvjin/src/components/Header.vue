@@ -5,7 +5,7 @@
 				<div class="center clearfix">
 					<div class="float_left">
 						<router-link tag="a" target="_blank" to="/user/userLogin">
-							<span class="color_title">亲，请登录</span>
+							<span class="color_title">亲，请登录</span>{{user}}
 						</router-link>
 						<router-link tag="a" target="_blank" to="/user/userRegister" class="padding_left_25">注册</router-link>
 					</div>
@@ -60,11 +60,14 @@
 				//登录页面
 				loginStatus: this.isLogin,
 				visible:false,
-        navigationList: []
+				navigationList: [],
+				user: 1
 			}
 		},
     mounted(){
-      // this.getNavigationList()
+			// this.getNavigationList()
+		
+
     },
 		methods:{
       // 获取上导航展示
@@ -99,6 +102,22 @@
             register() {
                 this.$router.push({path:'/user/userRegister'})
             },
+		},
+		computed: {
+			// 监听登录状态变化 修改页面值
+			getLoginChange() {
+
+					return this.$store.state.userData.ciphone;
+
+			}
+		},
+		watch: {
+			// 监听登录状态变化 修改页面值
+			getLoginChange:function(val){
+
+				this.user = val ;
+
+			}
 		}
 	}
 </script>
