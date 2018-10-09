@@ -3,37 +3,37 @@
 	    <div class="nav" style="position:relative;z-index:10000;">
 	      <div class="center relative">
 					<ul class="list_unstyled ul_inline clearfix font_18 navbar">
-	          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navDataModel" :key="index" @click='tabClick(index)'>
-	            <span class="color_fff tabHover">{{item.title}}</span>
+	          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navTitle" :key="index" @click='tabClick(item.catCode,index)'>
+	            <span class="color_fff tabHover">{{item.catName}}</span>
 	          </li>
 	        </ul>
 	        <div v-show="showItem" class="listBox">
 	          <div class="">
-	
-	            <div v-for="(items,index) in navDataModel[curIndex].lists" :key="index">
-	
-	              <div @mouseover="boxMouseOver(index)" @click="jumpDown(1)"
-										class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
-	                <span class="float_left color_fff font_18">{{items.title}}</span>
-	                <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
-	              </div>
-	
-	              <div v-show="showBox" class="itemBox bg_white width_1000px" >
-	                <div v-for="(item,index2) in navDataModel[curIndex].lists[itemsIndex].items " :key="index2">
-	                  <div @click="jumpDown(2)" class="font_18 pointer hover_title">{{item.title}}</div>
-	
-	                  <ul class="list_unstyled ul_inline clearfix margin_bottom_20">
-	                    <li @click="jumpDown(3)" v-for="( i, index3) in item.arr" :key="index3" class="margin_top_5 margin_right_30 pointer hover_title">{{i}}</li>
-	                  </ul>
-	
-	                </div>
-	              </div>
-	
-	            </div>
-	
+
+	            <!--<div v-for="(items,index) in navDataModel[curIndex].lists" :key="index">-->
+
+	              <!--<div @mouseover="boxMouseOver(index)" @click="jumpDown(1)"-->
+										<!--class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">-->
+	                <!--<span class="float_left color_fff font_18">{{items.title}}</span>-->
+	                <!--<Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>-->
+	              <!--</div>-->
+
+	              <!--<div v-show="showBox" class="itemBox bg_white width_1000px" >-->
+	                <!--<div v-for="(item,index2) in navDataModel[curIndex].lists[itemsIndex].items " :key="index2">-->
+	                  <!--<div @click="jumpDown(2)" class="font_18 pointer hover_title">{{item.title}}</div>-->
+
+	                  <!--<ul class="list_unstyled ul_inline clearfix margin_bottom_20">-->
+	                    <!--<li @click="jumpDown(3)" v-for="( i, index3) in item.arr" :key="index3" class="margin_top_5 margin_right_30 pointer hover_title">{{i}}</li>-->
+	                  <!--</ul>-->
+
+	                <!--</div>-->
+	              <!--</div>-->
+
+	            <!--</div>-->
+
 	          </div>
 	        </div>
-	        
+
 	      </div>
 	    </div>
 
@@ -47,151 +47,195 @@
 		data() {
 			return {
 
-			showBox: false,
+        showBox: false,
 
-			// 当前悬停位置
-			curIndex: this.nowIndex,
-			// 二级标题悬停
-			itemsIndex:0,
-			/*导航栏数据模型*/
-			navDataModel:[
-				{
-					title: "行业动态管控",
-					lists:[
-						{
-							title: "行业（企业）",
-							items:[
-								{
-									title: "行业",
-									arr:["入职申请表" ,"入职申请表"]
-								},
-								{
-									title: "行业",
-									arr:["入职申请表" ,"入职申请表"]
-								}
-							]
-						},
-						{
-							title: "行业（企业）",
-							items:[
-								{
-									title: "行业",
-									arr:["入职申请表" ,"入职申请表"]
-								},
-								{
-									title: "行业",
-									arr:["入职申请表" ,"入职申请表"]
-								}
-							]
-						},
-						{
-							title: "行业（企业）",
-							items:[
-								{
-									title: "行业",
-									arr:["入职申请表" ,"入职申请表"]
-								}
-							]
-						},
-						{
-							title: "行业（企业）",
-							items:[
-								{
-									title: "行业",
-									arr:["入职申请表" ,"入职申请表"]
-								}
-							]
-						}
-					]
-				},
-				{
-					title: "法律动态管控",
-					lists:[
-						{
-							title: "法律（企业）",
-							items:[
-								{
-									title: "法律",
-									arr:["入职申请表" ,"入职申请表"]
-								}
-							]
-						}
-					]
-				},
-				{
-					title: "视频课程",
-					lists:[
-						{
-							title: "视频课程",
-							items:[
-								{
-									title: "视频课程",
-									// arr:["入职申请表" ,"入职申请表"]
-								},
-                {
-                  title: "视频课程2",
-                  // arr:["入职申请表" ,"入职申请表"]
-                }
-							]
-						}
-					]
-				},
-				{
-					title: "音频课程",
-					lists:[
-						{
-							title: "音频课程",
-							items:[
-								{
-									title: "视频课程",
-									// arr:["入职申请表" ,"入职申请表"]
-								},
-                {
-                  title: "视频课程2",
-                  // arr:["入职申请表" ,"入职申请表"]
-                }
-							]
-						}
-					]
-				}
-			],
+        // 当前悬停位置
+        curIndex: this.nowIndex,
+        // 二级标题悬停
+        itemsIndex:0,
+        /*导航栏数据模型*/
+        navDataModel:[
+          {
+            title: "行业动态管控",
+            lists:[
+              {
+                title: "行业（企业）",
+                items:[
+                  {
+                    title: "行业",
+                    arr:["入职申请表" ,"入职申请表"]
+                  },
+                  {
+                    title: "行业",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              },
+              {
+                title: "行业（企业）",
+                items:[
+                  {
+                    title: "行业",
+                    arr:["入职申请表" ,"入职申请表"]
+                  },
+                  {
+                    title: "行业",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              },
+              {
+                title: "行业（企业）",
+                items:[
+                  {
+                    title: "行业",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              },
+              {
+                title: "行业（企业）",
+                items:[
+                  {
+                    title: "行业",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            title: "法律动态管控",
+            lists:[
+              {
+                title: "法律（企业）",
+                items:[
+                  {
+                    title: "法律",
+                    arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            title: "视频课程",
+            lists:[
+              {
+                title: "视频课程",
+                items:[
+                  {
+                    title: "视频课程",
+                    // arr:["入职申请表" ,"入职申请表"]
+                  },
+                  {
+                    title: "视频课程2",
+                    // arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            title: "音频课程",
+            lists:[
+              {
+                title: "音频课程",
+                items:[
+                  {
+                    title: "视频课程",
+                    // arr:["入职申请表" ,"入职申请表"]
+                  },
+                  {
+                    title: "视频课程2",
+                    // arr:["入职申请表" ,"入职申请表"]
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        navTitle: []
 
 			}
 		},
+    mounted(){
+      this.getNavTitle()
+    },
 		methods:{
+      // 获取导航标题
+      getNavTitle(){
+        // 获取产品分类列表
+        this.$api.getProductCatList()
+
+          .then( (res) => {
+
+            if(res.data.code == 200){
+
+              var result = res.data.content;
+              var navTitle = []
+              console.log(result)
+              for(var i=0;i<result.length;i++){
+                var obj = {}
+                if(result[i].parentId === '0'){
+                  obj.catCode = result[i].catCode
+                  obj.catName = result[i].catName
+                  navTitle.push(obj)
+                }
+              }
+              this.navTitle = navTitle
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
       // 导航鼠标点击
-      tabClick(index){
-        this.curIndex = index;
-        switch(index){
-          case 0:
+      tabClick(catCode,index){
+        this.curIndex = index
+        switch(catCode){
+          case '10001':
             this.$router.push({
               path:'/industryDynamic',
               query: {
-                typeId: 0
+                typeId: index
               }
             })
             break;
-          case 1:
+          case '10002':
             this.$router.push({
               path:'/industryDynamic',
               query: {
-                typeId: 1
+                typeId: index
               }
             })
             break;
-          case 2:
+          case '10003':
             this.$router.push({
               path:'videoCourse',
               query: {
-                typeId: 2
+                typeId: index
               }
             })
             break;
-          case 3:
+          case '10004':
             this.$router.push({
               path:'videoCourse',
               query: {
-                typeId: 3
+                typeId: index
+              }
+            })
+            break;
+          case '10005':
+            this.$router.push({
+              path:'lvyingMall',
+              query: {
+                typeId: index
               }
             })
             break;
@@ -250,9 +294,6 @@
             break;
         }
       }
-		},
-		mounted(){
-
 		}
 	}
 </script>

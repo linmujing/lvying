@@ -83,14 +83,14 @@ export default {
 
           typeId: parseInt(this.$route.query.typeId),
         }
-        
-    },
-    methods: {
 
     },
     mounted(){
       console.log(this.$route.query.typeId)
-		}
+    },
+    methods: {
+
+    }
 }
 </script>
 <style scoped lang='less'>

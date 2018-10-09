@@ -178,7 +178,10 @@ export default {
           isCur: 0,
           isActive: 0,
         }
-        
+
+    },
+    mounted(){
+      this.getProductInfo()
     },
     methods: {
     	//详情
@@ -188,7 +191,28 @@ export default {
 			//评价
 			evaluateBtn(i){
 				this.isActive = i;
-			}
+			},
+      // 查看产品详情
+      getProductInfo(){
+        // 查看产品详情
+        this.$api.getProductInfo( this.$Qs.stringify({'productCode': 'P121212121214'}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
     }
 }
 </script>
