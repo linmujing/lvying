@@ -1,35 +1,39 @@
 <template>
+    <!-- 地址页面 -->
 	<div class="address_box">
         <ul class="address_list">
-            <li v-for="(items, index1) in addressData.addressList" :key="index1">
+            <!-- 新增地址 -->
+            <li class="new_add" v-if="addressList.length < 10">
+                <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0"
+                        @click="openAddressModel" >新增地址</Button>
+            </li>
+            <!-- 地址列表 -->
+            <li v-for="(items, index1) in addressList" :key="index1">
                 <div>
                     姓名：<span  style="margin-right:100px;">{{items.name}}</span>电话：<span  >{{items.phone}}</span>
                 </div>
                 <div>
-                    地址：<span >{{items.province.label +" " + items.city.label +" " + items.county.label +" " + items.addressDetail  }}</span><br/>
+                    地址：<span >{{items.province +" " + items.city +" " + items.county +" " + items.addressDetail  }}</span><br/>
                     邮编：<span>{{items.postCode}}</span>
                 </div>
-                <p class="text_right">
+                <div class="text_right" style="width:100%">
 
-                    <div class="float_left" style="position:relative;" v-show="false">
+                    <div class="float_left" style="position:relative;" >
                         <div style="width:100%;height:100%;position:absolute;left:0top:0;z-index:10;" v-show="items.isDefalut" ></div>
-                        <Checkbox v-model="items.isDefalut" label="设置默认地址" > 设置默认地址 </Checkbox>
+                        <Checkbox v-model="items.isDefalut" label="设置默认地址" v-show="false"> 设置默认地址 </Checkbox>
                     </div>
                     <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0"
                         @click="aditAddressItem(index1)" >编辑</Button>
                     <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0;color:red;"
                         @click="deleteAddress(index1)" >删除</Button>
                     
-                </p>
+                </div>
                 <span class="choose_address" v-if="addressState == 1"> 
                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0" @click="chooseAddressItem(index1)" >选择</Button>
                 </span>
 
             </li>
-            <li class="new_add">
-                <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0"
-                        @click="openAddressModel" >新增地址</Button>
-            </li>
+
         </ul>
 
 
@@ -51,7 +55,15 @@
                 <div class="input_box" >
                     <span class="input_box_span" >所在地区：</span>
                     <div class="input_box_select" >
-                        <Select v-model="addressSelectData.province.value"  size="large" style="width:150px">
+                        <el-cascader
+                            v-model="addressValue"
+                            placeholder="请选择所在地区"
+                            :options="cityList"
+                            filterable
+                            style="width: 300px"
+                            @change="handleChange"
+                            ></el-cascader>
+                        <!-- <Select v-model="addressSelectData.province.value"  size="large" style="width:150px">
                             <Option v-for="item in addressSelectData.provinceList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                         <Select v-model="addressSelectData.city.value"  size="large" style="width:150px">
@@ -59,7 +71,7 @@
                         </Select>
                         <Select v-model="addressSelectData.county.value"  size="large" style="width:150px">
                             <Option v-for="item in addressSelectData.countyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
+                        </Select> -->
                     </div>  
                 </div>
                 <div class="input_box" >
@@ -95,6 +107,9 @@
 	</div>
 </template>
 <script>
+
+    import province from '../assets/js/province'
+
 	export default {
         props:['pState'],
 		data() {
@@ -105,20 +120,6 @@
 
                 /*收货地址数据*/
                 addressData:{
-                    // 收货地址数据列表
-                    addressList:[
-                    {
-                        id: 1,
-                        name:'律师之家',
-                        phone:'15874252525',
-                        province: { value: '1', label: '湖南省'},
-                        city: { value: '1', label: '长沙市'},
-                        county: { value: '1', label: '芙蓉区'},
-                        addressDetail: '芙蓉大道 中心街 23号',
-                        postCode: '10010',
-                        isDefalut: false
-                    }
-                    ],
                     // 收货地址弹框
                     addressModelValue: false,
                     // 收货地址新增或者编辑
@@ -129,9 +130,9 @@
                     addressModelData:{
                         name: '' ,
                         phone: '',
-                        province: { value: '1', label: '湖南省'},
-                        city: { value: '1', label: '长沙市'},
-                        county: { value: '1', label: '芙蓉区'},
+                        province: '',
+                        city: '',
+                        county: '',
                         addressDetail: '',
                         postCode: '',
                         isDefalut: false
@@ -144,20 +145,30 @@
 
                 },
 
-                /*地址数据模型 省 市 县*/
+                // 收货地址数据列表
+                addressList:[],
+
+                /*地址数据模型 省 市 县  暂时无用*/
                 addressSelectData:{ 
-                    province: { value: '', label: ''},
-                    city: { value: '', label: ''},
-                    county: { value: '', label: ''},
+
+                    province: '',
+                    city: '',
+                    county:  '',
                     provinceList: [{ value: '1', label: '湖南'}],
                     cityList: [{ value: '1', label: '长沙'}],
                     countyList: [{ value: '1', label: '芙蓉区'}]
                 },
 
+                // 地址城市列表
+                cityList: [ { value: '天津',label: '天津' }, ],
+                // 选中的城市数组
+                addressValue:[],
+
                 // 用户信息
                 userData: {
                     ciCode: ''
-                }
+                },
+                
 			}
 		},
 		methods:{
@@ -165,41 +176,47 @@
             /*地址功能块*/
             //  新增地址
             addAddressItem(){
-                
-                // 获取地址数据模型
-                let Data =  this.addressSelectData;
+
                 // 收货地址弹框绑定值
                 let modelData =  this.addressData.addressModelData;
 
-                if( Data.county == "" ){     this.$Message.warning('地址填写不完整！'); return ;  };
-                if( Data.name == "" ){     this.$Message.warning('收件人名不能为空'); return ;     }
-                if( Data.addressDetail == "" ){     this.$Message.warning('地址详情不能为空！'); return ;     }
+                if(modelData.name == ""){
+                    
+                        this.$Message.warning('姓名不能为空！');
+                        return ;
 
-                // 设置收货地址弹框绑定值地址
-                this.addressData.addressModelData.address = Data.province + " " + Data.city + " " + Data.county;
+                }
+                if(modelData.phone == ""){
+                    
+                        this.$Message.warning('联系方式不能为空！');
+                        return ;
+                        
+                }
+                if(modelData.province == ""){
+                    
+                        this.$Message.warning('地址不能为空！');
+                        return ;
+                        
+                }
+                if(modelData.addressDetail == ""){
+                    
+                        this.$Message.warning('详细地址不能为空！');
+                        return ;
+                        
+                } 
 
                 // 判断是新增地址还是修改地址
                 if(this.addressData.addOrAdit){
 
-                    this.addressData.addressList.push({
-                        id: 1,
-                        name: modelData.name,
-                        phone: modelData.phone,
-                        province: { value: '1', label: '湖南省'},
-                        city: { value: '1', label: '长沙市'},
-                        county: { value: '1', label: '芙蓉区'},
-                        addressDetail: modelData.addressDetail ,
-                        postCode: modelData.postCode,
-                    })
-                    
-                    this.$Message.success('新增成功！')
+                    // 新增地址
+                    this.addAddressData();
 
                 }else{
 
                     let Index =  this.addressData.aditAddressIndex ;
 
                     // 编辑修改选择的地址
-                    this.addressData.addressList[Index] = {
+                    this.addressList[Index] = {
                         id: 1,
                         name: modelData.name,
                         phone: modelData.phone,
@@ -219,7 +236,7 @@
                 this.addressData.addressModelValue = false;
 
             },
-            //  新增打开地址
+            // 新增打开地址
             openAddressModel(){
 
                 this.addressData.addressModelData = {
@@ -232,14 +249,10 @@
                     postCode: '',
                 };
 
-                this.addressSelectData.province = { value: '', label: ''};
-                this.addressSelectData.city = { value: '', label: ''};
-                this.addressSelectData.county = { value: '', label: ''}; 
-
                 this.addressData.addressModelValue = true;
                 
             },
-            //  编辑打开地址
+            // 编辑打开地址
             aditAddressItem(index){
 
                 // 设置编辑地址
@@ -247,7 +260,7 @@
 
                 this.addressData.aditAddressIndex =index;
         
-                let Item = this.addressData.addressList[index];
+                let Item = this.addressList[index];
 
                 this.addressData.addressModelData = {
                     name: Item.name ,
@@ -259,28 +272,23 @@
                     postCode: Item.postCode,
                 };
 
-                //  地址设置
-                this.addressSelectData.province = Item.province;
-                this.addressSelectData.city = Item.city;
-                this.addressSelectData.county = Item.county; 
-
                 this.addressData.addressModelValue = true;
 
             },
-            //  删除地址提示
+            // 删除地址提示
             deleteAddress(index){
 
                 this.addressData.deleteModel.Value = true ;
                 this.addressData.deleteModel.Index = index ;
 
             },
-            //  删除地址
+            // 删除地址
             deleteAddressItem(){
 
                 // 删除当前地址
                 let Index = this.addressData.deleteModel.Index;
 
-                this.addressData.addressList.splice(Index, 1);
+                this.addressList.splice(Index, 1);
 
                 this.addressData.deleteModel.Value = false ;
 
@@ -289,7 +297,15 @@
             chooseAddressItem(index){
 
                 // 将选中的值传递给父组件
-                this.$emit('hidebox', this.addressData.addressList[index]);
+                this.$emit('hidebox', this.addressList[index]);
+
+            },
+            // 选择城市
+            handleChange(value){
+
+                this.addressData.addressModelData.province = value[0];
+                this.addressData.addressModelData.city = value[1];
+                this.addressData.addressModelData.county = value[2];
 
             },
 
@@ -297,7 +313,7 @@
             // 获取地址列表
             getAddressData(){
 
-                let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 , 'ciCode': 12 }) ;
+                let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 , 'ciCode': this.userData.ciCode }) ;
 
                 this.$Loading.start();
 
@@ -309,20 +325,11 @@
 
                     if(res.data.code == 200){
 
-                        if(res.data.content.count == 0){
-
-                            this.addressData.addressList = [];
-                            return;
-
-                        }
-
-                        let data = res.data.content.list;
-
-                        this.addressData.addressList = [];
+                        let data = res.data.content.list , arr = [];
 
                         for(let i = 0 ; i < data.length; i++){
 
-                            this.addressData.addressList.push({
+                            arr.push({
                                 id: data[i].id,
                                 name:  data[i].addressPersonName,
                                 phone:  data[i].addressPhone,
@@ -336,6 +343,8 @@
 
                         }
 
+                        this.addressList = [];
+                        this.addressList = arr;
 
                     }else{
 
@@ -354,7 +363,7 @@
                 });
             },
             // 新增地址
-            addAddressItem(){
+            addAddressData(){
 
                 // 获取弹框数据
                 let data = this.addressData.addressModelData;
@@ -380,8 +389,10 @@
 
                     if(res.data.code == 200){
 
-                       
+                        // 获取用户地址列表
+                        this.getAddressData();
 
+                        this.$Message.success('新增成功！')
 
                     }else{
 
@@ -399,11 +410,15 @@
 
                 });
             }
+            
         },
         mounted(){
 
-            // 页面判断
+            // 订单选择地址页面判断
             this.addressState = this.pState;
+
+            // 获取地址信息
+            this.cityList = province();
 
             // 获取用户信息
             this.userData.ciCode = 12 ;//this.$store.state.userData.UserData.ciCode ;

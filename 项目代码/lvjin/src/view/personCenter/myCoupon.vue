@@ -16,7 +16,7 @@
             <Select v-model="couponData.couponValue" style="width:200px" size="large">
                 <Option v-for="item in couponData.platformItems" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
-            <Button type="success" size="large" style="background:#00aa88;width:80px;border-radius:2px;" >搜索</Button>
+            <Button type="success" size="large" style="background:#00aa88;width:80px;border-radius:2px;" @click="getCouponData">搜索</Button>
         </div>
 
         <!-- 优惠券列表 -->
@@ -70,24 +70,24 @@ export default {
             /*优惠券对象*/
             couponData:{
                 // 搜索值
-                couponValue: '',
+                couponValue: '1',
                 // 优惠券切换index
                 couponIndex: '',
                 // 优惠券类型
                 couponType:[
-                    { text:'全部', value:'0' },
+                    { text:'全部', value:'' },
                     { text:'可使用', value:'1' },
                     { text:'已使用', value:'2' },
                     { text:'已过期', value:'3' },
                 ],
                 // 平台
                 platformItems:[{
-                        value: '平台1',
-                        label: '平台1'
+                        value: '1',
+                        label: '平台'
                     }, 
                     {
-                        value: '平台2',
-                        label: '平台2'
+                        value: '2',
+                        label: '机构'
                     }, 
                 ],
                 // 优惠券列表
@@ -118,7 +118,12 @@ export default {
                         platform:''
                     },
                 ] 
-            }
+            },
+
+            // 用户信息
+            userData: {
+                ciCode: ''
+            },
 
         }
         
@@ -132,7 +137,6 @@ export default {
             this.couponData.couponIndex = index;
 
         },
-
 
         //监听优惠券数量添加滚动事件
         lisionOrderScroll(){
@@ -152,30 +156,67 @@ export default {
             }
         },
 
-        /**优惠券功能弹框**/
-        // 确定
-        //@param index 获取当前点击的元素下标
-        openModel(index){
+        /*优惠券数据*/
+        // 获取优惠券列表
+        getCouponData(){
 
-            if( this.orderData.orderList[index].payStateText == "待付款" ){
+            let param = this.$Qs.stringify({ 
+                'pageNo': 1, 
+                'pageSize': 10 , 
+                'ciCode': this.userData.ciCode , 
+                'couponStatus': this.couponData.couponIndex, 
+                'couponForm': this.couponData.couponValue
+                }) ;
 
-                this.orderModelData.modelState = 0;
+            this.$Loading.start();
 
-            }else{
+            this.$api.getCouponList( param )
 
-                this.orderModelData.modelState = 1;
+            .then( (res) => {
 
-            }
+                console.log(res)
 
-            this.orderModelData.modelValue = true;
+                if(res.data.code == 200){
 
+                  
+                    let data = res.data.content.list ;
+
+                    for(let i = 0 ; i < data.length; i++){
+
+                        arr.push({
+
+                        })
+
+                    }
+
+                    // 压入数据列表
+
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+                this.$Loading.finish();
+
+            })
+            .catch((error) => {
+
+                this.$Loading.error();
+                console.log('发生错误！', error);
+
+            });
         },
-        // 关闭
-        closeModel(){
 
-            this.orderModelData.modelValue = false;
+    },
+    mounted(){
 
-        }
+        // 获取用户信息
+        this.userData.ciCode = 12 ;//this.$store.state.userData.UserData.ciCode ;
+
+        // 获取优惠券列表
+        this.getCouponData();
+
     }
 }
 </script>
