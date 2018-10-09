@@ -1,79 +1,105 @@
 <template>
     <div class="">
-    	
+
         <div class="bg_f5 padding_bottom_120">
 	        <div class="box_center_1200 padding_top_20">
 	        	<div class="bg_white login_box">
 	        		<div class="padding_90">
-	        					
-						<Form ref="formValidate" :model="formRight" :rules="ruleValidate" label-position="right" :label-width="100">
-					        <FormItem label="真实姓名" prop="name">
-					            <Input v-model="formRight.name" size="large" placeholder="请输入真实姓名" style="width: 300px"></Input>
-					        </FormItem>
-					        <FormItem label="电子邮箱" prop="email">
-					            <Input v-model="formRight.email" size="large" placeholder="请输入电子邮箱" style="width: 300px"></Input>
-					        </FormItem>
-					        <FormItem label="所在地区" prop="addr">
-					             <Select v-model="formRight.addr" size="large" filterable style="width: 300px">
-					                <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-					            </Select>
-					        </FormItem>
-					        <FormItem label="所在律所/机构" prop="orgName">
-					            <Input v-model="formRight.orgName" size="large" placeholder="请输入所在律所/机构" style="width: 300px"></Input>
-					        </FormItem>
-					        <FormItem label="律所/机构电话" prop="orgTel">
-					            <Input v-model="formRight.orgTel" size="large" placeholder="请输入律所/机构电话" style="width: 300px"></Input>
-					        </FormItem>
-					        <FormItem label="律所/机构地址" prop="orgAddr">
-					            <Input v-model="formRight.orgAddr" size="large" placeholder="请输入律所/机构地址" style="width: 300px"></Input>
-					        </FormItem>
-					        <FormItem label="证件号" prop="idcard">
-					            <Input v-model="formRight.idcard" size="large" placeholder="请输入证件号" style="width: 300px"></Input>
+
+						<el-form ref="formValidate" :model="formRight" :rules="ruleValidate" label-position="right" label-width="120px">
+					        <el-form-item label="真实姓名" prop="name">
+					            <el-input v-model="formRight.name" size="large" placeholder="请输入真实姓名" style="width: 300px"></el-input>
+					        </el-form-item>
+					        <el-form-item label="电子邮箱" prop="email">
+					            <el-input v-model="formRight.email" size="large" placeholder="请输入电子邮箱" style="width: 300px"></el-input>
+					        </el-form-item>
+					        <el-form-item label="所在地区" prop="addr">
+                    <el-cascader
+                      v-model="formRight.addr"
+                      placeholder="请选择所在地区"
+                      :options="cityList"
+                      filterable
+                      style="width: 300px"
+                      @change="handleChange"
+                    ></el-cascader>
+					        </el-form-item>
+					        <el-form-item label="所在律所/机构" prop="orgName">
+					            <el-input v-model="formRight.orgName" size="large" placeholder="请输入所在律所/机构" style="width: 300px"></el-input>
+					        </el-form-item>
+					        <el-form-item label="律所/机构电话" prop="orgTel">
+					            <el-input v-model="formRight.orgTel" size="large" placeholder="请输入律所/机构电话" style="width: 300px"></el-input>
+					        </el-form-item>
+					        <el-form-item label="律所/机构地址" prop="orgAddr">
+					            <el-input v-model="formRight.orgAddr" size="large" placeholder="请输入律所/机构地址" style="width: 300px"></el-input>
+					        </el-form-item>
+					        <el-form-item label="证件号" prop="idcard">
+					            <el-input v-model="formRight.idcard" size="large" placeholder="请输入证件号" style="width: 300px"></el-input>
 					            <div>
 					            	<span class="font_12 color_999">律师身份请填写执业证号</span>
 					            </div>
-					        </FormItem>
-					        <FormItem label="资质扫描件" style="width: 420px">
-					             <Upload action="//jsonplaceholder.typicode.com/posts/" 
-					             		:format="['jpg','gif','png']"
-					             		:on-format-error="handleFormatError"
-					             		:on-exceeded-size="handleMaxSize"
-        								:max-size="10240">
-							        <Button>点击上传</Button>
-							    </Upload>
+					        </el-form-item>
+					        <el-form-item label="资质扫描件" style="width: 450px">
+                    <Upload v-if="showMaterial" action="/api/system/file/upload"
+                            :format="['jpg','gif','png']"
+                            :show-upload-list="false"
+                            :on-format-error="handleFormatError"
+                            :on-exceeded-size="handleMaxSize"
+                            :on-success="materialUrlSuccess"
+                            :max-size="10240">
+                      <Button>点击上传</Button>
+                    </Upload>
+                    <div v-else class="relative inline_block">
+                      <img :src="materialUrl" width="100" @click="seeImg(materialUrl)" class="pointer">
+                      <Icon type="ios-close-circle-outline" color="#00AA88" class="del" @click="delMaterialUrl"/>
+                    </div>
 							    <div>
 							    	<span class="font_12 color_999">扫描件要清晰，支持jpg，png，gif格式，最大不超过10M</span>
 							    </div>
-					        </FormItem>
-					        <FormItem label="个人资料" style="width: 420px">
-					             <Upload action="//jsonplaceholder.typicode.com/posts/" 
-					             		:format="['jpg','gif','png']"
-					             		:on-format-error="handleFormatError"
-					             		:on-exceeded-size="handleMaxSize"
-        								:max-size="10240">
-							        <Button>点击上传</Button>
-							    </Upload>
+					        </el-form-item>
+					        <el-form-item label="个人资料" style="width: 420px">
+                    <Upload v-if="showInfo" action="/api/system/file/upload"
+                            :format="['jpg','gif','png']"
+                            :show-upload-list="false"
+                            :on-format-error="handleFormatError"
+                            :on-exceeded-size="handleMaxSize"
+                            :on-success="infoUrlSuccess"
+                            :max-size="10240">
+                      <Button>点击上传</Button>
+                    </Upload>
+                    <div v-else class="relative inline_block">
+                      <img :src="personIntroduce" width="100" @click="seeImg(personIntroduce)" class="pointer">
+                      <Icon type="ios-close-circle-outline" color="#00AA88" class="del" @click="delInfoUrl"/>
+                    </div>
 							    <div>
 							    	<span class="font_12 color_999">您可上传个人资料，以便我们更好的了解您</span>
 							    </div>
-					        </FormItem>
-					        <FormItem>
+					        </el-form-item>
+					        <el-form-item>
 					        	<div>
 					        		<Checkbox v-model="isAgree">我已认真阅读并同意《XXXXX》</Checkbox>
 					        	</div>
 					            <Button @click="submit('formValidate')" size="large" type="success" shape="circle" class="all_width bg_title margin_top_10" style="width: 200px">提交</Button>
-					        </FormItem>
-					    </Form>
-						
+					        </el-form-item>
+					    </el-form>
+
 					</div>
 	        	</div>
 	        </div>
 	    </div>
-	    
+      <!--查看照片-->
+      <Modal title="查看照片" v-model="viewModal">
+        <div class="text_center">
+          <img :src="viewUrl"/>
+        </div>
+        <div slot="footer">
+          <Button  type="primary" @click="viewModal = false">关闭</Button>
+        </div>
+      </Modal>
+
     </div>
 </template>
 <script>
-
+import province from '../../assets/js/province'
 export default {
     components : {
     },
@@ -108,6 +134,7 @@ export default {
         formRight: {
             name: '',
             email: '',
+            orgRegin: '',
             addr: [],
             orgName: '',
             orgTel: '',
@@ -153,21 +180,49 @@ export default {
                 label: '长沙'
             }
         ],
-        // 商户编号
-        merchantCode: '',
+        // 商户资料
+        SupplierData: {},
         // 资质扫描件
         materialUrl: '',
+        showMaterial: true,
         // 个人资料
         personIntroduce: '',
+        showInfo: true,
         // 同意协议
-        isAgree: false
+        isAgree: false,
+        // 查看照片模态框
+        viewModal: false,
+        viewUrl: ''
       }
     },
     mounted(){
-      console.log(this.$store.state.userData.SupplierData)
+      // 获取商户信息
+      this.SupplierData = JSON.parse(sessionStorage.getItem("SupplierData"))
+      console.log(JSON.parse(sessionStorage.getItem("SupplierData")))
+      this.getSupplierData()
+      // 地区数据
+      this.cityList = province()
+      // console.log(this.cityList)
     },
     methods: {
-    	//密码登录
+      getSupplierData(){
+        var data = this.SupplierData
+        data.realName !== '' ? this.formRight.name = data.realName : this.formRight.name = ''
+        data.email !== '' ? this.formRight.email = data.email : this.formRight.email = ''
+        data.orgName !== '' ? this.formRight.orgName = data.orgName : this.formRight.orgName = ''
+        data.orgTel !== '' ? this.formRight.orgTel = data.orgTel : this.formRight.orgTel = ''
+        data.orgAddress !== '' ? this.formRight.orgAddr = data.orgAddress : this.formRight.orgAddr = ''
+        data.lawerRegistrationNo !== '' ? this.formRight.idcard = data.lawerRegistrationNo : this.formRight.idcard = ''
+        if(data.materialUrl !== ''){
+          this.materialUrl = data.materialUrl
+          this.showMaterial = false
+        }
+        if(data.personIntroduce !== ''){
+          this.personIntroduce = data.personIntroduce
+          this.showInfo = false
+        }
+      },
+    	//提交
 		  submit (name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
@@ -179,13 +234,13 @@ export default {
 
             }
             // 资质扫描件验证
-            if( materialUrl !== '' ){
+            if( this.materialUrl === '' ){
 
               this.$Message.error('请上传资质扫描件验证');
               return;
 
             }
-            let params = this.$Qs.stringify({ 'merchantCode': this.merchantCode, 'realName': this.formRight.name, 'email': this.formRight.email, 'orgTel': this.formRight.orgTel, 'orgName': this.formRight.orgName, 'orgRegin': this.formRight.addr, 'orgAddress': this.formRight.orgAddr, 'lawerRegistrationNo': this.formRight.idcard, 'materialUrl': this.formRight.materialUrl, 'personIntroduce': this.formRight.personIntroduce });
+            let params = this.$Qs.stringify({ 'merchantCode': this.SupplierData.merchantCode, 'realName': this.formRight.name, 'email': this.formRight.email, 'orgTel': this.formRight.orgTel, 'orgName': this.formRight.orgName, 'orgRegin': this.formRight.orgRegin, 'orgAddress': this.formRight.orgAddr, 'lawerRegistrationNo': this.formRight.idcard, 'materialUrl': this.materialUrl, 'personIntroduce': this.personIntroduce });
             this.$Loading.start();
             // 商户资料完善
             this.$api.saveMerchantInfo( params )
@@ -197,11 +252,12 @@ export default {
                 if(res.data.code == 200){
 
                   this.$Message.success(res.data.message);
-                  // this.$router.push({path:'/supplier/approverStatus'});
+                  // 存储用户信息
+                  sessionStorage.setItem("SupplierData", JSON.stringify(res.data.content));
+                  // this.$store.commit('userData/saveSupplierData', res.data.content);
+                  this.$router.push({path:'/supplier/approverStatus'});
 
-                  //跳转函数*************************************************
-
-                }else if (res.data.code == 500){
+                }else{
 
                   this.$Message.warning(res.data.message);
 
@@ -231,7 +287,41 @@ export default {
         this.$Message.warning({
           content: '上传图片过大，最大不能超过10M'
         });
+      },
+      //图片上传成功
+      materialUrlSuccess (res, file) {
+        this.materialUrl = res.content
+        this.showMaterial = false
+      },
+      // 删除图片
+      delMaterialUrl(){
+        this.materialUrl = ''
+        this.showMaterial = true
+      },
+      // 查看图片
+      seeImg(url){
+		    this.viewModal = true
+        this.viewUrl = url
+      },
+      // 个人资料图片上传成功
+      infoUrlSuccess (res, file) {
+        this.personIntroduce = res.content
+        this.showInfo = false
+      },
+      // 删除个人资料
+      delInfoUrl(){
+        this.personIntroduce = ''
+        this.showInfo = true
+      },
+      // 选择城市
+      handleChange(value){
+		    var str = ''
+        for(var i=0;i<value.length;i++){
+          str += value[i] + ' '
+        }
+        this.formRight.orgRegin = str
       }
+
     }
 }
 </script>
@@ -244,4 +334,11 @@ export default {
 		.padding_90{padding: 0 90px;}
 	}
 	.padding_bottom_120{padding-bottom: 120px;}
+  .del{
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    cursor: pointer;
+    font-size: 20px;
+  }
 </style>

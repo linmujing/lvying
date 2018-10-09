@@ -112,7 +112,7 @@ export default {
         isSend: false,
         isSendText: '获取验证码',
       }
-        
+
     },
     methods: {
     	//下一步
@@ -251,7 +251,8 @@ export default {
 
               this.$Message.success(res.data.message);
               // 存储用户信息
-              this.$store.commit('userData/saveSupplierData', res.data.content);
+              sessionStorage.setItem("SupplierData", JSON.stringify(res.data.content));
+              // this.$store.commit('userData/saveSupplierData', res.data.content);
               // console.log(this.$store.state.userData.SupplierData)
               // this.$router.push({ name: '', params: {id: id}})
 

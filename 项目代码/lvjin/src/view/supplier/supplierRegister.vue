@@ -1,13 +1,13 @@
 <template>
     <div class="">
-    	
+
         <div class="bg_f5 padding_bottom_120">
 	        <div class="box_center_1200 padding_top_20">
 	        	<div class="bg_white login_box">
 	        		<Row>
 	        			<Col span="14">
 	        				<div class="padding_90 border_right">
-	        					
+
 	        					<Form ref="formValidate" :model="formRight" :rules="ruleValidate" label-position="right" :label-width="100">
 							        <FormItem label="手机号码" prop="phone">
 							            <Input v-model="formRight.phone" size="large" placeholder="请输入手机号码" style="width: 300px"></Input>
@@ -29,12 +29,12 @@
 							            <Button @click="nextStep('formValidate')" size="large" type="success" shape="circle" class="all_width bg_title margin_top_10" style="width: 200px">下一步</Button>
 							        </FormItem>
 							    </Form>
-	        					
+
 	        				</div>
 	        			</Col>
 	        			<Col span="10">
 	        				<div class="padding_left_20 padding_right_20">
-	        					
+
 	        					<div v-for="item in 3" class="margin_top_10">
 	        						<Row class="font_weight_bold">
 		        						<Col span="3">问：</Col>
@@ -45,14 +45,14 @@
 		        						<Col span="21">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aeneaneuismod bibendum laoreet. Proin gravida dolor sit amet lacus </Col>
 		        					</Row>
 	        					</div>
-	    						
+
 	        				</div>
 	        			</Col>
 	        		</Row>
 	        	</div>
 	        </div>
 	    </div>
-	    
+
     </div>
 </template>
 <script>
@@ -133,6 +133,10 @@ export default {
                   if(res.data.code == 200){
 
                     this.$Message.success(res.data.message);
+                    // 存储用户信息
+                    sessionStorage.setItem("SupplierData", JSON.stringify(res.data.content));
+                    // this.$store.commit('userData/saveSupplierData', res.data.content);
+                    // console.log(this.$store.state.userData.SupplierData)
                     this.$router.push({path:'/supplier/approver'});
 
                   }else{
