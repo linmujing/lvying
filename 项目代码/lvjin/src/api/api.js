@@ -71,8 +71,10 @@ export const catGetCartList = params => { return instance.post(`customer/cart/ge
 /** 地址 **/
 //获取会员地址列表
 export const getAddressList = params => { return instance.post(`customer/address/getAddressList`, params ); };
-//保存收获地址
+//保存地址
 export const saveAddress = params => { return instance.post(`customer/address/saveAddress`, params ); };
+//删除地址
+export const deleteAddress = params => { return instance.post(`customer/address/deleteAddress`, params ); };
 
 /** 优惠券 **/
 //会员领取优惠券
