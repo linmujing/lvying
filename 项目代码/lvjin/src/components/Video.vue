@@ -19,6 +19,7 @@
                     @ready="playerReadied"
                     @statechanged="playerStateChanged($event)"
                     @error="onError($event)"
+
       >
       </video-player>
     </div>
@@ -33,13 +34,13 @@
                 </span>
                 <!-- 开关 -->
                 <span class="video_control_icon"
-                    style="padding:0 10px;" 
+                    style="padding:0 10px;"
                     @click="onPlayerPause"
                     v-show="!videoControl.videoOff">
                     <span class="vjs-icon-pause"></span>
                 </span>
-                <span class="video_control_icon" 
-                    style="padding:0 10px;" 
+                <span class="video_control_icon"
+                    style="padding:0 10px;"
                     @click="onPlayerPlay"
                     v-show="videoControl.videoOff">
                     <span class="vjs-icon-play"></span>
@@ -52,15 +53,17 @@
             </Col>
             <!-- 时间 -->
             <Col span="3">
-                <span> {{videoControl.timeDivider}} / {{videoControl.timeDuration}} </span>    
+                <span> {{videoControl.timeDivider}} / {{videoControl.timeDuration}} </span>
             </Col>
             <!-- 时间进度条 -->
             <Col span="12">
+               
+
                 <div style="padding-top:2px;">
-                    <Slider v-model="videoControl.timeProgress" 
+                    <Slider v-model="videoControl.timeProgress"
                         @on-change="getTimeChange" :tip-format="setTimeTip">
                     </Slider>
-                </div>
+               </div>
             </Col>
             <!-- 音量 -->
             <Col span="3">
@@ -89,7 +92,7 @@
     </div>
 
     <!-- 侧边栏容器 -->
-    <div class="video_menu" :class="[videoMenu.Off ? 'video_menu_active' : '']" 
+    <div class="video_menu" :class="[videoMenu.Off ? 'video_menu_active' : '']"
         v-show="videoControl.isShow">
 
         <!-- 侧边栏开关 -->
@@ -108,7 +111,7 @@
                     <div class="list_title"> {{items.title}} </div>
                     <div class="list_content">
                         <div class="item" :class="[item.isActive ? 'active' : '']"
-                            v-for="(item, index2) in items.items" 
+                            v-for="(item, index2) in items.items"
                             :key="index2" @click="changeItem(index, index2)">{{item.text}}
                         </div>
                     </div>
@@ -120,7 +123,7 @@
 
   </div>
 </template>
- 
+
 <script>
 
 import { videoPlayer } from "vue-video-player";
@@ -149,7 +152,7 @@ export default {
                 poster: "poster.jpg", //你的封面地址
                 width: document.documentElement.clientWidth,
                 notSupportedMessage: "此视频暂无法播放，请稍后再试" ,//允许覆盖Video.js无法播放媒体源时显示的默认信息。
-                
+
                 controlBar: {
                     timeDivider: true,
                     durationDisplay: true,
@@ -164,6 +167,7 @@ export default {
                 isShow: false,
                 // 时间进度
                 timeProgress: 0,
+                // bar:0,
                 // 总时间秒数
                 timesecond: 0,
                 // 当前播放时间
@@ -179,7 +183,6 @@ export default {
                 // 记录当前播放视频的位置
                 videoIndex1: 0,
                 videoIndex2: 0,
-
             },
 
             // 视频列表菜单
@@ -197,7 +200,7 @@ export default {
                                         type: "video/mp4",
                                         // mp4
                                         src: "http://221.228.226.23/11/t/j/v/b/tjvbwspwhqdmgouolposcsfafpedmb/sh.yinyuetai.com/691201536EE4912BF7E4F1E2C67B8119.mp4"
-                                    },                  
+                                    },
                                 ]
                             },
                             {
@@ -235,7 +238,7 @@ export default {
                                         type: "video/mp4",
                                         // mp4
                                         src: "http://221.228.226.23/11/t/j/v/b/tjvbwspwhqdmgouolposcsfafpedmb/sh.yinyuetai.com/691201536EE4912BF7E4F1E2C67B8119.mp4"
-                                    },                  
+                                    },
                                 ]
                             },
                             {
@@ -277,7 +280,7 @@ export default {
         // 视频播放 *
         onPlayerPlay(player) {
 
-            this.player.play(); 
+            this.player.play();
 
             // 没有播放源提示
             if( this.playerOptions.sources.length == 0 ){
@@ -288,38 +291,38 @@ export default {
 
             }
 
-            this.videoControl.videoOff = false; 
+            this.videoControl.videoOff = false;
 
         },
         // 视频暂停 *
         onPlayerPause(player) {
 
-            this.videoControl.videoOff = true; 
+            this.videoControl.videoOff = true;
 
-            this.player.pause();  
+            this.player.pause();
 
         },
         // 播放前获取总时间 *
         onPlayerLoadeddata(player) {
 
-            // console.log('player Loadeddata!', player) 
+            // console.log('player Loadeddata!', player)
 
             // 获取所有时间
             this.videoControl.timeDuration = this.changeTimeBox(player.duration());
 
             // 获取总时间秒
-            this.videoControl.timesecond = player.duration();  
+            this.videoControl.timesecond = player.duration();
 
         },
         // 同步获取视频时间参数 *
         onPlayerTimeupdate(player) {
 
             // 获取时间进度
-            this.videoControl.timeProgress = (player.currentTime() / player.duration()).toFixed(2) * 100  ;
-
+            this.videoControl.timeProgress = (player.currentTime() / player.duration()).toFixed(2)*100;
+    
             // 获取当前时间
-            this.videoControl.timeDivider = this.changeTimeBox(player.currentTime());     
-            
+            this.videoControl.timeDivider = this.changeTimeBox(player.currentTime());
+
         },
         // 初始设置 *
         playerReadied(player) {
@@ -349,12 +352,13 @@ export default {
             // console.log('player Canplay!', player)
         },
         onPlayerCanplaythrough(player) {
-            console.log('player Canplaythrough!', player)
-            
+            // console.log('player Canplaythrough!', player)
+
         },
         //  or listen state event
         playerStateChanged(player) {
-           // console.log(player);
+      //change
+
         },
 
 
@@ -371,12 +375,11 @@ export default {
 
         },
         // 时间进度
-        getTimeChange(){
-
-            let current =  parseInt(this.videoControl.timeProgress / 100  * this.videoControl.timesecond);
-            
+        getTimeChange(e){
+            this.videoControl.timeProgress=e;
+            let current =  parseInt(e * this.videoControl.timesecond/100);
+            console.log(current)
             this.player.currentTime(current);
-
         },
         // 设置时间进度悬浮标记
         setTimeTip(){
@@ -405,7 +408,7 @@ export default {
             let index1 = this.videoControl.videoIndex1;
             let index2 = this.videoControl.videoIndex2;
 
-            // 先判断视频地址是否还存在  
+            // 先判断视频地址是否还存在
             if( index2 > 0 ){
 
                 this.videoControl.videoIndex2--;
@@ -413,13 +416,13 @@ export default {
             }
             else if( index1 > 0 )
             {
-                
+
                 this.videoControl.videoIndex1--;
 
                 this.videoControl.videoIndex2 = this.videoMenu.lists[this.videoControl.videoIndex1].items.length-1;
 
             }else{
-                
+
                 this.$Message.warning('没有了');
 
                 return false;
@@ -427,7 +430,7 @@ export default {
 
             // 压入视频
             this.changeItem(this.videoControl.videoIndex1, this.videoControl.videoIndex2)
-            
+
         },
         // 下一集
         nextClick(){
@@ -438,7 +441,7 @@ export default {
             let index1 = this.videoControl.videoIndex1;
             let index2 = this.videoControl.videoIndex2;
 
-            // 先判断视频地址是否还存在  
+            // 先判断视频地址是否还存在
             if( index2 < this.videoMenu.lists[index1].items.length-1 ){
 
                 this.videoControl.videoIndex2++;
@@ -446,13 +449,13 @@ export default {
             }
             else if( index1 < this.videoMenu.lists.length-1 )
             {
-                
+
                 this.videoControl.videoIndex1++;
 
                 this.videoControl.videoIndex2 = 0;
 
             }else{
-                
+
                 this.$Message.warning('没有了');
 
                 return false;
@@ -477,8 +480,8 @@ export default {
             }
 
         },
-        // 全屏控制  
-        fullScreenHandle(player){  
+        // 全屏控制
+        fullScreenHandle(player){
 
             this.videoControl.fullScreen = !this.videoControl.fullScreen;
 
@@ -494,9 +497,9 @@ export default {
 
                 this.exitFullscreen();
 
-            } 
+            }
 
-        }, 
+        },
         // 进入全屏
         launchFullScreen() {
 
@@ -524,7 +527,7 @@ export default {
         },
         // 退出全屏
         exitFullscreen() { 
-            
+
             if (document.exitFullscreen) {
             document.exitFullscreen();
             }
@@ -598,7 +601,7 @@ export default {
         player() {
 
             return this.$refs.videoPlayer.player;
-            
+
         }
 
     },
@@ -606,7 +609,7 @@ export default {
 
         // 获取视频固定参数
         this.getVideoParam();
-        
+
         console.log(this.$refs.videoPlayer.player)
 
     },
@@ -619,7 +622,7 @@ export default {
         display: none;
     }
     .ivu-slider-button{
-        border: 0; 
+        border: 0;
         background-color: #fff;
     }
     .ivu-slider-wrap {
@@ -632,7 +635,7 @@ export default {
 <style scoped lang='less'>
 
     //引入订单共用less文件
-    @import '../view/shopCart/shopCart.less'; 
+    @import '../view/shopCart/shopCart.less';
 
     // 容器
     .container {
@@ -673,11 +676,30 @@ export default {
         border-top:2px solid #585858;
         transition: 0.5s;
         z-index: 999;
-
+      .prgress_box{
+        .progress_wrap{
+          width:100%;
+          border:1px solid #ddd;
+          height:6px;
+          border-radius:4px;
+          background-color:#ddd;
+          position:relative;
+          top:17px;
+          .progress_block{
+            width:15px;
+            height:15px;
+            position:absolute;
+            top:-5px;
+            left:-1px;
+            border-radius:50%;
+            background-color:#fff;
+          }
+        }
+      }
         .video_control_icon{
             cursor: pointer;
             font-size: 24px;
-            
+
         }
         .video_control_icon:hover{
             color: #059E7F;
@@ -702,7 +724,7 @@ export default {
             top:45%;
             left:-44px;
             width:26px;
-            height:26px; 
+            height:26px;
             background:#1E242C;
             color:#ccc;
             text-align: center;
@@ -726,7 +748,7 @@ export default {
             padding-left: 52px;
             padding-right: 20px;
             color: #EBEBEB;
-            
+
             .menu_title{
                 padding-top: 30px;
                 font-size: 18px;
@@ -761,5 +783,5 @@ export default {
     }
 
 
-    
+
 </style>

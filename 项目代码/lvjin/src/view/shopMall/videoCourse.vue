@@ -89,7 +89,7 @@ export default {
         return {
           typeId: parseInt(this.$route.query.typeId),
         }
-        
+
     },
     methods: {
 

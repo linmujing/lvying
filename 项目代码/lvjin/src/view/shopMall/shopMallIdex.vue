@@ -21,14 +21,14 @@
 							<router-link tag="a" target="_blank" to="/videoCourseList">更多》</router-link>
 						</div>
 					</div>
-					<div v-for="item in 2" class="margin_top_20 clearfix">
-						<div class="float_left videoBox"></div>
+					<div v-for="item in videoArr" class="margin_top_20 clearfix">
+						<div class="float_left videoBox"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left height_170 padding_left_25 margin_top_15">
-							<p class="font_18 font_weight_bold">审核同业禁止协议</p>
-							<p class="color_999 margin_top_10">立二拆四案辩护人</p>
+							<p class="font_18 font_weight_bold">{{item.productTitle}}</p>
+							<p class="color_999 margin_top_10">{{item.createBy}}</p>
 							<div class="margin_top_10">
-								<span class="font_20 color_title">￥500.00</span>
-								<span class="padding_left_25 color_999">1234人看过</span>
+								<span class="font_20 color_title">￥{{item.productPrice}}</span>
+								<span class="padding_left_25 color_999">{{item.saleCount}}人看过</span>
 							</div>
 							<div class="margin_top_15 clearfix">
 								<p class="pointer float_left">
@@ -52,14 +52,14 @@
 							<router-link tag="a" target="_blank" to="/videoCourseList">更多》</router-link>
 						</div>
 					</div>
-					<div v-for="item in 2" class="margin_top_20 clearfix">
-						<div class="float_left videoBox"></div>
+					<div v-for="item in musicArr" class="margin_top_20 clearfix">
+						<div class="float_left videoBox"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left height_170 padding_left_25 margin_top_15">
-							<p class="font_18 font_weight_bold">审核同业禁止协议</p>
-							<p class="color_999 margin_top_10">立二拆四案辩护人</p>
+							<p class="font_18 font_weight_bold">{{item.productTitle}}</p>
+							<p class="color_999 margin_top_10">{{item.createBy}}</p>
 							<div class="margin_top_10">
-								<span class="font_20 color_title">￥500.00</span>
-								<span class="padding_left_25 color_999">1234人看过</span>
+								<span class="font_20 color_title">￥{{item.productPrice}}</span>
+								<span class="padding_left_25 color_999">{{item.saleCount}}人看过</span>
 							</div>
 							<div class="margin_top_15 clearfix">
 								<p class="pointer float_left">
@@ -193,15 +193,75 @@ export default {
     },
     data() {
         return {
-          navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
+					navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
+					videoArr:[],
+					musicArr:[{productTitle:666,sortNo:6},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5}],
+					careerArr:[],
+					logicArr:[]
         }
 
     },
     mounted(){
       this.getNavTitle()
-      this.getBannerList()
+			// this.getBannerList()
+			this.getVCaseProduct()
     },
     methods: {
+			//商品排序
+			productSort(arr,key){
+				
+				return arr.sort(function(a,b){
+					var x=a[key];
+					var y=b[key];
+					return x-y;
+				});
+
+			},
+			//限制数组长度
+			limit(arr,num){
+				var newArr=[];
+				for(var i=0;i<arr.length&&i<num; i++){
+					 newArr.push(arr[i]);
+				}
+				return newArr
+			},
+			//获取视频推荐商品
+			getVCaseProduct(){
+					var params=this.$Qs.stringify({productCode:"P121212121213",productSortBy:"2"});
+					var that=this;
+					this.$api.getProductShowCase(params)
+					.then((res)=>{
+						let {content} =res.data;
+						console.log(content);
+						for(let item of content){
+							if(	item.isNewRecord){
+									break;
+							}else{
+								switch (item.productCat) {
+									case '1':
+										that.careerArr.push(item);
+										that.careerArr=that.limit(that.productSort(that.careerArr,"sortNo"),4);
+										break;
+									case '2':
+										that.logicArr.push(item);
+										that.logicArr=that.limit(that.productSort(that.logicArr,"sortNo"),4);
+										break;	
+									case '3':
+										that.videoArr.push(item);	
+										that.videoArr=that.limit(that.productSort(that.videoArr,"sortNo"),2);
+										break;
+									case '4':
+										that.musicArr.push(item);
+										that.musicArr=that.limit(that.productSort(that.musicArr,"sortNo"),2);
+										
+										break;	
+									default:
+										break;
+								}
+							}
+						}
+					})
+			},
       // 获取导航标题
       getNavTitle(){
         // 获取产品分类列表
@@ -235,7 +295,7 @@ export default {
           });
       },
       // 获取商品展示
-      getBannerList(){
+      /*getBannerList(){
         // 获取产品分类列表
         this.$api.getBannerList( this.$Qs.stringify({'appType': 1, 'pageLocat': 1}) )
 
@@ -254,7 +314,7 @@ export default {
           .catch((error) => {
             console.log('发生错误！', error);
           });
-      },
+      },*/
       // 导航鼠标点击
       tabClick(catCode,index){
         console.log(index)
@@ -308,7 +368,13 @@ export default {
 	.content{
 		width:1200px;margin:0 auto;min-width: 1200px;
 		.width_48{width: 48%;}
-		.videoBox{width: 270px;height: 170px;border:1px solid #999999;}
+		.videoBox{
+			width: 270px;height: 170px;border:1px solid #999999;overflow:hidden;
+				img{
+					width:100%;
+					height:100%;
+				}
+		}
 		.height_170{height: 170px;}
     .height_310px{height: 310px;}
     .height_88px{height: 88px;}

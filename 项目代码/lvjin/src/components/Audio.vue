@@ -203,9 +203,9 @@ export default {
 
         },
         // 时间进度
-        getTimeChange(){
+        getTimeChange(e){
 
-            let current =  parseInt(this.audioControl.timeProgress / 100  * this.audioControl.timesecond);
+            let current =  parseInt(e / 100  * this.audioControl.timesecond);
             
             this.$refs.audio.currentTime = current;
 
