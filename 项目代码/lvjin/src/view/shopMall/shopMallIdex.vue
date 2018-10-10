@@ -194,14 +194,14 @@ export default {
     data() {
         return {
           navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
+          showCase: []
         }
 
     },
     mounted(){
       this.getNavTitle()
-      this.getBannerList()
-      // 公共js方法
-      this.common.login()
+      this.getShowCaseList()
+      // this.getShowCase()
     },
     methods: {
       // 获取导航标题
@@ -236,15 +236,56 @@ export default {
             console.log('发生错误！', error);
           });
       },
-      // 获取商品展示
-      getBannerList(){
-        // 获取产品分类列表
-        this.$api.getBannerList( this.$Qs.stringify({'appType': 1, 'pageLocat': 1}) )
+      // 获取橱窗对象
+      getShowCaseList(){
+        this.$api.getShowCaseList( this.$Qs.stringify({'appType': 1, 'pageLocat': 1}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+              var result = res.data.content
+              this.showCase = result
+              setTimeout(function(){
+                this.getShowCaseProduct(result[5].productCode, result[5].productSortBy)
+              },200)
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      getShowCase(){
+        this.$api.getShowCase( this.$Qs.stringify({'caseLocat': '111'}) )
 
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
 
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      //获取橱窗对象对应列表数据
+      getShowCaseProduct(productCode, productSortBy){
+        this.$api.getShowCaseProduct( this.$Qs.stringify({'productCode': productCode, 'productSortBy': productSortBy}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
 
             }else if (res.data.code == 500){
 
