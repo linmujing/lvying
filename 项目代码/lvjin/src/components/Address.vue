@@ -14,7 +14,6 @@
                 </div>
                 <div>
                     地址：<span >{{items.province +" " + items.city +" " + items.county +" " + items.addressDetail  }}</span><br/>
-                    邮编：<span>{{items.postCode}}</span>
                 </div>
                 <div class="text_right" style="width:100%">
 
@@ -78,10 +77,6 @@
                     <span class="input_box_span" >详细地址：</span>
                     <Input v-model="addressData.addressModelData.addressDetail"  size="large" clearable style="width: 480px" />
                 </div>
-                <div class="input_box" >
-                    <span class="input_box_span" >邮编：</span>
-                    <Input v-model="addressData.addressModelData.postCode"  size="large" clearable style="width: 280px" />
-                </div>
                 <div class="input_box" v-show="false">
                     <span class="input_box_span" >默认地址：</span>
                     <Checkbox v-model="addressData.addressModelData.isDefalut" label="设置默认地址" ></Checkbox>
@@ -98,7 +93,7 @@
                 <p>确定删除该地址吗？</p>
             </div>
             <div style="padding: 0 0 20px 200px; "> 
-                <Button shape="circle" type="success" size="large" @click="deleteAddressItem">确定删除</Button>
+                <Button shape="circle" type="success" size="large" @click="deleteAddressData">确定删除</Button>
                 <span style="width:40px;display:inline-block;"></span>
                 <Button shape="circle" style="background:#a5a5a5;color:#fff;"  size="large" @click="addressData.deleteModel.Value = false">取消</Button>
             </div>
@@ -134,7 +129,6 @@
                         city: '',
                         county: '',
                         addressDetail: '',
-                        postCode: '',
                         isDefalut: false
                     },
                     //  删除弹框
@@ -205,35 +199,8 @@
                         
                 } 
 
-                // 判断是新增地址还是修改地址
-                if(this.addressData.addOrAdit){
-
-                    // 新增地址
-                    this.addAddressData();
-
-                }else{
-
-                    let Index =  this.addressData.aditAddressIndex ;
-
-                    // 编辑修改选择的地址
-                    this.addressList[Index] = {
-                        id: 1,
-                        name: modelData.name,
-                        phone: modelData.phone,
-                        province: modelData.province,
-                        city: modelData.city,
-                        county: modelData.county,
-                        addressDetail: modelData.addressDetail ,
-                        postCode: modelData.postCode,
-                    };
-
-                    this.addressData.addOrAdit = true;
-
-                    this.$Message.success('修改成功！')
-
-                }
-
-                this.addressData.addressModelValue = false;
+                // 新增地址
+                this.addAddressData();
 
             },
             // 新增打开地址
@@ -246,7 +213,6 @@
                     city: { value: '', label: ''},
                     county: { value: '', label: ''},
                     addressDetail: '',
-                    postCode: '',
                 };
 
                 this.addressData.addressModelValue = true;
@@ -269,7 +235,6 @@
                     city: Item.city,
                     county: Item.county,
                     addressDetail: Item.addressDetail,
-                    postCode: Item.postCode,
                 };
 
                 this.addressData.addressModelValue = true;
@@ -280,17 +245,6 @@
 
                 this.addressData.deleteModel.Value = true ;
                 this.addressData.deleteModel.Index = index ;
-
-            },
-            // 删除地址
-            deleteAddressItem(){
-
-                // 删除当前地址
-                let Index = this.addressData.deleteModel.Index;
-
-                this.addressList.splice(Index, 1);
-
-                this.addressData.deleteModel.Value = false ;
 
             },
             // 选择地址到页面
@@ -337,7 +291,6 @@
                                 city:  data[i].city,
                                 county:  data[i].zone,
                                 addressDetail:  data[i].address,
-                                postCode:  data[i].addressCode,
                                 isDefalut:  data[i].isDefalut,
                             })
 
@@ -368,9 +321,12 @@
                 // 获取弹框数据
                 let data = this.addressData.addressModelData;
 
+                // 判断是保存还是新增地址
+                let addressCode = this.addressData.addOrAdit ? '' : data.id ;
+
                 let param = this.$Qs.stringify({ 
                     "ciCode": this.userData.ciCode,
-                    "addressCode": data.postCode,
+                    "addressCode": addressCode,
                     "addressPersonName":data.name,
                     "addressPhone": data.phone,
                     "province": data.province,
@@ -392,7 +348,50 @@
                         // 获取用户地址列表
                         this.getAddressData();
 
-                        this.$Message.success('新增成功！')
+                        this.$Message.success(res.data.message)
+
+                        this.addressData.addressModelValue = false;
+
+                        this.addressData.addOrAdit = true;
+
+                    }else{
+
+                        this.$Message.warning(res.data.message);
+
+                    }
+
+                    this.$Loading.finish();
+
+                })
+                .catch((error) => {
+
+                    this.$Loading.error();
+                    console.log('发生错误！', error);
+
+                });
+
+            },
+            // 删除地址
+            deleteAddressData(){
+
+                let param = this.$Qs.stringify({ "addressCode":  this.addressList[this.addressData.deleteModel.Index].id }) ;
+
+                this.$Loading.start();
+
+                this.$api.deleteAddress( param )
+
+                .then( (res) => {
+
+                    console.log(res)
+
+                    if(res.data.code == 200){
+
+                        // 获取用户地址列表
+                        this.getAddressData();
+
+                        this.$Message.success('删除成功！')
+
+                        this.addressData.deleteModel.Value = false ;
 
                     }else{
 
@@ -454,7 +453,7 @@
         .address_list{
             color: #999;
             li{
-                height:150px;
+                height:120px;
                 border:1px solid @color_e6e6e6;
                 margin: 20px 20px 0 20px;
                 padding:15px 20px;
@@ -473,7 +472,7 @@
                 box-shadow: 1px 1px 3px @color_e6e6e6;
             }
             .new_add{
-                line-height:110px;
+                line-height:80px;
                 text-align: center;
             }
             .choose_address{

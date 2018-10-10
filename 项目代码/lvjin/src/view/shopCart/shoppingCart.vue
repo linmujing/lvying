@@ -126,59 +126,60 @@ export default {
                 //总价格
                 listTotal: 0.00,
                 //大列表
-                cartList:[
+                cartList:[],
+            }, 
+            //购物车数据列表大列表
+            cartList:[
+            {
+                index1: 0,
+                itemState: false,
+                itemTitle: '机构法院',
+                itemTotal: 0.00,
+                //小列表
+                items:[
                     {
-                        index1: 0,
-                        itemState: false,
-                        itemTitle: '机构法院',
-                        itemTotal: 0.00,
-                        //小列表
-                        items:[
-                            {
-                                index2: 0,
-                                state: false,
-                                price: '88.01',
-                                num: 1,
-                                describe: '暂无',
-                                imgSrc: require('../../assets/images/image/cart_book.png')
-                            },
-                            {
-                                index2: 1,
-                                state: false,
-                                price: '101.01',
-                                num: 1,
-                                describe: '很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字',
-                                imgSrc: require('../../assets/images/image/cart_book.png')
-                            }
-                        ]
+                        index2: 0,
+                        state: false,
+                        price: '88.01',
+                        num: 1,
+                        describe: '暂无',
+                        imgSrc: require('../../assets/images/image/cart_book.png')
                     },
                     {
-                        index1: 0,
-                        itemState: false,
-                        itemTitle: '机构法院',
-                        itemTotal: 0.00,
-                        //小列表
-                        items:[
-                            {
-                                index2: 0,
-                                state: false,
-                                price: '88.01',
-                                num: 1,
-                                describe: '暂无',
-                                imgSrc: require('../../assets/images/image/cart_book.png')
-                            },
-                            {
-                                index2: 1,
-                                state: false,
-                                price: '101.01',
-                                num: 1,
-                                describe: '暂无',
-                                imgSrc: require('../../assets/images/image/cart_book.png')
-                            }
-                        ]
+                        index2: 1,
+                        state: false,
+                        price: '101.01',
+                        num: 1,
+                        describe: '很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字',
+                        imgSrc: require('../../assets/images/image/cart_book.png')
                     }
-                ],
-            },   
+                ]
+            },
+            {
+                index1: 0,
+                itemState: false,
+                itemTitle: '机构法院',
+                itemTotal: 0.00,
+                //小列表
+                items:[
+                    {
+                        index2: 0,
+                        state: false,
+                        price: '88.01',
+                        num: 1,
+                        describe: '暂无',
+                        imgSrc: require('../../assets/images/image/cart_book.png')
+                    },
+                    {
+                        index2: 1,
+                        state: false,
+                        price: '101.01',
+                        num: 1,
+                        describe: '暂无',
+                        imgSrc: require('../../assets/images/image/cart_book.png')
+                    }
+                ]
+            }] , 
 
             /*购物车列表参数*/
             cartParams:{
@@ -413,20 +414,18 @@ export default {
                 let index1 = this.modelDate.index1,
                     index2 = this.modelDate.index2; 
 
-                //删除当前商品
-                this.cartDate.cartList[index1].items.splice(index2,1);
+                let cartId = this.cartDate.cartList[index1].items[index2].cartId;
 
-                //判断小列表是否还有商品,没有就删除
-                if(this.cartDate.cartList[index1].items.length == 0){
-
-                    this.cartDate.cartList.splice(index1,1);
-
-                }
+                // 单个删除
+                this.deleteCartItemData(cartId);
 
             }else{
 
                 //获取商品个数
                 let m = this.cartDate.cartList.length;
+
+                //购物车商品编码
+                let cartId = '';
 
                 //计算小计
                 for(let x = 0 ; x < m ; x++){
@@ -440,31 +439,18 @@ export default {
                         //判断是否选中
                         if(item.state){
 
-                            //删除当前商品
-                            this.cartDate.cartList[x].items.splice(i,1);
+                            cartId =='' ? cartId = item.cartId : cartId =  ',' + item.cartId ;
 
-                            return this.deleteModelOk();
                         } 
-
-                    }
-
-                    //判断小列表是否还有商品,没有就删除
-                    if(this.cartDate.cartList[x].items.length == 0){
-
-                        this.cartDate.cartList.splice(x,1);
-
-                        return this.deleteModelOk();
 
                     }
                     
                 }
 
+                // 批量删除
+                this.deleteCartItemData(cartId);
+
             }
-
-            this.modelDate.deleteModelValue = false;
-
-            //计算小计与合计
-            this.calculatePrice();
 
         },
 
@@ -478,7 +464,9 @@ export default {
    
         /**数据**/
         // 获取购物车列表
-        catGetCouponList(){
+        getCartListData(){
+
+            this.$Loading.start();
 
             let param = this.$Qs.stringify({ 'pageNo': this.cartParams.pageNo, 'pageSize': this.cartParams.pageSize , 'ciCode': this.cartParams.ciCode }) ;
 
@@ -488,17 +476,111 @@ export default {
 
                 console.log(res)
 
+                this.$Loading.finish();
+
                 if(res.data.code == 200){
+                    
+                    let data = res.data.content.list , arr = [], merchantArr = [];
 
+                    if (data == null || data.length == 0) { return ;}
+
+                    for(let i = 0 ; i < data.length; i++){
+
+                        let index = merchantArr.indexOf(data[i].merchantInfo.merchantNm) ;
+
+                        if( index == -1 ){ 
+
+                            merchantArr.push(data[i].merchantInfo.merchantNm);
+
+                            // 压入商户
+                            arr.push({
+                                id: '',
+                                itemState: false,
+                                itemTitle: data[i].merchantInfo.merchantNm,
+                                itemTotal: 0.00,
+                                //小列表
+                                items:[]
+                            });
+
+                            index = merchantArr.indexOf(data[i].merchantInfo.merchantNm);
+
+                            // 压入商品
+                            arr[index].items.push({
+                                cartId: data[i].id,
+                                productCode: data[i].productCode,
+                                state: false,
+                                price: data[i].productInfo.productPrice,
+                                num: data[i].productCount,
+                                describe: data[i].productInfo.productDesc,
+                                imgSrc: data[i].productInfo.productProfileUrl
+                            })
+
+                        }else{
+
+                            // 压入商品
+                            arr[index].items.push({
+                                productCode: data[i].productCode,
+                                state: false,
+                                price: data[i].productInfo.productPrice,
+                                num: data[i].productCount,
+                                describe: data[i].productInfo.productDesc,
+                                imgSrc: data[i].productInfo.productProfileUrl
+                            })
+
+                        }
+
+                    }
+
+                    // 压入到购物车
+                    this.cartDate.cartList = arr;
+
+                    //计算小计与合计
+                    this.calculatePrice();
                    
-
                 }else{
 
                     this.$Message.warning(res.data.message);
 
                 }
 
+            })
+            .catch((error) => {
+
+                this.$Loading.error();
+                console.log('发生错误！', error);
+
+            });
+ 
+
+        },
+        // 删除购物车商品
+        //@param cartId string 购物车商品编号 
+        deleteCartItemData(cartId){
+
+            this.$Loading.start();
+
+            let param = this.$Qs.stringify({ 'recordId': cartId }) ;
+
+            this.$api.deleteCart( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
                 this.$Loading.finish();
+
+                if(res.data.code == 200){
+
+                    // 获取购物车列表
+                    this.getCartListData();
+                   
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+                this.modelDate.deleteModelValue = false;
 
             })
             .catch((error) => {
@@ -511,14 +593,15 @@ export default {
 
         }
 
+
     },
     mounted(){
 
         // 获取用户cicode
-        this.cartParams.ciCode = 12; //this.$store.state.userData.UserData.ciCode ;
+        this.cartParams.ciCode = 12; //this.$store.state.userData.ciCode ;
 
         // 获取购物车列表
-        this.catGetCouponList()
+        this.getCartListData()
 
     }
 }
@@ -590,6 +673,7 @@ export default {
                 .item_list_img img{
                     vertical-align: middle;
                     height: 100px;
+                    width:100px;
 
                 }
                 .item_list_describe{

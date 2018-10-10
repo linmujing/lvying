@@ -3,9 +3,11 @@
 
   const state = {
     // 用户数据
-    ciphone: window.sessionStorage.getItem("ciphone"),
-    cicode: window.sessionStorage.getItem("cicode"),
-
+    ciphone: localStorage.getItem("ciphone"),
+    cicode: localStorage.getItem("cicode"),
+    ciProfileUrl: localStorage.getItem("ciProfileUrl"),
+    ciSex: localStorage.getItem("ciSex"),
+    ciIntroduce: localStorage.getItem("ciIntroduce"),
     
     SupplierData: {}
   }
@@ -27,9 +29,15 @@
 
         state.ciphone = n.ciPhone;
         state.cicode = n.ciCode;
+        state.ciProfileUrl = n.ciProfileUrl;
+        state.ciSex = n.ciSex;
+        state.ciIntroduce = n.ciIntroduce;
 
-        window.sessionStorage.setItem("ciphone", n.ciPhone)
-        window.sessionStorage.setItem("cicode", n.ciCode)
+        localStorage.setItem("ciphone", n.ciPhone)
+        localStorage.setItem("cicode", n.ciCode)
+        localStorage.setItem("ciProfileUrl", n.ciProfileUrl)
+        localStorage.setItem("ciSex", n.ciSex)
+        localStorage.setItem("ciIntroduce", n.ciIntroduce)
   
     },
     // 保存提供商数据
