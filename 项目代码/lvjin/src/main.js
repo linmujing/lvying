@@ -52,6 +52,10 @@ Vue.use(VideoPlayer);
 import "video.js/dist/video-js.css";
 import "vue-video-player/src/custom-theme.css";
 
+// 引入公共js
+import common from '../commonFunction/common.js';
+Vue.prototype.common = common
+
 
 Vue.config.productionTip = false
 

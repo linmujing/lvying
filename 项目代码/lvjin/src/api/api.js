@@ -45,8 +45,13 @@ export const getProductInfo = params => { return instance.post(`product/info/get
 export const getProductList = params => { return instance.post(`product/info/getProductList`, params ); };
 //获取产品分类列表
 export const getProductCatList = params => { return instance.post(`product/cat/getProductCatList`, params ); };
+<<<<<<< HEAD
 // 获取橱窗推荐
 export const getProductShowCase = params => { return instance.post(`product/info/getShowCaseProduct`, params ); };
+=======
+//获取橱窗推荐商品
+export const getShowCaseProduct = params => { return instance.post(`product/info/getShowCaseProduct`, params ); };
+>>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
 
 /** 系统接口 **/
 //短信发送
@@ -54,7 +59,9 @@ export const sendSms = params => { return instance.post(`system/sms/sendSms`, pa
 //获取轮播图列表
 //  export const getBannerList = params => { return instance.post(`system/banner/getBannerList`, params ); };
 //获取橱窗列表
-export const getBannerList = params => { return instance.post(`system/showCase/getBannerList`, params ); };
+export const getShowCaseList = params => { return instance.post(`system/showCase/getShowCaseList`, params ); };
+//获取橱窗详情
+export const getShowCase = params => { return instance.post(`system/showCase/getShowCase`, params ); };
 //获取导航列表
 export const getNavigationList = params => { return instance.post(`system/navigation/getNavigationList`, params ); };
 
@@ -69,8 +76,10 @@ export const catGetCartList = params => { return instance.post(`customer/cart/ge
 /** 地址 **/
 //获取会员地址列表
 export const getAddressList = params => { return instance.post(`customer/address/getAddressList`, params ); };
-//保存收获地址
+//保存地址
 export const saveAddress = params => { return instance.post(`customer/address/saveAddress`, params ); };
+//删除地址
+export const deleteAddress = params => { return instance.post(`customer/address/deleteAddress`, params ); };
 
 /** 优惠券 **/
 //会员领取优惠券

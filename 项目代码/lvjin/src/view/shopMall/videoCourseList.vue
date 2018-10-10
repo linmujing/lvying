@@ -18,35 +18,20 @@
           <Icon type="ios-arrow-down"/>
         </div>
         <div class="inline_block padding_left_10">
-          共找到<span class="color_title">271</span>门课程
+          共找到<span class="color_title">{{total}}</span>门课程
         </div>
       </div>
       <!--课程-->
       <div class="padding_15 bg_white">
-        课程：<span class="color_title">全部</span> (271)
+        课程：<span class="color_title">全部</span> ( {{total}} )
       </div>
       <!--排序-->
       <div class="padding_15 bg_white margin_top_15">
         <ul class="list_unstyled ul_inline clearfix">
-          <li class="color_title margin_right_30 pointer">
-            <span>综合排序</span>
-            <Icon v-if="sort" type="ios-arrow-up" />
-            <Icon v-else type="ios-arrow-down" />
-          </li>
-          <li class="margin_right_30 pointer">
-            <span>销量</span>
-            <Icon v-if="sale" type="ios-arrow-up" />
-            <Icon v-else type="ios-arrow-down" />
-          </li>
-          <li class="margin_right_30 pointer">
-            <span>满意度</span>
-            <Icon v-if="satisfaction" type="ios-arrow-up" />
-            <Icon v-else type="ios-arrow-down" />
-          </li>
-          <li class="pointer">
-            <span>价格</span>
-            <Icon v-if="price" type="ios-arrow-up" />
-            <Icon v-else type="ios-arrow-down" />
+          <li v-for="(item,index) in sortName" :key="index" :class="sortIndex == index ? 'color_title' : ''" class="margin_right_30 pointer" @click="changeClass(index)">
+            <span>{{item.name}}</span>
+            <Icon v-if="item.state" type="ios-arrow-up"/>
+            <Icon v-else type="ios-arrow-down"/>
           </li>
         </ul>
       </div>
@@ -54,17 +39,19 @@
     <!--列表-->
     <div class="center_box">
       <ul class="list_unstyled ul_inline clearfix">
-        <li v-for="item in 12" class="listBox bg_white">
-          <div @click="jumpDetail" class="height_210px all_width"></div>
+        <li v-for="(item,index) in productList" :key="index" class="listBox bg_white">
+          <div @click="jumpDetail(item.productCode)" class="height_210px all_width">
+            <img :src="item.productProfileUrl" class="all_width all_height">
+          </div>
           <div class="list_item">
-            <div class="font_18 font_weight_bold text_ellipsis">审核同业禁止协议</div>
+            <div class="font_18 font_weight_bold text_ellipsis">{{item.productTitle}}</div>
             <div class="margin_top_10 clearfix color_999">
-              <div class="float_left width_50 text_ellipsis">立二拆四案辩护人</div>
-              <div class="float_right">1234人看过</div>
+              <div class="float_left width_50 text_ellipsis" v-html="item.productDesc"></div>
+              <div class="float_right">{{item.saleCount}}人看过</div>
             </div>
             <div class="clearfix margin_top_5">
-            	<div class="float_left font_20 color_title">￥500.00</div>
-            	<div class="float_right color_666 line_height_30px text_ellipsis width_50 text_right">盈科律师事务所</div>
+            	<div class="float_left font_20 color_title">￥{{item.productPrice}}</div>
+            	<div class="float_right color_666 line_height_30px text_ellipsis width_50 text_right">{{item.createBy}}</div>
             </div>
             <div class="margin_top_10 clearfix">
               <p class="pointer float_left">
@@ -78,10 +65,11 @@
           </div>
         </li>
       </ul>
-      <!--分页-->
-     <div class="margin_80">
-       <Page :total="100" prev-text="上一页" next-text="下一页" />
-     </div>
+      <!-- 订单分页 -->
+      <div class="margin_80">
+        <Page :total="total" :current="current"   :page-size="pageSize"
+              @on-change="changeOrderPage" show-total show-elevator />
+      </div>
     </div>
 	</div>
 </template>
@@ -92,29 +80,44 @@ export default {
     data() {
         return {
           sort: true,
-          sale: false,
-          satisfaction: false,
-          price: false,
+          sortName: [
+            {name: '综合排序', state: true},
+            {name: '销量', state: true},
+            {name: '满意度', state: true},
+            {name: '价格', state: true}
+          ],
+          sortIndex: 0,
+          total: 0,
+          current: 1,
+          pageSize: 12,
+          productList: []
         }
 
     },
     mounted(){
       console.log(this.$route.query.twoPage)
-      this.getProductList()
+      this.getProductList(1,10)
     },
     methods: {
-      jumpDetail(){
-        this.$router.push({path:'/videoCourseDetail'})
+      jumpDetail(productCode){
+        this.$router.push({
+          path:'/videoCourseDetail',
+          query: {
+            productCode: productCode
+          }
+        })
       },
       // 获取商品展示
-      getProductList(){
+      getProductList(page,sort){
         // 获取产品分类列表
-        this.$api.getProductList( this.$Qs.stringify({'pageNo': 1, 'pageSize': 30}) )
+        this.$api.getProductList( this.$Qs.stringify({'pageNo': page, 'pageSize': 12, 'productCat': '4564', 'orderByStr': sort}) )
 
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
 
+              this.productList = res.data.content.list
+              this.total = res.data.content.count
 
             }else if (res.data.code == 500){
 
@@ -127,6 +130,35 @@ export default {
             console.log('发生错误！', error);
           });
       },
+      /**分页**/
+      //@param value 返回当前页码
+      changeOrderPage(value){
+        this.sortIndex = 0
+        this.getProductList(value,10)
+      },
+      //点击排序
+      changeClass(index){
+        if(this.sortIndex == index){
+          this.sortName[index].state = !this.sortName[index].state
+        }
+        this.sortIndex = index
+        var sortId
+        switch (index) {
+          case 0:
+            this.sortName[index].state ? sortId = 10 : sortId = 11
+            break
+          case 1:
+            this.sortName[index].state ? sortId = 20 : sortId = 21
+            break
+          case 2:
+            this.sortName[index].state ? sortId = 30 : sortId = 31
+            break
+          case 3:
+            this.sortName[index].state ? sortId = 40 : sortId = 41
+            break
+        }
+        this.getProductList(1,sortId)
+      }
     }
 }
 </script>
@@ -137,6 +169,7 @@ export default {
 	.ivu-page-next:hover a,.ivu-page-prev:hover a,.ivu-page-item:hover a,.ivu-page-item-active a,.ivu-page-item-active:hover a{color: #00AA88;}
 	.ivu-page-item:hover,.ivu-page-item-active {border-color: #00AA88;}
 	.ivu-page-disabled a {color: #ccc !important;}
+  .text_ellipsis,.text_ellipsis p{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 </style>
 <style scoped lang='less'>
   .content{

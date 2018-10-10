@@ -4,21 +4,23 @@
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
-          <div class="width_600px height_400px border"></div>
+          <div class="width_600px height_400px border">
+            <img :src="dataDetail.productProfileUrl" class="all_width all_height">
+          </div>
         </Col>
         <Col span="12" class="padding_20">
-          <div class="font_20 font_weight_bold text_ellipsis">行业动态管控-知识产权许可使用合同起草</div>
-          <div class="color_999 twoline_ellipsis margin_top_20">帮助拥有知识产权的企业起草和完善知识产权许可使用合同帮助拥有知识产权的企业起草和完善知识产权许可使用合同</div>
+          <div class="font_20 font_weight_bold text_ellipsis">{{dataDetail.productTitle}}</div>
+          <div class="color_999 twoline_ellipsis margin_top_20" v-html="dataDetail.productDesc"></div>
           <div class="clearfix margin_top_30">
             <div class="float_left">
               <Rate show-text allow-half disabled v-model="valueCustomText">
                 <span style="color: #f5a623">{{ valueCustomText }}</span>
               </Rate>
             </div>
-            <div class="float_left color_999 line_height_30px margin_left_30">1234人看过</div>
+            <div class="float_left color_999 line_height_30px margin_left_30">{{dataDetail.saleCount}}人看过</div>
           </div>
           <div class="margin_top_30 clearfix">
-            <p class="float_left"><span class="color_title font_20">￥500.00</span></p>
+            <p class="float_left"><span class="color_title font_20">￥{{dataDetail.productPrice}}</span></p>
             <p class="float_left pointer margin_left_30">
 							<Icon type="ios-headset-outline" size="28"/>
 							<span class="font_16 color_666 vertical_middle">试听</span>
@@ -177,11 +179,14 @@ export default {
           valueCustomText: 3.8,
           isCur: 0,
           isActive: 0,
+          dataDetail:{},
+          productCode: ''
         }
 
     },
     mounted(){
-      this.getProductInfo()
+      this.productCode = this.$route.query.productCode
+      this.getProductInfo(this.$route.query.productCode)
     },
     methods: {
     	//详情
@@ -193,14 +198,17 @@ export default {
 				this.isActive = i;
 			},
       // 查看产品详情
-      getProductInfo(){
+      getProductInfo(productCode){
         // 查看产品详情
-        this.$api.getProductInfo( this.$Qs.stringify({'productCode': 'P121212121214'}) )
+        this.$api.getProductInfo( this.$Qs.stringify({'productCode': productCode}) )
 
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
 
+              this.dataDetail = res.data.content
+              //商品评分
+              // this.valueCustomText = res.data.content.productScore
 
             }else if (res.data.code == 500){
 
