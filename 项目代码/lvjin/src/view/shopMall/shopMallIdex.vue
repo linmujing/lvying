@@ -200,6 +200,8 @@ export default {
     mounted(){
       this.getNavTitle()
       this.getBannerList()
+      // 公共js方法
+      this.common.login()
     },
     methods: {
       // 获取导航标题
