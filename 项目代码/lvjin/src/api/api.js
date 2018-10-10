@@ -45,13 +45,10 @@ export const getProductInfo = params => { return instance.post(`product/info/get
 export const getProductList = params => { return instance.post(`product/info/getProductList`, params ); };
 //获取产品分类列表
 export const getProductCatList = params => { return instance.post(`product/cat/getProductCatList`, params ); };
-<<<<<<< HEAD
 // 获取橱窗推荐
 export const getProductShowCase = params => { return instance.post(`product/info/getShowCaseProduct`, params ); };
-=======
 //获取橱窗推荐商品
 export const getShowCaseProduct = params => { return instance.post(`product/info/getShowCaseProduct`, params ); };
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
 
 /** 系统接口 **/
 //短信发送

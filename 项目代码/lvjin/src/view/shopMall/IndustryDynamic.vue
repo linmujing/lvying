@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :nowIndex="typeId" :showItem='true'></NavBar>
+    <NavBar :nowIndex="typeId" :showItem='true' :catCode="catCode"></NavBar>
     <Banner></Banner>
     <!--热门推荐-->
     <div class="content">
@@ -82,6 +82,7 @@ export default {
         return {
 
           typeId: parseInt(this.$route.query.typeId),
+          catCode: this.$route.query.catCode,
         }
 
     },
