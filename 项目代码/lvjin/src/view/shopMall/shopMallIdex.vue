@@ -8,7 +8,16 @@
         </li>
       </ul>
     </div>
-    <Banner></Banner>
+      <!--banner-->
+    <div>
+      <Carousel  radius-dot v-model="value" autoplay loop>
+        <CarouselItem v-for="(item,index) in banner" :key="index">
+          <div class="carousel">
+            <img :src="item.src" class="all_width block">
+          </div>
+        </CarouselItem>
+      </Carousel>
+    </div>
     <!--视频推荐-->
 		<div class="content">
 			<div class="padding_top_30 padding_bottom_30 clearfix">
@@ -18,7 +27,7 @@
 							<span class="title">视频推荐</span>
 						</div>
 						<div class="float_right more pointer">
-							<router-link tag="a" target="_blank" to="/videoCourseList">更多》</router-link>
+							<a @click="moreList('视频课程')">更多》</a>
 						</div>
 					</div>
 					<div v-for="item in videoArr" class="margin_top_20 clearfix">
@@ -49,7 +58,7 @@
 							<span class="title">音频推荐</span>
 						</div>
 						<div class="float_right more pointer">
-							<router-link tag="a" target="_blank" to="/videoCourseList">更多》</router-link>
+              <a @click="moreList('音频课程')">更多》</a>
 						</div>
 					</div>
 					<div v-for="item in musicArr" class="margin_top_20 clearfix">
@@ -85,7 +94,9 @@
 				<div class="float_left">
 					<span class="title">行业动态管控</span>
 				</div>
-				<div class="float_right more pointer">更多》</div>
+				<div class="float_right more pointer">
+          <a @click="moreList('行业动态管控')">更多》</a>
+        </div>
 			</div>
 			<ul class="list_unstyled ul_inline clearfix">
 				<li class="width_560px margin_top_20 margin_right_40" v-for="item in careerArr">
@@ -94,7 +105,7 @@
 						<div class="float_left font_weight_bold font_18">{{item.productTitle}}</div>
 						<div class="float_right color_999 line_height_25px">{{item.saleCount}}人看过</div>
 					</div>
-					<div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px">{{item.productDesc}}</div>
+					<div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px" v-html="item.productDesc"></div>
 					<div class="text_right margin_top_5"><span class="color_title">查看详情》</span></div>
 					<div class="margin_top_15 clearfix">
 						<p class="pointer float_left">
@@ -115,14 +126,16 @@
 					<div class="float_left">
 						<span class="title">法律动态管控</span>
 					</div>
-					<div class="float_right more pointer">更多》</div>
+					<div class="float_right more pointer">
+            <a @click="moreList('法律动态管控')">更多》</a>
+          </div>
 				</div>
 				<ul class="list_unstyled">
 					<li class="clearfix margin_top_30" v-for="item in logicArr">
 						<div class="float_left videoBox"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left width_900px margin_left_20 margin_top_5">
 							<div class="font_weight_bold font_18">{{item.productTitle}}</div>
-							<div class="twoline_ellipsis margin_top_10 color_666">{{item.productDesc}}</div>
+              <div class="color_666 text_ellipsis margin_top_10" v-html="item.productDesc"></div>
 							<div class="clearfix margin_top_10">
 								<div class="float_left">
 									<span class="font_20 color_title">￥{{item.productPrice}}</span>
@@ -147,20 +160,22 @@
 				<div class="float_left">
 					<span class="title">律瀛商城</span>
 				</div>
-				<div class="float_right more pointer">更多》</div>
+				<div class="float_right more pointer">
+          <a @click="moreList('律赢商城')">更多》</a>
+        </div>
 			</div>
 			<div class="margin_top_30">
 				<Row :gutter="16">
-			        <Col span="6" v-for="(item,index) in 4" :key="index">
+			        <Col span="6" v-for="(item,index) in lvyingArr" :key="index">
 			            <div class="mallBox padding_top_20 padding_bottom_20 padding_right_10 padding_left_10">
 			            	<div class="text_center ">
-			            		<img src="../../assets/images/image/cart_book.png" height="280">
+                      <img :src="item.productProfileUrl" class="all_width" style="max-height: 280px">
 			            	</div>
-			            	<div class="font_18 text_ellipsis margin_top_20">常见民事纠纷裁判思路与规则</div>
-			            	<div class="color_666 text_ellipsis margin_top_10">常见民事纠纷裁判思路与规则</div>
+			            	<div class="font_18 text_ellipsis margin_top_20">{{item.productTitle}}</div>
+			            	<div class="color_666 text_ellipsis margin_top_10" v-html="item.productDesc"></div>
 			            	<div class="margin_top_15 clearfix">
                       <p class="pointer float_left">
-                        <span class="font_20 color_title">￥500.00</span>
+                        <span class="font_20 color_title">￥{{item.productPrice}}</span>
                       </p>
                       <div class="float_right margin_left_20">
                         <Button type="success" shape="circle" class="bg_title">立即购买</Button>
@@ -193,76 +208,23 @@ export default {
     },
     data() {
         return {
-					navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
+					navDataModel: [],
 					videoArr:[],
 					musicArr:[],
 					careerArr:[],
 					logicArr:[],
-          showCase: []
+          lvyingArr:[],
+          banner: [],
+          value: 0,
+          // showCase: []
         }
 
     },
     mounted(){
       this.getNavTitle()
 			this.getCaseProduct()
-      this.getShowCaseList()
     },
     methods: {
-			//商品排序
-			// productSort(arr,key){
-			//
-			// 	return arr.sort(function(a,b){
-			// 		var x=a[key];
-			// 		var y=b[key];
-			// 		return x-y;
-			// 	});
-      //
-			// },
-			//限制数组长度
-			// limit(arr,num){
-			// 	var newArr=[];
-			// 	for(var i=0;i<arr.length&&i<num; i++){
-			// 		 newArr.push(arr[i]);
-			// 	}
-			// 	return newArr
-			// },
-			//获取视频推荐商品
-			// getVCaseProduct(){
-			// 		var params=this.$Qs.stringify({productCode:"P121212121213",productSortBy:"2"});
-			// 		var that=this;
-			// 		this.$api.getProductShowCase(params)
-			// 		.then((res)=>{
-			// 			let {content} =res.data;
-			// 			console.log(content);
-			// 			for(let item of content){
-			// 				if(	item.isNewRecord){
-			// 						break;
-			// 				}else{
-			// 					switch (item.productCat) {
-			// 						case '1':
-			// 							that.careerArr.push(item);
-			// 							that.careerArr=that.limit(that.productSort(that.careerArr,"sortNo"),4);
-			// 							break;
-			// 						case '2':
-			// 							that.logicArr.push(item);
-			// 							that.logicArr=that.limit(that.productSort(that.logicArr,"sortNo"),4);
-			// 							break;
-			// 						case '3':
-			// 							that.videoArr.push(item);
-			// 							that.videoArr=that.limit(that.productSort(that.videoArr,"sortNo"),2);
-			// 							break;
-			// 						case '4':
-			// 							that.musicArr.push(item);
-			// 							that.musicArr=that.limit(that.productSort(that.musicArr,"sortNo"),2);
-			//
-			// 							break;
-			// 						default:
-			// 							break;
-			// 					}
-			// 				}
-			// 			}
-			// 		})
-			// },
 			limit(arr,num){
 				var newArr=[];
 				for(var i=0;i<arr.length&&i<num; i++){
@@ -274,53 +236,37 @@ export default {
 			getCaseProduct(){
 
 					var that=this;
-					 this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1})).then((res)=>{
+					 this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1, pageLocat: 1})).then((res)=>{
 
 							 if(res.data.code == 200){
 								 let {content}=res.data;
-
+                this.banner = eval(res.data.content[6].caseUrl)
 								for(let item of content){
-										switch (item.pageLocat) {
-											case '1':
+                  if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="视频推荐"){
+                    that.videoArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
 
-												if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="视频推荐"){
-															 that.videoArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+                  }else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="音频推荐"){
 
-												}else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="音频推荐"){
+                    that.musicArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
 
-																 that.musicArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+                  }else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="行业动态管控"){
+                    that.careerArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+                  }else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="法律动态管控"){
 
-												}else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="行业动态管控"){
-																 that.careerArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
-												}else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="法律动态管控"){
+                    that.logicArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
 
-																 that.logicArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+                  }else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="律赢商城"){
 
+                    that.lvyingArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
 
-												}else{
+                  }else{
 
-														console.log("没数据!");
+                    console.log("没数据!");
 
-												}
-												break;
-											case "2":
+                  }
+                }
 
-												break;
-											case "3":
-
-												break;
-											case 4:
-
-												break;
-											case 5:
-
-												break;
-											default:
-												break;
-										 }
-									}
-
-							return Promise.resolve([that.videoArr,that.musicArr,that.careerArr,that.logicArr]);
+							return Promise.resolve([that.videoArr,that.musicArr,that.careerArr,that.logicArr,that.lvyingArr]);
 							 }
 					}).then((res)=>{
 						// console.log(res);
@@ -341,11 +287,12 @@ export default {
 											 }
 
 									 }).then((arry)=>{
-										if(arry.length===4){
+										if(arry.length===5){
 											that.videoArr=arry[0];
 											that.musicArr=arry[3];
 											that.logicArr=arry[1];
 											that.careerArr=arry[2];
+											that.lvyingArr=arry[4];
 										}
 									 })
 								}
@@ -450,9 +397,52 @@ export default {
             break;
         }
       },
+      // 点击更多跳转
+      moreList(name){
+			  console.log(name)
+        var arr = this.navDataModel
+        for(var i=0;i<arr.length;i++){
+          if(arr[i].catName == name){
+            switch (name) {
+              case '音频课程':
+              case '视频课程':
+                this.$router.push({
+                  path:'/videoCourseList',
+                  query: {
+                    catName: name,
+                    catCode: arr[i].catCode
+                  }
+                })
+                break
+              case '法律动态管控':
+              case '行业动态管控':
+                this.$router.push({
+                  path:'/industryDynamicList',
+                  query: {
+                    catName: name,
+                    catCode: arr[i].catCode
+                  }
+                })
+                break
+              case '律赢商城':
+                this.$router.push({
+                  path:'/lvyingMall',
+                  query: {
+                    catName: '律瀛商城',
+                    catCode: arr[i].catCode
+                  }
+                })
+                break
+            }
+          }
+        }
+      }
     }
 }
 </script>
+<style>
+  .text_ellipsis,.text_ellipsis p{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+</style>
 <style scoped lang='less'>
 	.content{
 		width:1200px;margin:0 auto;min-width: 1200px;
