@@ -45,8 +45,6 @@ export const getProductInfo = params => { return instance.post(`product/info/get
 export const getProductList = params => { return instance.post(`product/info/getProductList`, params ); };
 //获取产品分类列表
 export const getProductCatList = params => { return instance.post(`product/cat/getProductCatList`, params ); };
-// 获取橱窗推荐
-export const getProductShowCase = params => { return instance.post(`product/info/getShowCaseProduct`, params ); };
 //获取橱窗推荐商品
 export const getShowCaseProduct = params => { return instance.post(`product/info/getShowCaseProduct`, params ); };
 

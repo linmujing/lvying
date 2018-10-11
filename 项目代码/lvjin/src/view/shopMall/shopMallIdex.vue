@@ -3,7 +3,7 @@
     <!--导航栏-->
     <div class="nav">
       <ul class="list_unstyled ul_inline clearfix font_18 navbar box_center_1200">
-        <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(item.catCode,index)'>
+        <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(item.id,index)'>
           <span class="color_fff listItem">{{item.catName}}</span>
         </li>
       </ul>
@@ -193,106 +193,87 @@ export default {
     },
     data() {
         return {
-<<<<<<< HEAD
 					navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
 					videoArr:[],
-					musicArr:[{productTitle:666,sortNo:6},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5}],
+					musicArr:[],
 					careerArr:[],
-					logicArr:[]
-=======
-          navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
+					logicArr:[],
           showCase: []
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
         }
 
     },
     mounted(){
       this.getNavTitle()
-<<<<<<< HEAD
-			// this.getBannerList()
-			this.getVCaseProduct()
-=======
+			// this.getVCaseProduct()
       this.getShowCaseList()
-      // this.getShowCase()
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
     },
     methods: {
 			//商品排序
-			productSort(arr,key){
-				
-				return arr.sort(function(a,b){
-					var x=a[key];
-					var y=b[key];
-					return x-y;
-				});
-
-			},
+			// productSort(arr,key){
+			//
+			// 	return arr.sort(function(a,b){
+			// 		var x=a[key];
+			// 		var y=b[key];
+			// 		return x-y;
+			// 	});
+      //
+			// },
 			//限制数组长度
-			limit(arr,num){
-				var newArr=[];
-				for(var i=0;i<arr.length&&i<num; i++){
-					 newArr.push(arr[i]);
-				}
-				return newArr
-			},
+			// limit(arr,num){
+			// 	var newArr=[];
+			// 	for(var i=0;i<arr.length&&i<num; i++){
+			// 		 newArr.push(arr[i]);
+			// 	}
+			// 	return newArr
+			// },
 			//获取视频推荐商品
-			getVCaseProduct(){
-					var params=this.$Qs.stringify({productCode:"P121212121213",productSortBy:"2"});
-					var that=this;
-					this.$api.getProductShowCase(params)
-					.then((res)=>{
-						let {content} =res.data;
-						console.log(content);
-						for(let item of content){
-							if(	item.isNewRecord){
-									break;
-							}else{
-								switch (item.productCat) {
-									case '1':
-										that.careerArr.push(item);
-										that.careerArr=that.limit(that.productSort(that.careerArr,"sortNo"),4);
-										break;
-									case '2':
-										that.logicArr.push(item);
-										that.logicArr=that.limit(that.productSort(that.logicArr,"sortNo"),4);
-										break;	
-									case '3':
-										that.videoArr.push(item);	
-										that.videoArr=that.limit(that.productSort(that.videoArr,"sortNo"),2);
-										break;
-									case '4':
-										that.musicArr.push(item);
-										that.musicArr=that.limit(that.productSort(that.musicArr,"sortNo"),2);
-										
-										break;	
-									default:
-										break;
-								}
-							}
-						}
-					})
-			},
+			// getVCaseProduct(){
+			// 		var params=this.$Qs.stringify({productCode:"P121212121213",productSortBy:"2"});
+			// 		var that=this;
+			// 		this.$api.getProductShowCase(params)
+			// 		.then((res)=>{
+			// 			let {content} =res.data;
+			// 			console.log(content);
+			// 			for(let item of content){
+			// 				if(	item.isNewRecord){
+			// 						break;
+			// 				}else{
+			// 					switch (item.productCat) {
+			// 						case '1':
+			// 							that.careerArr.push(item);
+			// 							that.careerArr=that.limit(that.productSort(that.careerArr,"sortNo"),4);
+			// 							break;
+			// 						case '2':
+			// 							that.logicArr.push(item);
+			// 							that.logicArr=that.limit(that.productSort(that.logicArr,"sortNo"),4);
+			// 							break;
+			// 						case '3':
+			// 							that.videoArr.push(item);
+			// 							that.videoArr=that.limit(that.productSort(that.videoArr,"sortNo"),2);
+			// 							break;
+			// 						case '4':
+			// 							that.musicArr.push(item);
+			// 							that.musicArr=that.limit(that.productSort(that.musicArr,"sortNo"),2);
+			//
+			// 							break;
+			// 						default:
+			// 							break;
+			// 					}
+			// 				}
+			// 			}
+			// 		})
+			// },
       // 获取导航标题
       getNavTitle(){
         // 获取产品分类列表
-        this.$api.getProductCatList()
+        this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
 
           .then( (res) => {
 
             if(res.data.code == 200){
 
-              var result = res.data.content;
-              var navTitle = []
-              console.log(result)
-              for(var i=0;i<result.length;i++){
-                var obj = {}
-                if(result[i].parentId === '0'){
-                  obj.catCode = result[i].catCode
-                  obj.catName = result[i].catName
-                  navTitle.push(obj)
-                }
-              }
-              this.navDataModel = navTitle
+              this.navDataModel = res.data.content
+
             }else if (res.data.code == 500){
 
               this.$Message.warning(res.data.message);
@@ -304,12 +285,6 @@ export default {
             console.log('发生错误！', error);
           });
       },
-<<<<<<< HEAD
-      // 获取商品展示
-      /*getBannerList(){
-        // 获取产品分类列表
-        this.$api.getBannerList( this.$Qs.stringify({'appType': 1, 'pageLocat': 1}) )
-=======
       // 获取橱窗对象
       getShowCaseList(){
         this.$api.getShowCaseList( this.$Qs.stringify({'appType': 1, 'pageLocat': 1}) )
@@ -319,9 +294,9 @@ export default {
             if(res.data.code == 200){
               var result = res.data.content
               this.showCase = result
-              setTimeout(function(){
-                this.getShowCaseProduct(result[5].productCode, result[5].productSortBy)
-              },200)
+              // setTimeout(function(){
+              //   this.getShowCaseProduct(result[5].productCode, result[5].productSortBy)
+              // },200)
 
             }else if (res.data.code == 500){
 
@@ -333,29 +308,6 @@ export default {
           .catch((error) => {
             console.log('发生错误！', error);
           });
-      },
-      getShowCase(){
-        this.$api.getShowCase( this.$Qs.stringify({'caseLocat': '111'}) )
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
-
-          .then( (res) => {
-            console.log(res);
-            if(res.data.code == 200){
-
-
-            }else if (res.data.code == 500){
-
-              this.$Message.warning(res.data.message);
-
-            }
-
-          })
-          .catch((error) => {
-            console.log('发生错误！', error);
-          });
-<<<<<<< HEAD
-      },*/
-=======
       },
       //获取橱窗对象对应列表数据
       getShowCaseProduct(productCode, productSortBy){
@@ -376,48 +328,52 @@ export default {
             console.log('发生错误！', error);
           });
       },
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
       // 导航鼠标点击
       tabClick(catCode,index){
         console.log(index)
         switch(catCode){
-          case '10001':
+          case '1':
             this.$router.push({
               path:'/industryDynamic',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
-          case '10002':
+          case '2':
             this.$router.push({
               path:'/industryDynamic',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
-          case '10003':
+          case '3':
             this.$router.push({
               path:'videoCourse',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
-          case '10004':
+          case '4':
             this.$router.push({
               path:'videoCourse',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
 	    		break;
-          case '10005':
+          case '5':
             this.$router.push({
               path:'lvyingMall',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
