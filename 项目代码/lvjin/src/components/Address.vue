@@ -269,7 +269,7 @@
 
                 let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 , 'ciCode': this.userData.ciCode }) ;
 
-                this.$Loading.start();
+                this.$Spin.show();
 
                 this.$api.getAddressList( param )
 
@@ -305,12 +305,12 @@
 
                     }
 
-                    this.$Loading.finish();
+                    this.$Spin.hide();
 
                 })
                 .catch((error) => {
 
-                    this.$Loading.error();
+                    this.$Spin.hide();
                     console.log('发生错误！', error);
 
                 });
@@ -335,7 +335,7 @@
                     "address": data.addressDetail,
                     }) ;
 
-                this.$Loading.start();
+                this.$Spin.show();
 
                 this.$api.saveAddress( param )
 
@@ -360,12 +360,12 @@
 
                     }
 
-                    this.$Loading.finish();
+                    this.$Spin.hide();
 
                 })
                 .catch((error) => {
 
-                    this.$Loading.error();
+                    this.$Spin.hide();
                     console.log('发生错误！', error);
 
                 });
@@ -376,7 +376,7 @@
 
                 let param = this.$Qs.stringify({ "addressCode":  this.addressList[this.addressData.deleteModel.Index].id }) ;
 
-                this.$Loading.start();
+                this.$Spin.show();
 
                 this.$api.deleteAddress( param )
 
@@ -399,12 +399,12 @@
 
                     }
 
-                    this.$Loading.finish();
+                    this.$Spin.hide();
 
                 })
                 .catch((error) => {
 
-                    this.$Loading.error();
+                    this.$Spin.hide();
                     console.log('发生错误！', error);
 
                 });

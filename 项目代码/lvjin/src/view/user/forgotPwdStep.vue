@@ -110,7 +110,7 @@ export default {
 
             }
 
-            this.$Loading.start();
+            this.$Spin.show();
 
             // 判断手机号是否已被注册
             this.$api.verifyCiPhone( this.$Qs.stringify({ 'ciPhone': this.formRight.phone }) )
@@ -121,7 +121,7 @@ export default {
 
                 if(res.data.code == 500){
 
-                    this.$Loading.finish();
+                    this.$Spin.hide();
                     this.$Message.warning('该帐号还未注册!');
                     return;
 
@@ -135,7 +135,7 @@ export default {
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -161,7 +161,7 @@ export default {
 
                 }else{
 
-                    this.$Loading.finish();
+                    this.$Spin.hide();
 
                     this.$Message.warning(res.data.message);
 
@@ -171,7 +171,7 @@ export default {
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -181,7 +181,7 @@ export default {
         // 发送短信验证码
         sendVerifyCiPhone(){
             
-            this.$Loading.start();
+            this.$Spin.show();
 
             // 正则验证手机号
             if(!(/^1(3|4|5|7|8)\d{9}$/.test(this.formRight.phone ))){
@@ -223,12 +223,12 @@ export default {
 
                 }
 
-                this.$Loading.finish();
+                this.$Spin.hide();
 
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -282,10 +282,10 @@ export default {
 
                     // 存储用户信息
                     this.$store.commit('userData/saveUserData', res.data.content);
-                    // console.log(this.$store.state.userData.UserData)
-                    // this.$router.push({ name: '', params: {id: id}})
 
                     //跳转函数*************************************************
+                    // this.$router.push({ name: '', params: {id: id}})
+                    this.$router.push({ name: 'shopMallIdex'})
 
                 }else{
 
@@ -293,12 +293,12 @@ export default {
 
                 }
 
-                this.$Loading.finish();
+                this.$Spin.hide();
 
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });

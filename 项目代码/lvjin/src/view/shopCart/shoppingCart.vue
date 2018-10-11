@@ -466,7 +466,7 @@ export default {
         // 获取购物车列表
         getCartListData(){
 
-            this.$Loading.start();
+            this.$Spin.show()
 
             let param = this.$Qs.stringify({ 'pageNo': this.cartParams.pageNo, 'pageSize': this.cartParams.pageSize , 'ciCode': this.cartParams.ciCode }) ;
 
@@ -476,7 +476,7 @@ export default {
 
                 console.log(res)
 
-                this.$Loading.finish();
+                this.$Spin.hide()
 
                 if(res.data.code == 200){
                     
@@ -548,7 +548,7 @@ export default {
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -561,7 +561,7 @@ export default {
 
             console.log(cartId)
 
-            this.$Loading.start();
+            this.$Spin.show()
 
             let param = this.$Qs.stringify({ 'recordId': cartId }) ;
 
@@ -571,7 +571,7 @@ export default {
 
                 console.log(res)
 
-                this.$Loading.finish();
+                this.$Spin.hide()
 
                 if(res.data.code == 200){
 
@@ -587,7 +587,7 @@ export default {
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });

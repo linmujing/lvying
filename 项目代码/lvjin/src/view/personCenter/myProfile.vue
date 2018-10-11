@@ -75,14 +75,14 @@ export default {
         return {
 
             // 判断页面是资料页面还是收货地址 0：我的资料  1：收货地址
-            profileState: 1,
+            profileState: 0,
 
             /*资料对象*/
             profileData:{
                 name: '',
                 phone:'',
                 headImg: '',
-                sex:'',
+                sex: 0,
                 personal:''
             
             },
@@ -153,6 +153,8 @@ export default {
 
                 if(res.data.code == 200){
 
+                    res.data.content.ciPhone = this.$store.state.userData.ciphone;
+
                     // 存储用户信息
                     this.$store.commit('userData/saveUserData', res.data.content);
 
@@ -179,10 +181,10 @@ export default {
     mounted(){
     
         // 获取个人信息
-        this.profileData.phone = this.$store.state.userData.ciphone;
-        this.profileData.name = this.$store.state.userData.ciname || this.$store.state.userData.ciphone;
+        this.profileData.phone = this.common.testEmpty(this.$store.state.userData.ciphone) ;
+        this.profileData.name = this.common.testEmpty(this.$store.state.userData.ciname) ;
         this.profileData.sex = this.$store.state.userData.ciSex;
-        this.profileData.personal = this.$store.state.userData.ciIntroduce || '';
+        this.profileData.personal = this.common.testEmpty(this.$store.state.userData.ciIntroduce);
 
         // 头像
         let headImg = this.$store.state.userData.ciProfileUrl;
