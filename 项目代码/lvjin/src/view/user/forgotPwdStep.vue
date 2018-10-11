@@ -285,7 +285,7 @@ export default {
 
                     //跳转函数*************************************************
                     // this.$router.push({ name: '', params: {id: id}})
-                    this.$router.push({ name: '/'})
+                    this.$router.push({ name: 'shopMallIdex'})
 
                 }else{
 

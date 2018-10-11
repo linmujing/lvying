@@ -5,22 +5,22 @@
 				<div class="center clearfix">
 					<div class="float_left">
 						<div v-if="user == null">
-							<router-link tag="a" target="_blank" to="/user/userLogin">
+							<router-link tag="a" to="/user/userLogin">
 								<span class="color_title">亲，请登录</span>
 							</router-link>
-							<router-link tag="a" target="_blank" to="/user/userRegister" class="padding_left_25">注册</router-link>
+							<router-link tag="a"  to="/user/userRegister" class="padding_left_25">注册</router-link>
 						</div>
 						<div v-if="user != null">
-								欢迎你，亲爱的<span  class="color_title">{{user}}</span> <span class="" style="color:red;" @click="quitLogin">退出</span>
+								欢迎你，亲爱的<span  class="color_title"> {{user}} </span> <span class="pointer" style="color:red;" @click="quitLogin">退出</span>
 						</div>
 					</div>
 					<div class="float_right">
 						<ul class="list_unstyled ul_inline clearfix">
 							<li>
-								<router-link tag="a" target="_blank" to="/personCenter">我的中心</router-link>
+								<router-link tag="a"  to="/personCenter/myCourse">我的中心</router-link>
 							</li>
 							<li>
-								<router-link tag="a" target="_blank" to="/shoppingCart">购物车</router-link>
+								<router-link tag="a"  to="/shoppingCart">购物车</router-link>
 							</li>
 							<li>
                 <Poptip v-model="visible" trigger="hover">
@@ -31,10 +31,10 @@
                 </Poptip>
 							</li>
 							<li>
-								<router-link tag="a" target="_blank" to="/lvyingMall">律瀛商城</router-link>
+								<router-link tag="a"  to="/lvyingMall">律瀛商城</router-link>
 							</li>
 							<li>
-								<router-link tag="a" target="_blank" to="/supplier/supplierLogin">提供商入口</router-link>
+								<router-link tag="a"  to="/supplier/supplierLogin">提供商入口</router-link>
 							</li>
 						</ul>
 					</div>
@@ -111,11 +111,9 @@
 			quitLogin(){
 
 					this.$Modal.confirm({
-							title: 'Title',
+							title: '提示',
 							content: '<p>确定要退出吗？</p>',
 							onOk: () => {
-
-								this.$spin.show();
 
 								localStorage.removeItem("ciphone")
 								localStorage.removeItem("ciname")
@@ -124,7 +122,10 @@
 								localStorage.removeItem("ciSex")
 								localStorage.removeItem("ciIntroduce")
 
-								location.reload();
+								this.$store.commit('userData/saveUserData', {});
+
+								//跳转函数
+                this.$router.push({ name: 'shopMallIdex'})
 
 							},
 							onCancel: () => {
@@ -139,16 +140,15 @@
 		computed: {
 			// 监听登录状态变化 修改页面值
 			getLoginChange() {
-
-					return this.$store.state.userData.ciphone;
+				
+					this.user = this.$store.state.userData.ciname;
+					return this.$store.state.userData.ciname;
 
 			}
 		},
 		watch: {
 			// 监听登录状态变化 修改页面值
-			getLoginChange:function(val){
-
-				this.user = val ;
+			getLoginChange:function (val){
 
 			}
 		}
