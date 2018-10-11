@@ -8,35 +8,20 @@
           <Icon type="ios-arrow-down"/>
         </div>
         <div class="inline_block padding_left_10">
-          共找到<span class="color_title">271</span>门课程
+          共找到<span class="color_title">{{total}}</span>门课程
         </div>
       </div>
       <!--课程-->
       <div class="padding_15 bg_white">
-        课程：<span class="color_title">全部</span> (271)
+        课程：<span class="color_title">全部</span> ( {{total}} )
       </div>
       <!--排序-->
       <div class="padding_15 bg_white margin_top_15">
         <ul class="list_unstyled ul_inline clearfix">
-          <li class="color_title margin_right_30 pointer">
-            <span>综合排序</span>
-            <Icon v-if="sort" type="ios-arrow-up" />
-            <Icon v-else type="ios-arrow-down" />
-          </li>
-          <li class="margin_right_30 pointer">
-            <span>销量</span>
-            <Icon v-if="sale" type="ios-arrow-up" />
-            <Icon v-else type="ios-arrow-down" />
-          </li>
-          <li class="margin_right_30 pointer">
-            <span>满意度</span>
-            <Icon v-if="satisfaction" type="ios-arrow-up" />
-            <Icon v-else type="ios-arrow-down" />
-          </li>
-          <li class="pointer">
-            <span>价格</span>
-            <Icon v-if="price" type="ios-arrow-up" />
-            <Icon v-else type="ios-arrow-down" />
+          <li v-for="(item,index) in sortName" :key="index" :class="sortIndex == index ? 'color_title' : ''" class="margin_right_30 pointer" @click="changeClass(index)">
+            <span>{{item.name}}</span>
+            <Icon v-if="item.state" type="ios-arrow-up"/>
+            <Icon v-else type="ios-arrow-down"/>
           </li>
         </ul>
       </div>
@@ -44,18 +29,18 @@
     <!--列表-->
     <div class="center_box">
       <ul class="list_unstyled ul_inline clearfix">
-        <li v-for="item in 12" class="listBox bg_white">
-          <div class="text_center" @click="jumpDetail">
-            <img src="../../assets/images/image/cart_book.png" height="280">
+        <li v-for="item in productList" class="listBox bg_white">
+          <div class="text_center" @click="jumpDetail(item.productCode)">
+            <img :src="item.productProfileUrl" class="all_width" height="280">
           </div>
-          <div class="font_18 text_ellipsis margin_top_20">常见民事纠纷裁判思路与规则</div>
+          <div class="font_18 text_ellipsis margin_top_20">{{item.productTitle}}</div>
           <div class="color_666 text_ellipsis margin_top_10 clearfix">
-            <div class="float_left">法院大讲堂</div>
-            <div class="float_right">1234人购买过</div>
+            <div class="float_left" v-html="item.productDesc"></div>
+            <div class="float_right">{{item.saleCount}}人购买过</div>
           </div>
           <div class="margin_top_15 clearfix">
             <p class="pointer float_left">
-              <span class="font_20 color_title">￥500.00</span>
+              <span class="font_20 color_title">￥{{item.productPrice}}</span>
             </p>
             <div class="float_right margin_left_20">
               <Button type="success" shape="circle" class="bg_title">立即购买</Button>
@@ -63,10 +48,11 @@
           </div>
         </li>
       </ul>
-      <!--分页-->
-     <div class="margin_80">
-       <Page :total="100" prev-text="上一页" next-text="下一页" />
-     </div>
+      <!-- 订单分页 -->
+      <div class="margin_80">
+        <Page :total="total" :current="current"   :page-size="pageSize"
+              @on-change="changeOrderPage" show-total show-elevator />
+      </div>
     </div>
 	</div>
 </template>
@@ -77,19 +63,88 @@ export default {
     data() {
         return {
           sort: true,
-          sale: false,
-          satisfaction: false,
-          price: false,
+          sortName: [
+            {name: '综合排序', state: true},
+            {name: '销量', state: true},
+            {name: '满意度', state: true},
+            {name: '价格', state: true}
+          ],
+          sortIndex: 0,
+          total: 0,
+          current: 1,
+          pageSize: 12,
+          productList: [],
+          catCode: '',
+          catName: '',
         }
         
     },
-    methods: {
-      jumpDetail(){
-        this.$router.push({path:'/bookDetail'})
-      }
-    },
     mounted(){
+      this.catCode = this.$route.query.catCode
+      this.catName = this.$route.query.catName
+      this.getProductList(1,10)
+    },
+    methods: {
+      jumpDetail(productCode){
+        this.$router.push({
+          path:'/bookDetail',
+          query: {
+            productCode: productCode
+          }
+        })
+      },
+      // 获取商品展示
+      getProductList(page,sort){
+        // 获取产品分类列表
+        this.$api.getProductList( this.$Qs.stringify({'pageNo': page, 'pageSize': 12, 'productCat': this.catCode, 'orderByStr': sort}) )
 
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+
+              this.productList = res.data.content.list
+              this.total = res.data.content.count
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      /**分页**/
+      //@param value 返回当前页码
+      changeOrderPage(value){
+        this.sortIndex = 0
+        this.getProductList(value,10)
+      },
+      //点击排序
+      changeClass(index){
+        if(this.sortIndex == index){
+          this.sortName[index].state = !this.sortName[index].state
+        }
+        this.sortIndex = index
+        var sortId
+        switch (index) {
+          case 0:
+            this.sortName[index].state ? sortId = 10 : sortId = 11
+            break
+          case 1:
+            this.sortName[index].state ? sortId = 20 : sortId = 21
+            break
+          case 2:
+            this.sortName[index].state ? sortId = 30 : sortId = 31
+            break
+          case 3:
+            this.sortName[index].state ? sortId = 40 : sortId = 41
+            break
+        }
+        this.getProductList(1,sortId)
+      }
     }
 }
 </script>

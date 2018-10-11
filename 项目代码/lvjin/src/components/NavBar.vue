@@ -190,6 +190,8 @@
             if(res.data.code == 200){
 
               this.navTitle = res.data.content
+              // 导航标题信息
+              sessionStorage.setItem("NavTitle", JSON.stringify(res.data.content));
 
             }else if (res.data.code == 500){
 

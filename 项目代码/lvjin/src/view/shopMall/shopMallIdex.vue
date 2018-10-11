@@ -31,7 +31,7 @@
 						</div>
 					</div>
 					<div v-for="item in videoArr" class="margin_top_20 clearfix">
-						<div class="float_left videoBox"><img :src="item.productProfileUrl" alt=""></div>
+						<div class="float_left videoBox" @click="toDetail(item.productCode,2)"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left height_170 padding_left_25 margin_top_15">
 							<p class="font_18 font_weight_bold">{{item.productTitle}}</p>
 							<p class="color_999 margin_top_10">{{item.createBy}}</p>
@@ -62,7 +62,7 @@
 						</div>
 					</div>
 					<div v-for="item in musicArr" class="margin_top_20 clearfix">
-						<div class="float_left videoBox"><img :src="item.productProfileUrl" alt=""></div>
+						<div class="float_left videoBox" @click="toDetail(item.productCode,2)"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left height_170 padding_left_25 margin_top_15">
 							<p class="font_18 font_weight_bold">{{item.productTitle}}</p>
 							<p class="color_999 margin_top_10">{{item.createBy}}</p>
@@ -100,13 +100,15 @@
 			</div>
 			<ul class="list_unstyled ul_inline clearfix">
 				<li class="width_560px margin_top_20 margin_right_40" v-for="item in careerArr">
-					<div class="width_560px height_310px border"><img :src="item.productProfileUrl" alt=""></div>
+					<div class="width_560px height_310px border" @click="toDetail(item.productCode,1)"><img :src="item.productProfileUrl" alt=""></div>
 					<div class="clearfix margin_top_15">
 						<div class="float_left font_weight_bold font_18">{{item.productTitle}}</div>
 						<div class="float_right color_999 line_height_25px">{{item.saleCount}}人看过</div>
 					</div>
 					<div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px" v-html="item.productDesc"></div>
-					<div class="text_right margin_top_5"><span class="color_title">查看详情》</span></div>
+					<div class="text_right margin_top_5">
+            <span class="color_title" @click="toDetail(item.productCode,1)">查看详情》</span>
+          </div>
 					<div class="margin_top_15 clearfix">
 						<p class="pointer float_left">
 							<span class="font_20 color_title">￥{{item.productPrice}}</span>
@@ -132,7 +134,7 @@
 				</div>
 				<ul class="list_unstyled">
 					<li class="clearfix margin_top_30" v-for="item in logicArr">
-						<div class="float_left videoBox"><img :src="item.productProfileUrl" alt=""></div>
+						<div class="float_left videoBox" @click="toDetail(item.productCode,1)"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left width_900px margin_left_20 margin_top_5">
 							<div class="font_weight_bold font_18">{{item.productTitle}}</div>
               <div class="color_666 text_ellipsis margin_top_10" v-html="item.productDesc"></div>
@@ -142,7 +144,7 @@
 									<span class="padding_left_25 color_999">{{item.saleCount}}人看过</span>
 								</div>
 								<div class="float_right text_right">
-									<span class="color_title">查看详情》</span>
+									<span class="color_title" @click="toDetail(item.productCode,1)">查看详情》</span>
 								</div>
 							</div>
 							<div class="margin_top_10">
@@ -168,7 +170,7 @@
 				<Row :gutter="16">
 			        <Col span="6" v-for="(item,index) in lvyingArr" :key="index">
 			            <div class="mallBox padding_top_20 padding_bottom_20 padding_right_10 padding_left_10">
-			            	<div class="text_center ">
+			            	<div class="text_center" @click="toDetail(item.productCode,3)">
                       <img :src="item.productProfileUrl" class="all_width" style="max-height: 280px">
 			            	</div>
 			            	<div class="font_18 text_ellipsis margin_top_20">{{item.productTitle}}</div>
@@ -225,13 +227,6 @@ export default {
 			this.getCaseProduct()
     },
     methods: {
-			limit(arr,num){
-				var newArr=[];
-				for(var i=0;i<arr.length&&i<num; i++){
-					 newArr.push(arr[i]);
-				}
-				return newArr
-			},
 			//获取推荐商品
 			getCaseProduct(){
 
@@ -240,6 +235,7 @@ export default {
 
 							 if(res.data.code == 200){
 								 let {content}=res.data;
+								 // 保存轮播数据
                 this.banner = eval(res.data.content[6].caseUrl)
 								for(let item of content){
                   if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="视频推荐"){
@@ -272,7 +268,7 @@ export default {
 						// console.log(res);
 						let arr=[];
 							for(let item of res){
-
+                // console.log(item);
 								for(let item2 of item){
 										// console.log(item2);
 									let params=this.$Qs.stringify(item2);
@@ -282,15 +278,17 @@ export default {
 										 this.$api.getProductShowCase(params).then((res)=>{
 											 if(res.data.code=="200"){
 												 let {content}=res.data;
+												 console.log(res.data)
 													 arr.push(content);
 													return Promise.resolve(arr);
 											 }
 
 									 }).then((arry)=>{
+									   // console.log(arry)
 										if(arry.length===5){
 											that.videoArr=arry[0];
-											that.musicArr=arry[3];
-											that.logicArr=arry[1];
+											that.musicArr=arry[1];
+											that.logicArr=arry[3];
 											that.careerArr=arry[2];
 											that.lvyingArr=arry[4];
 										}
@@ -334,6 +332,8 @@ export default {
             if(res.data.code == 200){
 
               this.navDataModel = res.data.content
+              // 导航标题信息
+              sessionStorage.setItem("NavTitle", JSON.stringify(res.data.content));
 
             }else if (res.data.code == 500){
 
@@ -435,6 +435,35 @@ export default {
                 break
             }
           }
+        }
+      },
+      // 查看详情
+      toDetail(productCode,type){
+        switch (type) {
+          case 1:
+            this.$router.push({
+              path:'/industryDynamicDetail',
+              query: {
+                productCode: productCode
+              }
+            })
+            break
+          case 2:
+            this.$router.push({
+              path:'/videoCourseDetail',
+              query: {
+                productCode: productCode
+              }
+            })
+            break
+          case 3:
+            this.$router.push({
+              path:'/bookDetail',
+              query: {
+                productCode: productCode
+              }
+            })
+            break
         }
       }
     }
