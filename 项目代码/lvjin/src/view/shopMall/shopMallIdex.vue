@@ -88,17 +88,17 @@
 				<div class="float_right more pointer">更多》</div>
 			</div>
 			<ul class="list_unstyled ul_inline clearfix">
-				<li class="width_560px margin_top_20 margin_right_40" v-for="item in 4">
-					<div class="width_560px height_310px border"></div>
+				<li class="width_560px margin_top_20 margin_right_40" v-for="item in careerArr">
+					<div class="width_560px height_310px border"><img :src="item.productProfileUrl" alt=""></div>
 					<div class="clearfix margin_top_15">
-						<div class="float_left font_weight_bold font_18">知识产权许可使用合同起草</div>
-						<div class="float_right color_999 line_height_25px">12035人看过</div>
+						<div class="float_left font_weight_bold font_18">{{item.productTitle}}</div>
+						<div class="float_right color_999 line_height_25px">{{item.saleCount}}人看过</div>
 					</div>
-					<div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px">立二拆四案辩护人，著名主持人丛薇、著名演员黄奕、王希维、苏青、谢惠清、于琳相关案件代理人。盈科在发展中坚持"以人为本"的人才战略。</div>
+					<div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px">{{item.productDesc}}</div>
 					<div class="text_right margin_top_5"><span class="color_title">查看详情》</span></div>
 					<div class="margin_top_15 clearfix">
 						<p class="pointer float_left">
-							<span class="font_20 color_title">￥500.00</span>
+							<span class="font_20 color_title">￥{{item.productPrice}}</span>
 						</p>
 						<div class="float_right">
 							<Button type="warning" shape="circle">加入购物车</Button>
@@ -118,15 +118,15 @@
 					<div class="float_right more pointer">更多》</div>
 				</div>
 				<ul class="list_unstyled">
-					<li class="clearfix margin_top_30" v-for="item in 3">
-						<div class="float_left videoBox"></div>
+					<li class="clearfix margin_top_30" v-for="item in logicArr">
+						<div class="float_left videoBox"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left width_900px margin_left_20 margin_top_5">
-							<div class="font_weight_bold font_18">律师支招：买房过户中突遇法院查封怎么办？</div>
-							<div class="twoline_ellipsis margin_top_10 color_666">为了让孩子进入更好的学校读书，经过精挑细选，王女士花费重金近一千万元购买了一套学区房，为了让孩子进入更好的学校读书，经过精挑细选，王女士花费重金近一千万元购买了一套学区房，为了让孩子进入更好的学校读书，经过精挑细选，王女士花费重金近一千万元购买了一套学区房，</div>
+							<div class="font_weight_bold font_18">{{item.productTitle}}</div>
+							<div class="twoline_ellipsis margin_top_10 color_666">{{item.productDesc}}</div>
 							<div class="clearfix margin_top_10">
 								<div class="float_left">
-									<span class="font_20 color_title">￥500.00</span>
-									<span class="padding_left_25 color_999">1234人看过</span>
+									<span class="font_20 color_title">￥{{item.productPrice}}</span>
+									<span class="padding_left_25 color_999">{{item.saleCount}}人看过</span>
 								</div>
 								<div class="float_right text_right">
 									<span class="color_title">查看详情》</span>
@@ -193,28 +193,18 @@ export default {
     },
     data() {
         return {
-<<<<<<< HEAD
 					navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
 					videoArr:[],
-					musicArr:[{productTitle:666,sortNo:6},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5}],
+					musicArr:[],
 					careerArr:[],
 					logicArr:[]
-=======
-          navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
-          showCase: []
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
         }
 
     },
     mounted(){
       this.getNavTitle()
-<<<<<<< HEAD
 			// this.getBannerList()
-			this.getVCaseProduct()
-=======
-      this.getShowCaseList()
-      // this.getShowCase()
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
+			this.getCaseProduct()
     },
     methods: {
 			//商品排序
@@ -235,42 +225,112 @@ export default {
 				}
 				return newArr
 			},
-			//获取视频推荐商品
-			getVCaseProduct(){
-					var params=this.$Qs.stringify({productCode:"P121212121213",productSortBy:"2"});
+			//获取推荐商品
+			getCaseProduct(){
+					
 					var that=this;
-					this.$api.getProductShowCase(params)
-					.then((res)=>{
-						let {content} =res.data;
-						console.log(content);
-						for(let item of content){
-							if(	item.isNewRecord){
-									break;
-							}else{
-								switch (item.productCat) {
-									case '1':
-										that.careerArr.push(item);
-										that.careerArr=that.limit(that.productSort(that.careerArr,"sortNo"),4);
-										break;
-									case '2':
-										that.logicArr.push(item);
-										that.logicArr=that.limit(that.productSort(that.logicArr,"sortNo"),4);
-										break;	
-									case '3':
-										that.videoArr.push(item);	
-										that.videoArr=that.limit(that.productSort(that.videoArr,"sortNo"),2);
-										break;
-									case '4':
-										that.musicArr.push(item);
-										that.musicArr=that.limit(that.productSort(that.musicArr,"sortNo"),2);
+					 this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1})).then((res)=>{
+						
+							 if(res.data.code == 200){
+								 let {content}=res.data;
+								
+								for(let item of content){
+										switch (item.pageLocat) {
+											case '1':
+		
+												if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="视频推荐"){
+															 that.videoArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+					
+												}else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="音频推荐"){
+					
+																 that.musicArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+														
+												}else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="行业动态管控"){
+																 that.careerArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+												}else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="法律动态管控"){
+														
+																 that.logicArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+														
+											
+												}else{
+												
+														console.log("没数据!");
+													
+												}
+												break;
+											case "2":
+												
+												break;
+											case "3":
+												
+												break;
+											case 4:
+												
+												break;
+											case 5:
+												
+												break;
+											default:
+												break;
+										 }		
+									}
+														 
+							return Promise.resolve([that.videoArr,that.musicArr,that.careerArr,that.logicArr]);
+							 }
+					}).then((res)=>{
+						// console.log(res);
+						let arr=[];
+							for(let item of res){
+									
+								for(let item2 of item){
+										// console.log(item2);
+									let params=this.$Qs.stringify(item2);
+									// console.log(params);
+
+									var that=this;
+										 this.$api.getProductShowCase(params).then((res)=>{
+											 if(res.data.code=="200"){
+												 let {content}=res.data;
+													 arr.push(content);
+													return Promise.resolve(arr);
+											 }
 										
-										break;	
-									default:
-										break;
+									 }).then((arry)=>{
+										if(arry.length===4){
+											that.videoArr=arry[0];
+											that.musicArr=arry[3];
+											that.logicArr=arry[1];
+											that.careerArr=arry[2];
+										}
+									 })
 								}
 							}
-						}
+							
+						
 					})
+
+					// .then(()=>{
+					// 		//videoProductCode数组
+					// 		let newVdProductCode=[];
+					// 			for(let item of that.videoArr){
+					// 				newVdProductCode.push(item.productCode);
+					// 			}
+					// 			console.log(newVdProductCode);
+					// 		// 同上
+					// 		let newAdProductCode=[];
+					// 			for(let item of that.audioArr){
+					// 				newAdProductCode.push(item.productCode);
+					// 			}
+					// 		let newCrProductCode=[];
+					// 			for(let item of that.careerArr){
+					// 				newCrProductCode.push(item.productCode);
+					// 			}
+					// 		let newLgcProductCode=[];
+					// 			for(let item of that.logicArr){
+					// 				newLgcProductCode.push(item.productCode);
+					// 			}
+					// 			 that.$api.getProductShowCase()
+					// })
 			},
       // 获取导航标题
       getNavTitle(){
@@ -304,39 +364,10 @@ export default {
             console.log('发生错误！', error);
           });
       },
-<<<<<<< HEAD
       // 获取商品展示
       /*getBannerList(){
         // 获取产品分类列表
         this.$api.getBannerList( this.$Qs.stringify({'appType': 1, 'pageLocat': 1}) )
-=======
-      // 获取橱窗对象
-      getShowCaseList(){
-        this.$api.getShowCaseList( this.$Qs.stringify({'appType': 1, 'pageLocat': 1}) )
-
-          .then( (res) => {
-            console.log(res);
-            if(res.data.code == 200){
-              var result = res.data.content
-              this.showCase = result
-              setTimeout(function(){
-                this.getShowCaseProduct(result[5].productCode, result[5].productSortBy)
-              },200)
-
-            }else if (res.data.code == 500){
-
-              this.$Message.warning(res.data.message);
-
-            }
-
-          })
-          .catch((error) => {
-            console.log('发生错误！', error);
-          });
-      },
-      getShowCase(){
-        this.$api.getShowCase( this.$Qs.stringify({'caseLocat': '111'}) )
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
 
           .then( (res) => {
             console.log(res);
@@ -353,30 +384,7 @@ export default {
           .catch((error) => {
             console.log('发生错误！', error);
           });
-<<<<<<< HEAD
       },*/
-=======
-      },
-      //获取橱窗对象对应列表数据
-      getShowCaseProduct(productCode, productSortBy){
-        this.$api.getShowCaseProduct( this.$Qs.stringify({'productCode': productCode, 'productSortBy': productSortBy}) )
-
-          .then( (res) => {
-            console.log(res);
-            if(res.data.code == 200){
-
-            }else if (res.data.code == 500){
-
-              this.$Message.warning(res.data.message);
-
-            }
-
-          })
-          .catch((error) => {
-            console.log('发生错误！', error);
-          });
-      },
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
       // 导航鼠标点击
       tabClick(catCode,index){
         console.log(index)
@@ -440,7 +448,12 @@ export default {
 		.height_170{height: 170px;}
     .height_310px{height: 310px;}
     .height_88px{height: 88px;}
-		.width_560px{width: 560px;}
+		.width_560px{width: 560px;
+			img{
+					width:100%;
+					height:100%;
+			}
+		}
 		.width_900px{width: 900px;}
     .width_230px{width: 230px;}
 		.border{border:1px solid #999999;}
