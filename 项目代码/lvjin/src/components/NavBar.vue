@@ -3,33 +3,35 @@
 	    <div class="nav" style="position:relative;z-index:10000;">
 	      <div class="center relative">
 					<ul class="list_unstyled ul_inline clearfix font_18 navbar">
-	          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navTitle" :key="index" @click='tabClick(item.catCode,index)'>
+	          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navTitle" :key="index" @click='tabClick(item.id,index)'>
 	            <span class="color_fff tabHover">{{item.catName}}</span>
 	          </li>
 	        </ul>
-	        <div v-show="showItem" class="listBox">
+	        <div v-show="showItem" ref="listBox" class="listBox">
 	          <div class="">
 
-	            <!--<div v-for="(items,index) in navDataModel[curIndex].lists" :key="index">-->
+	            <div v-for="(items,index1) in secondNavTitle" :key="index1">
 
-	              <!--<div @mouseover="boxMouseOver(index)" @click="jumpDown(1)"-->
-										<!--class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">-->
-	                <!--<span class="float_left color_fff font_18">{{items.title}}</span>-->
-	                <!--<Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>-->
-	              <!--</div>-->
+	              <div @mouseenter="boxMouseOver(items.id, index1)" @click="jumpDown(items.catCode,items.catName, 1)"
+										class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
+	                <span class="float_left color_fff font_18">{{items.catName}}</span>
+	                <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
+	              </div>
 
-	              <!--<div v-show="showBox" class="itemBox bg_white width_1000px" >-->
-	                <!--<div v-for="(item,index2) in navDataModel[curIndex].lists[itemsIndex].items " :key="index2">-->
-	                  <!--<div @click="jumpDown(2)" class="font_18 pointer hover_title">{{item.title}}</div>-->
+	              <div v-show="thirdNavTitle.length > 0">
+                  <div v-show="showBox" class="itemBox bg_white width_1000px" :style="{minHeight: listBoxHeight + 'px'}">
+                    <div v-for="(itemss,index2) in thirdNavTitle" :key="index2">
+                      <!--<div @click="jumpDown(2)" class="font_18 pointer hover_title">{{itemss.catName}}</div>-->
 
-	                  <!--<ul class="list_unstyled ul_inline clearfix margin_bottom_20">-->
-	                    <!--<li @click="jumpDown(3)" v-for="( i, index3) in item.arr" :key="index3" class="margin_top_5 margin_right_30 pointer hover_title">{{i}}</li>-->
-	                  <!--</ul>-->
+                      <ul class="list_unstyled ul_inline clearfix margin_bottom_20">
+                        <li @click="jumpDown(items.catCode,items.catName, 2)" class="margin_top_5 margin_right_30 pointer hover_title">{{itemss.catName}}</li>
+                      </ul>
 
-	                <!--</div>-->
-	              <!--</div>-->
+                    </div>
+                  </div>
+                </div>
 
-	            <!--</div>-->
+	            </div>
 
 	          </div>
 	        </div>
@@ -157,7 +159,9 @@
         ],
         navTitle: [],
         secondNavTitle: [],
-        goodsCode: ''
+        thirdNavTitle: [],
+        goodsCode: '',
+        listBoxHeight: ''
 
 			}
 		},
@@ -167,13 +171,13 @@
         this.goodsCode = this.$route.query.catCode
       },
       goodsCode() {
-        this.getSecondNavTitle(this.goodsCode,'1')
+        this.getSecondNavTitle(this.goodsCode, 2)
       },
     },
     mounted(){
       this.getNavTitle()
       console.log(this.catCode)
-      this.getSecondNavTitle(this.catCode,'1')
+      this.getSecondNavTitle(this.catCode, 2)
     },
 		methods:{
       // 获取导航标题
@@ -199,15 +203,22 @@
           });
       },
       // hover导航标题
-      getSecondNavTitle(catCode, parentId){
+      getSecondNavTitle(id, type){
         // 获取产品分类列表
-        this.$api.getProductCatList( this.$Qs.stringify({'catCode': catCode, 'parentId': parentId}) )
+        this.$api.getProductCatList( this.$Qs.stringify({'parentId': id}) )
 
           .then( (res) => {
 
             if(res.data.code == 200){
 
-              this.secondNavTitle = res.data.content
+              switch (type) {
+                case 2:
+                  this.secondNavTitle = res.data.content
+                  break
+                case 3:
+                  this.thirdNavTitle = res.data.content
+                  break
+              }
 
             }else if (res.data.code == 500){
 
@@ -225,7 +236,7 @@
         this.curIndex = index
         console.log(index)
         switch (catCode) {
-          case '10001':
+          case '1':
             this.$router.push({
               path: '/industryDynamic',
               query: {
@@ -234,7 +245,7 @@
               }
             })
             break;
-          case '10002':
+          case '2':
             this.$router.push({
               path: '/industryDynamic',
               query: {
@@ -243,7 +254,7 @@
               }
             })
             break;
-          case '10003':
+          case '3':
             this.$router.push({
               path: 'videoCourse',
               query: {
@@ -252,7 +263,7 @@
               }
             })
             break;
-          case '10004':
+          case '4':
             this.$router.push({
               path: 'videoCourse',
               query: {
@@ -261,7 +272,7 @@
               }
             })
             break;
-          case '10005':
+          case '5':
             this.$router.push({
               path: 'lvyingMall',
               query: {
@@ -273,10 +284,11 @@
         }
       },
       // 二级导航鼠标悬停
-      boxMouseOver(index){
+      boxMouseOver(id, index){
 				this.showBox = true;
         this.itemsIndex = index;
-
+        this.listBoxHeight= this.$refs.listBox.offsetHeight;
+        this.getSecondNavTitle(id, 3)
 			},
 			//鼠标移除
 			boxMouseOut(){
@@ -284,24 +296,27 @@
 			},
 
       //跳转jumpDown
-      jumpDown(id){
-        var typeid = this.curIndex;
-        switch(typeid){
+      jumpDown(id, name, num){
+        var typeid = this.$route.query.typeId;
+        console.log(num)
+        switch(num){
           case 0:
             this.$router.push({
-              path:'industryDynamicDetail',
+              path:'industryDynamicList',
               query: {
-                typeId: 0,
-                twoPage: id
+                catName: name,
+                typeId: typeid,
+                catCode: id
               }
             })
             break;
           case 1:
             this.$router.push({
-              path:'industryDynamicDetail',
+              path:'industryDynamicList',
               query: {
-                typeId: 1,
-                twoPage: id
+                catName: name,
+                typeId: typeid,
+                catCode: id
               }
             })
             break;
@@ -309,8 +324,9 @@
             this.$router.push({
               path:'videoCourseList',
               query: {
-                typeId: 2,
-                twoPage: id
+                catName: name,
+                typeId: typeid,
+                catCode: id
               }
             })
             break;
@@ -318,8 +334,9 @@
             this.$router.push({
               path:'videoCourseList',
               query: {
-                typeId: 3,
-                twoPage: id
+                catName: name,
+                typeId: typeid,
+                catCode: id
               }
             })
             break;
@@ -346,7 +363,7 @@
       position: absolute;top: 67px;left: 0;z-index: 99;
       .listItem{background: rgba(0,0,0,0.5);width:180px;}
       .listItem:hover{background: #00aa88}
-      .itemBox{position: absolute;top:0;left:180px;padding: 20px;}
+      .itemBox{position: absolute;top:0;left:180px;padding: 20px;min-height: 200px}
     }
     .width_1000px{width: 1000px;}
   }

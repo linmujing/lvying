@@ -3,7 +3,7 @@
     <!--导航栏-->
     <div class="nav">
       <ul class="list_unstyled ul_inline clearfix font_18 navbar box_center_1200">
-        <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(item.catCode,index)'>
+        <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(item.id,index)'>
           <span class="color_fff listItem">{{item.catName}}</span>
         </li>
       </ul>
@@ -197,27 +197,81 @@ export default {
 					videoArr:[],
 					musicArr:[],
 					careerArr:[],
+<<<<<<< HEAD
 					logicArr:[]
+=======
+					logicArr:[],
+          showCase: []
+>>>>>>> 01d8c70710df151cc55b3a145a15b563ae88da0d
         }
 
     },
     mounted(){
       this.getNavTitle()
+<<<<<<< HEAD
 			// this.getBannerList()
 			this.getCaseProduct()
+=======
+			this.getCaseProduct()
+      this.getShowCaseList()
+>>>>>>> 01d8c70710df151cc55b3a145a15b563ae88da0d
     },
     methods: {
 			//商品排序
-			productSort(arr,key){
-				
-				return arr.sort(function(a,b){
-					var x=a[key];
-					var y=b[key];
-					return x-y;
-				});
-
-			},
+			// productSort(arr,key){
+			//
+			// 	return arr.sort(function(a,b){
+			// 		var x=a[key];
+			// 		var y=b[key];
+			// 		return x-y;
+			// 	});
+      //
+			// },
 			//限制数组长度
+			// limit(arr,num){
+			// 	var newArr=[];
+			// 	for(var i=0;i<arr.length&&i<num; i++){
+			// 		 newArr.push(arr[i]);
+			// 	}
+			// 	return newArr
+			// },
+			//获取视频推荐商品
+			// getVCaseProduct(){
+			// 		var params=this.$Qs.stringify({productCode:"P121212121213",productSortBy:"2"});
+			// 		var that=this;
+			// 		this.$api.getProductShowCase(params)
+			// 		.then((res)=>{
+			// 			let {content} =res.data;
+			// 			console.log(content);
+			// 			for(let item of content){
+			// 				if(	item.isNewRecord){
+			// 						break;
+			// 				}else{
+			// 					switch (item.productCat) {
+			// 						case '1':
+			// 							that.careerArr.push(item);
+			// 							that.careerArr=that.limit(that.productSort(that.careerArr,"sortNo"),4);
+			// 							break;
+			// 						case '2':
+			// 							that.logicArr.push(item);
+			// 							that.logicArr=that.limit(that.productSort(that.logicArr,"sortNo"),4);
+			// 							break;
+			// 						case '3':
+			// 							that.videoArr.push(item);
+			// 							that.videoArr=that.limit(that.productSort(that.videoArr,"sortNo"),2);
+			// 							break;
+			// 						case '4':
+			// 							that.musicArr.push(item);
+			// 							that.musicArr=that.limit(that.productSort(that.musicArr,"sortNo"),2);
+			//
+			// 							break;
+			// 						default:
+			// 							break;
+			// 					}
+			// 				}
+			// 			}
+			// 		})
+			// },
 			limit(arr,num){
 				var newArr=[];
 				for(var i=0;i<arr.length&&i<num; i++){
@@ -227,61 +281,61 @@ export default {
 			},
 			//获取推荐商品
 			getCaseProduct(){
-					
+
 					var that=this;
 					 this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1})).then((res)=>{
-						
+
 							 if(res.data.code == 200){
 								 let {content}=res.data;
-								
+
 								for(let item of content){
 										switch (item.pageLocat) {
 											case '1':
-		
+
 												if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="视频推荐"){
 															 that.videoArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
-					
+
 												}else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="音频推荐"){
-					
+
 																 that.musicArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
-														
+
 												}else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="行业动态管控"){
 																 that.careerArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
 												}else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="法律动态管控"){
-														
+
 																 that.logicArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
-														
-											
+
+
 												}else{
-												
+
 														console.log("没数据!");
-													
+
 												}
 												break;
 											case "2":
-												
+
 												break;
 											case "3":
-												
+
 												break;
 											case 4:
-												
+
 												break;
 											case 5:
-												
+
 												break;
 											default:
 												break;
-										 }		
+										 }
 									}
-														 
+
 							return Promise.resolve([that.videoArr,that.musicArr,that.careerArr,that.logicArr]);
 							 }
 					}).then((res)=>{
 						// console.log(res);
 						let arr=[];
 							for(let item of res){
-									
+
 								for(let item2 of item){
 										// console.log(item2);
 									let params=this.$Qs.stringify(item2);
@@ -294,7 +348,7 @@ export default {
 													 arr.push(content);
 													return Promise.resolve(arr);
 											 }
-										
+
 									 }).then((arry)=>{
 										if(arry.length===4){
 											that.videoArr=arry[0];
@@ -305,8 +359,8 @@ export default {
 									 })
 								}
 							}
-							
-						
+
+
 					})
 
 					// .then(()=>{
@@ -335,24 +389,14 @@ export default {
       // 获取导航标题
       getNavTitle(){
         // 获取产品分类列表
-        this.$api.getProductCatList()
+        this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
 
           .then( (res) => {
 
             if(res.data.code == 200){
 
-              var result = res.data.content;
-              var navTitle = []
-              console.log(result)
-              for(var i=0;i<result.length;i++){
-                var obj = {}
-                if(result[i].parentId === '0'){
-                  obj.catCode = result[i].catCode
-                  obj.catName = result[i].catName
-                  navTitle.push(obj)
-                }
-              }
-              this.navDataModel = navTitle
+              this.navDataModel = res.data.content
+
             }else if (res.data.code == 500){
 
               this.$Message.warning(res.data.message);
@@ -364,68 +408,52 @@ export default {
             console.log('发生错误！', error);
           });
       },
-      // 获取商品展示
-      /*getBannerList(){
-        // 获取产品分类列表
-        this.$api.getBannerList( this.$Qs.stringify({'appType': 1, 'pageLocat': 1}) )
-
-          .then( (res) => {
-            console.log(res);
-            if(res.data.code == 200){
-
-
-            }else if (res.data.code == 500){
-
-              this.$Message.warning(res.data.message);
-
-            }
-
-          })
-          .catch((error) => {
-            console.log('发生错误！', error);
-          });
-      },*/
       // 导航鼠标点击
       tabClick(catCode,index){
         console.log(index)
         switch(catCode){
-          case '10001':
+          case '1':
             this.$router.push({
               path:'/industryDynamic',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
-          case '10002':
+          case '2':
             this.$router.push({
               path:'/industryDynamic',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
-          case '10003':
+          case '3':
             this.$router.push({
               path:'videoCourse',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
-          case '10004':
+          case '4':
             this.$router.push({
               path:'videoCourse',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
 	    		break;
-          case '10005':
+          case '5':
             this.$router.push({
               path:'lvyingMall',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;

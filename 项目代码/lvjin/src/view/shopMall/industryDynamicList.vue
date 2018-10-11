@@ -3,18 +3,18 @@
     <div class="content">
       <!--面包屑-->
       <div class="padding_top_20 padding_bottom_20">
-        <div class="tagBox inline_block pointer color_666">
-          <span class="">行业动态管控</span>
-          <Icon type="ios-arrow-down"/>
-        </div>
-        <Icon type="ios-arrow-forward" />
-        <div class="tagBox inline_block pointer color_666">
-          <span class="">劳动（企业）</span>
-          <Icon type="ios-arrow-down"/>
-        </div>
-        <Icon type="ios-arrow-forward" />
+        <!--<div class="tagBox inline_block pointer color_666">-->
+          <!--<span class="">行业动态管控</span>-->
+          <!--<Icon type="ios-arrow-down"/>-->
+        <!--</div>-->
+        <!--<Icon type="ios-arrow-forward" />-->
+        <!--<div class="tagBox inline_block pointer color_666">-->
+          <!--<span class="">劳动（企业）</span>-->
+          <!--<Icon type="ios-arrow-down"/>-->
+        <!--</div>-->
+        <!--<Icon type="ios-arrow-forward" />-->
         <div class="tagBox inline_block color_666">
-          <span class="">项目启动</span>
+          <span class="">{{catName}}</span>
           <Icon type="ios-arrow-down"/>
         </div>
         <div class="inline_block padding_left_10">
@@ -83,11 +83,15 @@ export default {
           total: 0,
           current: 1,
           pageSize: 12,
-          productList: []
+          productList: [],
+          catCode: '',
+          catName: ''
         }
 
     },
     mounted(){
+      this.catCode = this.$route.query.catCode
+      this.catName = this.$route.query.catName
       this.getProductList(1,10)
     },
     methods: {
@@ -102,7 +106,7 @@ export default {
       // 获取商品展示
       getProductList(page,sort){
         // 获取产品分类列表
-        this.$api.getProductList( this.$Qs.stringify({'pageNo': page, 'pageSize': 12, 'productCat': '4564', 'orderByStr': sort}) )
+        this.$api.getProductList( this.$Qs.stringify({'pageNo': page, 'pageSize': 12, 'productCat': this.catCode, 'orderByStr': sort}) )
 
           .then( (res) => {
             console.log(res);

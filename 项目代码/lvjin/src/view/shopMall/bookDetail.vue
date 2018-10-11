@@ -3,8 +3,8 @@
     <!--导航栏-->
     <div class="nav">
       <ul class="list_unstyled ul_inline clearfix font_18 navbar box_center_1200">
-        <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(index)'>
-          <span class="color_fff listItem">{{item}}</span>
+        <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(item.id,index)'>
+          <span class="color_fff listItem">{{item.catName}}</span>
         </li>
       </ul>
     </div>
@@ -166,7 +166,10 @@ export default {
           isActive: 0,
           navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
         }
-        
+
+    },
+    mounted(){
+      this.getNavTitle()
     },
     methods: {
     	//详情
@@ -177,38 +180,74 @@ export default {
 			evaluateBtn(i){
 				this.isActive = i;
 			},
+      // 获取导航标题
+      getNavTitle(){
+        // 获取产品分类列表
+        this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
+
+          .then( (res) => {
+
+            if(res.data.code == 200){
+
+              this.navDataModel = res.data.content
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
       // 导航鼠标点击
-      tabClick(index){
-        switch(index){
-          case 0:
+      tabClick(catCode,index){
+        console.log(index)
+        switch(catCode){
+          case '1':
             this.$router.push({
               path:'/industryDynamic',
               query: {
-                typeId: 0
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
-          case 1:
+          case '2':
             this.$router.push({
               path:'/industryDynamic',
               query: {
-                typeId: 1
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
-          case 2:
+          case '3':
             this.$router.push({
               path:'videoCourse',
               query: {
-                typeId: 2
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
-          case 3:
+          case '4':
             this.$router.push({
               path:'videoCourse',
               query: {
-                typeId: 3
+                typeId: index,
+                catCode: catCode
+              }
+            })
+            break;
+          case '5':
+            this.$router.push({
+              path:'lvyingMall',
+              query: {
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
