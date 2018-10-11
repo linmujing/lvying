@@ -122,7 +122,7 @@ export default {
 
             }
 
-            this.$Loading.start();
+            this.$Spin.show()
 
             // 判断手机号是否已被注册
             this.$api.verifyCiPhone( this.$Qs.stringify({ 'ciPhone': phone }) )
@@ -133,7 +133,7 @@ export default {
 
                 if(res.data.code == 500){
 
-                    this.$Loading.finish();
+                    this.$Spin.hide();
                     this.$Message.error('该帐号还没有注册!');
                     return;
 
@@ -154,7 +154,7 @@ export default {
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -192,12 +192,12 @@ export default {
 
                 }
 
-                this.$Loading.finish();
+                this.$Spin.hide();
 
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });

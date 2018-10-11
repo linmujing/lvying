@@ -193,39 +193,18 @@ export default {
     },
     data() {
         return {
-<<<<<<< HEAD
-=======
-
->>>>>>> 94e472824ad4111c147308680919aae3abab917b
 					navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
 					videoArr:[],
 					musicArr:[],
 					careerArr:[],
-<<<<<<< HEAD
 					logicArr:[]
-=======
-					logicArr:[],
-
-          showCase: []
-
->>>>>>> 94e472824ad4111c147308680919aae3abab917b
         }
 
     },
     mounted(){
       this.getNavTitle()
-<<<<<<< HEAD
 			// this.getBannerList()
 			this.getCaseProduct()
-=======
-
-			// this.getBannerList()
-			this.getVCaseProduct()
-
-      this.getShowCaseList()
-      // this.getShowCase()
-
->>>>>>> 94e472824ad4111c147308680919aae3abab917b
     },
     methods: {
 			//商品排序

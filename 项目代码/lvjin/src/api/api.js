@@ -47,14 +47,8 @@ export const getProductList = params => { return instance.post(`product/info/get
 export const getProductCatList = params => { return instance.post(`product/cat/getProductCatList`, params ); };
 // 获取橱窗推荐
 export const getProductShowCase = params => { return instance.post(`product/info/getShowCaseProduct`, params ); };
-<<<<<<< HEAD
 // 获取橱窗列表
 export const getProductShowCaseList = params => { return instance.post(`system/showCase/getShowCaseList`, params ); };
-=======
-//获取橱窗推荐商品
-export const getShowCaseProduct = params => { return instance.post(`product/info/getShowCaseProduct`, params ); };
-
->>>>>>> 94e472824ad4111c147308680919aae3abab917b
 /** 系统接口 **/
 //短信发送
 export const sendSms = params => { return instance.post(`system/sms/sendSms`, params ); };

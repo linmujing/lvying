@@ -126,7 +126,7 @@ export default {
 
             }
 
-            this.$Loading.start();
+            this.$Spin.show();
 
             // 判断手机号是否已被注册
             this.$api.verifyCiPhone( this.$Qs.stringify({ 'ciPhone': this.formRight.phone }) )
@@ -137,7 +137,7 @@ export default {
 
                 if(res.data.code == 200){
 
-                    this.$Loading.finish();
+                    this.$Spin.hide();
                     this.$Message.warning('该帐号已经注册!');
                     return;
 
@@ -151,7 +151,7 @@ export default {
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -177,7 +177,7 @@ export default {
 
                 }else{
 
-                    this.$Loading.finish();
+                    this.$Spin.hide();
 
                     this.$Message.warning(res.data.message);
 
@@ -187,7 +187,7 @@ export default {
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -205,7 +205,7 @@ export default {
 
             }
 
-            this.$Loading.start();
+            this.$Spin.show();
             
             // 判断手机号是否已注册
             this.$api.verifyCiPhone( this.$Qs.stringify({ 'ciPhone':  this.formRight.phone }) )
@@ -238,12 +238,12 @@ export default {
 
                 }
 
-                this.$Loading.finish();
+                this.$Spin.hide();
 
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -308,12 +308,12 @@ export default {
 
                 }
 
-                this.$Loading.finish();
+                this.$Spin.hide();
 
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
