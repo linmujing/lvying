@@ -8,7 +8,8 @@
     ciProfileUrl: localStorage.getItem("ciProfileUrl"),
     ciSex: localStorage.getItem("ciSex"),
     ciIntroduce: localStorage.getItem("ciIntroduce"),
-    
+    ciname: localStorage.getItem("ciname"),
+
     SupplierData: {}
   }
   
@@ -28,12 +29,14 @@
     saveUserData(state, n) {
 
         state.ciphone = n.ciPhone;
+        state.ciname = n.ciName;
         state.cicode = n.ciCode;
         state.ciProfileUrl = n.ciProfileUrl;
         state.ciSex = n.ciSex;
         state.ciIntroduce = n.ciIntroduce;
 
         localStorage.setItem("ciphone", n.ciPhone)
+        localStorage.setItem("ciname", n.ciName)
         localStorage.setItem("cicode", n.ciCode)
         localStorage.setItem("ciProfileUrl", n.ciProfileUrl)
         localStorage.setItem("ciSex", n.ciSex)
