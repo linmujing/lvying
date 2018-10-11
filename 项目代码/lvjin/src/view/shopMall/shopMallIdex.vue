@@ -193,28 +193,27 @@ export default {
     },
     data() {
         return {
-<<<<<<< HEAD
+
 					navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
 					videoArr:[],
 					musicArr:[{productTitle:666,sortNo:6},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5},{productTitle:555,sortNo:5}],
 					careerArr:[],
-					logicArr:[]
-=======
-          navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
+					logicArr:[],
+
           showCase: []
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
+
         }
 
     },
     mounted(){
       this.getNavTitle()
-<<<<<<< HEAD
+
 			// this.getBannerList()
 			this.getVCaseProduct()
-=======
+
       this.getShowCaseList()
       // this.getShowCase()
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
+
     },
     methods: {
 			//商品排序
@@ -304,39 +303,10 @@ export default {
             console.log('发生错误！', error);
           });
       },
-<<<<<<< HEAD
       // 获取商品展示
       /*getBannerList(){
         // 获取产品分类列表
         this.$api.getBannerList( this.$Qs.stringify({'appType': 1, 'pageLocat': 1}) )
-=======
-      // 获取橱窗对象
-      getShowCaseList(){
-        this.$api.getShowCaseList( this.$Qs.stringify({'appType': 1, 'pageLocat': 1}) )
-
-          .then( (res) => {
-            console.log(res);
-            if(res.data.code == 200){
-              var result = res.data.content
-              this.showCase = result
-              setTimeout(function(){
-                this.getShowCaseProduct(result[5].productCode, result[5].productSortBy)
-              },200)
-
-            }else if (res.data.code == 500){
-
-              this.$Message.warning(res.data.message);
-
-            }
-
-          })
-          .catch((error) => {
-            console.log('发生错误！', error);
-          });
-      },
-      getShowCase(){
-        this.$api.getShowCase( this.$Qs.stringify({'caseLocat': '111'}) )
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
 
           .then( (res) => {
             console.log(res);
@@ -353,30 +323,7 @@ export default {
           .catch((error) => {
             console.log('发生错误！', error);
           });
-<<<<<<< HEAD
       },*/
-=======
-      },
-      //获取橱窗对象对应列表数据
-      getShowCaseProduct(productCode, productSortBy){
-        this.$api.getShowCaseProduct( this.$Qs.stringify({'productCode': productCode, 'productSortBy': productSortBy}) )
-
-          .then( (res) => {
-            console.log(res);
-            if(res.data.code == 200){
-
-            }else if (res.data.code == 500){
-
-              this.$Message.warning(res.data.message);
-
-            }
-
-          })
-          .catch((error) => {
-            console.log('发生错误！', error);
-          });
-      },
->>>>>>> 149a727b53bb46002c48c8339088f3aa9d9d3c4f
       // 导航鼠标点击
       tabClick(catCode,index){
         console.log(index)

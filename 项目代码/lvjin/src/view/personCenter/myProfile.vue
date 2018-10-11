@@ -15,6 +15,10 @@
                 <i>{{profileData.phone}}</i>
             </div>
             <div class="input_box">
+                <span >昵称：</span>
+                <Input v-model="profileData.name" type="text" placeholder="请输入关键字"  style="width:400px;" />
+            </div>
+            <div class="input_box">
                 <span style="vertical-align:top;">头像：</span>
                 <div style="display:inline-block;">
                     <p class="head_img" ><img :src="profileData.headImg" alt=""></p>
@@ -25,7 +29,6 @@
                         :on-format-error="handleFormatError"
                         :on-exceeded-size="handleMaxSize"
                         :on-success="materialUrlSuccess"
-                        :on-error="this.$Loading.finish()"
                         :max-size="10240">
                         <Button type="success" shape="circle" size="small" ghost style="width:90px;" >修改头像</Button>
                         <span class="padding_left_20 font_12 color_999">图片要清晰，支持jpg，png，gif格式，最大不超过10M</span>
@@ -49,10 +52,13 @@
                 <Input v-model="profileData.personal" type="textarea" placeholder="请输入关键字" :rows="6"  style="width:400px;padding-right:10px;" />
             </div>
             <div style="padding:50px 0 0 50px;">
-                 <Button type="success" size="large" shape="circle" style="width:100px;"  @click="saveProfile">提交</Button>
+
+                <Button type="success"  size="large" shape="circle" style="width:100px;"  @click="saveProfile">提交</Button>
+                 
             </div>
         </div>
 
+        <!-- 地址 -->
         <div  v-if="profileState == 1">
             <Address :pState="0"></Address>
         </div>
@@ -79,7 +85,9 @@ export default {
                 sex:'',
                 personal:''
             
-            }
+            },
+            // 提交按钮
+            submitLoading: false
 
         }
         
@@ -106,7 +114,7 @@ export default {
         },
         //图片上传成功
         materialUrlSuccess (res, file) {
-            
+
             if(res.code == 200){
 
                 this.profileData.headImg = res.content;
@@ -117,7 +125,7 @@ export default {
 
             }
 
-            this.$Loading.finish();
+            this.$Spin.hide();
             
         },
 
@@ -125,9 +133,15 @@ export default {
         // 保存个人信息
         saveProfile(){
 
-            this.$Loading.start();	
+            this.$Spin.show();	
 
-            let param = this.$Qs.stringify({ 'ciCode': 1, 'ciSex': 1, 'ciIntroduce': 1, 'ciProfileUrl': 1 }) ;
+            let param = this.$Qs.stringify({ 
+                'ciCode': this.$store.state.userData.cicode, 
+                'ciName': this.profileData.name, 
+                'ciSex': this.profileData.sex, 
+                'ciIntroduce': this.profileData.personal, 
+                'ciProfileUrl': this.profileData.headImg 
+            }) ;
 
             this.$api.saveCustomerInfo( param )
 
@@ -135,14 +149,14 @@ export default {
 
                 console.log(res)
 
-                this.$Loading.finish();
+                this.$Spin.hide();
 
                 if(res.data.code == 200){
 
                     // 存储用户信息
                     this.$store.commit('userData/saveUserData', res.data.content);
 
-                    this.$Message.warning(res.data.message);
+                    this.$Message.success(res.data.message);
                    
                 }else{
 
@@ -154,7 +168,7 @@ export default {
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -166,15 +180,30 @@ export default {
     
         // 获取个人信息
         this.profileData.phone = this.$store.state.userData.ciphone;
-        this.profileData.headImg = this.$store.state.userData.ciProfileUrl || require('../../assets/images/icon/head_img_icon.png');
+        this.profileData.name = this.$store.state.userData.ciname || this.$store.state.userData.ciphone;
         this.profileData.sex = this.$store.state.userData.ciSex;
         this.profileData.personal = this.$store.state.userData.ciIntroduce || '';
+
+        // 头像
+        let headImg = this.$store.state.userData.ciProfileUrl;
+        if(headImg){
+            this.profileData.headImg = headImg;
+        }else{
+            this.profileData.headImg = require('../../assets/images/icon/head_img_icon.png');
+            
+        } 
+
 
 
     }
 }
 </script>
 
+<style>
+    .ivu-input{
+        font-size: 14px;
+    }
+</style>
 
 <style scoped lang='less'>
 
