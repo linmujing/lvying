@@ -4,10 +4,15 @@
 			<div class="top">
 				<div class="center clearfix">
 					<div class="float_left">
-						<router-link tag="a" target="_blank" to="/user/userLogin">
-							<span class="color_title">亲，请登录</span>{{user}}
-						</router-link>
-						<router-link tag="a" target="_blank" to="/user/userRegister" class="padding_left_25">注册</router-link>
+						<div v-if="user == null">
+							<router-link tag="a" target="_blank" to="/user/userLogin">
+								<span class="color_title">亲，请登录</span>
+							</router-link>
+							<router-link tag="a" target="_blank" to="/user/userRegister" class="padding_left_25">注册</router-link>
+						</div>
+						<div v-if="user != null">
+								欢迎你，亲爱的<span  class="color_title">{{user}}</span> <span class="" style="color:red;" @click="quitLogin">退出</span>
+						</div>
 					</div>
 					<div class="float_right">
 						<ul class="list_unstyled ul_inline clearfix">
@@ -61,7 +66,7 @@
 				loginStatus: this.isLogin,
 				visible:false,
 				navigationList: [],
-				user: 1
+				user: null
 			}
 		},
     mounted(){
@@ -92,16 +97,44 @@
       },
 			//logo链接到首页
 			jump() {
-                this.$router.push({path:'/'})
-            },
-            //登录按钮
-            login() {
-                this.$router.push({path:'/user/userLogin'})
-            },
-            //注册按钮
-            register() {
-                this.$router.push({path:'/user/userRegister'})
-            },
+					this.$router.push({path:'/'})
+			},
+			//登录按钮
+			login() {
+					this.$router.push({path:'/user/userLogin'})
+			},
+			//注册按钮
+			register() {
+					this.$router.push({path:'/user/userRegister'})
+			},
+			//退出登录
+			quitLogin(){
+
+					this.$Modal.confirm({
+							title: 'Title',
+							content: '<p>确定要退出吗？</p>',
+							onOk: () => {
+
+								this.$spin.show();
+
+								localStorage.removeItem("ciphone")
+								localStorage.removeItem("ciname")
+								localStorage.removeItem("cicode")
+								localStorage.removeItem("ciProfileUrl")
+								localStorage.removeItem("ciSex")
+								localStorage.removeItem("ciIntroduce")
+
+								location.reload();
+
+							},
+							onCancel: () => {
+									
+							}
+					});
+
+
+
+			}
 		},
 		computed: {
 			// 监听登录状态变化 修改页面值

@@ -197,24 +197,14 @@ export default {
 					videoArr:[],
 					musicArr:[],
 					careerArr:[],
-<<<<<<< HEAD
 					logicArr:[]
-=======
-					logicArr:[],
-          showCase: []
->>>>>>> 01d8c70710df151cc55b3a145a15b563ae88da0d
         }
 
     },
     mounted(){
       this.getNavTitle()
-<<<<<<< HEAD
 			// this.getBannerList()
 			this.getCaseProduct()
-=======
-			this.getCaseProduct()
-      this.getShowCaseList()
->>>>>>> 01d8c70710df151cc55b3a145a15b563ae88da0d
     },
     methods: {
 			//商品排序

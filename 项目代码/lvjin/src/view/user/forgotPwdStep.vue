@@ -282,10 +282,10 @@ export default {
 
                     // 存储用户信息
                     this.$store.commit('userData/saveUserData', res.data.content);
-                    // console.log(this.$store.state.userData.UserData)
-                    // this.$router.push({ name: '', params: {id: id}})
 
                     //跳转函数*************************************************
+                    // this.$router.push({ name: '', params: {id: id}})
+                    this.$router.push({ name: '/'})
 
                 }else{
 

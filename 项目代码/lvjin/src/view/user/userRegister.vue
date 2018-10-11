@@ -301,6 +301,7 @@ export default {
                     // this.$router.push({ name: '', params: {id: id}})
 
                     //跳转函数*************************************************
+                    this.$router.push({ name: '/'})
 
                 }else{
 
