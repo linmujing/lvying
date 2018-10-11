@@ -3,9 +3,9 @@
         <div class="shopping_cart_container box_center_1200">
 
             <div class="title">
-                <span>我的购物车：共 {{cartDate.cartList.length}} 门课程</span>
+                <span>我的购物车：共 {{cartList.length}} 门课程</span>
             </div>
-            <div class="list_box" v-if="cartDate.cartList.length">
+            <div class="list_box" v-if="cartList.length">
                 <!-- 购物车列表头部 -->
                 <div class="list_header padding_left_14">
                     <Row>
@@ -22,7 +22,7 @@
                 </div>
                 
                 <!-- 购物车列表 -->
-                <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="items.id">
+                <ul class="list_content" v-for="(items, index1) in cartList" :key="index1">
                     <li>
                         <div class="item_title padding_left_14">
                             <el-checkbox  v-model="items.itemState" @click.prevent.native="checkboxChange(index1)" >
@@ -30,7 +30,7 @@
                             </el-checkbox>
                         </div>
                         <ul class="item_list">
-                            <li class="padding_left_14" v-for="(item, index2) in items.items" :key="item.id">
+                            <li class="padding_left_14" v-for="(item, index2) in items.items" :key="index2">
                                 <Row>
                                     <Col span="5">
                                         <el-checkbox v-model="item.state" @click.prevent.native="checkboxChange(index1, index2)" > 
@@ -90,7 +90,7 @@
             </div>
 
             <!-- 购物车为空 -->
-            <div class="not_has_store" v-if="!cartDate.cartList.length">
+            <div class="not_has_store" v-if="!cartList.length">
                 <img src="../../assets/images/image/cart_not.png" alt="">
             </div>
 
@@ -126,10 +126,7 @@ export default {
                 //总价格
                 listTotal: 0.00,
                 //大列表
-                cartList:[],
-            }, 
-            //购物车数据列表大列表
-            cartList:[
+                cartList:[
             {
                 index1: 0,
                 itemState: false,
@@ -179,7 +176,10 @@ export default {
                         imgSrc: require('../../assets/images/image/cart_book.png')
                     }
                 ]
-            }] , 
+            }],
+            }, 
+            //购物车数据列表大列表
+            cartList:[] , 
 
             /*购物车列表参数*/
             cartParams:{
@@ -213,7 +213,7 @@ export default {
             let index1 =  e.target.getAttribute("data-index1"), 
                 index2 =  e.target.getAttribute("data-index2"); 
             
-            this.cartDate.cartList[index1].items[index2].num ++;
+            this.cartList[index1].items[index2].num ++;
 
             //计算小计与合计
             this.calculatePrice();
@@ -225,17 +225,17 @@ export default {
             let index1 =  e.target.getAttribute("data-index1"), 
                 index2 =  e.target.getAttribute("data-index2"); 
 
-            if (this.cartDate.cartList[index1].items[index2].num<=1){
+            if (this.cartList[index1].items[index2].num<=1){
 
                 this.$Message.warning('受不了啦，宝贝不能再减少啦')
 
-                this.cartDate.cartList[index1].items[index2].num  = 1;
+                this.cartList[index1].items[index2].num  = 1;
 
                 return;
 
             }else {
 
-                this.cartDate.cartList[index1].items[index2].num  -= 1
+                this.cartList[index1].items[index2].num  -= 1
 
             }
 
@@ -253,14 +253,14 @@ export default {
             //监听商品是否选中 || 监听商家店里所有商品是否选中
             if(index2 != undefined){
 
-                this.cartDate.cartList[index1].items[index2].state = !this.cartDate.cartList[index1].items[index2].state;
+                this.cartList[index1].items[index2].state = !this.cartList[index1].items[index2].state;
 
                 // 当前集合是否全部选中
                 let states = true ; 
 
-                for(let i = 0 ; i < this.cartDate.cartList[index1].items.length; i++){
+                for(let i = 0 ; i < this.cartList[index1].items.length; i++){
 
-                    if(!this.cartDate.cartList[index1].items[i].state){
+                    if(!this.cartList[index1].items[i].state){
 
                         states = false;
 
@@ -268,15 +268,15 @@ export default {
 
                 }
 
-                this.cartDate.cartList[index1].itemState = states;
+                this.cartList[index1].itemState = states;
 
             }else{
 
-                this.cartDate.cartList[index1].itemState = !this.cartDate.cartList[index1].itemState;
+                this.cartList[index1].itemState = !this.cartList[index1].itemState;
 
-                for(let i = 0 ; i < this.cartDate.cartList[index1].items.length; i++ ){
+                for(let i = 0 ; i < this.cartList[index1].items.length; i++ ){
 
-                    this.cartDate.cartList[index1].items[i].state = this.cartDate.cartList[index1].itemState;
+                    this.cartList[index1].items[i].state = this.cartList[index1].itemState;
 
                 }
 
@@ -286,7 +286,7 @@ export default {
             // 所有选项是否全部选中
             let AllStates = true ; 
 
-            let All = this.cartDate.cartList ;
+            let All = this.cartList ;
 
             for(let i = 0 ; i < All.length; i++ ){
 
@@ -316,15 +316,15 @@ export default {
             // 获取全选大列表状态
             let isAll = this.cartDate.listState;
 
-            let n = this.cartDate.cartList.length;
+            let n = this.cartList.length;
             
             for(let i = 0 ; i < n ; i++ ){
 
-                this.cartDate.cartList[i].itemState = isAll;
+                this.cartList[i].itemState = isAll;
 
-                for(let x = 0 ; x < this.cartDate.cartList[i].items.length; x++ ){
+                for(let x = 0 ; x < this.cartList[i].items.length; x++ ){
 
-                    this.cartDate.cartList[i].items[x].state = isAll;
+                    this.cartList[i].items[x].state = isAll;
 
                 }
             }
@@ -339,30 +339,30 @@ export default {
         calculatePrice(){
 
             //获取商品个数
-            let m = this.cartDate.cartList.length;
+            let m = this.cartList.length;
 
             //计算小计
             for(let x = 0 ; x < m ; x++){
   
-                let n = this.cartDate.cartList[x].items.length;
+                let n = this.cartList[x].items.length;
 
                 //重置小计
-                this.cartDate.cartList[x].itemTotal = 0;
+                this.cartList[x].itemTotal = 0;
 
                 for(let i = 0 ; i < n ; i++){
                     
-                    let item = this.cartDate.cartList[x].items[i];
+                    let item = this.cartList[x].items[i];
 
                     //判断是否选中
                     if(item.state){
 
-                        this.cartDate.cartList[x].itemTotal += item.num * (item.price * 10000);
+                        this.cartList[x].itemTotal += item.num * (item.price * 10000);
 
                     } 
 
                 }
 
-                this.cartDate.cartList[x].itemTotal = (this.cartDate.cartList[x].itemTotal / 10000).toFixed(2);
+                this.cartList[x].itemTotal = (this.cartList[x].itemTotal / 10000).toFixed(2);
 
             }
 
@@ -372,7 +372,7 @@ export default {
             //计算合计
             for(let i = 0 ; i < m ; i++){
                 
-                let item = this.cartDate.cartList[i];
+                let item = this.cartList[i];
 
                 //判断是否选中
 
@@ -414,7 +414,7 @@ export default {
                 let index1 = this.modelDate.index1,
                     index2 = this.modelDate.index2; 
 
-                let cartId = this.cartDate.cartList[index1].items[index2].cartId;
+                let cartId = this.cartList[index1].items[index2].cartId;
 
                 // 单个删除
                 this.deleteCartItemData(cartId);
@@ -422,7 +422,7 @@ export default {
             }else{
 
                 //获取商品个数
-                let m = this.cartDate.cartList.length;
+                let m = this.cartList.length;
 
                 //购物车商品编码
                 let cartId = '';
@@ -430,11 +430,11 @@ export default {
                 //计算小计
                 for(let x = 0 ; x < m ; x++){
     
-                    let n = this.cartDate.cartList[x].items.length;
+                    let n = this.cartList[x].items.length;
 
                     for(let i = 0 ; i < n ; i++){
                         
-                        let item = this.cartDate.cartList[x].items[i];
+                        let item = this.cartList[x].items[i];
 
                         //判断是否选中
                         if(item.state){
@@ -488,7 +488,9 @@ export default {
 
                         let index = merchantArr.indexOf(data[i].merchantInfo.merchantNm) ;
 
-                        if( index == -1 ){ 
+                        if(data[i].merchantInfo == null){ return;}
+
+                        if( index == -1  ){ 
 
                             merchantArr.push(data[i].merchantInfo.merchantNm);
 
@@ -532,7 +534,7 @@ export default {
                     }
 
                     // 压入到购物车
-                    this.cartDate.cartList = arr;
+                    this.cartList = arr;
 
                     //计算小计与合计
                     this.calculatePrice();
@@ -557,6 +559,8 @@ export default {
         //@param cartId string 购物车商品编号 
         deleteCartItemData(cartId){
 
+            console.log(cartId)
+
             this.$Loading.start();
 
             let param = this.$Qs.stringify({ 'recordId': cartId }) ;
@@ -580,8 +584,6 @@ export default {
 
                 }
 
-                this.modelDate.deleteModelValue = false;
-
             })
             .catch((error) => {
 
@@ -590,6 +592,7 @@ export default {
 
             });
  
+            this.modelDate.deleteModelValue = false;
 
         }
 

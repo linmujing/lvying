@@ -43,7 +43,7 @@
 <script>
 
 	export default {
-	  props:['nowIndex','showItem'],
+	  props:['nowIndex','showItem','catCode'],
 		data() {
 			return {
 
@@ -155,35 +155,60 @@
             ]
           }
         ],
-        navTitle: []
+        navTitle: [],
+        secondNavTitle: [],
+        goodsCode: ''
 
 			}
 		},
+    watch: {
+	    //监听参数变化
+      $route(){
+        this.goodsCode = this.$route.query.catCode
+      },
+      goodsCode() {
+        this.getSecondNavTitle(this.goodsCode,'1')
+      },
+    },
     mounted(){
       this.getNavTitle()
+      console.log(this.catCode)
+      this.getSecondNavTitle(this.catCode,'1')
     },
 		methods:{
       // 获取导航标题
       getNavTitle(){
         // 获取产品分类列表
-        this.$api.getProductCatList()
+        this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
 
           .then( (res) => {
 
             if(res.data.code == 200){
 
-              var result = res.data.content;
-              var navTitle = []
-              console.log(result)
-              for(var i=0;i<result.length;i++){
-                var obj = {}
-                if(result[i].parentId === '0'){
-                  obj.catCode = result[i].catCode
-                  obj.catName = result[i].catName
-                  navTitle.push(obj)
-                }
-              }
-              this.navTitle = navTitle
+              this.navTitle = res.data.content
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      // hover导航标题
+      getSecondNavTitle(catCode, parentId){
+        // 获取产品分类列表
+        this.$api.getProductCatList( this.$Qs.stringify({'catCode': catCode, 'parentId': parentId}) )
+
+          .then( (res) => {
+
+            if(res.data.code == 200){
+
+              this.secondNavTitle = res.data.content
+
             }else if (res.data.code == 500){
 
               this.$Message.warning(res.data.message);
@@ -196,46 +221,52 @@
           });
       },
       // 导航鼠标点击
-      tabClick(catCode,index){
+      tabClick(catCode,index) {
         this.curIndex = index
-        switch(catCode){
+        console.log(index)
+        switch (catCode) {
           case '10001':
             this.$router.push({
-              path:'/industryDynamic',
+              path: '/industryDynamic',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
           case '10002':
             this.$router.push({
-              path:'/industryDynamic',
+              path: '/industryDynamic',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
           case '10003':
             this.$router.push({
-              path:'videoCourse',
+              path: 'videoCourse',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
           case '10004':
             this.$router.push({
-              path:'videoCourse',
+              path: 'videoCourse',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;
           case '10005':
             this.$router.push({
-              path:'lvyingMall',
+              path: 'lvyingMall',
               query: {
-                typeId: index
+                typeId: index,
+                catCode: catCode
               }
             })
             break;

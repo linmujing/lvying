@@ -28,7 +28,7 @@
             <p><span class="color_title font_20">￥500.00</span></p>
           </div>
           <div class="margin_top_50">
-            <Button size="large" type="warning" shape="circle">加入购物车</Button>
+            <Button size="large" type="warning" shape="circle" @click="addProductCart">加入购物车</Button>
             <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
           </div>
         </Col>
@@ -127,7 +127,7 @@
       			<div>
       				<div class="margin_top_30 margin_bottom_30"><span class="title">猜你喜欢</span></div>
       				<ul class="list_unstyled ul_inline clearfix">
-				        <li v-for="item in 3" class="listBox bg_white margin_bottom_30">
+				        <li v-for="(item, index) in 3" :key="index" class="listBox bg_white margin_bottom_30">
                   <div class="text_center">
                     <img src="../../assets/images/image/cart_book.png" height="280">
                   </div>
@@ -214,6 +214,51 @@ export default {
             break;
         }
       },
+
+      /** 数据 **/
+      // 添加商品到购物车 MT
+      addProductCart(){
+
+            this.$Loading.start();	
+
+            // productCode  商品编码
+            let param = this.$Qs.stringify({ 
+                'ciCode': this.$store.state.userData.cicode, 
+                'productCode': 'p141414141415', 
+                'productCount': 1, 
+            }) ;
+
+            this.$api.addCart( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                this.$Loading.finish();
+
+                if(res.data.code == 200){
+
+                    this.$Message.success(res.data.message);
+                   
+                }else{
+
+                    this.$Message.warning("该商品已添加！");
+
+                }
+
+            })
+            .catch((error) => {
+
+                this.$Loading.error();
+                console.log('发生错误！', error);
+
+            });
+
+      },
+
+    },
+    mounted(){
+
 
     }
 }
