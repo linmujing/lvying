@@ -1,6 +1,6 @@
 <template>
 	<div class="">
-	    <div class="nav" style="position:relative;z-index:10000;">
+	    <div class="nav" style="position:relative;z-index:11;">
 	      <div class="center relative">
 					<ul class="list_unstyled ul_inline clearfix font_18 navbar">
 	          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navTitle" :key="index" @click='tabClick(item.id,index)'>
@@ -24,7 +24,7 @@
                       <!--<div @click="jumpDown(2)" class="font_18 pointer hover_title">{{itemss.catName}}</div>-->
 
                       <ul class="list_unstyled ul_inline clearfix margin_bottom_20">
-                        <li @click="jumpDown(items.catCode,items.catName, 2)" class="margin_top_5 margin_right_30 pointer hover_title">{{itemss.catName}}</li>
+                        <li @click="jumpDown(itemss.catCode,itemss.catName, 2)" class="margin_top_5 margin_right_30 pointer hover_title">{{itemss.catName}}</li>
                       </ul>
 
                     </div>
@@ -39,7 +39,7 @@
 	      </div>
 	    </div>
 
-			<div class="mask"  v-show="showBox"  @mouseover="boxMouseOut" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:1000;"></div>
+			<div class="mask"  v-show="showBox"  @mouseover="boxMouseOut" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:8;"></div>
 	</div>
 </template>
 <script>
@@ -298,18 +298,8 @@
       //跳转jumpDown
       jumpDown(id, name, num){
         var typeid = this.$route.query.typeId;
-        console.log(num)
+        console.log(name)
         switch(num){
-          case 0:
-            this.$router.push({
-              path:'industryDynamicList',
-              query: {
-                catName: name,
-                typeId: typeid,
-                catCode: id
-              }
-            })
-            break;
           case 1:
             this.$router.push({
               path:'industryDynamicList',
@@ -321,16 +311,6 @@
             })
             break;
           case 2:
-            this.$router.push({
-              path:'videoCourseList',
-              query: {
-                catName: name,
-                typeId: typeid,
-                catCode: id
-              }
-            })
-            break;
-          case 3:
             this.$router.push({
               path:'videoCourseList',
               query: {

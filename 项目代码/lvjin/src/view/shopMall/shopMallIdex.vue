@@ -1,7 +1,7 @@
 <template>
     <div class="bg_white">
     <!--导航栏-->
-    <div class="nav">
+    <div class="nav" style="z-index: 10">
       <ul class="list_unstyled ul_inline clearfix font_18 navbar box_center_1200">
         <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(item.id,index)'>
           <span class="color_fff listItem">{{item.catName}}</span>
@@ -13,7 +13,7 @@
       <Carousel  radius-dot v-model="value" autoplay loop>
         <CarouselItem v-for="(item,index) in banner" :key="index">
           <div class="carousel">
-            <img :src="item.src" class="all_width block">
+            <img :src="item.src" class="all_width block" style="max-height: 500px">
           </div>
         </CarouselItem>
       </Carousel>
