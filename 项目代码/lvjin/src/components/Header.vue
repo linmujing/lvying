@@ -141,7 +141,11 @@
 			// 监听登录状态变化 修改页面值
 			getLoginChange() {
 				
-					this.user = this.$store.state.userData.ciname;
+					if(this.$store.state.userData.ciname != null || this.$store.state.userData.ciname != 'undefinde'){
+							this.user = this.$store.state.userData.ciname;
+					}else{
+							this.user = null;
+					};
 					return this.$store.state.userData.ciname;
 
 			}
