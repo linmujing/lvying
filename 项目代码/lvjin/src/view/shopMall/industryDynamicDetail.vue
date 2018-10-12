@@ -74,13 +74,13 @@
             <div class="margin_left_30 margin_top_10 clearfix">
               <span>视频音频详细讲解详细讲解</span>
               <div class="float_right">
-                <Button v-if="detailId == 1 || detailId == 2" size="small" shape="circle" class="bg_a5 color_fff">查看详情</Button>
-                <Button v-if="detailId == 1 || detailId == 2" size="small" type="success" shape="circle" class="bg_title">立即购买</Button>
-                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">视频</Button>
-                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">音频</Button>
-                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">文字</Button>
-                <Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
-                <Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>
+                <!--<Button v-if="detailId == 1 || detailId == 2" size="small" shape="circle" class="bg_a5 color_fff">查看详情</Button>-->
+                <!--<Button v-if="detailId == 1 || detailId == 2" size="small" type="success" shape="circle" class="bg_title">立即购买</Button>-->
+                <!--<Button v-if="detailId == 3" size="small" shape="circle" class="button_title">视频</Button>-->
+                <!--<Button v-if="detailId == 3" size="small" shape="circle" class="button_title">音频</Button>-->
+                <!--<Button v-if="detailId == 3" size="small" shape="circle" class="button_title">文字</Button>-->
+                <!--<Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>-->
+                <!--<Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>-->
               </div>
             </div>
           </div>
