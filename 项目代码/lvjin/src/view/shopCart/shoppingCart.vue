@@ -3,7 +3,7 @@
         <div class="shopping_cart_container box_center_1200">
 
             <div class="title">
-                <span>我的购物车：共 {{cartList.length}} 门课程</span>
+                <span>我的购物车：共 {{allCount}} 门课程</span>
             </div>
             <div class="list_box" v-if="cartList.length">
                 <!-- 购物车列表头部 -->
@@ -467,13 +467,13 @@ export default {
         getCartListData(){
 
             this.$Spin.show()
-
+              
             let param = this.$Qs.stringify({ 'pageNo': this.cartParams.pageNo, 'pageSize': this.cartParams.pageSize , 'ciCode': this.cartParams.ciCode }) ;
 
             this.$api.catGetCartList( param )
 
             .then( (res) => {
-
+                this.allCount=res.data.content.count;
                 console.log(res)
 
                 this.$Spin.hide()
