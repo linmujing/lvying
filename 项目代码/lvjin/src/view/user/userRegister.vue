@@ -289,7 +289,7 @@ export default {
 
             .then( (res) => {
 
-                cconsole.log(res)
+                console.log(res)
 
                 if(res.data.code == 200){
 
