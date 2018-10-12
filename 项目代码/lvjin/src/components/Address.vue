@@ -268,7 +268,7 @@
             getAddressData(){
 
                 let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 , 'ciCode': this.userData.ciCode }) ;
-
+                console.log(param)
                 this.$Spin.show();
 
                 this.$api.getAddressList( param )
@@ -420,7 +420,7 @@
             this.cityList = province();
 
             // 获取用户信息
-            this.userData.ciCode = 12 ;//this.$store.state.userData.UserData.ciCode ;
+            this.userData.ciCode = this.$store.state.userData.ciCode ;
 
             // 获取用户地址列表
             this.getAddressData();
