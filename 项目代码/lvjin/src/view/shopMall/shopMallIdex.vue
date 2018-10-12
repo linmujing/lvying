@@ -229,7 +229,7 @@ export default {
     methods: {
 			//获取推荐商品
 			getCaseProduct(){
-
+        this.$Spin.show()
 					var that=this;
 					 this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1, pageLocat: 1})).then((res)=>{
 
@@ -260,6 +260,7 @@ export default {
                     console.log("没数据!");
 
                   }
+                  this.$Spin.hide()
                 }
 
 							return Promise.resolve([that.videoArr,that.musicArr,that.careerArr,that.logicArr,that.lvyingArr]);
@@ -295,36 +296,12 @@ export default {
 									 })
 								}
 							}
-
-
 					})
-
-					// .then(()=>{
-					// 		//videoProductCode数组
-					// 		let newVdProductCode=[];
-					// 			for(let item of that.videoArr){
-					// 				newVdProductCode.push(item.productCode);
-					// 			}
-					// 			console.log(newVdProductCode);
-					// 		// 同上
-					// 		let newAdProductCode=[];
-					// 			for(let item of that.audioArr){
-					// 				newAdProductCode.push(item.productCode);
-					// 			}
-					// 		let newCrProductCode=[];
-					// 			for(let item of that.careerArr){
-					// 				newCrProductCode.push(item.productCode);
-					// 			}
-					// 		let newLgcProductCode=[];
-					// 			for(let item of that.logicArr){
-					// 				newLgcProductCode.push(item.productCode);
-					// 			}
-					// 			 that.$api.getProductShowCase()
-					// })
 			},
       // 获取导航标题
       getNavTitle(){
         // 获取产品分类列表
+        this.$Spin.show()
         this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
 
           .then( (res) => {
@@ -340,9 +317,10 @@ export default {
               this.$Message.warning(res.data.message);
 
             }
-
+            this.$Spin.hide()
           })
           .catch((error) => {
+            this.$Spin.hide()
             console.log('发生错误！', error);
           });
       },

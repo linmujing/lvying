@@ -86,7 +86,7 @@ export default {
         this.$refs[name].validate((valid) => {
           if (valid) {
             let params = this.$Qs.stringify({ 'merchantPhone': this.formRight.phone, 'passWord': this.formRight.pwd });
-            this.$Loading.start();
+            this.$Spin.show()
             // 商户登陆
             this.$api.merchantLogin( params )
 
@@ -110,12 +110,12 @@ export default {
                   this.$Message.warning(res.data.message);
 
                 }
-                this.$Loading.finish();
+                this.$Spin.hide()
 
               })
               .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide()
                 console.log('发生错误！', error);
 
               });

@@ -120,7 +120,7 @@ export default {
         this.$refs[name].validate((valid) => {
           if (valid) {
             let params = this.$Qs.stringify({ 'merchantPhone': this.formRight.phone, 'passWord': this.formRight.pwd, 'smsCode': this.formRight.code });
-            this.$Loading.start();
+            this.$Spin.show()
             // 商户密码找回
             this.$api.merchantResetPassWord( params )
 
@@ -139,12 +139,12 @@ export default {
                   this.$Message.warning(res.data.message);
 
                 }
-                this.$Loading.finish();
+                this.$Spin.hide()
 
               })
               .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide()
                 console.log('发生错误！', error);
 
               });

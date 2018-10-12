@@ -255,7 +255,7 @@ export default {
 
             }
             let params = this.$Qs.stringify({ 'merchantCode': this.SupplierData.merchantCode, 'realName': this.formRight.name, 'merchantNm': this.formRight.merchantName, 'email': this.formRight.email, 'orgTel': this.formRight.orgTel, 'orgName': this.formRight.orgName, 'orgRegin': this.formRight.orgRegin, 'orgAddress': this.formRight.orgAddr, 'lawerRegistrationNo': this.formRight.idcard, 'materialUrl': this.materialUrl, 'personIntroduce': this.personIntroduce });
-            this.$Loading.start();
+            this.$Spin.show()
             // 商户资料完善
             this.$api.saveMerchantInfo( params )
 
@@ -276,12 +276,12 @@ export default {
                   this.$Message.warning(res.data.message);
 
                 }
-                this.$Loading.finish();
+                this.$Spin.hide()
 
               })
               .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide()
                 console.log('发生错误！', error);
 
               });

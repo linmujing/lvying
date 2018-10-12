@@ -35,7 +35,7 @@
           </div>
           <div class="font_18 text_ellipsis margin_top_20">{{item.productTitle}}</div>
           <div class="color_666 text_ellipsis margin_top_10 clearfix">
-            <div class="float_left" v-html="item.productDesc"></div>
+            <div class="float_left width_50" v-html="item.productDesc"></div>
             <div class="float_right">{{item.saleCount}}人购买过</div>
           </div>
           <div class="margin_top_15 clearfix">
@@ -77,7 +77,7 @@ export default {
           catCode: '',
           catName: '',
         }
-        
+
     },
     mounted(){
       this.catCode = this.$route.query.catCode
@@ -155,6 +155,7 @@ export default {
 	.ivu-page-next:hover a,.ivu-page-prev:hover a,.ivu-page-item:hover a,.ivu-page-item-active a,.ivu-page-item-active:hover a{color: #00AA88;}
 	.ivu-page-item:hover,.ivu-page-item-active {border-color: #00AA88;}
 	.ivu-page-disabled a {color: #ccc !important;}
+  .text_ellipsis,.text_ellipsis p{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 </style>
 <style scoped lang='less'>
   .content{
