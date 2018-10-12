@@ -63,7 +63,7 @@ export const getNavigationList = params => { return instance.post(`system/naviga
 
 /** 购物车 **/
 //添加商品到购物车
-export const addCart = params => { return instance.post(`customer/cart/addCat`, params ); };
+export const addCart = params => { return instance.post(`customer/cart/addCart`, params ); };
 //删除购物车中商品
 export const deleteCart = params => { return instance.post(`customer/cart/deleteCart`, params ); };
 //获取我的购物车列表
@@ -102,7 +102,6 @@ export const hideOrder = params => { return instance.post(`order/info/hideOrder`
 /** 订单评价 **/
 //订单商品评价
 export const addComment = params => { return instance.post(`order/comment/addComment`, params ); };
-export const getProductCommentList = params => { return instance.post(`order/comment/getProductCommentList`, params ); };
 
 /** 订单物流 **/
 //查看订单物流
