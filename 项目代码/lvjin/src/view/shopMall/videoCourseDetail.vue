@@ -221,6 +221,30 @@ export default {
             console.log('发生错误！', error);
           });
       },
+      // 获取评价列表
+      getEvaluateList(productCode){
+        // 查看产品详情
+        this.$api.getProductCommentList( this.$Qs.stringify({'productCode': productCode}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+
+              this.dataDetail = res.data.content
+              //商品评分
+              // this.valueCustomText = res.data.content.productScore
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
     }
 }
 </script>

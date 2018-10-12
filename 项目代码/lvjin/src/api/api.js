@@ -102,6 +102,7 @@ export const hideOrder = params => { return instance.post(`order/info/hideOrder`
 /** 订单评价 **/
 //订单商品评价
 export const addComment = params => { return instance.post(`order/comment/addComment`, params ); };
+export const getProductCommentList = params => { return instance.post(`order/comment/getProductCommentList`, params ); };
 
 /** 订单物流 **/
 //查看订单物流

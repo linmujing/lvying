@@ -13,6 +13,7 @@
         				<p class="title">已提交的认证信息</p>
         				<div class="padding_100 color_666">
         					<p class="margin_top_30">真实姓名：{{SupplierData.realName}}</p>
+        					<p class="margin_top_30">商户名称：{{SupplierData.merchantNm}}</p>
         					<p class="margin_top_30">电子邮箱：{{SupplierData.email}}</p>
         					<p class="margin_top_30">所在地区：{{SupplierData.orgRegin}}</p>
         					<p class="margin_top_30">所在律所/机构：{{SupplierData.orgName}}</p>
@@ -23,6 +24,10 @@
         						<span>执业证扫描件：</span>
         						<img :src="SupplierData.materialUrl" width="300" height="200" style="vertical-align: top;"/>
         					</div>
+                  <div class="margin_top_30">
+                    <span>个人资料：</span>
+                    <img :src="SupplierData.personIntroduce" width="300" height="200" style="vertical-align: top;"/>
+                  </div>
         					<div class="margin_top_30">
 		        				<Button @click="edit" size="large" type="success" shape="circle" class="all_width bg_title margin_top_10" style="width: 200px">修改认证资料</Button>
 		        			</div>

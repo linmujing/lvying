@@ -10,6 +10,9 @@
 					        <el-form-item label="真实姓名" prop="name">
 					            <el-input v-model="formRight.name" size="large" placeholder="请输入真实姓名" style="width: 300px"></el-input>
 					        </el-form-item>
+                  <el-form-item label="商户名称" prop="merchantName">
+                    <el-input v-model="formRight.merchantName" size="large" placeholder="请输入商户名称" style="width: 300px"></el-input>
+                  </el-form-item>
 					        <el-form-item label="电子邮箱" prop="email">
 					            <el-input v-model="formRight.email" size="large" placeholder="请输入电子邮箱" style="width: 300px"></el-input>
 					        </el-form-item>
@@ -133,6 +136,7 @@ export default {
       return {
         formRight: {
             name: '',
+            merchantName: '',
             email: '',
             orgRegin: '',
             addr: [],
@@ -145,6 +149,9 @@ export default {
         ruleValidate: {
             name: [
               { required: true, message: '姓名不能为空!', trigger: 'blur' }
+            ],
+            merchantName: [
+              { required: true, message: '商户名称不能为空!', trigger: 'blur' }
             ],
             email: [
               { required: true, message: '邮箱不能为空!', trigger: 'blur' },
@@ -198,7 +205,7 @@ export default {
     mounted(){
       // 获取商户信息
       this.SupplierData = JSON.parse(sessionStorage.getItem("SupplierData"))
-      console.log(JSON.parse(sessionStorage.getItem("SupplierData")))
+      console.log(this.SupplierData)
       this.getSupplierData()
       // 地区数据
       this.cityList = province()
@@ -208,16 +215,23 @@ export default {
       getSupplierData(){
         var data = this.SupplierData
         data.realName !== '' ? this.formRight.name = data.realName : this.formRight.name = ''
+        data.merchantNm !== '' ? this.formRight.merchantName = data.merchantNm : this.formRight.merchantName = ''
         data.email !== '' ? this.formRight.email = data.email : this.formRight.email = ''
+        data.orgRegin !== '' ? this.formRight.orgRegin = data.orgRegin : this.formRight.orgRegin = ''
         data.orgName !== '' ? this.formRight.orgName = data.orgName : this.formRight.orgName = ''
         data.orgTel !== '' ? this.formRight.orgTel = data.orgTel : this.formRight.orgTel = ''
         data.orgAddress !== '' ? this.formRight.orgAddr = data.orgAddress : this.formRight.orgAddr = ''
         data.lawerRegistrationNo !== '' ? this.formRight.idcard = data.lawerRegistrationNo : this.formRight.idcard = ''
-        if(data.materialUrl !== ''){
+
+        if(!data.orgRegin == ''){
+          this.formRight.addr = data.orgRegin.split(' ')
+          console.log(this.addr)
+        }
+        if(!data.materialUrl == '' || !data.materialUrl == null || !data.materialUrl == undefined){
           this.materialUrl = data.materialUrl
           this.showMaterial = false
         }
-        if(data.personIntroduce !== ''){
+        if(!data.personIntroduce == '' || !data.personIntroduce == null || !data.personIntroduce == undefined){
           this.personIntroduce = data.personIntroduce
           this.showInfo = false
         }
@@ -240,7 +254,7 @@ export default {
               return;
 
             }
-            let params = this.$Qs.stringify({ 'merchantCode': this.SupplierData.merchantCode, 'realName': this.formRight.name, 'email': this.formRight.email, 'orgTel': this.formRight.orgTel, 'orgName': this.formRight.orgName, 'orgRegin': this.formRight.orgRegin, 'orgAddress': this.formRight.orgAddr, 'lawerRegistrationNo': this.formRight.idcard, 'materialUrl': this.materialUrl, 'personIntroduce': this.personIntroduce });
+            let params = this.$Qs.stringify({ 'merchantCode': this.SupplierData.merchantCode, 'realName': this.formRight.name, 'merchantNm': this.formRight.merchantName, 'email': this.formRight.email, 'orgTel': this.formRight.orgTel, 'orgName': this.formRight.orgName, 'orgRegin': this.formRight.orgRegin, 'orgAddress': this.formRight.orgAddr, 'lawerRegistrationNo': this.formRight.idcard, 'materialUrl': this.materialUrl, 'personIntroduce': this.personIntroduce });
             this.$Loading.start();
             // 商户资料完善
             this.$api.saveMerchantInfo( params )
@@ -315,6 +329,7 @@ export default {
       },
       // 选择城市
       handleChange(value){
+        console.log(value)
 		    var str = ''
         for(var i=0;i<value.length;i++){
           str += value[i] + ' '

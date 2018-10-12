@@ -5,7 +5,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 const router = new Router({
-  
+
   routes: [
 	  {path: '/', redirect: 'shopMallIdex'},
   	{
@@ -22,7 +22,7 @@ const router = new Router({
       component: resolve => require(['@/view/shopMall/index'],resolve) ,
       children: [
 
-        /**购物车模块**/ 
+        /**购物车模块**/
         {
           path: 'shoppingCart',
           name: 'shoppingCart',
@@ -106,7 +106,7 @@ const router = new Router({
               }
             },
           ]
-        }, 
+        },
         {
           path: 'personCenter/refundMoney',
           name: 'personCenter/refundMoney',
@@ -329,11 +329,11 @@ const router = new Router({
 mode: 'history'
 })
 
-router.beforeEach((to,form,next) =>{ 
-  /*路由变化修改title*/ 
+router.beforeEach((to,form,next) =>{
+  /*路由变化修改title*/
   if(to.meta.title){
     document.title=to.meta.title;
-  } 
-  next(); 
+  }
+  next();
 })
 export default router
