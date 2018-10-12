@@ -186,7 +186,8 @@ export default {
     },
     mounted(){
       this.productCode = this.$route.query.productCode
-      this.getProductInfo(this.$route.query.productCode)
+      this.getProductInfo(this.productCode)
+      this.getEvaluateList(this.productCode)
     },
     methods: {
     	//详情
