@@ -43,33 +43,33 @@
                 <a href="#detail3" @click="anchorBtn(2)" :class="{cur:isCur == 2}" class="inline_block padding_20_15 width_150px">评价</a>
               </div>
             </Affix>
-		        <div class="padding_20 margin_bottom_20">
-		          <Row class="margin_top_10">
-		            <Col span="2" class="font_weight_bold">适应人群 </Col>
-		            <Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>
-		          </Row>
-		          <Row class="margin_top_20">
-		            <Col span="2" class="font_weight_bold">教学老师</Col>
-		            <Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>
-		          </Row>
-		          <Row class="margin_top_20">
-		            <Col span="2" class="font_weight_bold">课程内容</Col>
-		            <Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>
-		          </Row>
+		        <div class="padding_20 margin_bottom_20" v-html="dataDetail.productDesc">
+		          <!--<Row class="margin_top_10">-->
+		            <!--<Col span="2" class="font_weight_bold">适应人群 </Col>-->
+		            <!--<Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>-->
+		          <!--</Row>-->
+		          <!--<Row class="margin_top_20">-->
+		            <!--<Col span="2" class="font_weight_bold">教学老师</Col>-->
+		            <!--<Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>-->
+		          <!--</Row>-->
+		          <!--<Row class="margin_top_20">-->
+		            <!--<Col span="2" class="font_weight_bold">课程内容</Col>-->
+		            <!--<Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>-->
+		          <!--</Row>-->
 		        </div>
 		      </div>
 		      <!--课程目录-->
 		      <div>
 		        <div id="detail2" class="font_weight_bold bg_f5 border_e6 padding_15">课程目录</div>
 		        <div>
-		          <p class="font_18 classTitle">第一章 入职管理</p>
-		          <div v-for="item in 3" class="bg_f5 border_e6 padding_15 margin_top_10 clearfix">
+		          <!--<p class="font_18 classTitle">第一章 入职管理</p>-->
+		          <div v-for="(item, index) in productSection" :key="index" class="bg_f5 border_e6 padding_15 margin_top_10 clearfix">
 		          	<div class="float_left">
-		          		<div class="inline_block width_40px">1</div>
-		          		<span>入职管理情况</span>
+		          		<div class="inline_block width_40px">{{item.sectionIndex}}</div>
+		          		<span>{{item.sectionName}}</span>
 		          	</div>
 		          	<div class="float_right">
-		          		<span>00:11:22</span>
+		          		<span>{{item.videoTime}}</span>
 		          		<div class="inline_block width_100px margin_left_20">
 		          			<Button size="small" type="success" shape="circle" class="bg_title">立即购买</Button>
 		          		</div>
@@ -131,24 +131,26 @@
       				<div class="float_left margin_left_20 margin_top_15">
       					<p class="font_18 font_weight_bold">法律援助</p>
       					<p class="color_666 margin_top_5">课程数：8</p>
-      					<p class="color_666 margin_top_5">用户数：210</p>
+      					<p class="color_666 margin_top_5">用户数：{{dataDetail.saleCount}}</p>
       				</div>
       			</div>
       			<!--热门课程-->
       			<div>
       				<div class="margin_top_30 margin_bottom_30"><span class="title">该律师的热门课程</span></div>
       				<ul class="list_unstyled ul_inline clearfix">
-				        <li v-for="item in 3"  class="listBox bg_white margin_bottom_30">
-				          <div class="height_190px all_width"></div>
+				        <li v-for="item in recommendList" class="listBox bg_white margin_bottom_30">
+				          <div @click="jumpDetail(item.productCode)" class="height_190px all_width">
+                    <img :src="item.productProfileUrl" class="all_width all_height">
+                  </div>
 				          <div class="list_item">
-				            <div class="font_18 font_weight_bold text_ellipsis">审核同业禁止协议</div>
+				            <div class="font_18 font_weight_bold text_ellipsis">{{item.productTitle}}</div>
 				            <div class="margin_top_10 clearfix color_999">
-				              <div class="float_left width_50 text_ellipsis">立二拆四案辩护人</div>
-				              <div class="float_right">1234人看过</div>
+				              <div class="float_left width_50 text_ellipsis" v-html="item.productDesc"></div>
+				              <div class="float_right">{{item.saleCount}}人看过</div>
 				            </div>
 				            <div class="clearfix margin_top_5">
-				            	<div class="float_left font_20 color_title">￥500.00</div>
-				            	<div class="float_right color_666 line_height_30px text_ellipsis width_50 text_right">盈科律师事务所</div>
+				            	<div class="float_left font_20 color_title">￥{{item.productPrice}}</div>
+				            	<div class="float_right color_666 line_height_30px text_ellipsis width_50 text_right">{{item.createBy}}</div>
 				            </div>
 				            <div class="margin_top_10 clearfix">
 				              <p class="pointer float_left">
@@ -186,9 +188,24 @@ export default {
           // 评价列表
           evaluateList: [],
           total: 0,
-          pageSize: 3
+          pageSize: 3,
+          // 课程目录
+          productSection: [],
+          // 推荐产品
+          recommendList: []
         }
 
+    },
+    watch: {
+      //监听参数变化
+      $route(){
+        this.productCode = this.$route.query.productCode
+      },
+      productCode() {
+        this.productCode = this.$route.query.productCode
+        this.getProductInfo(this.productCode)
+        this.getEvaluateList(this.pageSize,  this.productCode)
+      },
     },
     mounted(){
       this.productCode = this.$route.query.productCode
@@ -215,10 +232,18 @@ export default {
             if(res.data.code == 200){
 
               this.dataDetail = res.data.content
+              //获取推荐产品
+              // this.getProductShowCase('P121212121213,P121212121212,P121212121211,P121212121214') //测试
+              if(!res.data.content.productRecommendCode == '' || !res.data.content.productRecommendCode == null){
+                this.getProductShowCase(res.data.content.productRecommendCode)
+              }
               //商品评分
               res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
+              // 课程目录
+              this.productSection = eval(res.data.content.productSection)
+              // console.log(this.productSection)
 
-            }else if (res.data.code == 500){
+            }else{
 
               this.$Message.warning(res.data.message);
 
@@ -259,6 +284,43 @@ export default {
         }
 			  this.pageSize += 3
         this.getEvaluateList(this.pageSize, this.productCode)
+      },
+      // 获取推荐列表或猜你喜欢
+      getProductShowCase(productCode){
+        // 查看产品详情
+        this.$api.getProductShowCase( this.$Qs.stringify({'productCode': productCode}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+
+              if(res.data.content.length > 3){
+                for(var i=0;i<3;i++){
+                  this.recommendList.push(res.data.content[i])
+                }
+              }else {
+                this.recommendList = res.data.content
+              }
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      // 跳到详情
+      jumpDetail(productCode){
+        this.$router.push({
+          path:'/videoCourseDetail',
+          query: {
+            productCode: productCode
+          }
+        })
       }
     }
 }

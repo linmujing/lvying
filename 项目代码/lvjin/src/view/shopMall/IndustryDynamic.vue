@@ -127,10 +127,9 @@ export default {
       }
     },
     methods: {
-      //获取推荐商品
+      //获取橱窗对象
       getCaseProduct(pageLocat){
-
-        var that=this;
+        this.$Spin.show()
         this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1, pageLocat: pageLocat})).then((res)=>{
 
           if(res.data.code == 200){
@@ -139,50 +138,50 @@ export default {
             this.banner = eval(res.data.content[2].caseUrl)
             for(let item of content){
               if(item.caseName=="劳动推荐"){
-                that.laborArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
-
+                this.getProductShowCase(item.productCode, item.productSortBy, 1)
               }else if(item.caseName=="热门推荐"){
-
-                that.hotArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
-
-              }else{
-
-                console.log("没数据!");
-
+                this.getProductShowCase(item.productCode, item.productSortBy, 2)
               }
             }
+          }else{
 
-            return Promise.resolve([that.laborArr,that.hotArr]);
+            this.$Message.warning(res.data.message);
+
           }
-        }).then((res)=>{
-          // console.log(res);
-          let arr=[];
-          for(let item of res){
-            // console.log(item);
-            for(let item2 of item){
-              // console.log(item2);
-              let params=this.$Qs.stringify(item2);
-              // console.log(params);
-
-              var that=this;
-              this.$api.getProductShowCase(params).then((res)=>{
-                if(res.data.code=="200"){
-                  let {content}=res.data;
-                  console.log(res.data)
-                  arr.push(content);
-                  return Promise.resolve(arr);
-                }
-
-              }).then((arry)=>{
-                console.log(arry)
-                if(arry.length===2){
-                  that.laborArr=arry[0];
-                  that.hotArr=arry[1];
-                }
-              })
-            }
-          }
+          this.$Spin.hide()
         })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      //获取推荐商品
+      getProductShowCase(productCode, productSortBy, type){
+        var params = this.$Qs.stringify({'productCode': productCode, 'productSortBy': productSortBy})
+        this.$api.getProductShowCase( params )
+
+          .then( (res) => {
+
+            if(res.data.code == 200){
+
+              switch (type) {
+                case 1:
+                  this.laborArr = res.data.content
+                  break
+                case 2:
+                  this.hotArr = res.data.content
+                  break
+              }
+
+            }else{
+
+              this.$Message.warning(res.data.message);
+
+            }
+            this.$Spin.hide()
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
       },
       // 点击更多跳转
       moreList(){
