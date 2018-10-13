@@ -1,37 +1,39 @@
 <template>
   <div>
-    <NavBar :nowIndex="typeId" :showItem='false'></NavBar>
+    <NavBar :showItem='false'></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
-          <div class="width_600px height_400px border"></div>
+          <div class="width_600px height_400px border">
+            <img :src="dataDetail.productProfileUrl" class="all_width all_height">
+          </div>
         </Col>
         <Col span="12" class="padding_20">
-          <div class="font_20 font_weight_bold text_ellipsis">行业动态管控-知识产权许可使用合同起草</div>
-          <div class="color_999 twoline_ellipsis margin_top_20">帮助拥有知识产权的企业起草和完善知识产权许可使用合同帮助拥有知识产权的企业起草和完善知识产权许可使用合同</div>
+          <div class="font_20 font_weight_bold text_ellipsis">{{dataDetail.productTitle}}</div>
+          <div class="color_999 twoline_ellipsis margin_top_20" v-html="dataDetail.productDesc"></div>
           <div class="clearfix margin_top_30">
             <div class="float_left">
               <Rate show-text allow-half disabled v-model="valueCustomText">
                 <span style="color: #f5a623">{{ valueCustomText }}</span>
               </Rate>
             </div>
-            <div class="float_left color_999 line_height_30px margin_left_30">1234人看过</div>
+            <div class="float_left color_999 line_height_30px margin_left_30">{{dataDetail.saleCount}}人看过</div>
           </div>
-          <div class="margin_top_20">
-            <span v-for="item in 3" class="tag">标签</span>
-          </div>
+          <!--<div class="margin_top_20">-->
+            <!--<span v-for="item in 3" class="tag">标签</span>-->
+          <!--</div>-->
           <div class="margin_top_30">
-            <span class="color_title font_20">￥500.00</span>
+            <span class="color_title font_20">￥{{dataDetail.productPrice}}</span>
             <div class="inline_block relative">
-              <del class="color_999 font_20 padding_left_20">￥800.00</del>
-              <div v-if="detailId != 3" class="tooltip">
-                <div class="triangle"></div>
-                <div class="tooltip_txt">特价仅剩4天6小时35分钟</div>
-              </div>
+              <del class="color_999 font_20 padding_left_20">￥{{dataDetail.productOrgPrice}}</del>
+              <!--<div v-if="detailId != 3" class="tooltip">-->
+                <!--<div class="triangle"></div>-->
+                <!--<div class="tooltip_txt">特价仅剩4天6小时35分钟</div>-->
+              <!--</div>-->
             </div>
           </div>
           <div class="margin_top_50">
-            <Button size="large" type="warning" shape="circle">加入购物车</Button>
+            <Button size="large" type="warning" shape="circle" @click="addCart">加入购物车</Button>
             <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
           </div>
         </Col>
@@ -72,13 +74,13 @@
             <div class="margin_left_30 margin_top_10 clearfix">
               <span>视频音频详细讲解详细讲解</span>
               <div class="float_right">
-                <Button v-if="detailId == 1 || detailId == 2" size="small" shape="circle" class="bg_a5 color_fff">查看详情</Button>
-                <Button v-if="detailId == 1 || detailId == 2" size="small" type="success" shape="circle" class="bg_title">立即购买</Button>
-                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">视频</Button>
-                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">音频</Button>
-                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">文字</Button>
-                <Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
-                <Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>
+                <!--<Button v-if="detailId == 1 || detailId == 2" size="small" shape="circle" class="bg_a5 color_fff">查看详情</Button>-->
+                <!--<Button v-if="detailId == 1 || detailId == 2" size="small" type="success" shape="circle" class="bg_title">立即购买</Button>-->
+                <!--<Button v-if="detailId == 3" size="small" shape="circle" class="button_title">视频</Button>-->
+                <!--<Button v-if="detailId == 3" size="small" shape="circle" class="button_title">音频</Button>-->
+                <!--<Button v-if="detailId == 3" size="small" shape="circle" class="button_title">文字</Button>-->
+                <!--<Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>-->
+                <!--<Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>-->
               </div>
             </div>
           </div>
@@ -90,7 +92,7 @@
       </div>
       <!--评价-->
       <div id="detail3" class="margin_top_20">
-        <div class="font_weight_bold bg_f5 border_e6 padding_15">评价（4）</div>
+        <div class="font_weight_bold bg_f5 border_e6 padding_15">评价（{{total}}）</div>
         <div class="padding_15">
         	<span>评分：</span>
         	<Rate show-text allow-half disabled v-model="valueCustomText">
@@ -106,26 +108,27 @@
         	<!--</ul>-->
         <!--</div>-->
         <div class="margin_bottom_20">
-	    		<Row v-for="(item,index) in 3" :key="index" class="padding_15 line">
-	            <Col span="3">
-	            	<Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg"/>
-	            	<span class="float_right width_100px text_ellipsis line_height_32px">12345623131</span>
+	    		<Row v-for="(item,index) in evaluateList" :key="index" class="padding_15 line">
+	            <Col span="4">
+                <div class="float_left">
+                  <Avatar v-if="item.customerInfo.ciProfileUrl === '' || item.customerInfo.ciProfileUrl === null" icon="ios-person" />
+                  <Avatar v-else :src="item.customerInfo.ciProfileUrl"/>
+                </div>
+                <div class="float_left width_100px text_ellipsis line_height_32px margin_left_10">{{item.customerInfo.ciName}}</div>
 	            </Col>
-	            <Col span="20" offset="1">
+	            <Col span="19" offset="1">
 	            	<div class="clearfix">
 	            		<div class="float_left">
-		            		<Rate allow-half disabled v-model="valueCustomText"></Rate>
+                    <Rate allow-half disabled v-model="item.productScore == null ? 0 : item.productScore"></Rate>
 		            	</div>
-		            	<div class="float_right color_999 line_height_30px">2018-08-24 15:14</div>
+		            	<div class="float_right color_999 line_height_30px">{{item.createDate}}</div>
 	            	</div>
-	            	<div class="margin_top_10 text_justify">
-	            		合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买
-	            	</div>
+                <div class="margin_top_10 text_justify" v-html="item.commentDesc"></div>
 	            </Col>
 	          </Row>
 	    	</div>
         <div class="text_center padding_top_20 padding_bottom_30">
-        	<span class="pointer">查看更多》</span>
+          <span class="pointer" @click="seeMore">查看更多》</span>
         </div>
       </div>
     </div>
@@ -141,14 +144,23 @@ export default {
         return {
           //星星评分
           valueCustomText: 3.8,
+          classCur: 0,
           isCur: 0,
           isActive: 0,
-          classCur: 0,
-          //类型id
-          typeId: this.$route.query.typeId,
-          detailId: this.$route.query.twoPage,
+          // 产品详情数据
+          dataDetail:{},
+          productCode: '',
+          // 评价列表
+          evaluateList: [],
+          total: 0,
+          pageSize: 3
         }
 
+    },
+    mounted(){
+      this.productCode = this.$route.query.productCode
+      this.getProductInfo(this.productCode)
+      this.getEvaluateList(this.pageSize,  this.productCode)
     },
     methods: {
     	//详情
@@ -162,15 +174,79 @@ export default {
 			//评价
 			evaluateBtn(i){
 				this.isActive = i;
-			}
-    },
-    mounted(){
-      console.log(this.$route.query.twoPage)
+      },
+      // 添加购物车
+      addCart(){
+
+        let param = {
+          ciCode:this.$store.state.userData.cicode,
+          productCode:this.productCode,
+          productCount:1
+        }
+        // 存储用户信息
+        this.$store.commit('cart/addCartTo', param);
+
+      },
+      // 查看产品详情
+      getProductInfo(productCode){
+        // 查看产品详情
+        this.$api.getProductInfo( this.$Qs.stringify({'productCode': productCode}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+
+              this.dataDetail = res.data.content
+              //商品评分
+              res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      // 获取评价列表
+      getEvaluateList(pageSize, productCode){
+        let params = this.$Qs.stringify({'pageNo': 1, 'pageSize': pageSize, 'productCode': productCode});
+        this.$api.getProductCommentList( params )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+              this.evaluateList = res.data.content.list
+              this.total = res.data.content.count
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      // 查看更多
+      seeMore(){
+        if(this.pageSize >= this.total){
+          this.$Message.warning('已经没有更多了');
+          return
+        }
+        this.pageSize += 3
+        this.getEvaluateList(this.pageSize, this.productCode)
+      }
     }
 }
 </script>
 <style>
-
+  .text_ellipsis,.text_ellipsis p{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 </style>
 <style scoped lang='less'>
   .detailBox{

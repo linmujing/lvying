@@ -4,14 +4,14 @@
 			<div class="top">
 				<div class="center clearfix">
 					<div class="float_left">
-						<div v-if="user == null">
+						<div v-if="phone=='null' || phone==null">
 							<router-link tag="a" to="/user/userLogin">
 								<span class="color_title">亲，请登录</span>
 							</router-link>
 							<router-link tag="a"  to="/user/userRegister" class="padding_left_25">注册</router-link>
 						</div>
-						<div v-if="user != null">
-								欢迎你，亲爱的<span  class="color_title"> {{user}} </span> <span class="pointer" style="color:red;" @click="quitLogin">退出</span>
+						<div v-else>
+								欢迎你，亲爱的<span  class="color_title"> {{user!='null' && user!=null ? user : phone}} </span> <span class="pointer" style="color:red;" @click="quitLogin">退出</span>
 						</div>
 					</div>
 					<div class="float_right">
@@ -66,12 +66,13 @@
 				loginStatus: this.isLogin,
 				visible:false,
 				navigationList: [],
-				user: null
+				user: null,
+				phone: null
 			}
 		},
     mounted(){
 			// this.getNavigationList()
-		
+
 
     },
 		methods:{
@@ -123,12 +124,12 @@
 								localStorage.setItem("ciIntroduce", null)
 
 								this.$store.commit('userData/saveUserData', {
-									"ciphone": null,
-									"ciname": null,
-									"cicode": null,
+									"ciPhone": null,
+									"ciName": null,
+									"ciCode": null,
 									"ciProfileUrl": null,
 									"ciSex": null,
-									"ciIntroduce": null,
+									"ciIntroduce": null
 								});
 
 								//跳转函数
@@ -148,24 +149,10 @@
 
 				console.log(this.$store.state.userData.ciname)
 				
-				if(this.$store.state.userData.ciname != null){
+				this.user = this.$store.state.userData.ciname;
 
-						this.user = this.$store.state.userData.ciname;
+				this.phone = this.$store.state.userData.ciphone;
 
-				}else{
-
-					if(this.$store.state.userData.ciphone != null){
-
-						this.user = this.$store.state.userData.ciphone;
-
-					}else{
-
-						this.user = null;
-						
-					}	
-
-				};
-				
 				return this.$store.state.userData.ciname;
 
 			}

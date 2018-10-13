@@ -213,6 +213,7 @@
                     city: { value: '', label: ''},
                     county: { value: '', label: ''},
                     addressDetail: '',
+                    id: Item.id
                 };
 
                 this.addressData.addressModelValue = true;
@@ -235,6 +236,7 @@
                     city: Item.city,
                     county: Item.county,
                     addressDetail: Item.addressDetail,
+                    id: Item.id
                 };
 
                 this.addressData.addressModelValue = true;
@@ -267,8 +269,8 @@
             // 获取地址列表
             getAddressData(){
 
-                let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 , 'ciCode': this.userData.ciCode }) ;
-                console.log(param)
+                let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 ,'ciCode': this.userData.ciCode }) ;
+         
                 this.$Spin.show();
 
                 this.$api.getAddressList( param )
@@ -334,7 +336,7 @@
                     "city": data.city,
                     "address": data.addressDetail,
                     }) ;
-
+console.log(param)
                 this.$Spin.show();
 
                 this.$api.saveAddress( param )
@@ -420,7 +422,7 @@
             this.cityList = province();
 
             // 获取用户信息
-            this.userData.ciCode = this.$store.state.userData.ciCode ;
+            this.userData.ciCode = this.$store.state.userData.cicode ;
 
             // 获取用户地址列表
             this.getAddressData();

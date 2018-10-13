@@ -122,7 +122,7 @@ export default {
 
               }
               let params = this.$Qs.stringify({ 'merchantPhone': this.formRight.phone, 'passWord': this.formRight.pwd, 'smsCode': this.formRight.code })
-
+              this.$Spin.show()
               // 注册
               this.$api.addMerchantInfo( params )
 
@@ -141,17 +141,15 @@ export default {
 
                   }else{
 
-                    this.$Loading.finish();
-
                     this.$Message.warning(res.data.message);
 
                   }
 
-
+                  this.$Spin.hide()
                 })
                 .catch((error) => {
 
-                  this.$Loading.error();
+                  this.$Spin.hide()
                   console.log('发生错误！', error);
 
                 });
@@ -168,6 +166,7 @@ export default {
           return;
 
         }
+        this.$Spin.show()
         // 判断手机号是否已注册
         this.$api.verifyMerchantPhone( this.$Qs.stringify({ 'merchantPhone':  this.formRight.phone }) )
 
@@ -193,18 +192,20 @@ export default {
 
                     this.sendTimeOut();
 
+                  }else {
+                    this.$Message.error(res.data.message);
                   }
 
                 })
 
             }
 
-            this.$Loading.finish();
+            this.$Spin.hide()
 
           })
           .catch((error) => {
 
-            this.$Loading.error();
+            this.$Spin.hide()
             console.log('发生错误！', error);
 
           });

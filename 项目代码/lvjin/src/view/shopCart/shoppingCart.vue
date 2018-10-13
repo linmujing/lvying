@@ -116,13 +116,15 @@ export default {
     },
     data() {
         return {
-
+            allCount:0,
             /*购物车数据*/
             cartDate:{
                 //全部列表状态
                 listState: false,
                 //全部删除状态
                 listDeleteState: false,
+                // 商户
+                merchantAllArr:[],
                 //总价格
                 listTotal: 0.00,
                 //大列表
@@ -456,9 +458,31 @@ export default {
 
         // 去结算页面
         goBuy(){
-
+            let user=this.$store.state.userData;
+            let ciCode=user.cicode;
+            let ciName=user.ciname;
+            console.log(ciName);
+            let orderSource=1;
+            let merchantCode="";
+            for(let item of this.merchantAllArr){
+                merchantCode+=`${item},`;
+            }
+            let productCodeAndCount="";
+            for(let item of this.cartList){
+               for(let item2 of item.items){
+                   if(item2.state){
+                    productCodeAndCount += `${item2.productCode}-${item2.num},`;
+                   }
+               }
+            }
+            let params={ciCode,ciName,orderSource,merchantCode,productCodeAndCount};
+            params=this.$Qs.stringify(params);
+            this.$api.addOrderInfo(params).then((res)=>{
+                    console.log(res);
+            });
+           
             // 去结算页面
-            this.$router.push({ name: 'submitOrder', params: { type: true} })
+            // this.$router.push({ name: 'submitOrder', params: { type: true} })
 
         },
    
@@ -535,7 +559,7 @@ export default {
 
                     // 压入到购物车
                     this.cartList = arr;
-
+                    this.merchantAllArr=merchantArr;
                     //计算小计与合计
                     this.calculatePrice();
                    

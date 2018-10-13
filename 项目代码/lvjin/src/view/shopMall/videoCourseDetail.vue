@@ -82,11 +82,11 @@
 		      </div>
 		      <!--评价-->
 		      <div class="margin_top_50">
-		        <div id="detail3" class="font_weight_bold bg_f5 border_e6 padding_15">评价（4）</div>
+		        <div id="detail3" class="font_weight_bold bg_f5 border_e6 padding_15">评价（{{total}}）</div>
 		        <div class="padding_15">
 		        	<span>评分：</span>
 		        	<Rate show-text allow-half disabled v-model="valueCustomText">
-				        <span style="color: #f5a623">{{ valueCustomText }}</span>
+				        <span style="color: #f5a623">{{ valueCustomText}}</span>
 				      </Rate>
 		        </div>
 		        <!--<div class="bg_f5 border_e6 padding_10_15">-->
@@ -98,26 +98,27 @@
 		        	<!--</ul>-->
 		        <!--</div>-->
 		        <div class="margin_bottom_20">
-			    		<Row v-for="(item,index) in 3" :key="index" class="padding_15 line">
-			            <Col span="3">
-			            	<Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg"/>
-			            	<span class="float_right width_100px text_ellipsis line_height_32px">12345623131</span>
+			    		<Row v-for="(item,index) in evaluateList" :key="index" class="padding_15 line">
+			            <Col span="4">
+			            	<div class="float_left">
+                      <Avatar v-if="item.customerInfo.ciProfileUrl === '' || item.customerInfo.ciProfileUrl === null" icon="ios-person" />
+                      <Avatar v-else :src="item.customerInfo.ciProfileUrl"/>
+                    </div>
+			            	<div class="float_left width_100px text_ellipsis line_height_32px margin_left_10">{{item.customerInfo.ciName}}</div>
 			            </Col>
-			            <Col span="20" offset="1">
+			            <Col span="19" offset="1">
 			            	<div class="clearfix">
 			            		<div class="float_left">
-				            		<Rate allow-half disabled v-model="valueCustomText"></Rate>
+				            		<Rate allow-half disabled v-model="item.productScore == null ? 0 : item.productScore"></Rate>
 				            	</div>
-				            	<div class="float_right color_999 line_height_30px">2018-08-24 15:14</div>
+				            	<div class="float_right color_999 line_height_30px">{{item.createDate}}</div>
 			            	</div>
-			            	<div class="margin_top_10 text_justify">
-			            		合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买
-			            	</div>
+			            	<div class="margin_top_10 text_justify" v-html="item.commentDesc"></div>
 			            </Col>
 			          </Row>
 			    	</div>
 		        <div class="text_center padding_top_20 padding_bottom_30">
-		        	<span class="pointer">查看更多》</span>
+		        	<span class="pointer" @click="seeMore">查看更多》</span>
 		        </div>
 		      </div>
       	</Col>
@@ -179,15 +180,20 @@ export default {
           valueCustomText: 3.8,
           isCur: 0,
           isActive: 0,
+          // 产品详情数据
           dataDetail:{},
-          productCode: ''
+          productCode: '',
+          // 评价列表
+          evaluateList: [],
+          total: 0,
+          pageSize: 3
         }
 
     },
     mounted(){
       this.productCode = this.$route.query.productCode
       this.getProductInfo(this.productCode)
-      this.getEvaluateList(this.productCode)
+      this.getEvaluateList(this.pageSize,  this.productCode)
     },
     methods: {
     	//详情
@@ -209,7 +215,7 @@ export default {
 
               this.dataDetail = res.data.content
               //商品评分
-              // this.valueCustomText = res.data.content.productScore
+              res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
 
             }else if (res.data.code == 500){
 
@@ -223,17 +229,15 @@ export default {
           });
       },
       // 获取评价列表
-      getEvaluateList(productCode){
-        // 查看产品详情
-        this.$api.getProductCommentList( this.$Qs.stringify({'productCode': productCode}) )
+      getEvaluateList(pageSize, productCode){
+        let params = this.$Qs.stringify({'pageNo': 1, 'pageSize': pageSize, 'productCode': productCode});
+        this.$api.getProductCommentList( params )
 
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
-
-              this.dataDetail = res.data.content
-              //商品评分
-              // this.valueCustomText = res.data.content.productScore
+              this.evaluateList = res.data.content.list
+              this.total = res.data.content.count
 
             }else if (res.data.code == 500){
 
@@ -246,9 +250,21 @@ export default {
             console.log('发生错误！', error);
           });
       },
+      // 查看更多
+      seeMore(){
+			  if(this.pageSize >= this.total){
+          this.$Message.warning('已经没有更多了');
+          return
+        }
+			  this.pageSize += 3
+        this.getEvaluateList(this.pageSize, this.productCode)
+      }
     }
 }
 </script>
+<style>
+  .text_ellipsis,.text_ellipsis p{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+</style>
 <style scoped lang='less'>
   .detailBox{
     .width_40px{width: 40px;}

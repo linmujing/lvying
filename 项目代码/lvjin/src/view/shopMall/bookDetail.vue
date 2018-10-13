@@ -1,31 +1,27 @@
 <template>
   <div>
     <!--导航栏-->
-    <div class="nav">
-      <ul class="list_unstyled ul_inline clearfix font_18 navbar box_center_1200">
-        <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(item.id,index)'>
-          <span class="color_fff listItem">{{item.catName}}</span>
-        </li>
-      </ul>
-    </div>
+    <NavBar :showItem='false'></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
-          <div class="width_600px height_400px border"></div>
+          <div class="width_600px height_400px border">
+            <img :src="dataDetail.productProfileUrl" class="all_width all_height">
+          </div>
         </Col>
         <Col span="12" class="padding_20">
-          <div class="font_20 font_weight_bold text_ellipsis">常见民事纠纷裁判思路与规则起草</div>
-          <div class="color_999 twoline_ellipsis margin_top_20">帮助拥有知识产权的企业起草和完善知识产权许可使用合同帮助拥有知识产权的企业起草和完善知识产权许可使用合同</div>
+          <div class="font_20 font_weight_bold text_ellipsis">{{dataDetail.productTitle}}</div>
+          <div class="color_999 twoline_ellipsis margin_top_20" v-html="dataDetail.productDesc"></div>
           <div class="clearfix margin_top_30">
             <div class="float_left">
               <Rate show-text allow-half disabled v-model="valueCustomText">
                 <span style="color: #f5a623">{{ valueCustomText }}</span>
               </Rate>
             </div>
-            <div class="float_left color_999 line_height_30px margin_left_30">1234人看过</div>
+            <div class="float_left color_999 line_height_30px margin_left_30">{{dataDetail.saleCount}}人看过</div>
           </div>
           <div class="margin_top_30">
-            <p><span class="color_title font_20">￥500.00</span></p>
+            <p><span class="color_title font_20">￥{{dataDetail.productPrice}}</span></p>
           </div>
           <div class="margin_top_50">
             <Button size="large" type="warning" shape="circle" @click="addProductCart">加入购物车</Button>
@@ -72,7 +68,7 @@
 		      </div>
 		      <!--评价-->
 		      <div class="margin_top_50">
-		        <div id="detail2" class="font_weight_bold bg_f5 border_e6 padding_15">评价（4）</div>
+		        <div id="detail2" class="font_weight_bold bg_f5 border_e6 padding_15">评价（{{total}}）</div>
 		        <div class="padding_15">
 		        	<span>评分：</span>
 		        	<Rate show-text allow-half disabled v-model="valueCustomText">
@@ -88,26 +84,27 @@
 		        	<!--</ul>-->
 		        <!--</div>-->
 		        <div class="margin_bottom_20">
-			    		<Row v-for="(item,index) in 3" :key="index" class="padding_15 line">
-			            <Col span="3">
-			            	<Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg"/>
-			            	<span class="float_right width_100px text_ellipsis line_height_32px">12345623131</span>
-			            </Col>
-			            <Col span="20" offset="1">
+			    		<Row v-for="(item,index) in evaluateList" :key="index" class="padding_15 line">
+                  <Col span="4">
+                    <div class="float_left">
+                      <Avatar v-if="item.customerInfo.ciProfileUrl === '' || item.customerInfo.ciProfileUrl === null" icon="ios-person" />
+                      <Avatar v-else :src="item.customerInfo.ciProfileUrl"/>
+                    </div>
+                    <div class="float_left width_100px text_ellipsis line_height_32px margin_left_10">{{item.customerInfo.ciName}}</div>
+                  </Col>
+                  <Col span="19" offset="1">
 			            	<div class="clearfix">
 			            		<div class="float_left">
-				            		<Rate allow-half disabled v-model="valueCustomText"></Rate>
+                        <Rate allow-half disabled v-model="item.productScore == null ? 0 : item.productScore"></Rate>
 				            	</div>
-				            	<div class="float_right color_999 line_height_30px">2018-08-24 15:14</div>
+				            	<div class="float_right color_999 line_height_30px">{{item.createDate}}</div>
 			            	</div>
-			            	<div class="margin_top_10 text_justify">
-			            		合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买合同全面，值得够买
-			            	</div>
+			            	<div class="margin_top_10 text_justify" v-html="item.commentDesc"></div>
 			            </Col>
 			          </Row>
 			    	</div>
 		        <div class="text_center padding_top_20 padding_bottom_30">
-		        	<span class="pointer">查看更多》</span>
+              <span class="pointer" @click="seeMore">查看更多》</span>
 		        </div>
 		      </div>
       	</Col>
@@ -161,15 +158,26 @@ export default {
     },
     data() {
         return {
+          //星星评分
           valueCustomText: 3.8,
+          classCur: 0,
           isCur: 0,
           isActive: 0,
-          navDataModel: ['行业动态管控','法律动态管控','视频课程','音频课程'],
+          // 产品详情数据
+          dataDetail:{},
+          productCode: '',
+          // 评价列表
+          evaluateList: [],
+          total: 0,
+          pageSize: 3
         }
 
     },
     mounted(){
-      this.getNavTitle()
+      this.productCode = this.$route.query.productCode
+      this.getProductInfo(this.productCode)
+      this.getEvaluateList(this.pageSize,  this.productCode)
+      console.log(this.productCode)
     },
     methods: {
     	//详情
@@ -180,16 +188,18 @@ export default {
 			evaluateBtn(i){
 				this.isActive = i;
 			},
-      // 获取导航标题
-      getNavTitle(){
-        // 获取产品分类列表
-        this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
+      // 查看产品详情
+      getProductInfo(productCode){
+        // 查看产品详情
+        this.$api.getProductInfo( this.$Qs.stringify({'productCode': productCode}) )
 
           .then( (res) => {
-
+            console.log(res);
             if(res.data.code == 200){
 
-              this.navDataModel = res.data.content
+              this.dataDetail = res.data.content
+              //商品评分
+              res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
 
             }else if (res.data.code == 500){
 
@@ -202,69 +212,49 @@ export default {
             console.log('发生错误！', error);
           });
       },
-      // 导航鼠标点击
-      tabClick(catCode,index){
-        console.log(index)
-        switch(catCode){
-          case '1':
-            this.$router.push({
-              path:'/industryDynamic',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
-            })
-            break;
-          case '2':
-            this.$router.push({
-              path:'/industryDynamic',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
-            })
-            break;
-          case '3':
-            this.$router.push({
-              path:'videoCourse',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
-            })
-            break;
-          case '4':
-            this.$router.push({
-              path:'videoCourse',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
-            })
-            break;
-          case '5':
-            this.$router.push({
-              path:'lvyingMall',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
-            })
-            break;
+      // 获取评价列表
+      getEvaluateList(pageSize, productCode){
+        let params = this.$Qs.stringify({'pageNo': 1, 'pageSize': pageSize, 'productCode': productCode});
+        this.$api.getProductCommentList( params )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+              this.evaluateList = res.data.content.list
+              this.total = res.data.content.count
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      // 查看更多
+      seeMore(){
+        if(this.pageSize >= this.total){
+          this.$Message.warning('已经没有更多了');
+          return
         }
+        this.pageSize += 3
+        this.getEvaluateList(this.pageSize, this.productCode)
       },
 
       /** 数据 **/
       // 添加商品到购物车 MT
       addProductCart(){
 
-            this.$Loading.start();	
+            this.$Loading.start();
 
             // productCode  商品编码
-            let param = this.$Qs.stringify({ 
-                'ciCode': this.$store.state.userData.cicode, 
-                'productCode': 'p141414141415', 
-                'productCount': 1, 
+            let param = this.$Qs.stringify({
+                'ciCode': this.$store.state.userData.cicode,
+                'productCode': 'p141414141415',
+                'productCount': 1,
             }) ;
 
             this.$api.addCart( param )
@@ -278,7 +268,7 @@ export default {
                 if(res.data.code == 200){
 
                     this.$Message.success(res.data.message);
-                   
+
                 }else{
 
                     this.$Message.warning("该商品已添加！");
@@ -295,13 +285,12 @@ export default {
 
       },
 
-    },
-    mounted(){
-
-
     }
 }
 </script>
+<style>
+  .text_ellipsis,.text_ellipsis p{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+</style>
 <style scoped lang='less'>
   .detailBox{
     .width_40px{width: 40px;}
