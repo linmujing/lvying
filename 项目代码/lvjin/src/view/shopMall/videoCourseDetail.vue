@@ -124,7 +124,7 @@
       	</Col>
       	<Col span="6">
       		<div class="margin_left_30">
-      			<div class="bg_f5 clearfix padding_15">
+      			<div @click="toSupplierStore(dataDetail.merchantCode)" class="bg_f5 clearfix padding_15 pointer">
       				<div class="float_left bg_white">
       					<img src="../../assets/images/image/falv.png"/>
       				</div>
@@ -318,6 +318,14 @@ export default {
           path:'/videoCourseDetail',
           query: {
             productCode: productCode
+          }
+        })
+      },
+      toSupplierStore(code){
+        this.$router.push({
+          path:'/supplier/supplierStore',
+          query: {
+            merchantCode: code
           }
         })
       }

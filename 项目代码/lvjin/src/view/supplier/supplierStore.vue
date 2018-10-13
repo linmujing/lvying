@@ -1,6 +1,15 @@
 <template>
     <div class="bg_white">
-    <Banner></Banner>
+      <!--banner-->
+      <div>
+        <Carousel  radius-dot v-model="value" autoplay loop>
+          <CarouselItem v-for="(item,index) in banner" :key="index">
+            <div class="carousel">
+              <img :src="item.src" class="all_width block" style="max-height: 500px">
+            </div>
+          </CarouselItem>
+        </Carousel>
+      </div>
     <div class="box_center_1200">
       <div class="margin_top_20 margin_bottom_30">
         <div class="bg_f5 clearfix">
@@ -55,45 +64,30 @@
                 <!--排序-->
                 <div v-if="isCur == 1" class="padding_15 bg_f5">
                   <ul class="list_unstyled ul_inline clearfix">
-                    <li class="color_title margin_right_30 pointer">
-                      <span>综合排序</span>
-                      <Icon v-if="sort" type="ios-arrow-up" />
-                      <Icon v-else type="ios-arrow-down" />
-                    </li>
-                    <li class="margin_right_30 pointer">
-                      <span>销量</span>
-                      <Icon v-if="sale" type="ios-arrow-up" />
-                      <Icon v-else type="ios-arrow-down" />
-                    </li>
-                    <li class="margin_right_30 pointer">
-                      <span>满意度</span>
-                      <Icon v-if="satisfaction" type="ios-arrow-up" />
-                      <Icon v-else type="ios-arrow-down" />
-                    </li>
-                    <li class="pointer">
-                      <span>价格</span>
-                      <Icon v-if="price" type="ios-arrow-up" />
-                      <Icon v-else type="ios-arrow-down" />
+                    <li v-for="(item,index) in sortName" :key="index" :class="sortIndex == index ? 'color_title' : ''" class="margin_right_30 pointer" @click="changeClass(index)">
+                      <span>{{item.name}}</span>
+                      <Icon v-if="item.state" type="ios-arrow-up"/>
+                      <Icon v-else type="ios-arrow-down"/>
                     </li>
                   </ul>
                 </div>
 
                 <ul class="list_unstyled ul_inline clearfix">
-                  <li v-for="item in 9" class="class_Box bg_white">
-                    <div class="text_center">
-                      <img src="../../assets/images/image/cart_book.png" height="210">
+                  <li v-for="item in productList" class="class_Box bg_white">
+                    <div @click="jumpDetail(item.productCode)" class="text_center">
+                      <img :src="item.productProfileUrl" class="all_width" height="210">
                     </div>
                     <div class="margin_left_10 margin_right_10 margin_top_10">
-                      <div class="font_18 text_ellipsis">常见民事纠纷裁判思路与规则</div>
-                      <div class="color_666 text_ellipsis margin_top_5 clearfix">
-                        <div class="float_left color_999">立二拆四案辩护人</div>
-                        <div class="float_right">1234人购买过</div>
+                      <div class="font_18 text_ellipsis">{{item.productTitle}}</div>
+                      <div class="color_666 margin_top_5 clearfix">
+                        <div class="float_left color_999 width_50 text_ellipsis" v-html="item.productDesc"></div>
+                        <div class="float_right text_ellipsis">{{item.saleCount}}人购买过</div>
                       </div>
                       <div class="margin_top_10 clearfix">
                         <p class="pointer float_left">
-                          <span class="font_20 color_title">￥500.00</span>
+                          <span class="font_20 color_title">￥{{item.productPrice}}</span>
                         </p>
-                        <div class="float_right line_height_30px">盈科律师事务所</div>
+                        <div class="float_right line_height_30px">{{item.createBy}}</div>
                       </div>
                       <div class="margin_top_5 clearfix">
                         <p class="pointer float_left">
@@ -109,9 +103,10 @@
                 </ul>
               </div>
 
-              <!--分页-->
+              <!-- 订单分页 -->
               <div class="margin_80">
-                <Page :total="100" prev-text="上一页" next-text="下一页" />
+                <Page :total="total" :current="current"   :page-size="pageSize"
+                      @on-change="changeOrderPage" show-total show-elevator />
               </div>
 
             </Col>
@@ -129,26 +124,111 @@ export default {
     },
     data() {
         return {
+          value: 0,
+          banner: JSON.parse(sessionStorage.getItem("Banner")),
           isCur: 0,
           //排序
           sort: true,
-          sale: false,
-          satisfaction: false,
-          price: false,
+          sortName: [
+            {name: '综合排序', state: true},
+            {name: '销量', state: true},
+            {name: '满意度', state: true},
+            {name: '价格', state: true}
+          ],
+          sortIndex: 0,
+          total: 0,
+          current: 1,
+          pageSize: 12,
+          productList: [],
+          merchantCode: this.$route.query.merchantCode
         }
         
+    },
+    mounted(){
+      // console.log(this.$route.query.merchantCode)
+      this.getProductList(1,10)
     },
     methods: {
       //首页切换
       anchorBtn(i){
         this.isCur = i;
       },
+      jumpDetail(productCode){
+        this.$router.push({
+          path:'/videoCourseDetail',
+          query: {
+            productCode: productCode
+          }
+        })
+      },
+      // 获取商品列表
+      getProductList(page,sort){
+        this.$Spin.show()
+        this.$api.getProductList( this.$Qs.stringify({'pageNo': page, 'pageSize': 9, 'merchantCode': this.merchantCode, 'orderByStr': sort}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+
+              this.productList = res.data.content.list
+              this.total = res.data.content.count
+
+            }else {
+
+              this.$Message.warning(res.data.message);
+
+            }
+            this.$Spin.hide()
+          })
+          .catch((error) => {
+            this.$Spin.hide()
+            console.log('发生错误！', error);
+          });
+      },
+      /**分页**/
+      //@param value 返回当前页码
+      changeOrderPage(value){
+        this.sortIndex = 0
+        this.getProductList(value,10)
+      },
+      //点击排序
+      changeClass(index){
+        if(this.sortIndex == index){
+          this.sortName[index].state = !this.sortName[index].state
+        }
+        this.sortIndex = index
+        var sortId
+        switch (index) {
+          case 0:
+            this.sortName[index].state ? sortId = 10 : sortId = 11
+            break
+          case 1:
+            this.sortName[index].state ? sortId = 20 : sortId = 21
+            break
+          case 2:
+            this.sortName[index].state ? sortId = 30 : sortId = 31
+            break
+          case 3:
+            this.sortName[index].state ? sortId = 40 : sortId = 41
+            break
+        }
+        this.getProductList(1,sortId)
+      }
     }
 }
 </script>
-
+<style>
+  /*修改分页样式*/
+  .ivu-page-item{background: #F5F5F5;}
+  .ivu-page-next, .ivu-page-prev{background: #F5F5F5;}
+  .ivu-page-next:hover a,.ivu-page-prev:hover a,.ivu-page-item:hover a,.ivu-page-item-active a,.ivu-page-item-active:hover a{color: #00AA88;}
+  .ivu-page-item:hover,.ivu-page-item-active {border-color: #00AA88;}
+  .ivu-page-disabled a {color: #ccc !important;}
+  .text_ellipsis,.text_ellipsis p{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+</style>
 <style scoped lang='less'>
   .cur{color:#fff;background: #00AA88;}
+  .cur:hover{color:#fff}
   .width_150px{width: 150px;}
   .padding_20_15{padding: 10px 20px;text-align: center;float: left;font-size: 16px;}
   .title{color: #00AA88;font-size: 18px;border-left: 3px solid #00AA88; padding-left: 10px;}

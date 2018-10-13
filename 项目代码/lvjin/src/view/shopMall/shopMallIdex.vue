@@ -236,6 +236,7 @@ export default {
             let {content}=res.data;
             // 保存轮播数据
             this.banner = eval(res.data.content[6].caseUrl)
+            sessionStorage.setItem("Banner", JSON.stringify(eval(res.data.content[6].caseUrl)));
             for(let item of content){
               if(item.caseName=="视频推荐"){
                 this.getProductShowCase(item.productCode, item.productSortBy, 1)

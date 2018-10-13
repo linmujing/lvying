@@ -110,9 +110,9 @@ export default {
           }
         })
       },
-      // 获取商品展示
+      // 获取商品列表
       getProductList(page,sort){
-        // 获取产品分类列表
+        this.$Spin.show()
         this.$api.getProductList( this.$Qs.stringify({'pageNo': page, 'pageSize': 12, 'productCat': this.catCode, 'orderByStr': sort}) )
 
           .then( (res) => {
@@ -127,9 +127,10 @@ export default {
               this.$Message.warning(res.data.message);
 
             }
-
+            this.$Spin.hide()
           })
           .catch((error) => {
+            this.$Spin.hide()
             console.log('发生错误！', error);
           });
       },
