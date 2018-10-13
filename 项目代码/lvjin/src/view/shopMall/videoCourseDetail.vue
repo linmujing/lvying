@@ -211,6 +211,7 @@ export default {
       this.productCode = this.$route.query.productCode
       this.getProductInfo(this.productCode)
       this.getEvaluateList(this.pageSize,  this.productCode)
+      
     },
     methods: {
     	//详情

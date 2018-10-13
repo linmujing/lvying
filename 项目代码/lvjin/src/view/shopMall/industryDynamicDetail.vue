@@ -32,7 +32,7 @@
               <!--</div>-->
             </div>
           </div>
-          <div class="margin_top_50">
+          <div class="margin_top_50" >
             <Button size="large" type="warning" shape="circle" @click="addCart">加入购物车</Button>
             <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
           </div>
@@ -180,14 +180,14 @@ export default {
       },
       // 添加购物车
       addCart(){
-
+        console.log("yes")
         let param = {
           ciCode:this.$store.state.userData.cicode,
           productCode:this.productCode,
           productCount:1
         }
         // 存储用户信息
-        this.$store.commit('cart/addCartTo', param);
+        //this.$store.commit('cart/addCartTo', param);
 
       },
       // 查看产品详情
