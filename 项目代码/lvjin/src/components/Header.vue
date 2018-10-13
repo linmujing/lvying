@@ -112,35 +112,35 @@
 			//退出登录
 			quitLogin(){
 
-					this.$Modal.confirm({
-							title: '提示',
-							content: '<p>确定要退出吗？</p>',
-							onOk: () => {
+				this.$Modal.confirm({
+					title: '提示',
+					content: '<p>确定要退出吗？</p>',
+					onOk: () => {
 
-								localStorage.setItem("ciphone", null)
-								localStorage.setItem("ciname", null)
-								localStorage.setItem("cicode", null)
-								localStorage.setItem("ciProfileUrl", null)
-								localStorage.setItem("ciSex", null)
-								localStorage.setItem("ciIntroduce", null)
+						localStorage.setItem("ciphone", null)
+						localStorage.setItem("ciname", null)
+						localStorage.setItem("cicode", null)
+						localStorage.setItem("ciProfileUrl", null)
+						localStorage.setItem("ciSex", null)
+						localStorage.setItem("ciIntroduce", null)
 
-								this.$store.commit('userData/saveUserData', {
-									"ciPhone": null,
-									"ciName": null,
-									"ciCode": null,
-									"ciProfileUrl": null,
-									"ciSex": null,
-									"ciIntroduce": null
-								});
+						this.$store.commit('userData/saveUserData', {
+							"ciPhone": null,
+							"ciName": null,
+							"ciCode": null,
+							"ciProfileUrl": null,
+							"ciSex": null,
+							"ciIntroduce": null
+						});
 
-								//跳转函数
-                this.$router.push({ name: 'shopMallIdex'})
+						//跳转函数
+						this.$router.push({ name: 'shopMallIdex'})
 
-							},
-							onCancel: () => {
-									
-							}
-					});
+					},
+					onCancel: () => {
+							
+					}
+				});
 
 			}
 		},

@@ -138,7 +138,7 @@
       			<div>
       				<div class="margin_top_30 margin_bottom_30"><span class="title">该律师的热门课程</span></div>
       				<ul class="list_unstyled ul_inline clearfix">
-				        <li v-for="item in 3" class="listBox bg_white margin_bottom_30">
+				        <li v-for="item in 3"  class="listBox bg_white margin_bottom_30">
 				          <div class="height_190px all_width"></div>
 				          <div class="list_item">
 				            <div class="font_18 font_weight_bold text_ellipsis">审核同业禁止协议</div>
@@ -194,6 +194,7 @@ export default {
       this.productCode = this.$route.query.productCode
       this.getProductInfo(this.productCode)
       this.getEvaluateList(this.pageSize,  this.productCode)
+      
     },
     methods: {
     	//详情

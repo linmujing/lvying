@@ -32,7 +32,7 @@
               <!--</div>-->
             </div>
           </div>
-          <div class="margin_top_50">
+          <div class="margin_top_50" >
             <Button size="large" type="warning" shape="circle" @click="addCart">加入购物车</Button>
             <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
           </div>
@@ -63,7 +63,7 @@
         <div class="font_weight_bold bg_f5 border_e6 padding_15">全程动态管控系统</div>
         <div class="">
           <div class="margin_left_20 margin_top_30 margin_bottom_30 font_18">
-            <div class="inline_block" v-for="(item,index) in 3" @click="classBtn(index)">
+            <div class="inline_block" v-for="(item,index) in 3" :key="index" @click="classBtn(index)">
               <span class="pointer" :class="{color_title: classCur == index}">项目启动文件</span>
               <Icon v-show="index != 2" type="ios-arrow-round-forward" size="30"/>
             </div>
@@ -177,14 +177,14 @@ export default {
       },
       // 添加购物车
       addCart(){
-
+        console.log("yes")
         let param = {
           ciCode:this.$store.state.userData.cicode,
           productCode:this.productCode,
           productCount:1
         }
         // 存储用户信息
-        this.$store.commit('cart/addCartTo', param);
+        //this.$store.commit('cart/addCartTo', param);
 
       },
       // 查看产品详情

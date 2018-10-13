@@ -43,6 +43,11 @@
         localStorage.setItem("ciIntroduce", n.ciIntroduce)
   
     },
+    addToCart(state,s){
+      state.ciCode=s.ciCode;
+      state.productCode=s.productCode;
+      state.productCount=s.productCount;
+    },
     // 保存提供商数据
     saveSupplierData(state, n) {
 

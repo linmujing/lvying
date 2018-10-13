@@ -24,8 +24,8 @@
             <p><span class="color_title font_20">￥{{dataDetail.productPrice}}</span></p>
           </div>
           <div class="margin_top_50">
-            <Button size="large" type="warning" shape="circle" @click="addProductCart">加入购物车</Button>
-            <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
+            <Button size="large" type="warning" shape="circle" @click="addProductCart(dataDetail.productCode)">加入购物车</Button>
+            <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
           </div>
         </Col>
       </Row>
@@ -155,6 +155,7 @@ import NavBar from '../../components/NavBar.vue'
 export default {
     components : {
       NavBar,
+
     },
     data() {
         return {
@@ -246,44 +247,47 @@ export default {
 
       /** 数据 **/
       // 添加商品到购物车 MT
-      addProductCart(){
+      addProductCart(code){
 
-            this.$Loading.start();
+        if(this.$store.state.userData.cicode == null || this.$store.state.userData.cicode == "null"){
 
-            // productCode  商品编码
-            let param = this.$Qs.stringify({
-                'ciCode': this.$store.state.userData.cicode,
-                'productCode': 'p141414141415',
-                'productCount': 1,
-            }) ;
+           this.$Message.warning('您还没有登录，请登录后再尝试！');
+           return ;
 
-            this.$api.addCart( param )
+        }
 
-            .then( (res) => {
+        let param = {
+          ciCode:this.$store.state.userData.cicode,
+          productCode: code,
+          productCount:1
+        }
 
-                console.log(res)
+        // 存储商品信息
+        this.$store.commit('cart/addToCart', param);
 
-                this.$Loading.finish();
+        this.$store.dispatch('cart/addCartTo', param);
 
-                if(res.data.code == 200){
-
-                    this.$Message.success(res.data.message);
-
-                }else{
-
-                    this.$Message.warning("该商品已添加！");
-
-                }
-
-            })
-            .catch((error) => {
-
-                this.$Loading.error();
-                console.log('发生错误！', error);
-
-            });
 
       },
+      // 立即购买
+      goBuy(code){
+
+        if(this.$store.state.userData.cicode == null || this.$store.state.userData.cicode == "null"){
+
+           this.$Message.warning('您还没有登录，请登录后再尝试！');
+           return ;
+
+        }
+
+        // 页面跳转
+        this.$router.push({
+          path:'/submitOrder',
+          query: {
+            productCode: code
+          }
+        })
+
+      }
 
     }
 }
