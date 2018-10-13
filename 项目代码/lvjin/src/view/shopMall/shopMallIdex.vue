@@ -227,76 +227,77 @@ export default {
 			this.getCaseProduct()
     },
     methods: {
-			//获取推荐商品
-			getCaseProduct(){
+			//获取橱窗对象
+      getCaseProduct(){
         this.$Spin.show()
-					var that=this;
-					 this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1, pageLocat: 1})).then((res)=>{
+        this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1, pageLocat: 1})).then((res)=>{
 
-							 if(res.data.code == 200){
-								 let {content}=res.data;
-								 // 保存轮播数据
-                this.banner = eval(res.data.content[6].caseUrl)
-								for(let item of content){
-                  if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="视频推荐"){
-                    that.videoArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+          if(res.data.code == 200){
+            let {content}=res.data;
+            // 保存轮播数据
+            this.banner = eval(res.data.content[6].caseUrl)
+            for(let item of content){
+              if(item.caseName=="视频推荐"){
+                this.getProductShowCase(item.productCode, item.productSortBy, 1)
+              }else if(item.caseName=="音频推荐"){
+                this.getProductShowCase(item.productCode, item.productSortBy, 2)
+              }else if(item.caseName=="行业动态管控"){
+                this.getProductShowCase(item.productCode, item.productSortBy, 3)
+              }else if(item.caseName=="法律动态管控"){
+                this.getProductShowCase(item.productCode, item.productSortBy, 4)
+              }else if(item.caseName=="律赢商城"){
+                this.getProductShowCase(item.productCode, item.productSortBy, 5)
+              }
+            }
+          }else{
 
-                  }else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="音频推荐"){
+            this.$Message.warning(res.data.message);
 
-                    that.musicArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+          }
+          this.$Spin.hide()
+        })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      //获取推荐商品
+      getProductShowCase(productCode, productSortBy, type){
+        var params = this.$Qs.stringify({'productCode': productCode, 'productSortBy': productSortBy})
+        this.$api.getProductShowCase( params )
 
-                  }else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="行业动态管控"){
-                    that.careerArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
-                  }else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="法律动态管控"){
+          .then( (res) => {
 
-                    that.logicArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+            if(res.data.code == 200){
 
-                  }else if(item.caseLocat.slice(0,1)=="1"&&item.caseName=="律赢商城"){
+              switch (type) {
+                case 1:
+                  this.videoArr = res.data.content
+                  break
+                case 2:
+                  this.musicArr = res.data.content
+                  break
+                case 3:
+                  this.careerArr = res.data.content
+                  break
+                case 4:
+                  this.logicArr = res.data.content
+                  break
+                case 5:
+                  this.lvyingArr = res.data.content
+                  break
+              }
 
-                    that.lvyingArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
+            }else{
 
-                  }else{
+              this.$Message.warning(res.data.message);
 
-                    console.log("没数据!");
-
-                  }
-                }
-                this.$Spin.hide()
-							return Promise.resolve([that.videoArr,that.musicArr,that.careerArr,that.logicArr,that.lvyingArr]);
-							 }
-					}).then((res)=>{
-						// console.log(res);
-						let arr=[];
-							for(let item of res){
-                // console.log(item);
-								for(let item2 of item){
-										// console.log(item2);
-									let params=this.$Qs.stringify(item2);
-									// console.log(params);
-
-									var that=this;
-										 this.$api.getProductShowCase(params).then((res)=>{
-											 if(res.data.code=="200"){
-												 let {content}=res.data;
-												 console.log(res.data)
-													 arr.push(content);
-													return Promise.resolve(arr);
-											 }
-
-									 }).then((arry)=>{
-									   // console.log(arry)
-										if(arry.length===5){
-											that.videoArr=arry[0];
-											that.musicArr=arry[1];
-											that.logicArr=arry[3];
-											that.careerArr=arry[2];
-											that.lvyingArr=arry[4];
-										}
-									 })
-								}
-							}
-					})
-			},
+            }
+            this.$Spin.hide()
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
       // 获取导航标题
       getNavTitle(){
         this.$Spin.show()
@@ -310,7 +311,7 @@ export default {
               // 导航标题信息
               sessionStorage.setItem("NavTitle", JSON.stringify(res.data.content));
 
-            }else if (res.data.code == 500){
+            }else{
 
               this.$Message.warning(res.data.message);
 
