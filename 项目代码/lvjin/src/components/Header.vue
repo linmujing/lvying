@@ -115,14 +115,21 @@
 							content: '<p>确定要退出吗？</p>',
 							onOk: () => {
 
-								localStorage.removeItem("ciphone")
-								localStorage.removeItem("ciname")
-								localStorage.removeItem("cicode")
-								localStorage.removeItem("ciProfileUrl")
-								localStorage.removeItem("ciSex")
-								localStorage.removeItem("ciIntroduce")
+								localStorage.setItem("ciphone", null)
+								localStorage.setItem("ciname", null)
+								localStorage.setItem("cicode", null)
+								localStorage.setItem("ciProfileUrl", null)
+								localStorage.setItem("ciSex", null)
+								localStorage.setItem("ciIntroduce", null)
 
-								this.$store.commit('userData/saveUserData', {});
+								this.$store.commit('userData/saveUserData', {
+									"ciphone": null,
+									"ciname": null,
+									"cicode": null,
+									"ciProfileUrl": null,
+									"ciSex": null,
+									"ciIntroduce": null,
+								});
 
 								//跳转函数
                 this.$router.push({ name: 'shopMallIdex'})
@@ -133,20 +140,33 @@
 							}
 					});
 
-
-
 			}
 		},
 		computed: {
 			// 监听登录状态变化 修改页面值
 			getLoginChange() {
+
+				console.log(this.$store.state.userData.ciname)
 				
-					if(this.$store.state.userData.ciname != null || this.$store.state.userData.ciname != 'undefinde'){
-							this.user = this.$store.state.userData.ciname;
+				if(this.$store.state.userData.ciname != null){
+
+						this.user = this.$store.state.userData.ciname;
+
+				}else{
+
+					if(this.$store.state.userData.ciphone != null){
+
+						this.user = this.$store.state.userData.ciphone;
+
 					}else{
-							this.user = null;
-					};
-					return this.$store.state.userData.ciname;
+
+						this.user = null;
+						
+					}	
+
+				};
+				
+				return this.$store.state.userData.ciname;
 
 			}
 		},
