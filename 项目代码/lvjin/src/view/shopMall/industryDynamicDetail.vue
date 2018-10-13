@@ -32,9 +32,9 @@
               <!--</div>-->
             </div>
           </div>
-          <div class="margin_top_50">
-            <Button size="large" type="warning" shape="circle" @click="addCart">加入购物车</Button>
-            <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
+          <div class="margin_top_50" >
+            <Button size="large" type="warning" shape="circle" @click="addProductCart(dataDetail.productCode)">加入购物车</Button>
+            <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
           </div>
         </Col>
       </Row>
@@ -47,35 +47,35 @@
             <a href="#detail3" @click="anchorBtn(2)" :class="{cur:isCur == 2}" class="inline_block padding_20_15 width_150px">评价</a>
           </div>
         </Affix>
-        <div class="padding_20 margin_bottom_20">
-          <Row class="margin_top_10">
-            <Col span="2" class="font_weight_bold">适应企业</Col>
-            <Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>
-          </Row>
-          <Row class="margin_top_20">
-            <Col span="2" class="font_weight_bold">内容介绍</Col>
-            <Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>
-          </Row>
+        <div class="padding_20 margin_bottom_20" v-html="dataDetail.productDesc">
+          <!--<Row class="margin_top_10">-->
+            <!--<Col span="2" class="font_weight_bold">适应企业</Col>-->
+            <!--<Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>-->
+          <!--</Row>-->
+          <!--<Row class="margin_top_20">-->
+            <!--<Col span="2" class="font_weight_bold">内容介绍</Col>-->
+            <!--<Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>-->
+          <!--</Row>-->
         </div>
       </div>
       <!--全程动态管控系统-->
       <div id="detail2">
         <div class="font_weight_bold bg_f5 border_e6 padding_15">全程动态管控系统</div>
         <div class="">
-          <div class="margin_left_20 margin_top_30 margin_bottom_30 font_18">
-            <div class="inline_block" v-for="(item,index) in 3" @click="classBtn(index)">
-              <span class="pointer" :class="{color_title: classCur == index}">项目启动文件</span>
-              <Icon v-show="index != 2" type="ios-arrow-round-forward" size="30"/>
-            </div>
-          </div>
+          <!--<div class="margin_left_20 margin_top_30 margin_bottom_30 font_18">-->
+            <!--<div class="inline_block" v-for="(item,index) in 3" @click="classBtn(index)">-->
+              <!--<span class="pointer" :class="{color_title: classCur == index}">项目启动文件</span>-->
+              <!--<Icon v-show="index != 2" type="ios-arrow-round-forward" size="30"/>-->
+            <!--</div>-->
+          <!--</div>-->
 
-          <div v-for="item in 3" class="margin_15 border_bottom_e6 padding_bottom_10">
-            <p class="font_18">1.1.1专项服务合同</p>
+          <div v-for="item in productSection" class="margin_15 border_bottom_e6 padding_bottom_10">
+            <p class="font_18">{{item.sectionIndex}}</p>
             <div class="margin_left_30 margin_top_10 clearfix">
-              <span>视频音频详细讲解详细讲解</span>
+              <span>{{item.sectionName}}</span>
               <div class="float_right">
                 <Button v-if="detailId == 1 || detailId == 2" size="small" shape="circle" class="bg_a5 color_fff">查看详情</Button>
-                <Button v-if="detailId == 1 || detailId == 2" size="small" type="success" shape="circle" class="bg_title">立即购买</Button>
+                <Button v-if="detailId == 1 || detailId == 2" size="small" type="success" shape="circle" class="bg_title" @click="goBuy(item.productCode)">立即购买</Button>
                 <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">视频</Button>
                 <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">音频</Button>
                 <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">文字</Button>
@@ -87,7 +87,7 @@
 
         </div>
         <div class="text_center padding_top_20 padding_bottom_30">
-        	<span class="pointer">查看更多》</span>
+        	<!--<span class="pointer">查看更多》</span>-->
         </div>
       </div>
       <!--评价-->
@@ -153,7 +153,10 @@ export default {
           // 评价列表
           evaluateList: [],
           total: 0,
-          pageSize: 3
+          pageSize: 3,
+          // 课程目录
+          productSection: [],
+          detailId: 1
         }
 
     },
@@ -175,18 +178,6 @@ export default {
 			evaluateBtn(i){
 				this.isActive = i;
       },
-      // 添加购物车
-      addCart(){
-
-        let param = {
-          ciCode:this.$store.state.userData.cicode,
-          productCode:this.productCode,
-          productCount:1
-        }
-        // 存储用户信息
-        this.$store.commit('cart/addCartTo', param);
-
-      },
       // 查看产品详情
       getProductInfo(productCode){
         // 查看产品详情
@@ -199,6 +190,9 @@ export default {
               this.dataDetail = res.data.content
               //商品评分
               res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
+              // 课程目录
+              this.productSection = eval(res.data.content.productSection)
+              console.log(this.productSection)
 
             }else if (res.data.code == 500){
 
@@ -241,6 +235,36 @@ export default {
         }
         this.pageSize += 3
         this.getEvaluateList(this.pageSize, this.productCode)
+      },
+      /** 数据 **/
+      // 添加商品到购物车 MT
+      addProductCart(code){
+        if(this.$store.state.userData.cicode == null || this.$store.state.userData.cicode == "null"){
+          this.$Message.warning('您还没有登录，请登录后再尝试！');
+          return ;
+        }
+        let param = {
+          ciCode:this.$store.state.userData.cicode,
+          productCode: code,
+          productCount:1
+        }
+        // 存储商品信息
+        this.$store.commit('cart/addToCart', param);
+        this.$store.dispatch('cart/addCartTo', param);
+      },
+      // 立即购买
+      goBuy(code){
+        if(this.$store.state.userData.cicode == null || this.$store.state.userData.cicode == "null"){
+          this.$Message.warning('您还没有登录，请登录后再尝试！');
+          return ;
+        }
+        // 页面跳转
+        this.$router.push({
+          path:'/submitOrder',
+          query: {
+            productCode: code
+          }
+        })
       }
     }
 }

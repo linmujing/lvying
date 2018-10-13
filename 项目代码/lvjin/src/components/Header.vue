@@ -4,6 +4,7 @@
 			<div class="top">
 				<div class="center clearfix">
 					<div class="float_left">
+				
 						<div v-if="phone=='null' || phone==null">
 							<router-link tag="a" to="/user/userLogin">
 								<span class="color_title">亲，请登录</span>
@@ -111,37 +112,35 @@
 			//退出登录
 			quitLogin(){
 
-					this.$Modal.confirm({
-							title: '提示',
-							content: '<p>确定要退出吗？</p>',
-							onOk: () => {
+				this.$Modal.confirm({
+					title: '提示',
+					content: '<p>确定要退出吗？</p>',
+					onOk: () => {
 
-								localStorage.setItem("ciphone", null)
-								localStorage.setItem("ciname", null)
-								localStorage.setItem("cicode", null)
-								localStorage.setItem("ciProfileUrl", null)
-								localStorage.setItem("ciSex", null)
-								localStorage.setItem("ciIntroduce", null)
+						localStorage.setItem("ciphone", null)
+						localStorage.setItem("ciname", null)
+						localStorage.setItem("cicode", null)
+						localStorage.setItem("ciProfileUrl", null)
+						localStorage.setItem("ciSex", null)
+						localStorage.setItem("ciIntroduce", null)
 
-								this.$store.commit('userData/saveUserData', {
-									"ciPhone": null,
-									"ciName": null,
-									"ciCode": null,
-									"ciProfileUrl": null,
-									"ciSex": null,
-									"ciIntroduce": null
-								});
+						this.$store.commit('userData/saveUserData', {
+							"ciPhone": null,
+							"ciName": null,
+							"ciCode": null,
+							"ciProfileUrl": null,
+							"ciSex": null,
+							"ciIntroduce": null
+						});
 
-								//跳转函数
-                this.$router.push({ name: 'shopMallIdex'})
+						//跳转函数
+						this.$router.push({ name: 'shopMallIdex'})
 
-							},
-							onCancel: () => {
-									
-							}
-					});
-
-
+					},
+					onCancel: () => {
+							
+					}
+				});
 
 			}
 		},

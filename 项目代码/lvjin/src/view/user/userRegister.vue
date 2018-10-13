@@ -232,6 +232,8 @@ export default {
 
                             this.sendTimeOut();
 
+                        }else {
+                          this.$Message.error(res.data.message);
                         }
 
                     })

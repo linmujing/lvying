@@ -43,8 +43,8 @@
                     <span class="font_16 color_666 vertical_middle">试听</span>
                   </p>
                   <div class="float_left margin_left_10">
-                    <Button type="warning" shape="circle">加入购物车</Button>
-                    <Button type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
+                    <Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
+                    <Button type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(item.productCode)">立即购买</Button>
                   </div>
                 </div>
               </div>
@@ -81,8 +81,8 @@
               </p>
             </div>
             <div class="float_right">
-              <Button type="warning" shape="circle">加入购物车</Button>
-              <Button type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
+              <Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
+              <Button type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(item.productCode)">立即购买</Button>
             </div>
           </div>
         </li>
@@ -134,10 +134,9 @@ export default {
       }
     },
     methods: {
-      //获取推荐商品
+      //获取橱窗对象
       getCaseProduct(pageLocat){
-
-        var that=this;
+        this.$Spin.show()
         this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1, pageLocat: pageLocat})).then((res)=>{
 
           if(res.data.code == 200){
@@ -145,51 +144,53 @@ export default {
             // 保存轮播数据
             this.banner = eval(res.data.content[2].caseUrl)
             for(let item of content){
-              if(item.caseName=="劳动推荐"){
-                that.laborArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
-
+              if(item.caseName=="音频推荐" || item.caseName=="视频推荐"){
+                this.getProductShowCase(item.productCode, item.productSortBy, 1)
               }else if(item.caseName=="热门推荐"){
-
-                that.hotArr.push({productCode:item.productCode,productSortBy:item.productSortBy});
-
-              }else{
-
-                console.log("没数据!");
-
+                this.getProductShowCase(item.productCode, item.productSortBy, 2)
               }
             }
+          }else{
 
-            return Promise.resolve([that.laborArr,that.hotArr]);
+            this.$Message.warning(res.data.message);
+
           }
-        }).then((res)=>{
-          // console.log(res);
-          let arr=[];
-          for(let item of res){
-            // console.log(item);
-            for(let item2 of item){
-              // console.log(item2);
-              let params=this.$Qs.stringify(item2);
-              // console.log(params);
-
-              var that=this;
-              this.$api.getProductShowCase(params).then((res)=>{
-                if(res.data.code=="200"){
-                  let {content}=res.data;
-                  console.log(res.data)
-                  arr.push(content);
-                  return Promise.resolve(arr);
-                }
-
-              }).then((arry)=>{
-                console.log(arry)
-                if(arry.length===2){
-                  that.laborArr=arry[0];
-                  that.hotArr=arry[1];
-                }
-              })
-            }
-          }
+          this.$Spin.hide()
         })
+          .catch((error) => {
+            this.$Spin.hide()
+            console.log('发生错误！', error);
+          });
+      },
+      //获取推荐商品
+      getProductShowCase(productCode, productSortBy, type){
+        var params = this.$Qs.stringify({'productCode': productCode, 'productSortBy': productSortBy})
+        this.$api.getProductShowCase( params )
+
+          .then( (res) => {
+
+            if(res.data.code == 200){
+
+              switch (type) {
+                case 1:
+                  this.laborArr = res.data.content
+                  break
+                case 2:
+                  this.hotArr = res.data.content
+                  break
+              }
+
+            }else{
+
+              this.$Message.warning(res.data.message);
+
+            }
+            this.$Spin.hide()
+          })
+          .catch((error) => {
+            this.$Spin.hide()
+            console.log('发生错误！', error);
+          });
       },
       // 点击更多跳转
       moreList(){
@@ -213,6 +214,36 @@ export default {
           path:'/videoCourseDetail',
           query: {
             productCode: productCode
+          }
+        })
+      },
+      /** 数据 **/
+      // 添加商品到购物车 MT
+      addProductCart(code){
+        if(this.$store.state.userData.cicode == null || this.$store.state.userData.cicode == "null"){
+          this.$Message.warning('您还没有登录，请登录后再尝试！');
+          return ;
+        }
+        let param = {
+          ciCode:this.$store.state.userData.cicode,
+          productCode: code,
+          productCount:1
+        }
+        // 存储商品信息
+        this.$store.commit('cart/addToCart', param);
+        this.$store.dispatch('cart/addCartTo', param);
+      },
+      // 立即购买
+      goBuy(code){
+        if(this.$store.state.userData.cicode == null || this.$store.state.userData.cicode == "null"){
+          this.$Message.warning('您还没有登录，请登录后再尝试！');
+          return ;
+        }
+        // 页面跳转
+        this.$router.push({
+          path:'/submitOrder',
+          query: {
+            productCode: code
           }
         })
       }

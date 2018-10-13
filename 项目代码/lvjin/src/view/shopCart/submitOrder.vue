@@ -1,4 +1,5 @@
 <template>
+    <!-- 提交订单页面 -->
     <div class="bg_f5 padding_top_30 padding_bottom_80" >
         <div class="box_center_1200" v-show="!addressData.addressPageShow">
 
@@ -212,91 +213,92 @@ export default {
                 // 总价格
                 listTotal: 0.00,
                 // 大列表
-                cartList:[
-                    {
-                        index1: 0,
-                        itemState: false,
-                        itemTitle: '机构法院',
-                        itemTotal: 0.00,
-                        shippingMethods: '快递免邮',
-                        // 小列表
-                        items:[
+                cartList: []
+            }, 
+            cartList:  [
+                {
+                    index1: 0,
+                    itemState: false,
+                    itemTitle: '机构法院',
+                    itemTotal: 0.00,
+                    shippingMethods: '快递免邮',
+                    // 小列表
+                    items:[
+                        {
+                            index2: 0,
+                            state: false,
+                            price: 88.01,
+                            num: 1,
+                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字',
+                            itemCoupon: '限时优惠券省14元限时优惠券省12元限时优惠券省12元',
+                            itemCouponList: [
                             {
-                                index2: 0,
-                                state: false,
-                                price: 88.01,
-                                num: 1,
-                                describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字',
-                                itemCoupon: '限时优惠券省14元限时优惠券省12元限时优惠券省12元',
-                                itemCouponList: [
-                                {
-                                    value: '限时优惠券省12元',
-                                    label: '限时优惠券省12元'
-                                },
-                                ],
+                                value: '限时优惠券省12元',
+                                label: '限时优惠券省12元'
+                            },
+                            ],
 
-                                
-                                imgSrc: require('../../assets/images/image/cart_book.png')
+                            
+                            imgSrc: require('../../assets/images/image/cart_book.png')
+                        },
+                        {
+                            index2: 1,
+                            state: false,
+                            price: 101.01,
+                            num: 1,
+                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
+                            itemCoupon: '限时优惠券省13元',
+                            itemCouponList: [
+                            {
+                                value: '限时优惠券省12元',
+                                label: '限时优惠券省12元'
                             },
+                            ],
+                            imgSrc: require('../../assets/images/image/cart_book.png')
+                        }
+                    ]
+                },
+                {
+                    index1: 0,
+                    itemState: false,
+                    itemTitle: '机构法院',
+                    itemTotal: 0.00,
+                    shippingMethods: '快递免邮',
+                    // 小列表
+                    items:[
+                        {
+                            index2: 0,
+                            state: false,
+                            price: 88.01,
+                            num: 1,
+                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
+                            itemCoupon: '限时优惠券省12元',
+                            itemCouponList: [
                             {
-                                index2: 1,
-                                state: false,
-                                price: 101.01,
-                                num: 1,
-                                describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                                itemCoupon: '限时优惠券省13元',
-                                itemCouponList: [
-                                {
-                                    value: '限时优惠券省12元',
-                                    label: '限时优惠券省12元'
-                                },
-                                ],
-                                imgSrc: require('../../assets/images/image/cart_book.png')
-                            }
-                        ]
-                    },
-                    {
-                        index1: 0,
-                        itemState: false,
-                        itemTitle: '机构法院',
-                        itemTotal: 0.00,
-                        shippingMethods: '快递免邮',
-                        // 小列表
-                        items:[
-                            {
-                                index2: 0,
-                                state: false,
-                                price: 88.01,
-                                num: 1,
-                                describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                                itemCoupon: '限时优惠券省12元',
-                                itemCouponList: [
-                                {
-                                    value: '限时优惠券省16元',
-                                    label: '限时优惠券省16元'
-                                },
-                                ],
-                                imgSrc: require('../../assets/images/image/cart_book.png')
+                                value: '限时优惠券省16元',
+                                label: '限时优惠券省16元'
                             },
+                            ],
+                            imgSrc: require('../../assets/images/image/cart_book.png')
+                        },
+                        {
+                            index2: 1,
+                            state: false,
+                            price: 101.01,
+                            num: 1,
+                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
+                            itemCoupon: '限时优惠券省18元',
+                            itemCouponList: [
                             {
-                                index2: 1,
-                                state: false,
-                                price: 101.01,
-                                num: 1,
-                                describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                                itemCoupon: '限时优惠券省18元',
-                                itemCouponList: [
-                                {
-                                    value: '限时优惠券省12元',
-                                    label: '限时优惠券省12元'
-                                },
-                                ],
-                                imgSrc: require('../../assets/images/image/cart_book.png')
-                            }
-                        ]
-                    }
-                ],
-            },   
+                                value: '限时优惠券省12元',
+                                label: '限时优惠券省12元'
+                            },
+                            ],
+                            imgSrc: require('../../assets/images/image/cart_book.png')
+                        }
+                    ]
+                }
+            ],
 
             /*收货地址数据*/
             addressData:{
@@ -517,8 +519,13 @@ export default {
                 this.$router.push({ name: 'shopGoPay', params: { type: true} })
             }
             
+        },
+
+        /**数据**/
+        // 获取产品详情
+        getProductDetail(){
+
         }
-        
 
     },
     mounted(){

@@ -1,4 +1,5 @@
 <template>
+    <!-- 去支付页面 -->
     <div class="bg_f5 padding_top_30 padding_bottom_80">
         <div class="box_center_1200">
 
