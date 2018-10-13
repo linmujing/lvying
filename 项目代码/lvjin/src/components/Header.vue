@@ -4,6 +4,7 @@
 			<div class="top">
 				<div class="center clearfix">
 					<div class="float_left">
+				
 						<div v-if="phone=='null' || phone==null">
 							<router-link tag="a" to="/user/userLogin">
 								<span class="color_title">亲，请登录</span>
@@ -146,8 +147,6 @@
 		computed: {
 			// 监听登录状态变化 修改页面值
 			getLoginChange() {
-
-				console.log(this.$store.state.userData.ciname)
 				
 				this.user = this.$store.state.userData.ciname;
 
