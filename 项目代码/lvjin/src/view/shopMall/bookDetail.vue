@@ -40,31 +40,14 @@
               </div>
             </Affix>
             <!--商品详情-->
-		        <div class="padding_20 margin_bottom_20">
-		          <Row class="margin_top_10">
-		            <Col span="8" class="">开 本：16开</Col>
-		            <Col span="8" class="">纸 张：胶版纸</Col>
-		            <Col span="8" class="">包 装：平装-胶订</Col>
-		          </Row>
-		          <Row class="margin_top_10">
-                <Col span="8" class="">是否套装：是</Col>
-                <Col span="8" class="">国际标准书号ISBN：25271564</Col>
-		          </Row>
-		          <Row class="margin_top_10">
-		            <Col>所属分类：图书>考试>司法考试图书>法律>法律考试>司法考试</Col>
-		          </Row>
-              <Row class="margin_top_20">
-                <Col span="2" class="">内容简介：</Col>
-		            <Col span="22">生活处处总关法——在当今这个物质生活和精神生活都飞速发展的社会里，法律是不容回避的问题。*、吃饭、旅游、看病、 结婚、育儿、养老、上班、开店、买房、装修、拆迁等等，无处不涉及法律。法律已经成为了我们生活中不能缺少的“伴侣”。也正是有了法律的存在，有法律给我们做后盾，我们才能胸有成竹地去维护法律赋予我们的权利。但是，这要以我们“懂法、 知法”作为前提。如果我们不懂法，当我们的权益受到侵犯时，就会或许选择沉默、或许选择激进的方法解决，但最终受伤害的还是我们自己。</Col>
-		          </Row>
-              <div class="margin_top_30">
-                <p>目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</p>
-                <p class="padding_left_20 margin_top_10">第一章日常消费法律知识——天天315</p>
-              </div>
-              <div class="text_right margin_top_20">
-                <Button size="small">显示全部信息</Button>
-              </div>
-		        </div>
+		        <div class="padding_20 margin_bottom_20" v-html="dataDetail.productSpecification"></div>
+            <!--<div class="margin_top_30">-->
+              <!--<p>目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</p>-->
+              <!--<p class="padding_left_20 margin_top_10">第一章日常消费法律知识——天天315</p>-->
+            <!--</div>-->
+            <!--<div class="text_right margin_top_20">-->
+              <!--<Button size="small">显示全部信息</Button>-->
+            <!--</div>-->
 		      </div>
 		      <!--评价-->
 		      <div class="margin_top_50">
@@ -117,25 +100,25 @@
       				<div class="float_left margin_left_20 margin_top_15">
       					<p class="font_18 font_weight_bold">法律援助</p>
       					<p class="color_666 margin_top_5">课程数：8</p>
-      					<p class="color_666 margin_top_5">用户数：210</p>
+      					<p class="color_666 margin_top_5">用户数：{{dataDetail.saleCount}}</p>
       				</div>
       			</div>
       			<!--热门课程-->
       			<div>
       				<div class="margin_top_30 margin_bottom_30"><span class="title">猜你喜欢</span></div>
       				<ul class="list_unstyled ul_inline clearfix">
-				        <li v-for="(item, index) in 3" :key="index" class="listBox bg_white margin_bottom_30">
-                  <div class="text_center">
-                    <img src="../../assets/images/image/cart_book.png" height="280">
+				        <li v-for="(item, index) in recommendList" :key="index" class="listBox bg_white margin_bottom_30">
+                  <div @click="jumpDetail(item.productCode)" class="text_center">
+                    <img :src="item.productProfileUrl" class="all_width" height="280">
                   </div>
-                  <div class="font_18 text_ellipsis margin_top_20">常见民事纠纷裁判思路与规则</div>
+                  <div class="font_18 text_ellipsis margin_top_20">{{item.productTitle}}</div>
                   <div class="color_666 text_ellipsis margin_top_10 clearfix">
-                    <div class="float_left">法院大讲堂</div>
-                    <div class="float_right">1234人购买过</div>
+                    <div class="float_left" v-html="item.productDesc"></div>
+                    <div class="float_right">{{item.saleCount}}人购买过</div>
                   </div>
                   <div class="margin_top_15 clearfix">
                     <p class="pointer float_left">
-                      <span class="font_20 color_title">￥500.00</span>
+                      <span class="font_20 color_title">￥{{item.productPrice}}</span>
                     </p>
                     <div class="float_right margin_left_20">
                       <Button type="success" shape="circle" class="bg_title">立即购买</Button>
@@ -169,15 +152,27 @@ export default {
           // 评价列表
           evaluateList: [],
           total: 0,
-          pageSize: 3
+          pageSize: 3,
+          // 推荐产品
+          recommendList: []
         }
 
+    },
+    watch: {
+      //监听参数变化
+      $route(){
+        this.productCode = this.$route.query.productCode
+      },
+      productCode() {
+        this.productCode = this.$route.query.productCode
+        this.getProductInfo(this.productCode)
+        this.getEvaluateList(this.pageSize,  this.productCode)
+      },
     },
     mounted(){
       this.productCode = this.$route.query.productCode
       this.getProductInfo(this.productCode)
       this.getEvaluateList(this.pageSize,  this.productCode)
-      console.log(this.productCode)
     },
     methods: {
     	//详情
@@ -190,7 +185,7 @@ export default {
 			},
       // 查看产品详情
       getProductInfo(productCode){
-        // 查看产品详情
+        this.$Spin.show()
         this.$api.getProductInfo( this.$Qs.stringify({'productCode': productCode}) )
 
           .then( (res) => {
@@ -198,6 +193,11 @@ export default {
             if(res.data.code == 200){
 
               this.dataDetail = res.data.content
+                //获取推荐产品
+              // this.getProductShowCase('P121212121213,P121212121212,P121212121211,P121212121214') //测试
+              if(!res.data.content.productRecommendCode == '' || !res.data.content.productRecommendCode == null){
+                this.getProductShowCase(res.data.content.productRecommendCode)
+              }
               //商品评分
               res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
 
@@ -206,9 +206,10 @@ export default {
               this.$Message.warning(res.data.message);
 
             }
-
+            this.$Spin.hide()
           })
           .catch((error) => {
+            this.$Spin.hide()
             console.log('发生错误！', error);
           });
       },
@@ -242,6 +243,43 @@ export default {
         }
         this.pageSize += 3
         this.getEvaluateList(this.pageSize, this.productCode)
+      },
+      // 获取推荐列表或猜你喜欢
+      getProductShowCase(productCode){
+        // 查看产品详情
+        this.$api.getProductShowCase( this.$Qs.stringify({'productCode': productCode}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+
+              if(res.data.content.length > 3){
+                for(var i=0;i<3;i++){
+                  this.recommendList.push(res.data.content[i])
+                }
+              }else {
+                this.recommendList = res.data.content
+              }
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      // 跳到详情
+      jumpDetail(productCode){
+        this.$router.push({
+          path:'/bookDetail',
+          query: {
+            productCode: productCode
+          }
+        })
       },
 
       /** 数据 **/
