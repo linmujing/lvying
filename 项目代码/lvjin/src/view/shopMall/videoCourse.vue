@@ -43,8 +43,8 @@
                     <span class="font_16 color_666 vertical_middle">试听</span>
                   </p>
                   <div class="float_left margin_left_10">
-                    <Button type="warning" shape="circle">加入购物车</Button>
-                    <Button type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
+                    <Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
+                    <Button type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(item.productCode)">立即购买</Button>
                   </div>
                 </div>
               </div>
@@ -81,8 +81,8 @@
               </p>
             </div>
             <div class="float_right">
-              <Button type="warning" shape="circle">加入购物车</Button>
-              <Button type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
+              <Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
+              <Button type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(item.productCode)">立即购买</Button>
             </div>
           </div>
         </li>
@@ -214,6 +214,36 @@ export default {
           path:'/videoCourseDetail',
           query: {
             productCode: productCode
+          }
+        })
+      },
+      /** 数据 **/
+      // 添加商品到购物车 MT
+      addProductCart(code){
+        if(this.$store.state.userData.cicode == null || this.$store.state.userData.cicode == "null"){
+          this.$Message.warning('您还没有登录，请登录后再尝试！');
+          return ;
+        }
+        let param = {
+          ciCode:this.$store.state.userData.cicode,
+          productCode: code,
+          productCount:1
+        }
+        // 存储商品信息
+        this.$store.commit('cart/addToCart', param);
+        this.$store.dispatch('cart/addCartTo', param);
+      },
+      // 立即购买
+      goBuy(code){
+        if(this.$store.state.userData.cicode == null || this.$store.state.userData.cicode == "null"){
+          this.$Message.warning('您还没有登录，请登录后再尝试！');
+          return ;
+        }
+        // 页面跳转
+        this.$router.push({
+          path:'/submitOrder',
+          query: {
+            productCode: code
           }
         })
       }

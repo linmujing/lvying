@@ -33,8 +33,8 @@
             </div>
           </div>
           <div class="margin_top_50" >
-            <Button size="large" type="warning" shape="circle" @click="addCart">加入购物车</Button>
-            <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title">立即购买</Button>
+            <Button size="large" type="warning" shape="circle" @click="addProductCart(dataDetail.productCode)">加入购物车</Button>
+            <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
           </div>
         </Col>
       </Row>
@@ -75,7 +75,7 @@
               <span>{{item.sectionName}}</span>
               <div class="float_right">
                 <Button v-if="detailId == 1 || detailId == 2" size="small" shape="circle" class="bg_a5 color_fff">查看详情</Button>
-                <Button v-if="detailId == 1 || detailId == 2" size="small" type="success" shape="circle" class="bg_title">立即购买</Button>
+                <Button v-if="detailId == 1 || detailId == 2" size="small" type="success" shape="circle" class="bg_title" @click="goBuy(item.productCode)">立即购买</Button>
                 <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">视频</Button>
                 <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">音频</Button>
                 <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">文字</Button>
@@ -178,18 +178,6 @@ export default {
 			evaluateBtn(i){
 				this.isActive = i;
       },
-      // 添加购物车
-      addCart(){
-        console.log("yes")
-        let param = {
-          ciCode:this.$store.state.userData.cicode,
-          productCode:this.productCode,
-          productCount:1
-        }
-        // 存储用户信息
-        //this.$store.commit('cart/addCartTo', param);
-
-      },
       // 查看产品详情
       getProductInfo(productCode){
         // 查看产品详情
@@ -247,6 +235,36 @@ export default {
         }
         this.pageSize += 3
         this.getEvaluateList(this.pageSize, this.productCode)
+      },
+      /** 数据 **/
+      // 添加商品到购物车 MT
+      addProductCart(code){
+        if(this.$store.state.userData.cicode == null || this.$store.state.userData.cicode == "null"){
+          this.$Message.warning('您还没有登录，请登录后再尝试！');
+          return ;
+        }
+        let param = {
+          ciCode:this.$store.state.userData.cicode,
+          productCode: code,
+          productCount:1
+        }
+        // 存储商品信息
+        this.$store.commit('cart/addToCart', param);
+        this.$store.dispatch('cart/addCartTo', param);
+      },
+      // 立即购买
+      goBuy(code){
+        if(this.$store.state.userData.cicode == null || this.$store.state.userData.cicode == "null"){
+          this.$Message.warning('您还没有登录，请登录后再尝试！');
+          return ;
+        }
+        // 页面跳转
+        this.$router.push({
+          path:'/submitOrder',
+          query: {
+            productCode: code
+          }
+        })
       }
     }
 }
