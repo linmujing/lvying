@@ -519,8 +519,13 @@ export default {
                 this.$router.push({ name: 'shopGoPay', params: { type: true} })
             }
             
+        },
+
+        /**数据**/
+        // 获取产品详情
+        getProductDetail(){
+
         }
-        
 
     },
     mounted(){
