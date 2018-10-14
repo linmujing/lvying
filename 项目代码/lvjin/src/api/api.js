@@ -25,7 +25,8 @@ export const resetPassWord = params => { return instance.post(`customer/info/res
 export const saveCustomerInfo = params => { return instance.post(`customer/info/saveCustomerInfo`, params ); };
 //校验手机号
 export const verifyCiPhone = params => { return instance.post(`customer/info/verifyCiPhone`, params ); };
-
+// 会员课程
+export const getmyCourseList = params => { return instance.post(`/customer/course/getCourseList`, params ); };
 /** 商户信息 **/
 //商户注册
 export const addMerchantInfo = params => { return instance.post(`merchant/info/addMerchantInfo`, params ); };

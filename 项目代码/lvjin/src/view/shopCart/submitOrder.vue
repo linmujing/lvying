@@ -84,7 +84,8 @@
             </div>
 
             <!-- 订单部分 -->
-            <div class="shopping_cart_container">
+            <div class="shopping_cart_container" style="position:relative;">
+                <div v-if="!submitType" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;"></div>
                 <div class="list_box" >
 
                     <!-- 确认订单信息提示 #submitType#-->
@@ -125,7 +126,7 @@
                                             <Row>
                                                 <Col span="24">
                                                     <div class="item_list_describe">
-                                                        <p >{{item.describe}}</p>
+                                                        <p v-html="item.describe"></p>
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -446,7 +447,7 @@ export default {
 
             // 收货地址弹框绑定值
             let modelData =  this.addressData.addressModelData;
-    console.log(modelData)
+
             if(modelData.name == ""){
                 
                     this.$Message.warning('姓名不能为空！');
@@ -529,6 +530,70 @@ export default {
             
         },
 
+        /**获取产品过来数据**/
+        // 获取产品详情数据
+        getProductDetailData(productCode){
+
+            let param = {'productCode': productCode}
+
+            this.$api.getProductInfo(  this.$Qs.stringify(param) )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    let data = res.data.content , arr = [];
+
+                    if (data == null || data.length == 0) { return ;}
+
+                    // 压入商户
+                    arr.push({
+                        id: '',
+                        itemState: false,
+                        itemTitle: data.merchantCode,
+                        itemTotal: 0.00,
+                        //小列表
+                        items:[]
+                    });
+
+                    // 压入商品
+                    arr[0].items.push({
+                        id: data.id,
+                        productCode: data.productCode,
+                        state: false,
+                        price: data.productPrice,
+                        num: data.productNum,
+                        describe: data.productDesc,
+                        imgSrc: data.productProfileUrl
+                    })
+
+                    // 压入到购物车
+                    this.cartDate.cartList = arr;
+
+                    //计算小计与合计
+                    this.calculatePrice();
+
+                }else{
+
+                    this.$Message.warning(res.data.message);  
+                    
+                }
+
+            })
+            .catch((error) => {
+
+                this.$Spin.hide();
+                console.log('发生错误！', error);
+
+            });
+        },
+        // 获取购物车产品数据
+        getProductCartData(){
+
+        },        
+
         /**数据**/
         // 获取地址列表
         getAddressData(){
@@ -541,7 +606,7 @@ export default {
 
             .then( (res) => {
 
-                console.log(res)
+                //console.log(res)
 
                 if(res.data.code == 200){
 
@@ -566,7 +631,7 @@ export default {
 
                         for(let item of data){
 
-                            if(this.addressData.addressModelData.id == item.addressCode){
+                            if(this.addressData.addressModelData.addressCode == item.addressCode){
 
                                 arr.push({
                                     addressCode: data[0].addressCode,
@@ -609,27 +674,26 @@ export default {
             // 获取弹框数据
             let data = this.addressData.addressModelData;
 
-            // 判断是保存还是新增地址
-            let addressCode = this.addressData.addOrAdit ? '' : data.addressCode ;
-
-            let param = this.$Qs.stringify({ 
+            let param = { 
                 "ciCode": this.userData.ciCode,
-                "addressCode": addressCode,
                 "addressPersonName":data.name,
                 "addressPhone": data.phone,
                 "province": data.province,
                 "zone": data.county,
                 "city": data.city,
                 "address": data.addressDetail,
-                }) ;
-            console.log(param)
+                };
+
+            // 判断是保存还是新增地址
+            this.addressData.addOrAdit ? '' : param.addressCode = data.addressCode ;
+         
             this.$Spin.show();
 
-            this.$api.saveAddress( param )
+            this.$api.saveAddress(  this.$Qs.stringify(param) )
 
             .then( (res) => {
 
-                console.log(res)
+                //console.log(res)
 
                 if(res.data.code == 200){
 
@@ -661,15 +725,12 @@ export default {
             });
 
         },
-        // 获取产品详情
-        getProductDetail(){
 
-        }
 
     },
 
     computed: {
-        // 监听地址增删， 及时更新列表
+        // 监听地址增删， 及时更新地址
         listenAddressList() {  return this.$store.state.personCenter.addressState  }
     },
     watch: {
@@ -679,16 +740,29 @@ export default {
     mounted(){
 
         // 获取页面类型
-        this.submitType = this.$route.params.type;
+        this.submitType = true;//this.$route.params.type;
 
         // 获取地址信息
         this.cityList = province();
 
         // 获取用户信息
         this.userData.ciCode = this.$store.state.userData.cicode ;
+        this.userData.phone = this.$store.state.userData.ciphone ;
 
         // 获取用户地址列表
         this.getAddressData();
+
+        // 获取页面数据来源 this.$route.query.sourceType
+        if(1){
+
+            this.getProductDetailData(this.$route.query.productCode);
+
+        }else{
+
+
+
+        }
+        
 
     }
 }

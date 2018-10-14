@@ -482,7 +482,7 @@ export default {
             });
            
             // 去结算页面
-            // this.$router.push({ name: 'submitOrder', params: { type: true} })
+            // this.$router.push({ path: 'submitOrder', query: { productCode: ''} })
 
         },
    
