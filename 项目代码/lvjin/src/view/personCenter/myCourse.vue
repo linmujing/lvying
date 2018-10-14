@@ -125,13 +125,29 @@ export default {
 
             this.$router.push({ name: '', params: {id: id}})
         },
-
+        // 请求我的课程
+        getMyCourse(){
+            let pageNo=this.courseData.pageData.current;
+            let pageSize=6;
+            let ciCode=this.$store.state.userData.cicode;
+            let param=this.$Qs.stringify({pageNo,pageSize,ciCode})
+            this.$api.getmyCourseList(param).then((res)=>{
+                console.log(res);
+                // if(res.code===200){
+                //     let {content}=res.data;
+                //     for(item of content.list){
+                        
+                //     }
+                // }
+                
+            })
+        },
         /**分页**/
         //@param value 返回当前页码
         changeOrderPage(value){
 
             this.courseData.pageData.current = value;
-
+            
         },
         //监听课程数量添加滚动事件
         lisionOrderScroll(){
@@ -158,10 +174,7 @@ export default {
 
     },
     mounted(){
-
-
-       
-
+        this.getMyCourse()
     }
 }
 </script>

@@ -476,8 +476,9 @@ export default {
 
             if(CodeAndCount == ''){ this.$Message.warning('请选择商品！'); return; }
 
+            
             // 去结算页面
-            this.$router.push({ path: 'submitOrder', query: { productCode: CodeAndCount, sourceType: 'cart'} })
+            this.$router.push({ path: 'submitOrder', query: { productCode: CodeAndCount , sourceType: 'cart'} })
 
         },
    

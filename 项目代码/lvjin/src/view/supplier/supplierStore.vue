@@ -27,8 +27,8 @@
                   </div>
                   <div class="float_left margin_left_20 margin_top_15">
                     <p class="font_18 font_weight_bold">法律援助</p>
-                    <p class="color_666 margin_top_5">课程数：8</p>
-                    <p class="color_666 margin_top_5">用户数：210</p>
+                    <p class="color_666 margin_top_5">课程数：{{merchantInfo.productCount}}</p>
+                    <p class="color_666 margin_top_5">用户数：{{merchantInfo.ciCount}}</p>
                   </div>
                 </div>
                 <!--购买量排行-->
@@ -141,7 +141,8 @@ export default {
           pageSize: 12,
           productList: [],
           saleList: [],
-          merchantCode: this.$route.query.merchantCode
+          merchantCode: this.$route.query.merchantCode,
+          merchantInfo: {}
         }
         
     },
@@ -149,6 +150,7 @@ export default {
       // console.log(this.$route.query.merchantCode)
       this.getProductList(1,10)
       this.getProductList(1,20)
+      this.getMerchantInfo()
     },
     methods: {
       //首页切换
@@ -184,6 +186,29 @@ export default {
                   this.saleList = res.data.content.list
                 }
               }
+
+            }else {
+
+              this.$Message.warning(res.data.message);
+
+            }
+            this.$Spin.hide()
+          })
+          .catch((error) => {
+            this.$Spin.hide()
+            console.log('发生错误！', error);
+          });
+      },
+      //获取商户详细信息
+      getMerchantInfo(){
+        this.$Spin.show()
+        this.$api.getMerchantInfo( this.$Qs.stringify({'merchantCode': this.merchantCode}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+
+              this.merchantInfo = res.data.content
 
             }else {
 

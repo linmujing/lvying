@@ -130,8 +130,8 @@
       				</div>
       				<div class="float_left margin_left_20 margin_top_15">
       					<p class="font_18 font_weight_bold">法律援助</p>
-      					<p class="color_666 margin_top_5">课程数：8</p>
-      					<p class="color_666 margin_top_5">用户数：{{dataDetail.saleCount}}</p>
+                <p class="color_666 margin_top_5">课程数：{{merchantInfo.productCount}}</p>
+                <p class="color_666 margin_top_5">用户数：{{merchantInfo.ciCount}}</p>
       				</div>
       			</div>
       			<!--热门课程-->
@@ -192,7 +192,8 @@ export default {
           // 课程目录
           productSection: [],
           // 推荐产品
-          recommendList: []
+          recommendList: [],
+          merchantInfo: {}
         }
 
     },
@@ -211,7 +212,6 @@ export default {
       this.productCode = this.$route.query.productCode
       this.getProductInfo(this.productCode)
       this.getEvaluateList(this.pageSize,  this.productCode)
-      
     },
     methods: {
     	//详情
@@ -232,6 +232,7 @@ export default {
             if(res.data.code == 200){
 
               this.dataDetail = res.data.content
+              this.getMerchantInfo(res.data.content.merchantCode)
               //获取推荐产品
               // this.getProductShowCase('P121212121213,P121212121212,P121212121211,P121212121214') //测试
               if(!res.data.content.productRecommendCode == '' || !res.data.content.productRecommendCode == null){
@@ -241,8 +242,6 @@ export default {
               res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
               // 课程目录
               this.productSection = eval(res.data.content.productSection)
-              // console.log(this.productSection)
-
             }else{
 
               this.$Message.warning(res.data.message);
@@ -310,6 +309,27 @@ export default {
 
           })
           .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
+      //获取商户详细信息
+      getMerchantInfo(code){
+        this.$Spin.show()
+        this.$api.getMerchantInfo( this.$Qs.stringify({'merchantCode': code}) )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+              this.merchantInfo = res.data.content
+            }else {
+
+              this.$Message.warning(res.data.message);
+
+            }
+            this.$Spin.hide()
+          })
+          .catch((error) => {
+            this.$Spin.hide()
             console.log('发生错误！', error);
           });
       },
