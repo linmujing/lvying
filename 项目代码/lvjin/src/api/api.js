@@ -35,6 +35,8 @@ export const merchantLogin = params => { return instance.post(`merchant/info/log
 export const merchantResetPassWord = params => { return instance.post(`merchant/info/resetPassWord`, params ); };
 //商户资料完善
 export const saveMerchantInfo = params => { return instance.post(`merchant/info/saveMerchantInfo`, params ); };
+//获取商户详细信息
+export const getMerchantInfo = params => { return instance.post(`merchant/info/getMerchantInfo`, params ); };
 //校验手机号
 export const verifyMerchantPhone = params => { return instance.post(`merchant/info/verifyMerchantPhone`, params ); };
 
