@@ -625,7 +625,7 @@ export default {
     mounted(){
 
         // 获取用户cicode
-        this.cartParams.ciCode = 12; //this.$store.state.userData.ciCode ;
+        this.cartParams.ciCode = this.$store.state.userData.cicode ;
 
         // 获取购物车列表
         this.getCartListData()

@@ -209,12 +209,14 @@
                 this.addressData.addressModelData = {
                     name: '' ,
                     phone: '',
-                    province: { value: '', label: ''},
-                    city: { value: '', label: ''},
-                    county: { value: '', label: ''},
+                    province: '',
+                    city: '',
+                    county: '',
                     addressDetail: '',
-                    id: Item.id
+                    addressCode: ''
                 };
+
+                this.addressValue = [];
 
                 this.addressData.addressModelValue = true;
                 
@@ -236,8 +238,10 @@
                     city: Item.city,
                     county: Item.county,
                     addressDetail: Item.addressDetail,
-                    id: Item.id
+                    addressCode: Item.addressCode
                 };
+
+                this.addressValue = [Item.province, Item.city, Item.county];
 
                 this.addressData.addressModelValue = true;
 
@@ -265,7 +269,7 @@
 
             },
 
-            /*地址数据*/
+            /**地址数据**/
             // 获取地址列表
             getAddressData(){
 
@@ -286,7 +290,7 @@
                         for(let i = 0 ; i < data.length; i++){
 
                             arr.push({
-                                id: data[i].id,
+                                addressCode: data[i].addressCode,
                                 name:  data[i].addressPersonName,
                                 phone:  data[i].addressPhone,
                                 province:  data[i].province,
@@ -298,14 +302,20 @@
 
                         }
 
-                        this.addressList = [];
                         this.addressList = arr;
+
+                        // 全局监听用户地址列表变化
+                        this.$store.commit('personCenter/setAddressState', data.length > 0 ? 1 : 0);
 
                     }else{
 
                         this.$Message.warning(res.data.message);
 
                     }
+
+
+
+                    
 
                     this.$Spin.hide();
 
@@ -323,23 +333,24 @@
                 // 获取弹框数据
                 let data = this.addressData.addressModelData;
 
-                // 判断是保存还是新增地址
-                let addressCode = this.addressData.addOrAdit ? '' : data.id ;
-
-                let param = this.$Qs.stringify({ 
+                let param = { 
                     "ciCode": this.userData.ciCode,
-                    "addressCode": addressCode,
                     "addressPersonName":data.name,
                     "addressPhone": data.phone,
                     "province": data.province,
                     "zone": data.county,
                     "city": data.city,
                     "address": data.addressDetail,
-                    }) ;
-console.log(param)
+                    };
+
+                // 判断是保存还是新增地址
+                this.addressData.addOrAdit ? '' : param.addressCode = data.addressCode ;
+
+                console.log(param)
+
                 this.$Spin.show();
 
-                this.$api.saveAddress( param )
+                this.$api.saveAddress( this.$Qs.stringify(param) )
 
                 .then( (res) => {
 
@@ -376,7 +387,7 @@ console.log(param)
             // 删除地址
             deleteAddressData(){
 
-                let param = this.$Qs.stringify({ "addressCode":  this.addressList[this.addressData.deleteModel.Index].id }) ;
+                let param = this.$Qs.stringify({ "addressCode":  this.addressList[this.addressData.deleteModel.Index].addressCode }) ;
 
                 this.$Spin.show();
 
@@ -393,8 +404,6 @@ console.log(param)
 
                         this.$Message.success('删除成功！')
 
-                        this.addressData.deleteModel.Value = false ;
-
                     }else{
 
                         this.$Message.warning(res.data.message);
@@ -410,6 +419,8 @@ console.log(param)
                     console.log('发生错误！', error);
 
                 });
+
+                this.addressData.deleteModel.Value = false ;
             }
             
         },
