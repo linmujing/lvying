@@ -458,31 +458,31 @@ export default {
 
         // 去结算页面
         goBuy(){
-            // let user=this.$store.state.userData;
-            // let ciCode=user.cicode;
-            // let ciName=user.ciname;
-            // console.log(ciName);
-            // let orderSource=1;
-            // let merchantCode="";
-            // for(let item of this.merchantAllArr){
-            //     merchantCode+=`${item},`;
-            // }
-            // let productCodeAndCount="";
-            // for(let item of this.cartList){
-            //    for(let item2 of item.items){
-            //        if(item2.state){
-            //         productCodeAndCount += `${item2.productCode}-${item2.num},`;
-            //        }
-            //    }
-            // }
-            // let params={ciCode,ciName,orderSource,merchantCode,productCodeAndCount};
-            // params=this.$Qs.stringify(params);
-            // this.$api.addOrderInfo(params).then((res)=>{
-            //         console.log(res);
-            // });
+            let user=this.$store.state.userData;
+            let ciCode=user.cicode;
+            let ciName=user.ciname;
+            console.log(ciName);
+            let orderSource=1;
+            let merchantCode="";
+            for(let item of this.merchantAllArr){
+                merchantCode+=`${item},`;
+            }
+            let productCodeAndCount="";
+            for(let item of this.cartList){
+               for(let item2 of item.items){
+                   if(item2.state){
+                    productCodeAndCount += `${item2.productCode}-${item2.num},`;
+                   }
+               }
+            }
+            let params={ciCode,ciName,orderSource,merchantCode,productCodeAndCount};
+            params=this.$Qs.stringify(params);
+            this.$api.addOrderInfo(params).then((res)=>{
+                    console.log(res);
+            });
            
             // 去结算页面
-            this.$router.push({ path: 'submitOrder', query: { productCode: ''} })
+            // this.$router.push({ path: 'submitOrder', query: { productCode: ''} })
 
         },
    
