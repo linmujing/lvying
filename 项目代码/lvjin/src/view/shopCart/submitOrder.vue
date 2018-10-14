@@ -523,7 +523,8 @@ export default {
 
                 if(res.data.code == 200){
 
-                    
+                // 去支付页面
+                // this.$router.push({ name: 'shopGoPay', params: { orderId: true} })
 
                 }else{
 
@@ -540,10 +541,6 @@ export default {
                 console.log('发生错误！', error);
 
             });
-
-
-            // 去结算页面
-            // this.$router.push({ name: 'shopGoPay', params: { type: true} })
  
         },
         // 获取创建订单参数
@@ -576,7 +573,7 @@ export default {
                 orderSource: 1,
                 productCodeAndCount: productCodeAndCount,
                 merchantCode: merchantCode,
-                ciAddressId: this.addressData.addressList[0].addressCode,
+                addressCode: this.addressData.addressList[0].addressCode,
             }
 
             return param;
