@@ -590,7 +590,111 @@ export default {
             });
         },
         // 获取购物车产品数据
-        getProductCartData(){
+        getProductCartData(productCode){
+
+            let cartString = productCode.split(','), cartCode = [], cartNun = [];
+
+            for(let item of cartString){
+
+                cartCode.push(item.split('-')[0]);
+                cartNun.push(item.split('-')[1]);
+
+            }
+
+            this.$Spin.show()
+              
+            let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 50 , 'ciCode': this.userData.ciCode }) ;
+
+            this.$api.catGetCartList( param )
+
+            .then( (res) => {
+
+                this.allCount = res.data.content.count;
+                console.log(res)
+
+                this.$Spin.hide()
+
+                if(res.data.code == 200){
+                    
+                    let data = res.data.content.list , arr = [], merchantArr = [];
+
+                    if (data == null || data.length == 0) { return ;}
+
+                    for(let i = 0 ; i < data.length; i++){
+
+                        // 购物车商品判断
+                        let codeIndex = cartCode.indexOf(data[i].productCode);
+
+                        // 判断是否是该商品
+                        if( codeIndex != -1) {
+
+                            let index = merchantArr.indexOf(data[i].merchantInfo.merchantNm) ;
+
+                            console.log(index)
+
+                            if( index == -1  ){ 
+
+                                merchantArr.push(data[i].merchantInfo.merchantNm);
+
+                                // 压入商户
+                                arr.push({
+                                    id: '',
+                                    itemState: false,
+                                    itemTitle: data[i].merchantInfo.merchantNm,
+                                    itemTotal: 0.00,
+                                    //小列表
+                                    items:[]
+                                });
+
+                                index = merchantArr.indexOf(data[i].merchantInfo.merchantNm);
+
+                                // 压入商品
+                                arr[index].items.push({
+                                    cartId: data[i].id,
+                                    productCode: data[i].productCode,
+                                    state: false,
+                                    price: data[i].productInfo.productPrice,
+                                    num: cartNun[codeIndex],
+                                    describe: data[i].productInfo.productDesc,
+                                    imgSrc: data[i].productInfo.productProfileUrl
+                                })
+
+                            }else{
+
+                                // 压入商品
+                                arr[index].items.push({
+                                    productCode: data[i].productCode,
+                                    state: false,
+                                    price: data[i].productInfo.productPrice,
+                                    num: cartNun[codeIndex],
+                                    describe: data[i].productInfo.productDesc,
+                                    imgSrc: data[i].productInfo.productProfileUrl
+                                })
+
+                            }
+                        }
+
+                    }
+
+                    // 压入到购物车
+                    this.cartDate.cartList = arr;
+
+                    //计算小计与合计
+                    this.calculatePrice();
+                   
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+            })
+            .catch((error) => {
+
+                this.$Spin.hide();
+                console.log('发生错误！', error);
+
+            });
 
         },        
 
@@ -752,14 +856,14 @@ export default {
         // 获取用户地址列表
         this.getAddressData();
 
-        // 获取页面数据来源 this.$route.query.sourceType
-        if(1){
+        // 获取页面数据来源 
+        if(this.$route.query.sourceType != 'cart'){
 
             this.getProductDetailData(this.$route.query.productCode);
 
         }else{
 
-
+            this.getProductCartData(this.$route.query.productCode);
 
         }
         

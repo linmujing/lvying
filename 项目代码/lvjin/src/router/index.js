@@ -334,6 +334,9 @@ router.beforeEach((to,form,next) =>{
   if(to.meta.title){
     document.title=to.meta.title;
   }
+  // 置顶
+  window.scrollTo(0,0);
+
   next();
 })
 export default router
