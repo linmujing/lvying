@@ -1,16 +1,13 @@
 <template>
     <!-- 提交订单页面 -->
     <div class="bg_f5 padding_top_30 padding_bottom_80" >
-        <div class="box_center_1200" v-show="!addressData.addressPageShow">
+        <div class="box_center_1200" >
 
             <!-- 订单地址 #submitType#-->
             <div class="order_address" >
 
-                <!-- 添加地址 地址列表为空时展示-->
-                <div class="address_add" v-if="addressData.addressList.length == 0"><span class="address_btn" @click="addressData.addressPageShow = true"> <img src="../../assets/images/icon/address_add.png" alt=""> <i>添加收货地址</i> </span></div>
-
                 <!-- 地址列表 -->
-                <div class="address_box" v-else>
+                <div class="address_box">
                     <Row>
                         <Col span="3"><span class="block_center address_box_title">收件人信息：</span></Col>
                         <Col span="21">
@@ -22,65 +19,13 @@
                                             <Col span="12" class="text_right"><span >{{items.phone}}</span></Col>
                                         </Row>
                                         <p class="twoline_ellipsis">{{items.province +" " + items.city +" " + items.county +" " + items.addressDetail}}</p>
-                                        <span class="address_li_adit text_hover_color" @click="aditAddressItem(index1)" v-if="submitType">编辑</span>
+                                        
                                     </li>
                                 </ul>
-                                <span  class="address_btn" style="position:absolute;right:-120px;bottom:0px;" @click="addressData.addressPageShow = true" v-if="submitType"> 
-                                    <!-- <img src="../../assets/images/icon/address_add.png" alt="">  -->
-                                    <i class="text_hover_color">修改收货地址</i> 
-                                </span>
                             </div>
                         </Col>
                     </Row>
                 </div>
-
-                <!-- 订单添加地址弹框 -->
-                <Modal v-model="addressData.addressModelValue" width="680" footer-hide >
-                    <p slot="header" style="background:#f8f8f8;">
-                        <span class="font_18" style="font-weight:400;">新增收货地址</span>
-                    </p>
-                    <!-- 地址信息输入框 -->
-                    <div>
-                        <div class="input_box" >
-                            <span class="input_box_span" >收件人：</span>
-                            <Input v-model="addressData.addressModelData.name"  size="large" clearable style="width: 280px" />
-                        </div>
-                        <div class="input_box" >
-                            <span class="input_box_span" >手机号码：</span>
-                            <Input v-model="addressData.addressModelData.phone"  size="large" clearable style="width: 280px" />
-                        </div>
-                        <div class="input_box" >
-                            <span class="input_box_span" >所在地区：</span>
-                            <div class="input_box_select" >
-                                <el-cascader
-                                    v-model="addressValue"
-                                    placeholder="请选择所在地区"
-                                    :options="cityList"
-                                    filterable
-                                    style="width: 300px"
-                                    @change="handleChange"
-                                    ></el-cascader>
-                                <!-- <Select v-model="addressSelectData.province.value"  size="large" style="width:150px">
-                                    <Option v-for="item in addressSelectData.provinceList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                </Select>
-                                <Select v-model="addressSelectData.city.value"  size="large" style="width:150px">
-                                    <Option v-for="item in addressSelectData.cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                </Select>
-                                <Select v-model="addressSelectData.county.value"  size="large" style="width:150px">
-                                    <Option v-for="item in addressSelectData.countyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                </Select> -->
-                            </div>  
-                        </div>
-                        <div class="input_box" >
-                            <span class="input_box_span" >详细地址：</span>
-                            <Input v-model="addressData.addressModelData.addressDetail"  size="large" clearable style="width: 480px" />
-                        </div>
-                    </div>
-                    <div style="padding: 30px 0 20px 100px; "> 
-                        <Button shape="circle" type="success" size="large" @click="addAddressItem">确认收货地址</Button>
-                    </div>
-                </Modal>
-
             </div>
 
             <!-- 订单部分 -->
@@ -95,7 +40,6 @@
                             <Col span="7"><span>课程名称</span></Col>
                             <Col span="5"><span class="block_center">单价（元）</span></Col>
                             <Col span="6"><span class="block_center">数量</span></Col>
-                            <Col span="0"><span class="block_center">优惠（元）</span></Col>
                             <Col span="2"><span class="block_center">小计（元）</span></Col>
                         </Row>
                     </div>
@@ -199,8 +143,8 @@ export default {
         return {
 
             /*提交订单页面类型*/
-            //  true  : 去结算提交  解释：当页面为去结算提交时，可以修改数量，可以选择优惠券
-            //  false : 去结算后修改状态  解释：不可以修改数量，不可以选择优惠券，但是可以选择地址
+            //  true  :  确定订单页面 解释：当页面为去结算提交时，可以修改数量，可以选择地址
+            //  false :   解释：可以选择优惠券
             submitType: false,
 
             /*订单数据*/
@@ -302,83 +246,20 @@ export default {
 
             /*收货地址数据*/
             addressData:{
-                // 地址列表隐藏与展示
-                addressPageShow: false,
-
                 // 收货地址数据列表
                 addressList:[],
-                // 收货地址弹框
-                addressModelValue: false,
-                // 编辑时地址下标
-                aditAddressIndex: 0,
-                // 收货地址弹框绑定值
-                addressModelData:{
-                    name: '' ,
-                    phone: '',
-                    province: '',
-                    city: '',
-                    county: '',
-                    addressDetail: '',
-                    addressCode:''
-                }
-
             },
-
-            // 地址城市列表 new
-            cityList: [ { value: '天津',label: '天津' }, ],
-            // 选中的城市数组
-            addressValue:[],
             
             // 用户信息
             userData: {
                 ciCode: '',
-                phone: '',
-                name:''
+                phone: ''
             },
             
         }
         
     },
     methods: {
-
-        /*加减小组件*/
-        // 加
-        addNumber:function(e){
-
-            //  获取商品下标
-            let index1 =  e.target.getAttribute("data-index1"), 
-                index2 =  e.target.getAttribute("data-index2"); 
-            
-            this.cartDate.cartList[index1].items[index2].num ++;
-
-            // 计算小计与合计
-            this.calculatePrice();
-        },
-        // 减
-        reduceNumber:function(e){
-
-            //  获取商品下标
-            let index1 =  e.target.getAttribute("data-index1"), 
-                index2 =  e.target.getAttribute("data-index2"); 
-
-            if (this.cartDate.cartList[index1].items[index2].num<=1){
-
-                this.$Message.warning('受不了啦，宝贝不能再减少啦')
-
-                this.cartDate.cartList[index1].items[index2].num  = 1;
-
-                return;
-
-            }else {
-
-                this.cartDate.cartList[index1].items[index2].num  -= 1
-
-            }
-
-            // 计算小计与合计
-            this.calculatePrice();
-
-        },
 
         /*订单数据计算*/    
         // 计算小计与合计
@@ -423,171 +304,21 @@ export default {
 
         },
 
-        /*地址功能块*/
-        //  新增地址
-        addAddressItem(){
-
-            // 收货地址弹框绑定值
-            let modelData =  this.addressData.addressModelData;
-
-            if(modelData.name == ""){
-                
-                    this.$Message.warning('姓名不能为空！');
-                    return ;
-
-            }
-            if(modelData.phone == ""){
-                
-                    this.$Message.warning('联系方式不能为空！');
-                    return ;
-                    
-            }
-            if(modelData.province == ""){
-                
-                    this.$Message.warning('地址不能为空！');
-                    return ;
-                    
-            }
-            if(modelData.addressDetail == ""){
-                
-                    this.$Message.warning('详细地址不能为空！');
-                    return ;
-                    
-            } 
-
-            // 新增地址
-            this.addAddressData();
-
-        },
-        //  编辑打开地址
-        aditAddressItem(){
-
-            let data = this.addressData.addressList[0];
-            console.log(data)
-            this.addressData.addressModelData = {
-                name: data.name ,
-                phone: data.phone,
-                province: data.province,
-                city: data.city,
-                county: data.county,
-                addressDetail: data.addressDetail,
-                addressCode: data.addressCode
-            };
-            
-            this.addressValue = [data.province, data.city, data.county ];
-
-            this.addressData.addressModelValue = true;
-
-        },
-
-        // 监听地址选择
-        listenAddressChoose(data){
-
-            this.addressData.addressList = [];
-            this.addressData.addressList.push(data);
-
-            this.addressData.addressPageShow = false;
-
-        },
-
-        // 选择城市
-        handleChange(value){
-
-            this.addressData.addressModelData.province = value[0];
-            this.addressData.addressModelData.city = value[1];
-            this.addressData.addressModelData.county = value[2];
-
-        },
-
-
-        /*订单提交 生成订单*/   
+        /*订单提交*/   
         submitOrderClick(){   
             
-            if(this.addressData.addressList.length == 0){
-                
-                this.$Message.warning("请先填写好订单地址！");
-                return;
-
+            if(this.submitType){
+                this.submitType = false;
+            }else{
+                // 去结算页面
+                this.$router.push({ name: 'shopGoPay', params: { type: true} })
             }
-
-            this.$Spin.show();
-
-            let param = this.getOrderParam();
-            console.log(param)
-
-            this.$api.addOrderInfo(  this.$Qs.stringify(param) )
-
-            .then( (res) => {
-
-                console.log(res)
-
-                if(res.data.code == 200){
-
-                    
-
-                }else{
-
-                    this.$Message.warning(res.data.message);  
-                    
-                }
-
-                this.$Spin.hide()
-
-            })
-            .catch((error) => {
-
-                this.$Spin.hide();
-                console.log('发生错误！', error);
-
-            });
-
-
-            // 去结算页面
-            // this.$router.push({ name: 'shopGoPay', params: { type: true} })
- 
-        },
-        // 获取创建订单参数
-        getOrderParam(){
-
-            let productCodeAndCount = '', merchantCode = '';
-
-            for(let item of this.cartDate.cartList){
-                
-                merchantCode +=  merchantCode == '' ? item.itemCode : ',' + item.itemCode ;
-
-                for(let li of item.items){
-
-                    if(productCodeAndCount==''){
-                            // li.productCode +'-'+ item.itemCode
-                        productCodeAndCount +=  li.productCode + '-'+ li.num;
-
-                    } else{
-
-                        productCodeAndCount += ','+  li.productCode + '-'+ li.num;
-
-                    }
-                }
-
-            }
-
-            let param = {
-                ciCode: this.userData.ciCode,
-                ciName: '15874025525', //this.userData.name,
-                orderSource: 1,
-                productCodeAndCount: productCodeAndCount,
-                merchantCode: merchantCode,
-                ciAddressId: this.addressData.addressList[0].addressCode,
-            }
-
-            return param;
             
         },
 
         /**获取产品过来数据**/
         // 获取产品详情数据
         getProductDetailData(productCode){
-
-            this.$Spin.show()
 
             let param = {'productCode': productCode}
 
@@ -607,8 +338,7 @@ export default {
                     arr.push({
                         id: '',
                         itemState: false,
-                        itemTitle: data.merchantNm,
-                        itemCode: data.merchantCode,
+                        itemTitle: data.merchantCode,
                         itemTotal: 0.00,
                         //小列表
                         items:[]
@@ -636,7 +366,6 @@ export default {
                     this.$Message.warning(res.data.message);  
                     
                 }
-                this.$Spin.hide()
 
             })
             .catch((error) => {
@@ -698,7 +427,6 @@ export default {
                                     id: '',
                                     itemState: false,
                                     itemTitle: data[i].merchantInfo.merchantNm,
-                                    itemCode: data[i].merchantInfo.merchantCode,
                                     itemTotal: 0.00,
                                     //小列表
                                     items:[]
@@ -830,102 +558,22 @@ export default {
 
             });
         },
-        // 新增地址
-        addAddressData(){
+        // 获取订单详情数据
+        getOrderDetail(){
 
-            // 获取弹框数据
-            let data = this.addressData.addressModelData;
-
-            let param = { 
-                "ciCode": this.userData.ciCode,
-                "addressPersonName":data.name,
-                "addressPhone": data.phone,
-                "province": data.province,
-                "zone": data.county,
-                "city": data.city,
-                "address": data.addressDetail,
-                };
-
-            // 判断是保存还是新增地址
-            this.addressData.addOrAdit ? '' : param.addressCode = data.addressCode ;
-         
-            this.$Spin.show();
-
-            this.$api.saveAddress(  this.$Qs.stringify(param) )
-
-            .then( (res) => {
-
-                //console.log(res)
-
-                if(res.data.code == 200){
-
-                    // 获取用户地址列表
-                    this.getAddressData();
-
-                    this.$Message.success(res.data.message)
-
-                    this.addressData.addressModelValue = false;
-
-                    this.addressData.addOrAdit = true;
-
-                }else{
-
-                    this.$Message.warning(res.data.message);
-
-                }
-
-                this.$Spin.hide();
-                this.addressData.addressModelValue = false;
-
-            })
-            .catch((error) => {
-
-                this.$Spin.hide();
-                this.addressData.addressModelValue = false;
-                console.log('发生错误！', error);
-
-            });
-
-        },
+        }
+        
 
 
     },
 
-    computed: {
-        // 监听地址增删， 及时更新地址
-        listenAddressList() {  return this.$store.state.personCenter.addressState  }
-    },
-    watch: {
-        // 监听地址增删
-        listenAddressList:function (val){  this.getAddressData()  }
-    },
     mounted(){
-
-        // 获取页面类型
-        this.submitType = true;//this.$route.params.type;
-
-        // 获取地址信息
-        this.cityList = province();
 
         // 获取用户信息
         this.userData.ciCode = this.$store.state.userData.cicode ;
         this.userData.phone = this.$store.state.userData.ciphone ;
-        this.userData.name = this.$store.state.userData.ciname ;
 
-        // 获取用户地址列表
-        this.getAddressData();
-
-        // 获取页面数据来源 
-        if(this.$route.query.sourceType != 'cart'){
-
-            this.getProductDetailData(this.$route.query.productCode);
-
-        }else{
-
-            this.getProductCartData(this.$route.query.productCode);
-
-        }
-        
+        let orderId = this.$route.query.orderId ;
 
     }
 }
