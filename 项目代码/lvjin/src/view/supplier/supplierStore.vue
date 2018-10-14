@@ -38,17 +38,17 @@
                 </div>
 
                 <ul class="list_unstyled ul_inline clearfix">
-                  <li v-for="(item,index) in 3" class="listBox bg_white margin_bottom_30">
+                  <li v-for="(item,index) in saleList" :key="index" class="listBox bg_white margin_bottom_30">
                     <div class="text_center relative">
-                      <img src="../../assets/images/image/cart_book.png" height="210" class="all_width">
+                      <img :src="item.productProfileUrl" class="all_width" height="210" @click="jumpDetail(item.productCode)">
                       <div class="sort_box"></div>
                       <div class="sort_txt">{{index + 1}}</div>
                     </div>
                     <div class="margin_left_10 margin_right_10 margin_top_15">
-                      <div class="font_18 text_ellipsis">常见民事纠纷裁判思路与规则</div>
+                      <div class="font_18 text_ellipsis">{{item.productTitle}}</div>
                       <div class="color_666 text_ellipsis margin_top_10 clearfix">
-                        <div class="float_left">法院大讲堂</div>
-                        <div class="float_right">1234人听过</div>
+                        <div class="float_left">{{item.createBy}}</div>
+                        <div class="float_right">{{item.saleCount}}人听过</div>
                       </div>
                     </div>
                   </li>
@@ -140,6 +140,7 @@ export default {
           current: 1,
           pageSize: 12,
           productList: [],
+          saleList: [],
           merchantCode: this.$route.query.merchantCode
         }
         
@@ -147,6 +148,7 @@ export default {
     mounted(){
       // console.log(this.$route.query.merchantCode)
       this.getProductList(1,10)
+      this.getProductList(1,20)
     },
     methods: {
       //首页切换
@@ -172,6 +174,16 @@ export default {
 
               this.productList = res.data.content.list
               this.total = res.data.content.count
+              // 排行销量
+              if(sort == 20){
+                if(res.data.content.list.length > 3){
+                  for(var i=0;i<3;i++){
+                    this.saleList.push(res.data.content.list[i])
+                  }
+                }else {
+                  this.saleList = res.data.content.list
+                }
+              }
 
             }else {
 
