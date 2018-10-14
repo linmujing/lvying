@@ -4,8 +4,9 @@
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
-          <div class="width_600px height_400px border">
-            <img :src="dataDetail.productProfileUrl" class="all_width all_height">
+          <div class="width_600px border" style="max-height: 400px">
+            <!--<img :src="dataDetail.productProfileUrl" class="all_width all_height">-->
+            <Video :videoParams="dataDetail"></Video>
           </div>
         </Col>
         <Col span="12" class="padding_20">
@@ -173,9 +174,11 @@
 </template>
 <script>
 import NavBar from '../../components/NavBar.vue'
+import Video from '../../components/Video.vue'
 export default {
     components : {
       NavBar,
+      Video
     },
     data() {
         return {

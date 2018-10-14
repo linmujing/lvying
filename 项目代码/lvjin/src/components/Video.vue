@@ -107,15 +107,15 @@
         <div class="video_menu_list" >
             <div class="menu_title">课程目录</div>
             <ul class="menu_list">
-                <li v-for="(items, index) in videoMenu.lists" :key="index">
-                    <div class="list_title"> {{items.title}} </div>
-                    <div class="list_content">
-                        <div class="item" :class="[item.isActive ? 'active' : '']"
-                            v-for="(item, index2) in items.items"
-                            :key="index2" @click="changeItem(index, index2)">{{item.text}}
-                        </div>
-                    </div>
-                </li>
+                <!--<li v-for="(items, index) in videoMenu.lists" :key="index">-->
+                    <!--<div class="list_title"> {{items.title}} </div>-->
+                    <!--<div class="list_content">-->
+                        <!--<div class="item" :class="[item.isActive ? 'active' : '']"-->
+                            <!--v-for="(item, index2) in items.items"-->
+                            <!--:key="index2" @click="changeItem(index, index2)">{{item.text}}-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</li>-->
             </ul>
         </div>
 
@@ -129,6 +129,7 @@
 import { videoPlayer } from "vue-video-player";
 
 export default {
+  props:['videoParams'],
     data() {
         return {
 
@@ -149,7 +150,7 @@ export default {
                     //     src: "http://vjs.zencdn.net/v/oceans.mp4"
                     // }
                 ],
-                poster: "poster.jpg", //你的封面地址
+                poster: this.videoParams.productProfileUrl, //你的封面地址
                 width: document.documentElement.clientWidth,
                 notSupportedMessage: "此视频暂无法播放，请稍后再试" ,//允许覆盖Video.js无法播放媒体源时显示的默认信息。
 
@@ -281,7 +282,7 @@ export default {
         onPlayerPlay(player) {
 
             this.player.play();
-
+            console.log(this.playerOptions.sources)
             // 没有播放源提示
             if( this.playerOptions.sources.length == 0 ){
 
@@ -296,10 +297,18 @@ export default {
         },
         // 视频暂停 *
         onPlayerPause(player) {
+          console.log('暂 停')
+          // 没有播放源提示
+          if( this.playerOptions.sources.length == 0 ){
 
-            this.videoControl.videoOff = true;
+            this.$Message.warning('对不起，当前没有播放源！');
 
-            this.player.pause();
+            return false;
+
+          }
+          this.videoControl.videoOff = true;
+
+          this.player.pause();
 
         },
         // 播放前获取总时间 *
@@ -365,14 +374,19 @@ export default {
         /** 控制器方法 **/
         // 获取视频固定参数
         getVideoParam(){
-
             // 设置默认播放源
-            if(this.videoMenu.lists[0].items[0].videoSource.length > 0 ){
-
-                this.playerOptions.sources = this.videoMenu.lists[0].items[0].videoSource;
-
+            // if(this.videoMenu.lists[0].items[0].videoSource.length > 0 ){
+            //
+            //     this.playerOptions.sources = this.videoMenu.lists[0].items[0].videoSource;
+            //
+            // }
+          if(!this.videoParams.productUrl == null || !this.videoParams.productUrl == ''){
+            this.playerOptions.sources = {
+              type: '',
+              // mp4
+              src: this.videoParams.productUrl
             }
-
+          }
         },
         // 时间进度
         getTimeChange(e){
@@ -606,7 +620,7 @@ export default {
 
     },
     mounted(){
-
+      console.log(this.videoParams)
         // 获取视频固定参数
         this.getVideoParam();
 
