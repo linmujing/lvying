@@ -36,6 +36,14 @@ const router = new Router({
           name: 'submitOrder',
           component:resolve => require(['@/view/shopCart/submitOrder'],resolve),
           meta:{
+            title:'确认订单',
+          },
+        },
+        {
+          path: 'confirmOrder',
+          name: 'confirmOrder',
+          component:resolve => require(['@/view/shopCart/confirmOrder'],resolve),
+          meta:{
             title:'提交订单',
           },
         },

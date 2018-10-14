@@ -23,8 +23,8 @@
                     </Col>
                 </Row>
             </div>
-            <!-- <Video></Video>    -->
-            <!-- <Audio></Audio> -->
+            <Video></Video>    
+             <!-- <Audio></Audio>  -->
         </div>
     </div>
 </template>
