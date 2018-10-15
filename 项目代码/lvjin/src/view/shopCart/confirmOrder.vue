@@ -4,7 +4,7 @@
         <div class="box_center_1200" >
 
             <!-- 订单地址 #submitType#-->
-            <div class="order_address" >
+            <div class="order_address" v-if="false" >
 
                 <!-- 地址列表 -->
                 <div class="address_box">
@@ -118,26 +118,12 @@
             </div>
 
         </div>
-
-        <!-- 地址列表 -->
-        <div class="box_center_1200" style="background:#fff;padding:0 0 20px 0;" v-show="addressData.addressPageShow">
-            <!-- 标题    -->
-            <div class="order_title font_16" >
-                <span >选择地址</span>
-                <i class="text_hover_color padding_right_20 float_right" @click="addressData.addressPageShow = false" >关闭</i>
-            </div>
-            <Address :pState="1" @hidebox="listenAddressChoose" ></Address>
-        </div>
     </div>
 </template>
 <script>
 
-import Address from '../../components/Address.vue'
-import province from '../../assets/js/province'
-
 export default {
     components : {
-        Address
     },
     data() {
         return {
@@ -314,183 +300,13 @@ export default {
                 this.$router.push({ name: 'shopGoPay', params: { type: true} })
             }
             
-        },
-
-        /**获取产品过来数据**/
-        // 获取产品详情数据
-        getProductDetailData(productCode){
-
-            let param = {'productCode': productCode}
-
-            this.$api.getProductInfo(  this.$Qs.stringify(param) )
-
-            .then( (res) => {
-
-                console.log(res)
-
-                if(res.data.code == 200){
-
-                    let data = res.data.content , arr = [];
-
-                    if (data == null || data.length == 0) { return ;}
-
-                    // 压入商户
-                    arr.push({
-                        id: '',
-                        itemState: false,
-                        itemTitle: data.merchantCode,
-                        itemTotal: 0.00,
-                        //小列表
-                        items:[]
-                    });
-
-                    // 压入商品
-                    arr[0].items.push({
-                        id: data.id,
-                        productCode: data.productCode,
-                        state: false,
-                        price: data.productPrice,
-                        num: data.productNum,
-                        describe: data.productDesc,
-                        imgSrc: data.productProfileUrl
-                    })
-
-                    // 压入到购物车
-                    this.cartDate.cartList = arr;
-
-                    //计算小计与合计
-                    this.calculatePrice();
-
-                }else{
-
-                    this.$Message.warning(res.data.message);  
-                    
-                }
-
-            })
-            .catch((error) => {
-
-                this.$Spin.hide();
-                console.log('发生错误！', error);
-
-            });
-        },
-        // 获取购物车产品数据
-        getProductCartData(productCode){
-
-            let cartString = productCode.split(','), cartCode = [], cartNun = [];
-
-            for(let item of cartString){
-
-                cartCode.push(item.split('-')[0]);
-                cartNun.push(item.split('-')[1]);
-
-            }
-
-            this.$Spin.show()
-              
-            let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 50 , 'ciCode': this.userData.ciCode }) ;
-
-            this.$api.catGetCartList( param )
-
-            .then( (res) => {
-
-                this.allCount = res.data.content.count;
-                console.log(res)
-
-                this.$Spin.hide()
-
-                if(res.data.code == 200){
-                    
-                    let data = res.data.content.list , arr = [], merchantArr = [];
-
-                    if (data == null || data.length == 0) { return ;}
-
-                    for(let i = 0 ; i < data.length; i++){
-
-                        // 购物车商品判断
-                        let codeIndex = cartCode.indexOf(data[i].productCode);
-
-                        // 判断是否是该商品
-                        if( codeIndex != -1) {
-
-                            let index = merchantArr.indexOf(data[i].merchantInfo.merchantNm) ;
-
-                            console.log(index)
-
-                            if( index == -1  ){ 
-
-                                merchantArr.push(data[i].merchantInfo.merchantNm);
-
-                                // 压入商户
-                                arr.push({
-                                    id: '',
-                                    itemState: false,
-                                    itemTitle: data[i].merchantInfo.merchantNm,
-                                    itemTotal: 0.00,
-                                    //小列表
-                                    items:[]
-                                });
-
-                                index = merchantArr.indexOf(data[i].merchantInfo.merchantNm);
-
-                                // 压入商品
-                                arr[index].items.push({
-                                    cartId: data[i].id,
-                                    productCode: data[i].productCode,
-                                    state: false,
-                                    price: data[i].productInfo.productPrice,
-                                    num: cartNun[codeIndex],
-                                    describe: data[i].productInfo.productDesc,
-                                    imgSrc: data[i].productInfo.productProfileUrl
-                                })
-
-                            }else{
-
-                                // 压入商品
-                                arr[index].items.push({
-                                    productCode: data[i].productCode,
-                                    state: false,
-                                    price: data[i].productInfo.productPrice,
-                                    num: cartNun[codeIndex],
-                                    describe: data[i].productInfo.productDesc,
-                                    imgSrc: data[i].productInfo.productProfileUrl
-                                })
-
-                            }
-                        }
-
-                    }
-
-                    // 压入到购物车
-                    this.cartDate.cartList = arr;
-
-                    //计算小计与合计
-                    this.calculatePrice();
-                   
-                }else{
-
-                    this.$Message.warning(res.data.message);
-
-                }
-
-            })
-            .catch((error) => {
-
-                this.$Spin.hide();
-                console.log('发生错误！', error);
-
-            });
-
-        },        
+        },     
 
         /**数据**/
         // 获取地址列表
         getAddressData(){
 
             let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 ,'ciCode': this.userData.ciCode }) ;
-        
-            this.$Spin.show();
 
             this.$api.getAddressList( param )
 
@@ -517,30 +333,99 @@ export default {
                             isDefalut:  data[0].isDefalut,
                         })
 
-                    }else{
+                    }
 
-                        for(let item of data){
+                    this.addressData.addressList = arr;
 
-                            if(this.addressData.addressModelData.addressCode == item.addressCode){
+                }else{
 
-                                arr.push({
-                                    addressCode: data[0].addressCode,
-                                    name:  data[0].addressPersonName,
-                                    phone:  data[0].addressPhone,
-                                    province:  data[0].province,
-                                    city:  data[0].city,
-                                    county:  data[0].zone,
-                                    addressDetail:  data[0].address,
-                                    isDefalut:  data[0].isDefalut,
-                                })
+                    this.$Message.warning(res.data.message);
 
-                            }
+                }
+
+            })
+            .catch((error) => {
+
+                this.$Spin.hide();
+                console.log('发生错误！', error);
+
+            });
+        },
+        // 获取订单详情商品数据
+        // param orderCode string 订单编号
+        getOrderDetail(orderCode){
+
+            this.$Spin.show();
+
+            let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 20 ,'orderCode': orderCode }) ;
+
+            this.$api.getOrderProductList( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    let data = res.data.content.list , arr = [], merchantArr = [];
+
+                    if (data == null || data.length == 0) { return ;}
+
+                    for(let i = 0 ; i < data.length; i++){
+
+                        let index = merchantArr.indexOf(data[i].merchantInfo.merchantNm) ;
+
+                        console.log(index)
+
+                        if( index == -1  ){ 
+
+                            merchantArr.push(data[i].merchantInfo.merchantNm);
+
+                            // 压入商户
+                            arr.push({
+                                id: '',
+                                itemState: false,
+                                itemTitle: data[i].merchantInfo.merchantNm,
+                                itemCode: data[i].merchantInfo.merchantCode,
+                                itemTotal: 0.00,
+                                //小列表
+                                items:[]
+                            });
+
+                            index = merchantArr.indexOf(data[i].merchantInfo.merchantNm);
+
+                            // 压入商品
+                            arr[index].items.push({
+                                cartId: data[i].id,
+                                productCode: data[i].productCode,
+                                state: false,
+                                price: data[i].productInfo.productPrice,
+                                num: cartNun[codeIndex],
+                                describe: data[i].productInfo.productDesc,
+                                imgSrc: data[i].productInfo.productProfileUrl
+                            })
+
+                        }else{
+
+                            // 压入商品
+                            arr[index].items.push({
+                                productCode: data[i].productCode,
+                                state: false,
+                                price: data[i].productInfo.productPrice,
+                                num: data[i].productCount,
+                                describe: data[i].productInfo.productDesc,
+                                imgSrc: data[i].productInfo.productProfileUrl
+                            })
 
                         }
 
                     }
 
-                    this.addressData.addressList = arr;
+                    // 压入到购物车
+                    this.cartDate.cartList = arr;
+
+                    //计算小计与合计
+                    this.calculatePrice();
 
                 }else{
 
@@ -557,10 +442,6 @@ export default {
                 console.log('发生错误！', error);
 
             });
-        },
-        // 获取订单详情数据
-        getOrderDetail(){
-
         }
         
 
@@ -573,12 +454,13 @@ export default {
         this.userData.ciCode = this.$store.state.userData.cicode ;
         this.userData.phone = this.$store.state.userData.ciphone ;
 
-        let orderId = this.$route.query.orderId ;
+        // 获取订单详情
+        this.getOrderDetail(this.$route.query.orderCode);
 
     }
 }
 </script>
-<style>
+<style scoped>
      .ivu-modal .ivu-modal-header {
         border-bottom:0;
         padding: 10px 16px;
@@ -592,22 +474,6 @@ export default {
     .ivu-modal-close .ivu-icon-ios-close{
         top:5px;
     } 
-    .input_box{
-        height:40px;
-        line-height:40px;
-        font-size:16px;
-        margin-top:20px;
-    }
-    .input_box_span{
-        display:inline-block;
-        width:100px;
-        text-align:right;
-        padding-right:10px;
-        font-size: 16px;
-    }
-    .input_box_select{
-        display: inline-block;
-    }
 </style>
 <style scoped lang='less'>
 

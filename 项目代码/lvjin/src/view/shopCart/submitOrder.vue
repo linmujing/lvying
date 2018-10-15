@@ -40,7 +40,7 @@
                         <span class="font_18" style="font-weight:400;">新增收货地址</span>
                     </p>
                     <!-- 地址信息输入框 -->
-                    <div>
+                    <div class="address_input">
                         <div class="input_box" >
                             <span class="input_box_span" >收件人：</span>
                             <Input v-model="addressData.addressModelData.name"  size="large" clearable style="width: 280px" />
@@ -523,8 +523,9 @@ export default {
 
                 if(res.data.code == 200){
 
-                // 去支付页面
-                // this.$router.push({ name: 'shopGoPay', params: { orderId: true} })
+                    // 去结算页面
+                    this.$router.push({ path: '/confirmOrder', query: { orderCode: res.data.content.orderCode} })
+
 
                 }else{
 
@@ -540,7 +541,7 @@ export default {
                 this.$Spin.hide();
                 console.log('发生错误！', error);
 
-            });
+            }); 
  
         },
         // 获取创建订单参数
@@ -580,7 +581,7 @@ export default {
             
         },
 
-        /**获取产品过来数据**/
+        /**获取产品提交订单的数据**/
         // 获取产品详情数据
         getProductDetailData(productCode){
 
@@ -927,7 +928,7 @@ export default {
     }
 }
 </script>
-<style>
+<style >
      .ivu-modal .ivu-modal-header {
         border-bottom:0;
         padding: 10px 16px;
@@ -941,20 +942,20 @@ export default {
     .ivu-modal-close .ivu-icon-ios-close{
         top:5px;
     } 
-    .input_box{
+    .address_input .input_box{
         height:40px;
         line-height:40px;
         font-size:16px;
         margin-top:20px;
     }
-    .input_box_span{
+    .address_input .input_box_span{
         display:inline-block;
         width:100px;
         text-align:right;
         padding-right:10px;
         font-size: 16px;
     }
-    .input_box_select{
+    .address_input .input_box_select{
         display: inline-block;
     }
 </style>

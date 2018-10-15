@@ -99,7 +99,8 @@ export default {
         this.$router.push({
           path:'/videoCourseDetail',
           query: {
-            productCode: productCode
+            productCode: productCode,
+            typeId: this.$route.query.typeId
           }
         })
       },

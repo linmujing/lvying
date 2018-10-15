@@ -193,7 +193,8 @@ export default {
               path:'/industryDynamicList',
               query: {
                 catName: this.typeName,
-                catCode: navTitle[i].catCode
+                catCode: navTitle[i].catCode,
+                typeId: this.typeId
               }
             })
           }
@@ -204,7 +205,8 @@ export default {
         this.$router.push({
           path:'/industryDynamicDetail',
           query: {
-            productCode: productCode
+            productCode: productCode,
+            typeId: this.typeId
           }
         })
       },

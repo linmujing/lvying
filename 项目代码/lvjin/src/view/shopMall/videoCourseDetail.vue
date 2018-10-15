@@ -1,11 +1,17 @@
 <template>
   <div>
-    <NavBar :showItem='false'></NavBar>
+    <NavBar :nowIndex="typeId" :showItem='false'></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
-          <div class="width_600px height_400px border">
-            <img :src="dataDetail.productProfileUrl" class="all_width all_height">
+          <div v-if="dataStates" class="width_600px border">
+            <div v-if="typeId == 2" style="max-height: 400px">
+              <Video :videoParams="dataDetail" :imgUrl="dataDetail.productProfileUrl" ></Video>
+            </div>
+            <div v-else style="height: 400px">
+              <img :src="dataDetail.productProfileUrl" class="all_width all_height">
+              <Audio></Audio>
+            </div>
           </div>
         </Col>
         <Col span="12" class="padding_20">
@@ -130,8 +136,8 @@
       				</div>
       				<div class="float_left margin_left_20 margin_top_15">
       					<p class="font_18 font_weight_bold">法律援助</p>
-                <p class="color_666 margin_top_5">课程数：{{merchantInfo.productCount}}</p>
-                <p class="color_666 margin_top_5">用户数：{{merchantInfo.ciCount}}</p>
+                <p class="color_666 margin_top_5">课程数：{{merchantInfo.productCount == null ? '' : merchantInfo.productCount}}</p>
+                <p class="color_666 margin_top_5">用户数：{{merchantInfo.ciCount == null ? '' : merchantInfo.ciCount}}</p>
       				</div>
       			</div>
       			<!--热门课程-->
@@ -173,9 +179,13 @@
 </template>
 <script>
 import NavBar from '../../components/NavBar.vue'
+import Video from '../../components/Video.vue'
+import Audio from '../../components/Audio.vue'
 export default {
     components : {
       NavBar,
+      Video,
+      Audio
     },
     data() {
         return {
@@ -193,7 +203,12 @@ export default {
           productSection: [],
           // 推荐产品
           recommendList: [],
-          merchantInfo: {}
+          merchantInfo: {
+            productCount: '',
+            ciCount: ''
+          },
+          dataStates: false,
+          typeId: parseInt(this.$route.query.typeId),
         }
 
     },
@@ -210,6 +225,7 @@ export default {
     },
     mounted(){
       this.productCode = this.$route.query.productCode
+      // this.productCode = 'P153942083696397'
       this.getProductInfo(this.productCode)
       this.getEvaluateList(this.pageSize,  this.productCode)
     },
@@ -232,6 +248,7 @@ export default {
             if(res.data.code == 200){
 
               this.dataDetail = res.data.content
+              this.dataStates = true
               this.getMerchantInfo(res.data.content.merchantCode)
               //获取推荐产品
               // this.getProductShowCase('P121212121213,P121212121212,P121212121211,P121212121214') //测试
@@ -242,6 +259,7 @@ export default {
               res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
               // 课程目录
               this.productSection = eval(res.data.content.productSection)
+              console.log(this.productSection)
             }else{
 
               this.$Message.warning(res.data.message);
@@ -320,7 +338,8 @@ export default {
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
-              this.merchantInfo = res.data.content
+              this.merchantInfo.productCount = res.data.content.productCount
+              this.merchantInfo.ciCount = res.data.content.ciCount
             }else {
 
               this.$Message.warning(res.data.message);
@@ -338,7 +357,8 @@ export default {
         this.$router.push({
           path:'/videoCourseDetail',
           query: {
-            productCode: productCode
+            productCode: productCode,
+            typeId: this.typeId
           }
         })
       },
@@ -350,6 +370,18 @@ export default {
             merchantCode: code
           }
         })
+      },
+      // 视频播放 *
+      onPlayerPlay() {
+        // console.log(this.dataDetail.productSection)
+        // 没有播放源提示
+        if( this.dataDetail.productSection == null || this.dataDetail.productSection == ''){
+
+          this.$Message.warning('对不起，当前没有播放源！');
+
+          return false;
+
+        }
       },
       /** 数据 **/
       // 添加商品到购物车 MT
