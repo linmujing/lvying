@@ -431,7 +431,9 @@ export default {
                     { title: '确定删除该订单吗？'}
                 ]
 
-            }
+            },
+
+
 
             
         }
@@ -525,7 +527,117 @@ export default {
         // 查看物流
         checkLogistics(){
             this.$router.push({ name: 'personCenter/checkLogistics', params: {state: 'c'}})
-        }
+        },
+
+        /** 数据获取 **/
+        // 获取订单列表
+        getOrderList(){
+
+            this.$Spin.show()
+              
+            let param = this.$Qs.stringify({ 
+                'pageNo': 1, 
+                'pageSize': 20 , 
+                'ciCode': this.$store.state.userData.cicode ,
+                'orderStatus': this.orderData.orderSearchValue,
+                'searchKey': this.orderData.orderType[this.orderData.orderTypeIndex].value
+                }) ;
+
+            this.$api.getOrderList( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+                   
+                   
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+                this.$Spin.hide()
+
+            })
+            .catch((error) => {
+
+                this.$Spin.hide();
+                console.log('发生错误！', error);
+
+            });
+        },
+        // 删除订单
+        // param orderCode string 订单编号
+        deleteOrderItem(orderCode){
+
+            this.$Spin.show()
+              
+            let param = this.$Qs.stringify({ 'orderCode': orderCode }) ;
+
+            this.$api.hideOrder( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    this.$Message.success(res.data.message);
+                    this.getOrderList();
+                   
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+                this.$Spin.hide()
+
+            })
+            .catch((error) => {
+
+                this.$Spin.hide();
+                console.log('发生错误！', error);
+
+            });
+        },
+        // 删除订单
+        // param orderCode string 订单编号
+        cancelOrderItem(orderCode){
+
+            this.$Spin.show()
+              
+            let param = this.$Qs.stringify({ 'orderCode': orderCode }) ;
+
+            this.$api.cancleOrder( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    this.$Message.success(res.data.message);
+                    this.getOrderList();
+                   
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+                this.$Spin.hide()
+
+            })
+            .catch((error) => {
+
+                this.$Spin.hide();
+                console.log('发生错误！', error);
+
+            });
+        },
     }
 }
 </script>
