@@ -1,6 +1,6 @@
 <template>
     <!-- 提交订单页面 -->
-    <div class="bg_f5 padding_top_30 padding_bottom_80" >
+    <div class="bg_f5 padding_top_30 padding_bottom_80 submit_Order" >
         <div class="box_center_1200" v-show="!addressData.addressPageShow">
 
             <!-- 订单地址 #submitType#-->
@@ -523,7 +523,8 @@ export default {
 
                 if(res.data.code == 200){
 
-                    
+                    // 去结算页面
+                    this.$router.push({ path: '/confirmOrder', query: { orderCode: res.data.content.orderCode} })
 
                 }else{
 
@@ -542,8 +543,7 @@ export default {
             });
 
 
-            // 去结算页面
-            // this.$router.push({ name: 'shopGoPay', params: { type: true} })
+
  
         },
         // 获取创建订单参数
@@ -576,14 +576,14 @@ export default {
                 orderSource: 1,
                 productCodeAndCount: productCodeAndCount,
                 merchantCode: merchantCode,
-                ciAddressId: this.addressData.addressList[0].addressCode,
+                addressCode: this.addressData.addressList[0].addressCode,
             }
 
             return param;
             
         },
 
-        /**获取产品过来数据**/
+        /**获取产品提交订单的数据**/
         // 获取产品详情数据
         getProductDetailData(productCode){
 
@@ -930,7 +930,7 @@ export default {
     }
 }
 </script>
-<style>
+<style >
      .ivu-modal .ivu-modal-header {
         border-bottom:0;
         padding: 10px 16px;
@@ -944,20 +944,20 @@ export default {
     .ivu-modal-close .ivu-icon-ios-close{
         top:5px;
     } 
-    .input_box{
+    .submit_Order .input_box{
         height:40px;
         line-height:40px;
         font-size:16px;
         margin-top:20px;
     }
-    .input_box_span{
+    .submit_Order .input_box_span{
         display:inline-block;
         width:100px;
         text-align:right;
         padding-right:10px;
         font-size: 16px;
     }
-    .input_box_select{
+    .submit_Order .input_box_select{
         display: inline-block;
     }
 </style>

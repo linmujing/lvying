@@ -380,7 +380,6 @@ export default {
 
                 this.cartDate.listTotal += item.itemTotal *10000;
 
-
             }  
 
             this.cartDate.listTotal = (this.cartDate.listTotal / 10000).toFixed(2);
@@ -478,7 +477,7 @@ export default {
 
             
             // 去结算页面
-            this.$router.push({ path: 'submitOrder', query: { productCode: CodeAndCount , sourceType: 'cart'} })
+            this.$router.push({ path: '/submitOrder', query: { productCode: CodeAndCount , sourceType: 'cart'} })
 
         },
    
