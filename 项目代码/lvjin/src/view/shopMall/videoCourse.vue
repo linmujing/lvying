@@ -202,7 +202,8 @@ export default {
               path:'/videoCourseList',
               query: {
                 catName: this.typeName,
-                catCode: navTitle[i].catCode
+                catCode: navTitle[i].catCode,
+                typeId: this.typeId
               }
             })
           }
@@ -213,7 +214,8 @@ export default {
         this.$router.push({
           path:'/videoCourseDetail',
           query: {
-            productCode: productCode
+            productCode: productCode,
+            typeId: this.typeId
           }
         })
       },

@@ -1,12 +1,17 @@
 <template>
   <div>
-    <NavBar :showItem='false'></NavBar>
+    <NavBar :nowIndex="typeId" :showItem='false'></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
-          <div @click="onPlayerPlay" class="width_600px border" style="max-height: 400px">
-            <!--<img :src="dataDetail.productProfileUrl" class="all_width all_height">-->
-            <Video :videoParams="dataDetail"></Video>
+          <div v-if="dataStates" class="width_600px border">
+            <div v-if="typeId == 2" style="max-height: 400px">
+              <Video :videoParams="dataDetail" :imgUrl="dataDetail.productProfileUrl" ></Video>
+            </div>
+            <div v-else style="height: 400px">
+              <img :src="dataDetail.productProfileUrl" class="all_width all_height">
+              <Audio></Audio>
+            </div>
           </div>
         </Col>
         <Col span="12" class="padding_20">
@@ -175,10 +180,12 @@
 <script>
 import NavBar from '../../components/NavBar.vue'
 import Video from '../../components/Video.vue'
+import Audio from '../../components/Audio.vue'
 export default {
     components : {
       NavBar,
-      Video
+      Video,
+      Audio
     },
     data() {
         return {
@@ -199,7 +206,9 @@ export default {
           merchantInfo: {
             productCount: '',
             ciCount: ''
-          }
+          },
+          dataStates: false,
+          typeId: parseInt(this.$route.query.typeId),
         }
 
     },
@@ -215,8 +224,8 @@ export default {
       },
     },
     mounted(){
-      // this.productCode = this.$route.query.productCode
-      this.productCode = 'P153942083696397'
+      this.productCode = this.$route.query.productCode
+      // this.productCode = 'P153942083696397'
       this.getProductInfo(this.productCode)
       this.getEvaluateList(this.pageSize,  this.productCode)
     },
@@ -239,6 +248,7 @@ export default {
             if(res.data.code == 200){
 
               this.dataDetail = res.data.content
+              this.dataStates = true
               this.getMerchantInfo(res.data.content.merchantCode)
               //获取推荐产品
               // this.getProductShowCase('P121212121213,P121212121212,P121212121211,P121212121214') //测试
@@ -249,7 +259,7 @@ export default {
               res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
               // 课程目录
               this.productSection = eval(res.data.content.productSection)
-              // console.log(this.productSection)
+              console.log(this.productSection)
             }else{
 
               this.$Message.warning(res.data.message);
@@ -347,7 +357,8 @@ export default {
         this.$router.push({
           path:'/videoCourseDetail',
           query: {
-            productCode: productCode
+            productCode: productCode,
+            typeId: this.typeId
           }
         })
       },

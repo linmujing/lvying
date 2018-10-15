@@ -131,7 +131,7 @@
 import { videoPlayer } from "vue-video-player";
 
 export default {
-  props:['videoParam'],
+  props:['videoParams', 'imgUrl'],
     data() {
         return {
 
@@ -152,7 +152,7 @@ export default {
                     //     src: "http://vjs.zencdn.net/v/oceans.mp4"
                     // }
                 ],
-                poster: this.videoParams.productProfileUrl, //你的封面地址
+                poster: this.imgUrl, //你的封面地址
                 width: document.documentElement.clientWidth,
                 notSupportedMessage: "此视频暂无法播放，请稍后再试" ,//允许覆盖Video.js无法播放媒体源时显示的默认信息。
 

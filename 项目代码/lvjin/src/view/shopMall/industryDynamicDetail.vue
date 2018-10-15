@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :showItem='false'></NavBar>
+    <NavBar :nowIndex="typeId" :showItem='false'></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
@@ -142,6 +142,7 @@ export default {
     },
     data() {
         return {
+          typeId: parseInt(this.$route.query.typeId),
           //星星评分
           valueCustomText: 3.8,
           classCur: 0,
