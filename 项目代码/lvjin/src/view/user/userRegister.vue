@@ -161,7 +161,7 @@ export default {
         // 注册
         registerFn (){
 
-            let params = this.$Qs.stringify({ 'ciPhone': this.formRight.phone, 'passWord': this.formRight.pwd, 'smsCode': this.formRight.code })
+            let params = this.$Qs.stringify({ 'ciPhone': this.formRight.phone, 'passWord': this.formRight.pwd, 'smsCode': this.formRight.code, merchantCode: '' })
 
             // 注册
             this.$api.addCustomerInfo( params )

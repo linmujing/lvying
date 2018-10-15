@@ -39,19 +39,6 @@
             </div>
         </div>
 
-        <!-- 使用说明
-        <div class="coupon_explain padding_left_20 padding_top_30 padding_bottom_30"  v-if="couponData.couponList.length > 0 ">
-            <p class="font_16" style="color:#000">优惠券使用说明</p>
-            <div>
-                请在券面所示有效期内使用，逾期失效<br>
-                用券应满足券面所示使用范围、满减金额。通用券可全平台通用，机构/讲师券仅限指定机构名下课程使用，课程券仅限指定课程使用<br>
-                如您的订单在用券后24小时内未最终支付，则订单失效，优惠券自动返还。您也可以去往“我的订单”手工删除待支付订单，以收回优惠券<br>
-                如您的订单在用券后发生退款，优惠券不予以返还<br>
-                一笔订单只能使用一张平台优惠券。平台券无法叠加使用；平台券可与机构发布的优惠券叠加使用；课程券与同一课程的折扣无法叠加使用<br>
-                在个别特殊促销活动中，优惠券无法与其他优惠（如拼团、秒杀等）叠加使用。请以具体的活动规则为准
-            </div>
-        </div> -->
-
         <!-- 没有优惠券 -->
         <div class="order_has_not color_ccc" v-if="couponData.couponList.length == 0 ">
             暂无可用的优惠券
@@ -168,7 +155,7 @@ export default {
                 'couponForm': this.couponData.couponValue
                 }) ;
 
-            this.$Loading.start();
+            this.$Spin.show();
 
             this.$api.getCouponList( param )
 
@@ -197,12 +184,12 @@ export default {
 
                 }
 
-                this.$Loading.finish();
+                this.$Spin.hide();
 
             })
             .catch((error) => {
 
-                this.$Loading.error();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });

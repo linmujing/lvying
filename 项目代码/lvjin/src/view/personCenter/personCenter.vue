@@ -23,7 +23,7 @@
                     </Col>
                 </Row>
             </div>
-            <Video></Video>    
+            <!-- <Video></Video>     -->
              <!-- <Audio></Audio>  -->
         </div>
     </div>

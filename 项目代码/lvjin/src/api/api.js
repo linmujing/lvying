@@ -52,6 +52,7 @@ export const getProductCatList = params => { return instance.post(`product/cat/g
 export const getProductShowCase = params => { return instance.post(`product/info/getShowCaseProduct`, params ); };
 // 获取橱窗列表
 export const getProductShowCaseList = params => { return instance.post(`system/showCase/getShowCaseList`, params ); };
+
 /** 系统接口 **/
 //短信发送
 export const sendSms = params => { return instance.post(`system/sms/sendSms`, params ); };
@@ -102,11 +103,14 @@ export const getOrderList = params => { return instance.post(`order/info/getOrde
 //删除订单
 export const hideOrder = params => { return instance.post(`order/info/hideOrder`, params ); };
 
+/** 订单商品 **/
+//获取订单商品
+export const getOrderProductList = params => { return instance.post(`/order/product/getOrderProductList`, params ); };
+
 /** 订单评价 **/
 //订单商品评价
 export const addComment = params => { return instance.post(`order/comment/addComment`, params ); };
 export const getProductCommentList = params => { return instance.post(`order/comment/getProductCommentList`, params ); };
-
 
 /** 订单物流 **/
 //查看订单物流
