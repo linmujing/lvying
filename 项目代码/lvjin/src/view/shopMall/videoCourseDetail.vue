@@ -4,7 +4,7 @@
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
-          <div class="width_600px border" style="max-height: 400px">
+          <div @click="onPlayerPlay" class="width_600px border" style="max-height: 400px">
             <!--<img :src="dataDetail.productProfileUrl" class="all_width all_height">-->
             <Video :videoParams="dataDetail"></Video>
           </div>
@@ -131,8 +131,8 @@
       				</div>
       				<div class="float_left margin_left_20 margin_top_15">
       					<p class="font_18 font_weight_bold">法律援助</p>
-                <p class="color_666 margin_top_5">课程数：{{merchantInfo.productCount}}</p>
-                <p class="color_666 margin_top_5">用户数：{{merchantInfo.ciCount}}</p>
+                <p class="color_666 margin_top_5">课程数：{{merchantInfo.productCount == null ? '' : merchantInfo.productCount}}</p>
+                <p class="color_666 margin_top_5">用户数：{{merchantInfo.ciCount == null ? '' : merchantInfo.ciCount}}</p>
       				</div>
       			</div>
       			<!--热门课程-->
@@ -196,7 +196,10 @@ export default {
           productSection: [],
           // 推荐产品
           recommendList: [],
-          merchantInfo: {}
+          merchantInfo: {
+            productCount: '',
+            ciCount: ''
+          }
         }
 
     },
@@ -212,7 +215,8 @@ export default {
       },
     },
     mounted(){
-      this.productCode = this.$route.query.productCode
+      // this.productCode = this.$route.query.productCode
+      this.productCode = 'P153942083696397'
       this.getProductInfo(this.productCode)
       this.getEvaluateList(this.pageSize,  this.productCode)
     },
@@ -245,6 +249,7 @@ export default {
               res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
               // 课程目录
               this.productSection = eval(res.data.content.productSection)
+              // console.log(this.productSection)
             }else{
 
               this.$Message.warning(res.data.message);
@@ -323,7 +328,8 @@ export default {
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
-              this.merchantInfo = res.data.content
+              this.merchantInfo.productCount = res.data.content.productCount
+              this.merchantInfo.ciCount = res.data.content.ciCount
             }else {
 
               this.$Message.warning(res.data.message);
@@ -353,6 +359,18 @@ export default {
             merchantCode: code
           }
         })
+      },
+      // 视频播放 *
+      onPlayerPlay() {
+        // console.log(this.dataDetail.productSection)
+        // 没有播放源提示
+        if( this.dataDetail.productSection == null || this.dataDetail.productSection == ''){
+
+          this.$Message.warning('对不起，当前没有播放源！');
+
+          return false;
+
+        }
       },
       /** 数据 **/
       // 添加商品到购物车 MT

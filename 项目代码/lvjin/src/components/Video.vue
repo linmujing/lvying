@@ -57,7 +57,7 @@
             </Col>
             <!-- 时间进度条 -->
             <Col span="12">
-               
+
 
                 <div style="padding-top:2px;">
                     <Slider v-model="videoControl.timeProgress"
@@ -106,16 +106,18 @@
         <!-- 视频内容列表 -->
         <div class="video_menu_list" >
             <div class="menu_title">课程目录</div>
-            <ul class="menu_list">
-                <!--<li v-for="(items, index) in videoMenu.lists" :key="index">-->
-                    <!--<div class="list_title"> {{items.title}} </div>-->
-                    <!--<div class="list_content">-->
+            <ul v-if="videoMenu.lists.length > 0" class="menu_list">
+                <li v-for="(item, index) in videoMenu.lists" :key="index">
+                    <!--<div class="list_title"> {{items.name}} </div>-->
+                    <div class="list_content">
                         <!--<div class="item" :class="[item.isActive ? 'active' : '']"-->
                             <!--v-for="(item, index2) in items.items"-->
                             <!--:key="index2" @click="changeItem(index, index2)">{{item.text}}-->
                         <!--</div>-->
-                    <!--</div>-->
-                <!--</li>-->
+                      <div class="item" :class='{active: index == curIndex}' @click="changeItem(index)">{{item.name}}
+                      </div>
+                    </div>
+                </li>
             </ul>
         </div>
 
@@ -129,7 +131,7 @@
 import { videoPlayer } from "vue-video-player";
 
 export default {
-  props:['videoParams'],
+  props:['videoParam'],
     data() {
         return {
 
@@ -187,87 +189,92 @@ export default {
             },
 
             // 视频列表菜单
-            videoMenu:{
-                Off: true,
-                lists:[
-                    {
-                        title: '大章节',
-                        items:[
-                            {
-                                text: '01 小章节列表',
-                                isActive: false,
-                                videoSource:[
-                                    {
-                                        type: "video/mp4",
-                                        // mp4
-                                        src: "http://221.228.226.23/11/t/j/v/b/tjvbwspwhqdmgouolposcsfafpedmb/sh.yinyuetai.com/691201536EE4912BF7E4F1E2C67B8119.mp4"
-                                    },
-                                ]
-                            },
-                            {
-                                text: '02 小章节列表',
-                                isActive: false,
-                                videoSource:[
-                                    {
-                                        type: "video/mp4",
-                                        // mp4
-                                        src: "http://221.228.226.5/14/z/w/y/y/zwyyobhyqvmwslabxyoaixvyubmekc/sh.yinyuetai.com/4599015ED06F94848EBF877EAAE13886.mp4"
-                                    },
-                                ]
-                            },
-                            {
-                                text: '03 小章节列表',
-                                isActive: false,
-                                videoSource:[
-                                    {
-                                        type: "video/mp4",
-                                        // mp4
-                                        src: "http://221.228.226.5/15/t/s/h/v/tshvhsxwkbjlipfohhamjkraxuknsc/sh.yinyuetai.com/88DC015DB03C829C2126EEBBB5A887CB.mp4"
-                                    }
-                                ]
-                            },
-                        ]
-                    },
-                    {
-                        title: '大章节',
-                        items:[
-                            {
-                                text: '01 小章节列表',
-                                isActive: false,
-                                videoSource:[
-                                    {
-                                        type: "video/mp4",
-                                        // mp4
-                                        src: "http://221.228.226.23/11/t/j/v/b/tjvbwspwhqdmgouolposcsfafpedmb/sh.yinyuetai.com/691201536EE4912BF7E4F1E2C67B8119.mp4"
-                                    },
-                                ]
-                            },
-                            {
-                                text: '02 小章节列表',
-                                isActive: false,
-                                videoSource:[
-                                    {
-                                        type: "video/mp4",
-                                        // mp4
-                                        src: "http://221.228.226.5/14/z/w/y/y/zwyyobhyqvmwslabxyoaixvyubmekc/sh.yinyuetai.com/4599015ED06F94848EBF877EAAE13886.mp4"
-                                    },
-                                ]
-                            },
-                            {
-                                text: '03 小章节列表',
-                                isActive: false,
-                                videoSource:[
-                                    {
-                                        type: "video/mp4",
-                                        // mp4
-                                        src: "http://221.228.226.5/15/t/s/h/v/tshvhsxwkbjlipfohhamjkraxuknsc/sh.yinyuetai.com/88DC015DB03C829C2126EEBBB5A887CB.mp4"
-                                    }
-                                ]
-                            },
-                        ]
-                    }
-                ]
+            videoMenu: {
+              Off: true,
+              lists: []
             },
+            // videoMenu:{
+            //     Off: true,
+            //     lists:[
+            //         {
+            //             title: '大章节',
+            //             items:[
+            //                 {
+            //                     text: '01 小章节列表',
+            //                     isActive: false,
+            //                     videoSource:[
+            //                         {
+            //                             type: "video/mp4",
+            //                             // mp4
+            //                             src: "http://221.228.226.23/11/t/j/v/b/tjvbwspwhqdmgouolposcsfafpedmb/sh.yinyuetai.com/691201536EE4912BF7E4F1E2C67B8119.mp4"
+            //                         },
+            //                     ]
+            //                 },
+            //                 {
+            //                     text: '02 小章节列表',
+            //                     isActive: false,
+            //                     videoSource:[
+            //                         {
+            //                             type: "video/mp4",
+            //                             // mp4
+            //                             src: "http://221.228.226.5/14/z/w/y/y/zwyyobhyqvmwslabxyoaixvyubmekc/sh.yinyuetai.com/4599015ED06F94848EBF877EAAE13886.mp4"
+            //                         },
+            //                     ]
+            //                 },
+            //                 {
+            //                     text: '03 小章节列表',
+            //                     isActive: false,
+            //                     videoSource:[
+            //                         {
+            //                             type: "video/mp4",
+            //                             // mp4
+            //                             src: "http://221.228.226.5/15/t/s/h/v/tshvhsxwkbjlipfohhamjkraxuknsc/sh.yinyuetai.com/88DC015DB03C829C2126EEBBB5A887CB.mp4"
+            //                         }
+            //                     ]
+            //                 },
+            //             ]
+            //         },
+            //         {
+            //             title: '大章节',
+            //             items:[
+            //                 {
+            //                     text: '01 小章节列表',
+            //                     isActive: false,
+            //                     videoSource:[
+            //                         {
+            //                             type: "video/mp4",
+            //                             // mp4
+            //                             src: "http://221.228.226.23/11/t/j/v/b/tjvbwspwhqdmgouolposcsfafpedmb/sh.yinyuetai.com/691201536EE4912BF7E4F1E2C67B8119.mp4"
+            //                         },
+            //                     ]
+            //                 },
+            //                 {
+            //                     text: '02 小章节列表',
+            //                     isActive: false,
+            //                     videoSource:[
+            //                         {
+            //                             type: "video/mp4",
+            //                             // mp4
+            //                             src: "http://221.228.226.5/14/z/w/y/y/zwyyobhyqvmwslabxyoaixvyubmekc/sh.yinyuetai.com/4599015ED06F94848EBF877EAAE13886.mp4"
+            //                         },
+            //                     ]
+            //                 },
+            //                 {
+            //                     text: '03 小章节列表',
+            //                     isActive: false,
+            //                     videoSource:[
+            //                         {
+            //                             type: "video/mp4",
+            //                             // mp4
+            //                             src: "http://221.228.226.5/15/t/s/h/v/tshvhsxwkbjlipfohhamjkraxuknsc/sh.yinyuetai.com/88DC015DB03C829C2126EEBBB5A887CB.mp4"
+            //                         }
+            //                     ]
+            //                 },
+            //             ]
+            //         }
+            //     ]
+            // },
+            curIndex: 0
         };
     },
     components: {
@@ -297,15 +304,6 @@ export default {
         },
         // 视频暂停 *
         onPlayerPause(player) {
-          console.log('暂 停')
-          // 没有播放源提示
-          if( this.playerOptions.sources.length == 0 ){
-
-            this.$Message.warning('对不起，当前没有播放源！');
-
-            return false;
-
-          }
           this.videoControl.videoOff = true;
 
           this.player.pause();
@@ -328,7 +326,7 @@ export default {
 
             // 获取时间进度
             this.videoControl.timeProgress = (player.currentTime() / player.duration()).toFixed(2)*100;
-    
+
             // 获取当前时间
             this.videoControl.timeDivider = this.changeTimeBox(player.currentTime());
 
@@ -380,13 +378,24 @@ export default {
             //     this.playerOptions.sources = this.videoMenu.lists[0].items[0].videoSource;
             //
             // }
-          if(!this.videoParams.productUrl == null || !this.videoParams.productUrl == ''){
-            this.playerOptions.sources = {
-              type: '',
-              // mp4
-              src: this.videoParams.productUrl
+          var lists = []
+          var arr = eval(this.videoParams.productSection)
+          if(!arr == '' || !arr == null){
+            console.log(222)
+            for(var i=0;i<arr.length;i++){
+              var obj = {
+                name: arr[i].sectionName,
+                videoSource: {
+                  type: '',
+                  // mp4
+                  src: arr[i].videoUrl
+                }
+              }
+              lists.push(obj)
             }
           }
+          this.videoMenu.lists = lists
+          this.playerOptions.sources = arr[0].videoUrl;
         },
         // 时间进度
         getTimeChange(e){
@@ -443,7 +452,8 @@ export default {
             }
 
             // 压入视频
-            this.changeItem(this.videoControl.videoIndex1, this.videoControl.videoIndex2)
+            // this.changeItem(this.videoControl.videoIndex1, this.videoControl.videoIndex2)
+            this.changeItem(this.videoControl.videoIndex1)
 
         },
         // 下一集
@@ -476,7 +486,8 @@ export default {
             }
 
             // 压入视频
-            this.changeItem(this.videoControl.videoIndex1, this.videoControl.videoIndex2)
+            // this.changeItem(this.videoControl.videoIndex1, this.videoControl.videoIndex2)
+            this.changeItem(this.videoControl.videoIndex1)
 
         },
         // 监听鼠标悬停事件
@@ -565,28 +576,32 @@ export default {
         // 切换视频
         //@param index 大列表下标
         //@param index2 小列表下标
-        changeItem(index, index2){
+        changeItem(index){
+            // let data = this.videoMenu.lists;
+            //
+            // for(let i = 0 ; i < data.length; i++){
+            //
+            //     for(let x = 0; x < data[i].items.length; x++){
+            //
+            //         if(data[i].items[x].isActive){
+            //
+            //             this.videoMenu.lists[i].items[x].isActive = false;
+            //
+            //         }
+            //     }
+            //
+            // }
 
-            let data = this.videoMenu.lists;
-
-            for(let i = 0 ; i < data.length; i++){
-
-                for(let x = 0; x < data[i].items.length; x++){
-
-                    if(data[i].items[x].isActive){
-
-                        this.videoMenu.lists[i].items[x].isActive = false;
-
-                    }
-                }
-
-            }
-
-            this.videoMenu.lists[index].items[index2].isActive = true;
+            // this.videoMenu.lists[index].items[index2].isActive = true;
 
             // 压入视频
-            this.playerOptions.sources = this.videoMenu.lists[index].items[index2].videoSource;
-
+            // this.playerOptions.sources = this.videoMenu.lists[index].items[index2].videoSource;
+          this.curIndex = index
+          if(this.videoMenu.lists.length > 1){
+            // 压入视频
+            this.playerOptions.sources = this.videoMenu.lists[index].videoSource;
+            console.log(this.videoMenu.lists[index].videoSource)
+          }
         },
 
         /** 辅助函数 **/
@@ -619,6 +634,9 @@ export default {
         }
 
     },
+    watch: {
+
+    },
     mounted(){
       console.log(this.videoParams)
         // 获取视频固定参数
@@ -644,6 +662,16 @@ export default {
     }
     .ivu-slider-bar{
         background: #059E7F;
+    }
+    .video-js .vjs-big-play-button{
+      /*
+       播放按钮换成圆形
+      */
+      height: 2em;
+      width: 2em;
+      line-height: 2em;
+      border-radius: 1em;
+      outline: none;
     }
 </style>
 <style scoped lang='less'>
