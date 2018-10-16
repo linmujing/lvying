@@ -144,7 +144,7 @@ export default {
           merchantCode: this.$route.query.merchantCode,
           merchantInfo: {}
         }
-        
+
     },
     mounted(){
       // console.log(this.$route.query.merchantCode)
@@ -161,7 +161,8 @@ export default {
         this.$router.push({
           path:'/videoCourseDetail',
           query: {
-            productCode: productCode
+            productCode: productCode,
+            typeId: 3
           }
         })
       },

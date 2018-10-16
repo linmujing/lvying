@@ -1,12 +1,17 @@
 <template>
   <div>
-    <NavBar :showItem='false'></NavBar>
+    <NavBar :nowIndex="nowIndex" :showItem='false'></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
-          <div @click="onPlayerPlay" class="width_600px border" style="max-height: 400px">
-            <!--<img :src="dataDetail.productProfileUrl" class="all_width all_height">-->
-            <Video :videoParams="dataDetail"></Video>
+          <div v-if="dataStates" class="width_600px border">
+            <div v-if="typeId == 3" style="max-height: 400px">
+              <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" ></Video>
+            </div>
+            <div v-else style="height: 400px">
+              <img :src="dataDetail.productProfileUrl" class="all_width all_height">
+              <Audio v-show="showAudio" ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl"></Audio>
+            </div>
           </div>
         </Col>
         <Col span="12" class="padding_20">
@@ -22,12 +27,37 @@
           </div>
           <div class="margin_top_30 clearfix">
             <p class="float_left"><span class="color_title font_20">￥{{dataDetail.productPrice}}</span></p>
-            <p class="float_left pointer margin_left_30">
+            <p class="float_left pointer margin_left_30" @click="audition">
 							<Icon type="ios-headset-outline" size="28"/>
 							<span class="font_16 color_666 vertical_middle">试听</span>
 						</p>
           </div>
-          <div class="margin_top_50">
+          <div class="margin_top_10">
+            <Dropdown trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
+              <a href="javascript:void(0)" @click="handleOpen">
+                <Tag color="orange">优惠</Tag>
+                <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
+              </a>
+              <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
+                <DropdownItem v-for="(item,index) in 3" :key="index" :name="'优惠券' + (index + 1)" style="background: #FFF3E5;margin-bottom: 10px;">
+                  <Row style="width: 300px;">
+                    <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
+                      <div>￥<span class="font_20 font_weight_bold"> 20 </span>店铺优惠券</div>
+                      <div class="margin_top_5">满399使用</div>
+                      <div class="margin_top_5">有效期2018.09.04-2018.09.30</div>
+                    </Col>
+                    <Col span="8">
+                      <div class="color_F5320D font_20 text_center margin_left_10" style="line-height: 60px">立即领取</div>
+                    </Col>
+                  </Row>
+                </DropdownItem>
+                <div style="text-align: right;margin:10px;">
+                  <Button type="success" size="small" ghost @click="handleClose">关闭</Button>
+                </div>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+          <div class="margin_top_40">
             <Button size="large" type="warning" shape="circle" @click="addProductCart(dataDetail.productCode)">加入购物车</Button>
             <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
           </div>
@@ -39,9 +69,9 @@
           <div id="detail1" class="">
             <Affix>
               <div class="bg_f5 clearfix border_e6">
-                <a href="#detail1" @click="anchorBtn(0)" :class="{cur:isCur == 0}" class="inline_block padding_20_15 width_150px">简介</a>
-                <a href="#detail2" @click="anchorBtn(1)" :class="{cur:isCur == 1}" class="inline_block padding_20_15">全程动态管控系统</a>
-                <a href="#detail3" @click="anchorBtn(2)" :class="{cur:isCur == 2}" class="inline_block padding_20_15 width_150px">评价</a>
+                <a href="#detail1" @click="anchorBtn(0)" :class="{cur:isCur == 0}" class="inline_block padding_20_15 width_150px">课程简介</a>
+                <a href="#detail2" @click="anchorBtn(1)" :class="{cur:isCur == 1}" class="inline_block padding_20_15">课程目录</a>
+                <a href="#detail3" @click="anchorBtn(2)" :class="{cur:isCur == 2}" class="inline_block padding_20_15 width_150px">课程评价</a>
               </div>
             </Affix>
 		        <div class="padding_20 margin_bottom_20" v-html="dataDetail.productDesc">
@@ -64,18 +94,36 @@
 		        <div id="detail2" class="font_weight_bold bg_f5 border_e6 padding_15">课程目录</div>
 		        <div>
 		          <!--<p class="font_18 classTitle">第一章 入职管理</p>-->
-		          <div v-for="(item, index) in productSection" :key="index" class="bg_f5 border_e6 padding_15 margin_top_10 clearfix">
-		          	<div class="float_left">
-		          		<div class="inline_block width_40px">{{item.sectionIndex}}</div>
-		          		<span>{{item.sectionName}}</span>
-		          	</div>
-		          	<div class="float_right">
-		          		<span>{{item.videoTime}}</span>
-		          		<div class="inline_block width_100px margin_left_20">
-		          			<Button size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
-		          		</div>
-		          	</div>
-		          </div>
+		          <div v-if="typeId == 3">
+                <div v-for="(item, index) in productSection.videoSection" :key="index" class="bg_f5 border_e6 padding_15 margin_top_10 clearfix">
+                  <div class="float_left">
+                    <div class="inline_block width_40px">{{item.sectionIndex}}</div>
+                    <span>{{item.sectionName}}</span>
+                  </div>
+                  <div class="float_right">
+                    <span>{{item.videoTime}}</span>
+                    <div class="inline_block width_100px margin_left_20">
+                      <Button v-if="parseInt(item.videoStatus) === 0" size="small" type="warning" shape="circle" style="width: 60px" @click="audition">试听</Button>
+                      <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-else>
+                <div v-for="(item, index) in productSection.audioSection" :key="index" class="bg_f5 border_e6 padding_15 margin_top_10 clearfix">
+                  <div class="float_left">
+                    <div class="inline_block width_40px">{{item.sectionIndex}}</div>
+                    <span>{{item.sectionName}}</span>
+                  </div>
+                  <div class="float_right">
+                    <span>{{item.audioTime}}</span>
+                    <div class="inline_block width_100px margin_left_20">
+                      <Button v-if="parseInt(item.voiceStatus) === 0" size="small" type="warning" shape="circle" style="width: 60px">试听</Button>
+                      <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 		        </div>
 		        <!--<div class="text_center padding_top_20 padding_bottom_30">
 		        	<span class="pointer">查看更多》</span>
@@ -175,10 +223,12 @@
 <script>
 import NavBar from '../../components/NavBar.vue'
 import Video from '../../components/Video.vue'
+import Audio from '../../components/Audio.vue'
 export default {
     components : {
       NavBar,
-      Video
+      Video,
+      Audio
     },
     data() {
         return {
@@ -193,13 +243,23 @@ export default {
           total: 0,
           pageSize: 3,
           // 课程目录
-          productSection: [],
+          productSection: {
+            videoSection: [],
+            audioSection: []
+          },
           // 推荐产品
           recommendList: [],
           merchantInfo: {
             productCount: '',
             ciCount: ''
-          }
+          },
+          dataStates: false,
+          typeId: parseInt(this.$route.query.typeId),
+          nowIndex: this.$route.query.typeId-1,
+          visible: false,
+          videoData: [],
+          audioData: [],
+          showAudio: false
         }
 
     },
@@ -215,8 +275,8 @@ export default {
       },
     },
     mounted(){
-      // this.productCode = this.$route.query.productCode
-      this.productCode = 'P153942083696397'
+      this.productCode = this.$route.query.productCode
+      // this.productCode = 'P153942083696397'
       this.getProductInfo(this.productCode)
       this.getEvaluateList(this.pageSize,  this.productCode)
     },
@@ -229,6 +289,16 @@ export default {
 			evaluateBtn(i){
 				this.isActive = i;
 			},
+      handleOpen () {
+        this.visible = true;
+      },
+      handleClose () {
+        this.visible = false;
+      },
+      // 选择优惠券
+      selectCoupon(name){
+        this.$Message.success('领取'+name+'成功');
+      },
       // 查看产品详情
       getProductInfo(productCode){
         // 查看产品详情
@@ -248,8 +318,33 @@ export default {
               //商品评分
               res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
               // 课程目录
-              this.productSection = eval(res.data.content.productSection)
-              // console.log(this.productSection)
+              var productSection = eval(res.data.content.productSection)
+              // 获取视频音频数据
+              var videoSection = []
+              var audioSection = []
+              var videoData = []
+              var audioData = []
+              for (var i=0;i<productSection.length;i++){
+                var section = productSection[i]
+                if(!section.videoUrl == ''){
+                  videoSection.push(section)
+                }
+                if(!section.voiceUrl == ''){
+                  audioSection.push(section)
+                }
+                //获取试用视频音频数据tatuss = 0
+                if(parseInt(section.videoStatus) === 0){
+                  videoData.push(section)
+                }
+                if(parseInt(section.voiceStatus) === 0){
+                  audioData.push(section)
+                }
+              }
+              this.productSection.videoSection = videoSection
+              this.productSection.audioSection = audioSection
+              this.videoData = videoData
+              this.audioData = audioData
+              this.dataStates = true
             }else{
 
               this.$Message.warning(res.data.message);
@@ -294,7 +389,6 @@ export default {
       },
       // 获取推荐列表或猜你喜欢
       getProductShowCase(productCode){
-        // 查看产品详情
         this.$api.getProductShowCase( this.$Qs.stringify({'productCode': productCode}) )
 
           .then( (res) => {
@@ -347,7 +441,8 @@ export default {
         this.$router.push({
           path:'/videoCourseDetail',
           query: {
-            productCode: productCode
+            productCode: productCode,
+            typeId: this.typeId
           }
         })
       },
@@ -360,16 +455,17 @@ export default {
           }
         })
       },
-      // 视频播放 *
-      onPlayerPlay() {
-        // console.log(this.dataDetail.productSection)
-        // 没有播放源提示
-        if( this.dataDetail.productSection == null || this.dataDetail.productSection == ''){
-
-          this.$Message.warning('对不起，当前没有播放源！');
-
-          return false;
-
+      // 试听视频
+      audition(){
+        if(this.typeId == 3){
+          this.$refs.myVideo.onPlayerPlay();
+        }else {
+          if(this.audioData.length === 0){
+            this.$Message.warning('对不起，当前没有播放源！');
+            return false;
+          }
+          this.showAudio = true
+          this.$refs.myAudio.startPlay();
         }
       },
       /** 数据 **/
@@ -407,6 +503,16 @@ export default {
 </script>
 <style>
   .text_ellipsis,.text_ellipsis p{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+  .twoline_ellipsis, .twoline_ellipsis p{
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* autoprefixer: off*/
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on*/
+    white-space: normal;
+  }
 </style>
 <style scoped lang='less'>
   .detailBox{

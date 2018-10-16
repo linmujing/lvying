@@ -1,6 +1,6 @@
 <template>
     <!-- 提交订单页面 -->
-    <div class="bg_f5 padding_top_30 padding_bottom_80 submit_Order" >
+    <div class="bg_f5 padding_top_30 padding_bottom_80" >
         <div class="box_center_1200" v-show="!addressData.addressPageShow">
 
             <!-- 订单地址 #submitType#-->
@@ -40,7 +40,7 @@
                         <span class="font_18" style="font-weight:400;">新增收货地址</span>
                     </p>
                     <!-- 地址信息输入框 -->
-                    <div>
+                    <div class="address_input">
                         <div class="input_box" >
                             <span class="input_box_span" >收件人：</span>
                             <Input v-model="addressData.addressModelData.name"  size="large" clearable style="width: 280px" />
@@ -568,6 +568,7 @@ export default {
                     // 去结算页面
                     this.$router.push({ path: '/confirmOrder', query: { orderCode: res.data.content.orderCode} })
 
+
                 }else{
 
                     this.$Message.warning(res.data.message);  
@@ -582,10 +583,7 @@ export default {
                 this.$Spin.hide();
                 console.log('发生错误！', error);
 
-            });
-
-
-
+            }); 
  
         },
         // 获取创建订单参数
@@ -1103,20 +1101,20 @@ export default {
     .ivu-modal-close .ivu-icon-ios-close{
         top:5px;
     } 
-    .submit_Order .input_box{
+    .address_input .input_box{
         height:40px;
         line-height:40px;
         font-size:16px;
         margin-top:20px;
     }
-    .submit_Order .input_box_span{
+    .address_input .input_box_span{
         display:inline-block;
         width:100px;
         text-align:right;
         padding-right:10px;
         font-size: 16px;
     }
-    .submit_Order .input_box_select{
+    .address_input .input_box_select{
         display: inline-block;
     }
 </style>

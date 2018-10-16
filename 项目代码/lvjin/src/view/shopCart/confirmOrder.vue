@@ -4,7 +4,7 @@
         <div class="box_center_1200" >
 
             <!-- 订单地址 #submitType#-->
-            <div class="order_address" >
+            <div class="order_address" v-if="false" >
 
                 <!-- 地址列表 -->
                 <div class="address_box">

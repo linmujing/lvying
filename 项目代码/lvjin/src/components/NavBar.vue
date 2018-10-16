@@ -4,7 +4,7 @@
 	      <div class="center relative">
 					<ul class="list_unstyled ul_inline clearfix font_18 navbar">
 	          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navTitle" :key="index" @click='tabClick(item.id,index)'>
-	            <span class="color_fff tabHover">{{item.catName}}</span>
+	            <span class="color_fff tabHover">{{item.name}}</span>
 	          </li>
 	        </ul>
 	        <div v-show="showItem" ref="listBox" class="listBox">
@@ -57,7 +57,12 @@
         itemsIndex:0,
         /*导航栏数据模型*/
         navDataModel:[],
-        navTitle: [],
+        navTitle: [
+          {name: '行业动态管控', id: 1},
+          {name: '法律动态管控', id: 2},
+          {name: '视频动态管控', id: 3},
+          {name: '音频动态管控', id: 4}
+        ],
         secondNavTitle: [],
         thirdNavTitle: [],
         goodsCode: '',
@@ -68,42 +73,42 @@
     watch: {
 	    //监听参数变化
       $route(){
-        this.goodsCode = this.$route.query.catCode
+        this.goodsCode = this.$route.query.typeId
       },
       goodsCode() {
         this.getSecondNavTitle(this.goodsCode, 2)
       },
     },
     mounted(){
-      this.getNavTitle()
-      console.log(this.catCode)
+      // this.getNavTitle()
+      console.log(this.nowIndex)
       this.getSecondNavTitle(this.catCode, 2)
     },
 		methods:{
       // 获取导航标题
-      getNavTitle(){
-        // 获取产品分类列表
-        this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
-
-          .then( (res) => {
-
-            if(res.data.code == 200){
-
-              this.navTitle = res.data.content
-              // 导航标题信息
-              sessionStorage.setItem("NavTitle", JSON.stringify(res.data.content));
-
-            }else if (res.data.code == 500){
-
-              this.$Message.warning(res.data.message);
-
-            }
-
-          })
-          .catch((error) => {
-            console.log('发生错误！', error);
-          });
-      },
+      // getNavTitle(){
+      //   // 获取产品分类列表
+      //   this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
+      //
+      //     .then( (res) => {
+      //
+      //       if(res.data.code == 200){
+      //
+      //         this.navTitle = res.data.content
+      //         // 导航标题信息
+      //         sessionStorage.setItem("NavTitle", JSON.stringify(res.data.content));
+      //
+      //       }else if (res.data.code == 500){
+      //
+      //         this.$Message.warning(res.data.message);
+      //
+      //       }
+      //
+      //     })
+      //     .catch((error) => {
+      //       console.log('发生错误！', error);
+      //     });
+      // },
       // hover导航标题
       getSecondNavTitle(id, type){
         // 获取产品分类列表
@@ -134,53 +139,27 @@
           });
       },
       // 导航鼠标点击
-      tabClick(catCode,index) {
-        this.curIndex = index
-        console.log(catCode)
-        switch (catCode) {
-          case '1':
+      tabClick(id,index){
+        console.log(id)
+        switch(id){
+          case 1:
             this.$router.push({
-              path: '/industryDynamic',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
+              path:'/industryDynamic'
             })
             break;
-          case '2':
+          case 2:
             this.$router.push({
-              path: '/industryDynamic',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
+              path:'/lawDynamic'
             })
             break;
-          case '3':
+          case 3:
             this.$router.push({
-              path: 'videoCourse',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
+              path:'videoCourse'
             })
             break;
-          case '4':
+          case 4:
             this.$router.push({
-              path: 'videoCourse',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
-            })
-            break;
-          case '5':
-            this.$router.push({
-              path: 'lvyingMall',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
+              path:'audioCourse'
             })
             break;
         }
@@ -199,11 +178,11 @@
 
       //跳转jumpDown
       jumpDown(id, name){
-        var typeid = this.$route.query.typeId;
+        var typeid = this.catCode
         console.log(name)
         switch(typeid){
-          case 3:
-          case 4:
+          case 1:
+          case 2:
             this.$router.push({
               path:'industryDynamicList',
               query: {
@@ -213,8 +192,8 @@
               }
             })
             break;
-          case 1:
-          case 2:
+          case 3:
+          case 4:
             this.$router.push({
               path:'videoCourseList',
               query: {

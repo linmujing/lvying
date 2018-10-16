@@ -6,7 +6,7 @@
                 <Row>
                     <!-- 音频图片 -->
                     <Col span="2">
-                        <span class="audio_img"> <img src="../assets/images/icon/audio_01.png" alt=""> </span>    
+                        <span class="audio_img"> <img :src="imgUrl" alt=""> </span>
                     </Col>
                     <Col span="3">
                         <!-- 上一个-->
@@ -16,13 +16,13 @@
 
                         <!-- 开关 -->
                         <span class="audio_control_icon"
-                            style="padding:0 10px;" 
+                            style="padding:0 10px;"
                             @click="pausePlay"
                             v-show="!audioControl.audioOff">
                             <span class="vjs-icon-pause"></span>
                         </span>
-                        <span class="audio_control_icon" 
-                            style="padding:0 10px;" 
+                        <span class="audio_control_icon"
+                            style="padding:0 10px;"
                             @click="startPlay"
                             v-show="audioControl.audioOff">
                             <span class="vjs-icon-play"></span>
@@ -35,16 +35,16 @@
                     </Col>
                     <!-- 时间进度条 -->
                     <Col span="12">
-                        <div class="audio_title">我是标题</div>
+                        <div class="audio_title">{{audioTitle}}</div>
                         <div style="padding-top:2px;">
-                            <Slider v-model="audioControl.timeProgress" 
+                            <Slider v-model="audioControl.timeProgress"
                                 @on-change="getTimeChange" :tip-format="setTimeTip" >
                             </Slider>
                         </div>
                     </Col>
                     <!-- 时间 -->
                     <Col span="3">
-                        <div class="text_center" style="padding-top:13px;color:#fff;"> {{audioControl.timeDivider}} / {{audioControl.timeDuration}} </div>    
+                        <div class="text_center" style="padding-top:13px;color:#fff;"> {{audioControl.timeDivider}} / {{audioControl.timeDuration}} </div>
                     </Col>
 
                     <!-- 音量 -->
@@ -65,19 +65,21 @@
                         </div>
                     </Col>
                     <Col span="1">
-
+                      <!--<div class="audio_list">-->
+                        <!--<Icon type="ios-list" size="40"/>-->
+                      <!--</div>-->
                     </Col>
                 </Row>
             </div>
             <div style="display:none;">
                 <!-- 这里设置了ref属性后，在vue组件中，就可以用this.$refs.audio来访问该dom元素 -->
-                <audio ref="audio" class="dn" 
+                <audio ref="audio" class="dn"
                     :src="url" :preload="audio.preload"
-                    @play="onPlay" 
+                    @play="onPlay"
                     @error="onError"
                     @waiting="onWaiting"
-                    @pause="onPause" 
-                    @timeupdate="onTimeupdate" 
+                    @pause="onPause"
+                    @timeupdate="onTimeupdate"
                     @loadedmetadata="onLoadedmetadata"
                 ></audio>
             </div>
@@ -85,44 +87,49 @@
     </div>
 
 </template>
- 
+
 <script>
 
 export default {
+  props:['audioParams', 'imgUrl'],
     data() {
         return {
 
-        url: this.theUrl || 'https://wdd.js.org/element-audio/static/falling-star.mp3',
+          // url: this.theUrl || 'https://wdd.js.org/element-audio/static/falling-star.mp3',
+          url: '',
 
-        audio: {
-          preload: 'auto'
-        },
-        
-        // 视频控制器参数
-        audioControl: {
-            // 控制器开关
-            isShow: false,
-            // 时间进度
-            timeProgress: 0,
-            // 总时间秒数
-            timesecond: 0,
-            // 当前播放时间
-            timeDivider: '00:00',
-            // 总时间
-            timeDuration: '00:00',
-            // 音量
-            volume: 50,
-            // 视频开关
-            audioOff: true,
-            // 全屏
-            fullScreen: false,
-            // 记录当前播放视频的位置
-            audioIndex1: 0,
-            audioIndex2: 0,
+          audio: {
+            preload: 'auto'
+          },
 
-        },
-           
-           
+          // 视频控制器参数
+          audioControl: {
+              // 控制器开关
+              isShow: false,
+              // 时间进度
+              timeProgress: 0,
+              // 总时间秒数
+              timesecond: 0,
+              // 当前播放时间
+              timeDivider: '00:00',
+              // 总时间
+              timeDuration: '00:00',
+              // 音量
+              volume: 50,
+              // 视频开关
+              audioOff: true,
+              // 全屏
+              fullScreen: false,
+              // 记录当前播放视频的位置
+              audioIndex1: 0,
+              audioIndex2: 0,
+
+          },
+          // 标题
+          audioTitle: '',
+          showList: false
+
+
         };
     },
     components: {
@@ -160,7 +167,7 @@ export default {
             this.audioControl.timeProgress = (res.target.currentTime / res.target.duration).toFixed(2) * 100  ;
 
             // 获取当前时间
-            this.audioControl.timeDivider = this.changeTimeBox(res.target.currentTime);     
+            this.audioControl.timeDivider = this.changeTimeBox(res.target.currentTime);
 
         },
         // 当加载语音流元数据完成后，会触发该事件的回调函数
@@ -173,7 +180,7 @@ export default {
             // 获取总时长
             this.audioControl.timesecond = parseInt(res.target.duration) ;
             this.audioControl.timeDuration = this.changeTimeBox(res.target.duration);
-            
+
             // 加载完毕
             this.$Spin.hide();
 
@@ -206,7 +213,7 @@ export default {
         getTimeChange(e){
 
             let current =  parseInt(e / 100  * this.audioControl.timesecond);
-            
+
             this.$refs.audio.currentTime = current;
 
             this.startPlay();
@@ -232,7 +239,7 @@ export default {
             return index ;
 
         },
-        
+
 
         /** 辅助函数 **/
         // 秒转化器
@@ -256,14 +263,18 @@ export default {
 
     },
     computed: {
-        
+
 
     },
     mounted(){
 
         // 加载中
         this.$Spin.show();
-
+      console.log(this.audioParams)
+      if(this.audioParams.length === 1){
+        this.audioTitle = this.audioParams[0].sectionName
+        this.url = this.audioParams[0].voiceUrl
+      }
 
     },
 };
@@ -275,7 +286,7 @@ export default {
         display: none;
     }
     .ivu-slider-button{
-        border: 0; 
+        border: 0;
         background-color: #fff;
     }
     .ivu-slider-wrap {
@@ -291,7 +302,7 @@ export default {
 <style scoped lang='less'>
 
     //引入订单共用less文件
-    @import '../view/shopCart/shopCart.less'; 
+    @import '../view/shopCart/shopCart.less';
 
     .audio_box{
         position: fixed;
@@ -302,7 +313,7 @@ export default {
         width:100%;
         background:#1E242C;
         z-index: 999;
-        
+
         .audio_center_1200{
             width: 1200px;
             height: 80px;
@@ -326,12 +337,19 @@ export default {
             cursor: pointer;
             font-size: 26px;
             color:#ccc;
-            
+
         }
         .audio_control_icon:hover{
             color: #059E7F;
         }
+        .audio_list{
+          color: #fff;
+          cursor: pointer;
+        }
+        .audio_list:hover{
+          color: #059E7F;
+        }
     }
 
-    
+
 </style>

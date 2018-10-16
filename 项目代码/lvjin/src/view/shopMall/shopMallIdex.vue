@@ -3,8 +3,8 @@
     <!--导航栏-->
     <div class="nav" style="z-index: 10">
       <ul class="list_unstyled ul_inline clearfix font_18 navbar box_center_1200">
-        <li class="pointer" v-for="(item,index) in navDataModel" :key="index" @click='tabClick(item.id,index)'>
-          <span class="color_fff listItem">{{item.catName}}</span>
+        <li class="pointer" v-for="(item,index) in navTitle" :key="index" @click='tabClick(item.id,index)'>
+          <span class="color_fff listItem">{{item.name}}</span>
         </li>
       </ul>
     </div>
@@ -27,11 +27,11 @@
 							<span class="title">视频推荐</span>
 						</div>
 						<div class="float_right more pointer">
-							<a @click="moreList('视频课程')">更多》</a>
+							<a @click="moreList('视频课程',3)">更多》</a>
 						</div>
 					</div>
 					<div v-for="item in videoArr" class="margin_top_20 clearfix">
-						<div class="float_left videoBox" @click="toDetail(item.productCode,2)"><img :src="item.productProfileUrl" alt=""></div>
+						<div class="float_left videoBox" @click="toDetail(item.productCode,3)"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left height_170 padding_left_25 margin_top_15">
 							<p class="font_18 font_weight_bold">{{item.productTitle}}</p>
 							<p class="color_999 margin_top_10">{{item.createBy}}</p>
@@ -42,7 +42,7 @@
 							<div class="margin_top_15 clearfix">
 								<p class="pointer float_left">
 									<Icon type="ios-headset-outline" size="30"/>
-									<span class="font_16 color_666 vertical_middle" @click="toDetail(item.productCode,2)">试听</span>
+									<span class="font_16 color_666 vertical_middle" @click="toDetail(item.productCode,3)">试听</span>
 								</p>
 								<div class="float_left margin_left_20">
 									<Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
@@ -58,11 +58,11 @@
 							<span class="title">音频推荐</span>
 						</div>
 						<div class="float_right more pointer">
-              <a @click="moreList('音频课程')">更多》</a>
+              <a @click="moreList('音频课程',4)">更多》</a>
 						</div>
 					</div>
 					<div v-for="item in musicArr" class="margin_top_20 clearfix">
-						<div class="float_left videoBox" @click="toDetail(item.productCode,2)"><img :src="item.productProfileUrl" alt=""></div>
+						<div class="float_left videoBox" @click="toDetail(item.productCode,4)"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left height_170 padding_left_25 margin_top_15">
 							<p class="font_18 font_weight_bold">{{item.productTitle}}</p>
 							<p class="color_999 margin_top_10">{{item.createBy}}</p>
@@ -73,7 +73,7 @@
 							<div class="margin_top_15 clearfix">
 								<p class="pointer float_left">
 									<Icon type="ios-headset-outline" size="30"/>
-									<span class="font_16 color_666 vertical_middle" @click="toDetail(item.productCode,2)">试听</span>
+									<span class="font_16 color_666 vertical_middle" @click="toDetail(item.productCode,4)">试听</span>
 								</p>
 								<div class="float_left margin_left_20">
 									<Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
@@ -95,7 +95,7 @@
 					<span class="title">行业动态管控</span>
 				</div>
 				<div class="float_right more pointer">
-          <a @click="moreList('行业动态管控')">更多》</a>
+          <a @click="moreList('行业动态管控',1)">更多》</a>
         </div>
 			</div>
 			<ul class="list_unstyled ul_inline clearfix">
@@ -129,12 +129,12 @@
 						<span class="title">法律动态管控</span>
 					</div>
 					<div class="float_right more pointer">
-            <a @click="moreList('法律动态管控')">更多》</a>
+            <a @click="moreList('法律动态管控',2)">更多》</a>
           </div>
 				</div>
 				<ul class="list_unstyled">
 					<li class="clearfix margin_top_30" v-for="item in logicArr">
-						<div class="float_left videoBox" @click="toDetail(item.productCode,1)"><img :src="item.productProfileUrl" alt=""></div>
+						<div class="float_left videoBox" @click="toDetail(item.productCode,2)"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left width_900px margin_left_20 margin_top_5">
 							<div class="font_weight_bold font_18">{{item.productTitle}}</div>
               <div class="color_666 text_ellipsis margin_top_10" v-html="item.productDesc"></div>
@@ -144,7 +144,7 @@
 									<span class="padding_left_25 color_999">{{item.saleCount}}人看过</span>
 								</div>
 								<div class="float_right text_right">
-									<span class="color_title pointer" @click="toDetail(item.productCode,1)">查看详情》</span>
+									<span class="color_title pointer" @click="toDetail(item.productCode,2)">查看详情》</span>
 								</div>
 							</div>
 							<div class="margin_top_10">
@@ -163,14 +163,14 @@
 					<span class="title">律瀛商城</span>
 				</div>
 				<div class="float_right more pointer">
-          <a @click="moreList('律赢商城')">更多》</a>
+          <a @click="moreList('律赢商城',5)">更多》</a>
         </div>
 			</div>
 			<div class="margin_top_30">
 				<Row :gutter="16">
 			        <Col span="6" v-for="(item,index) in lvyingArr" :key="index">
 			            <div class="mallBox padding_top_20 padding_bottom_20 padding_right_10 padding_left_10">
-			            	<div class="text_center" @click="toDetail(item.productCode,3)">
+			            	<div class="text_center" @click="toDetail(item.productCode,5)">
                       <img :src="item.productProfileUrl" class="all_width" style="max-height: 280px">
 			            	</div>
 			            	<div class="font_18 text_ellipsis margin_top_20">{{item.productTitle}}</div>
@@ -210,15 +210,19 @@ export default {
     },
     data() {
         return {
-					navDataModel: [],
+          navTitle: [
+            {name: '行业动态管控', id: 1},
+            {name: '法律动态管控', id: 2},
+            {name: '视频动态管控', id: 3},
+            {name: '音频动态管控', id: 4}
+          ],
 					videoArr:[],
 					musicArr:[],
 					careerArr:[],
 					logicArr:[],
           lvyingArr:[],
           banner: [],
-          value: 0,
-          // showCase: []
+          value: 0
         }
 
     },
@@ -324,89 +328,67 @@ export default {
           });
       },
       // 导航鼠标点击
-      tabClick(catCode,index){
-        console.log(index)
-        switch(catCode){
-          case '1':
+      tabClick(id,index){
+        console.log(id)
+        switch(id){
+          case 1:
             this.$router.push({
-              path:'/industryDynamic',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
+              path:'/industryDynamic'
             })
             break;
-          case '2':
+          case 2:
             this.$router.push({
-              path:'/industryDynamic',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
+              path:'/lawDynamic'
             })
             break;
-          case '3':
+          case 3:
             this.$router.push({
-              path:'videoCourse',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
+              path:'videoCourse'
             })
             break;
-          case '4':
+          case 4:
             this.$router.push({
-              path:'videoCourse',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
+              path:'audioCourse'
             })
 	    		break;
-          case '5':
-            this.$router.push({
-              path:'lvyingMall',
-              query: {
-                typeId: index,
-                catCode: catCode
-              }
-            })
-            break;
         }
       },
       // 点击更多跳转
-      moreList(name){
+      moreList(name, typeId){
 			  console.log(name)
         var arr = this.navDataModel
         for(var i=0;i<arr.length;i++){
-          if(arr[i].catName == name){
-            switch (name) {
-              case '音频课程':
-              case '视频课程':
+          if(arr[i].id == typeId){
+            switch (typeId) {
+              case 3:
+              case 4:
                 this.$router.push({
                   path:'/videoCourseList',
                   query: {
                     catName: name,
-                    catCode: arr[i].catCode
+                    catCode: arr[i].catCode,
+                    typeId: typeId
                   }
                 })
                 break
-              case '法律动态管控':
-              case '行业动态管控':
+              case 1:
+              case 2:
                 this.$router.push({
                   path:'/industryDynamicList',
                   query: {
                     catName: name,
-                    catCode: arr[i].catCode
+                    catCode: arr[i].catCode,
+                    typeId: typeId
                   }
                 })
                 break
-              case '律赢商城':
+              case 5:
                 this.$router.push({
                   path:'/lvyingMall',
                   query: {
                     catName: '律瀛商城',
-                    catCode: arr[i].catCode
+                    catCode: arr[i].catCode,
+                    typeId: typeId
                   }
                 })
                 break
@@ -415,29 +397,34 @@ export default {
         }
       },
       // 查看详情
-      toDetail(productCode,type){
-        switch (type) {
+      toDetail(productCode,typeId){
+        switch (typeId) {
           case 1:
+          case 2:
             this.$router.push({
               path:'/industryDynamicDetail',
               query: {
-                productCode: productCode
-              }
-            })
-            break
-          case 2:
-            this.$router.push({
-              path:'/videoCourseDetail',
-              query: {
-                productCode: productCode
+                productCode: productCode,
+                typeId: typeId
               }
             })
             break
           case 3:
+          case 4:
+            this.$router.push({
+              path:'/videoCourseDetail',
+              query: {
+                productCode: productCode,
+                typeId: typeId
+              }
+            })
+            break
+          case 5:
             this.$router.push({
               path:'/bookDetail',
               query: {
-                productCode: productCode
+                productCode: productCode,
+                typeId: typeId
               }
             })
             break

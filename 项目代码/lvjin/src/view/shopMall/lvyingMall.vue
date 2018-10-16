@@ -74,14 +74,16 @@ export default {
           current: 1,
           pageSize: 12,
           productList: [],
-          catCode: '',
-          catName: '',
+          catCode: 10005,
+          catName: '律瀛商城',
         }
 
     },
     mounted(){
-      this.catCode = this.$route.query.catCode
-      this.catName = this.$route.query.catName
+      if(this.$route.query.catCode){
+        this.catCode = this.$route.query.catCode
+        this.catName = this.$route.query.catName
+      }
       this.getProductList(1,10)
     },
     methods: {
