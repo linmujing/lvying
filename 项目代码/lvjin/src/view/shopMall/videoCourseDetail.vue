@@ -33,18 +33,18 @@
 						</p>
           </div>
           <div class="margin_top_10">
-            <Dropdown trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
+            <Dropdown v-show="cuponList.length > 0" trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
               <a href="javascript:void(0)" @click="handleOpen">
                 <Tag color="orange">优惠</Tag>
                 <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
               </a>
               <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
-                <DropdownItem v-for="(item,index) in 3" :key="index" :name="'优惠券' + (index + 1)" style="background: #FFF3E5;margin-bottom: 10px;">
+                <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="'优惠券' + (index + 1)" style="background: #FFF3E5;margin-bottom: 10px;">
                   <Row style="width: 300px;">
                     <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
-                      <div>￥<span class="font_20 font_weight_bold"> 20 </span>店铺优惠券</div>
-                      <div class="margin_top_5">满399使用</div>
-                      <div class="margin_top_5">有效期2018.09.04-2018.09.30</div>
+                      <div>￥<span class="font_20 font_weight_bold"> {{item.couponValuePrice}} </span>店铺优惠券</div>
+                      <div class="margin_top_5">满{{item.couponValueDiscount}}使用</div>
+                      <div class="margin_top_5">有效期{{item.couponStartTime}}-{{item.couponEndTime}}</div>
                     </Col>
                     <Col span="8">
                       <div class="color_F5320D font_20 text_center margin_left_10" style="line-height: 60px">立即领取</div>
