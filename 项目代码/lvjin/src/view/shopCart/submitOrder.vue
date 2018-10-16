@@ -59,16 +59,7 @@
                                     filterable
                                     style="width: 300px"
                                     @change="handleChange"
-                                    ></el-cascader>
-                                <!-- <Select v-model="addressSelectData.province.value"  size="large" style="width:150px">
-                                    <Option v-for="item in addressSelectData.provinceList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                </Select>
-                                <Select v-model="addressSelectData.city.value"  size="large" style="width:150px">
-                                    <Option v-for="item in addressSelectData.cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                </Select>
-                                <Select v-model="addressSelectData.county.value"  size="large" style="width:150px">
-                                    <Option v-for="item in addressSelectData.countyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                </Select> -->
+                                ></el-cascader>
                             </div>  
                         </div>
                         <div class="input_box" >
@@ -100,8 +91,8 @@
                         </Row>
                     </div>
                     
-                    <!-- 订单列表 -->
-                    <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="items.id">
+                    <!-- 订单列表  单一商品 -->
+                    <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="items.id" v-if="!isGroup">
                         <li>
                             <div v-if="submitType" class="item_title padding_left_14"> {{items.itemTitle}} </div>
                             <ul class="item_list">
@@ -136,17 +127,6 @@
                                         </Col>
                                         <!-- 优惠券  #submitType#-->
                                         <Col span="0">
-                                            <!-- 可选状态 -->
-                                            <!-- <span class="block_center item_coupon" style="line-height:20px;padding-top:45px;" v-if="submitType">        
-                                                <i class="item_coupon" >{{item.itemCoupon}}  </i>                              
-                                                <Select v-model="item.itemCoupon" size="small" style="width:100px">
-                                                    <Option v-for="itemC in item.itemCouponList" :value="itemC.value" :key="itemC.value">{{ itemC.label }}</Option>
-                                                </Select>
-                                            </span> -->
-                                            <!-- 不可选状态 -->
-                                            <!-- <span class="block_center item_list_describe" v-if="!submitType">        
-                                                <p class="item_coupon" >{{item.itemCoupon}}  </p>                              
-                                            </span> -->
                                         </Col>
                                         <!-- 小计 -->
                                         <Col span="2"><span class="block_center">{{items.itemTotal}}</span></Col>
@@ -158,6 +138,46 @@
                             <div class="item_shipping_methods padding_left_14" v-if="!submitType">配送方式： {{items.shippingMethods}}</div>
                         </li>
                     </ul>
+
+                    <!-- 订单列表  组合单 -->
+                    <ul class="list_content" v-for="(lists, index1) in cartDate.cartList" :key="index1" v-if="isGroup">
+                        <li style="line-height:48px;">我是一个组合包</li>
+                        <li v-for="(items, index2) in lists.items" :key="index2">
+                            <div v-if="submitType" class="item_title padding_left_14"> {{items.itemTitle}} </div>
+                            <ul class="item_list">
+                                <!-- 列表 #submitType# 调整背景色-->
+                                <li class="padding_left_14" v-for="(item, index3) in items.items" :key="index3" v-bind:class="[ submitType ? '':'active']">
+                                    <Row>
+                                        <Col span="4">
+                                            <span class="item_list_img">
+                                                <img :src="item.imgSrc">
+                                            </span>
+                                        </Col>
+                                        <Col span="7">
+                                            <Row>
+                                                <Col span="24">
+                                                    <div class="item_list_describe">
+                                                        <p v-html="item.describe"></p>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                        <Col span="5"><span class="block_center">{{item.price}}</span></Col>
+                                        <Col span="6"><span class="block_center">{{item.num}}</span></Col>
+                                        <!-- 优惠券  #submitType#-->
+                                        <Col span="0">
+                                        </Col>
+                                        <!-- 小计 -->
+                                        <Col span="2"><span class="block_center">{{item.price}}</span></Col>
+                                    </Row>
+                                </li>
+                            </ul>
+                            <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： {{items.itemTotal}}</div>
+                            <!-- 其他操作  #submitType#-->
+                            <div class="item_shipping_methods padding_left_14" v-if="!submitType">配送方式： {{items.shippingMethods}}</div>
+                        </li>
+                    </ul>
+
                     <!-- 其他操作 #submitType#-->
                     <div class="list_operate padding_left_14" v-if="!submitType">
                         <div class="all_total padding_right_24">
@@ -299,6 +319,8 @@ export default {
                     ]
                 }
             ],
+            // 是否为组合包
+            isGroup: false,
 
             /*收货地址数据*/
             addressData:{
@@ -387,37 +409,57 @@ export default {
             // 获取商品个数
             let m = this.cartDate.cartList.length;
 
-            // 计算小计
-            for(let x = 0 ; x < m ; x++){
-  
-                let n = this.cartDate.cartList[x].items.length;
+            if(!this.isGroup){
 
-                // 重置小计
-                this.cartDate.cartList[x].itemTotal = 0;
+                // 计算小计
+                for(let x = 0 ; x < m ; x++){
+    
+                    let n = this.cartDate.cartList[x].items.length;
 
-                for(let i = 0 ; i < n ; i++){
-                    
-                    let item = this.cartDate.cartList[x].items[i];
+                    // 重置小计
+                    this.cartDate.cartList[x].itemTotal = 0;
 
-                    this.cartDate.cartList[x].itemTotal += item.num * (item.price * 10000);
+                    for(let i = 0 ; i < n ; i++){
+                        
+                        let item = this.cartDate.cartList[x].items[i];
+
+                        this.cartDate.cartList[x].itemTotal += item.num * (item.price * 10000);
+
+                    }
+
+                    this.cartDate.cartList[x].itemTotal = (this.cartDate.cartList[x].itemTotal / 10000).toFixed(2);
 
                 }
 
-                this.cartDate.cartList[x].itemTotal = (this.cartDate.cartList[x].itemTotal / 10000).toFixed(2);
+                // 重置合计
+                this.cartDate.listTotal = 0;
+                
+                // 计算合计
+                for(let i = 0 ; i < m ; i++){
+                    
+                    let item = this.cartDate.cartList[i];
+
+                    this.cartDate.listTotal += item.itemTotal *10000;
+
+                }  
+
+            }else{
+
+                // 组合包
+                for(let lists of this.cartDate.cartList){
+
+                    for(let items of lists.items){
+
+                        for(let item of items.items){
+                            
+                            lists.itemTotal += item.num * (item.price * 10000);
+                        }
+                    }
+
+                    this.cartDate.listTotal += lists.itemTotal;
+                }
 
             }
-
-            // 重置合计
-            this.cartDate.listTotal = 0;
-            
-            // 计算合计
-            for(let i = 0 ; i < m ; i++){
-                
-                let item = this.cartDate.cartList[i];
-
-                this.cartDate.listTotal += item.itemTotal *10000;
-
-            }  
 
             this.cartDate.listTotal = (this.cartDate.listTotal / 10000).toFixed(2);
 
@@ -549,33 +591,30 @@ export default {
         // 获取创建订单参数
         getOrderParam(){
 
-            let productCodeAndCount = '', merchantCode = '';
+            let productCodeAndCount = '';
 
-            for(let item of this.cartDate.cartList){
-                
-                merchantCode +=  merchantCode == '' ? item.itemCode : ',' + item.itemCode ;
+            if(!this.isGroup){
 
-                for(let li of item.items){
+                for(let lists of this.cartDate.cartList){
 
-                    if(productCodeAndCount==''){
-                            // li.productCode +'-'+ item.itemCode
-                        productCodeAndCount +=  li.productCode + '-'+ li.num;
-
-                    } else{
-
-                        productCodeAndCount += ','+  li.productCode + '-'+ li.num;
+                    for(let items of lists.items){
+    
+                            productCodeAndCount +=  productCodeAndCount=='' ? items.productCode + '-'+ items.num : ','+  items.productCode + '-'+ items.num;
 
                     }
+
                 }
+            }else{
+
+                productCodeAndCount =  this.cartDate.cartList[0].productCode + '-'+ this.cartDate.cartList[0].num;
 
             }
 
             let param = {
                 ciCode: this.userData.ciCode,
-                ciName: '15874025525', //this.userData.name,
+                ciName: this.userData.name,
                 orderSource: 1,
                 productCodeAndCount: productCodeAndCount,
-                merchantCode: merchantCode,
                 addressCode: this.addressData.addressList[0].addressCode,
             }
 
@@ -689,47 +728,76 @@ export default {
 
                             console.log(index)
 
-                            if( index == -1  ){ 
+                            // 单个商品
+                            if(data[i].productInfo.productType == '1'){
 
-                                merchantArr.push(data[i].merchantInfo.merchantNm);
+                                if( index == -1  ){ 
 
-                                // 压入商户
+                                    merchantArr.push(data[i].merchantInfo.merchantNm);
+
+                                    // 压入商户
+                                    arr.push({
+                                        id: '',
+                                        itemState: false,
+                                        itemType: data[i].productInfo.productType ,
+                                        itemTitle: data[i].merchantInfo.merchantNm,
+                                        itemCode: data[i].merchantInfo.merchantCode,
+                                        itemTotal: 0.00,
+                                        //小列表
+                                        items:[]
+                                    });
+
+                                    index = merchantArr.indexOf(data[i].merchantInfo.merchantNm);
+
+                                    // 压入商品
+                                    arr[index].items.push({
+                                        cartId: data[i].id,
+                                        productCode: data[i].productCode,
+                                        state: false,
+                                        price: data[i].productInfo.productPrice,
+                                        num: cartNun[codeIndex],
+                                        describe: data[i].productInfo.productDesc,
+                                        imgSrc: data[i].productInfo.productProfileUrl
+                                    })
+
+                                }else{
+
+                                    // 压入商品
+                                    arr[index].items.push({
+                                        productCode: data[i].productCode,
+                                        state: false,
+                                        price: data[i].productInfo.productPrice,
+                                        num: cartNun[codeIndex],
+                                        describe: data[i].productInfo.productDesc,
+                                        imgSrc: data[i].productInfo.productProfileUrl
+                                    })
+
+                                }
+
+                            }else{
+
+                               // 组合包商品
+                                merchantArr.push(data[i].productCode);
+
+                                // 压入组合包
                                 arr.push({
                                     id: '',
+                                    itemType: data[i].productInfo.productType ,
                                     itemState: false,
-                                    itemTitle: data[i].merchantInfo.merchantNm,
-                                    itemCode: data[i].merchantInfo.merchantCode,
+                                    itemTitle: data[i].productInfo.productTitle,
                                     itemTotal: 0.00,
+                                    productCode: data[i].productCode,
+                                    num: 1,
+                                    productSubCode: data[i].productInfo.productSubCode,
                                     //小列表
                                     items:[]
                                 });
 
-                                index = merchantArr.indexOf(data[i].merchantInfo.merchantNm);
-
-                                // 压入商品
-                                arr[index].items.push({
-                                    cartId: data[i].id,
-                                    productCode: data[i].productCode,
-                                    state: false,
-                                    price: data[i].productInfo.productPrice,
-                                    num: cartNun[codeIndex],
-                                    describe: data[i].productInfo.productDesc,
-                                    imgSrc: data[i].productInfo.productProfileUrl
-                                })
-
-                            }else{
-
-                                // 压入商品
-                                arr[index].items.push({
-                                    productCode: data[i].productCode,
-                                    state: false,
-                                    price: data[i].productInfo.productPrice,
-                                    num: cartNun[codeIndex],
-                                    describe: data[i].productInfo.productDesc,
-                                    imgSrc: data[i].productInfo.productProfileUrl
-                                })
+                                // 是否为组合包
+                                this.isGroup = true;
 
                             }
+
                         }
 
                     }
@@ -737,8 +805,8 @@ export default {
                     // 压入到购物车
                     this.cartDate.cartList = arr;
 
-                    //计算小计与合计
-                    this.calculatePrice();
+                    // 判断是否为组合包
+                    this.isGroup ? this.getGroupCartItem() : this.calculatePrice();                   
                    
                 }else{
 
@@ -754,7 +822,98 @@ export default {
 
             });
 
-        },        
+        },
+        // 组合包数据加载
+        getGroupCartItem(){
+
+            // 获取购物车一次加载列表
+            let CartList = this.cartDate.cartList ;
+
+            for(let i = 0; i < CartList.length; i++ ){
+
+                if(CartList[i].itemType == '2'){
+
+                    // 获取组合包商品
+                    this.$api.getProductShowCase( this.$Qs.stringify({ 'productCode': CartList[i].productSubCode }) )
+
+                    .then( (res) => {
+
+                        console.log(res)
+
+                        if(res.data.code == 200){
+
+                            let Data = res.data.content ;
+
+                            // 对组合包里的商品进行商户分类
+                            let arr2 = [], merchantArr2 = [] ;
+
+                            for(let child of Data){
+
+                                let childIndex = merchantArr2.indexOf(child.merchantCode);
+
+                                if(childIndex == -1){
+
+                                    merchantArr2.push(child.merchantCode);
+
+                                    arr2.push({
+                                        id: '',
+                                        itemTitle: child.merchantNm,
+                                        itemTotal: 0.00,
+                                        //小列表
+                                        items:[]
+                                    })
+
+                                    childIndex = merchantArr2.indexOf(child.merchantCode);
+
+                                    // 压入商品
+                                    arr2[childIndex].items.push({
+                                        productCode: child.productCode,
+                                        price: child.productPrice,
+                                        num: 1, //child.productNum,
+                                        productTitle: child.productTitle,
+                                        describe: child.productDesc,
+                                        imgSrc: child.productProfileUrl
+                                    })
+
+                                }else{
+
+                                    // 压入商品
+                                    arr2[childIndex].items.push({
+                                        productCode: child.productCode,
+                                        price: child.productPrice,
+                                        num: 1,//child.productNum,
+                                        productTitle: child.productTitle,
+                                        describe: child.productDesc,
+                                        imgSrc: child.productProfileUrl
+                                    })
+
+                                }
+
+                            } 
+
+                            CartList[i].items = arr2;
+
+                            this.calculatePrice();
+                        
+                        }else{
+
+                            this.$Message.warning(res.data.message);
+
+                        }
+
+                        this.$Spin.hide()
+
+                    })
+
+                }
+      
+            }    
+
+           console.log(CartList);
+           this.cartDate.cartList = CartList;
+           console.log(this.cartDate.cartList)
+
+        },      
 
         /**数据**/
         // 获取地址列表
