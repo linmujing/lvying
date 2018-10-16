@@ -102,7 +102,6 @@ export default {
         return {
           typeId: 3,
           typeName: '视频课程',
-          catCode: 3,
           hotArr:[],
           laborArr:[],
           banner: [],

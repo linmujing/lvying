@@ -65,7 +65,9 @@
                         </div>
                     </Col>
                     <Col span="1">
-
+                      <!--<div class="audio_list">-->
+                        <!--<Icon type="ios-list" size="40"/>-->
+                      <!--</div>-->
                     </Col>
                 </Row>
             </div>
@@ -124,7 +126,8 @@ export default {
 
           },
           // 标题
-          audioTitle: ''
+          audioTitle: '',
+          showList: false
 
 
         };
@@ -338,6 +341,13 @@ export default {
         }
         .audio_control_icon:hover{
             color: #059E7F;
+        }
+        .audio_list{
+          color: #fff;
+          cursor: pointer;
+        }
+        .audio_list:hover{
+          color: #059E7F;
         }
     }
 
