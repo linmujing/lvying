@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :nowIndex="typeId" :showItem='false'></NavBar>
+    <NavBar :nowIndex="nowIndex" :showItem='false'></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
@@ -32,7 +32,32 @@
               <!--</div>-->
             </div>
           </div>
-          <div class="margin_top_50" >
+          <div class="margin_top_10">
+            <Dropdown trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
+              <a href="javascript:void(0)" @click="handleOpen">
+                <Tag color="orange">优惠</Tag>
+                <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
+              </a>
+              <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
+                <DropdownItem v-for="(item,index) in 3" :key="index" :name="'优惠券' + (index + 1)" style="background: #FFF3E5;margin-bottom: 10px;">
+                  <Row style="width: 300px;">
+                    <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
+                      <div>￥<span class="font_20 font_weight_bold"> 20 </span>店铺优惠券</div>
+                      <div class="margin_top_5">满399使用</div>
+                      <div class="margin_top_5">有效期2018.09.04-2018.09.30</div>
+                    </Col>
+                    <Col span="8">
+                      <div class="color_F5320D font_20 text_center margin_left_10" style="line-height: 60px">立即领取</div>
+                    </Col>
+                  </Row>
+                </DropdownItem>
+                <div style="text-align: right;margin:10px;">
+                  <Button type="success" size="small" ghost @click="handleClose">关闭</Button>
+                </div>
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+          <div class="margin_top_40" >
             <Button size="large" type="warning" shape="circle" @click="addProductCart(dataDetail.productCode)">加入购物车</Button>
             <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
           </div>
@@ -143,6 +168,7 @@ export default {
     data() {
         return {
           typeId: parseInt(this.$route.query.typeId),
+          nowIndex: this.$route.query.typeId-1,
           //星星评分
           valueCustomText: 3.8,
           classCur: 0,
@@ -157,7 +183,8 @@ export default {
           pageSize: 3,
           // 课程目录
           productSection: [],
-          detailId: 1
+          detailId: 1,
+          visible: false
         }
 
     },
@@ -178,6 +205,16 @@ export default {
 			//评价
 			evaluateBtn(i){
 				this.isActive = i;
+      },
+      handleOpen () {
+        this.visible = true;
+      },
+      handleClose () {
+        this.visible = false;
+      },
+      // 选择优惠券
+      selectCoupon(name){
+        this.$Message.success('领取'+name+'成功');
       },
       // 查看产品详情
       getProductInfo(productCode){
@@ -272,6 +309,16 @@ export default {
 </script>
 <style>
   .text_ellipsis,.text_ellipsis p{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+  .twoline_ellipsis, .twoline_ellipsis p{
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* autoprefixer: off*/
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on*/
+    white-space: normal;
+  }
 </style>
 <style scoped lang='less'>
   .detailBox{

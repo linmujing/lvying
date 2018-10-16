@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :nowIndex="typeId" :showItem='true' :catCode="catCode"></NavBar>
+    <NavBar nowIndex="0" :showItem='true' :catCode="typeId"></NavBar>
     <!--banner-->
     <div>
       <Carousel  radius-dot v-model="value" autoplay loop>
@@ -93,9 +93,8 @@ export default {
     },
     data() {
         return {
-          typeId: parseInt(this.$route.query.typeId),
-          typeName: '',
-          catCode: this.$route.query.catCode,
+          typeId: 1,
+          typeName: '行业动态管控',
           hotArr:[],
           laborArr:[],
           banner: [],
@@ -104,29 +103,36 @@ export default {
 
     },
     watch: {
-      //监听参数变化
-      $route(){
-        this.typeId = this.$route.query.typeId
-      },
-      typeId() {
-        if(this.$route.query.typeId === 3){
-          this.getCaseProduct(3)
-        }else {
-          this.getCaseProduct(2)
-        }
-      },
+
     },
     mounted(){
-      console.log(this.$route.query.typeId)
-      if(this.$route.query.typeId === 3){
-        this.getCaseProduct(3)
-        this.typeName = '法律动态管控'
-      }else {
-        this.getCaseProduct(2)
-        this.typeName = '行业动态管控'
-      }
+      this.getCaseProduct(2)
+      this.getNavTitle()
     },
     methods: {
+      // 获取导航标题
+      getNavTitle(){
+        this.$Spin.show()
+        this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
+
+          .then( (res) => {
+
+            if(res.data.code == 200){
+
+              // 导航标题信息
+              sessionStorage.setItem("NavTitle", JSON.stringify(res.data.content));
+
+            }else{
+
+              this.$Message.warning(res.data.message);
+
+            }
+            this.$Spin.hide()
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
       //获取橱窗对象
       getCaseProduct(pageLocat){
         this.$Spin.show()

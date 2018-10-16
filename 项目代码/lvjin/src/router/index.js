@@ -158,6 +158,14 @@ const router = new Router({
           },
         },
         {
+          path: '/lawDynamic',
+          name: 'lawDynamic',
+          component:resolve => require(['@/view/shopMall/lawDynamic'],resolve),
+          meta:{
+            title:'',
+          },
+        },
+        {
           path: '/industryDynamicList',
           name: 'industryDynamicList',
           component:resolve => require(['@/view/shopMall/industryDynamicList'],resolve),
@@ -177,6 +185,14 @@ const router = new Router({
           path: '/videoCourse',
           name: 'videoCourse',
           component:resolve => require(['@/view/shopMall/videoCourse'],resolve),
+          meta:{
+            title:'',
+          },
+        },
+        {
+          path: '/audioCourse',
+          name: 'audioCourse',
+          component:resolve => require(['@/view/shopMall/audioCourse'],resolve),
           meta:{
             title:'',
           },

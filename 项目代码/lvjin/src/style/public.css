@@ -69,6 +69,7 @@ a:hover{color: #00AA88;}
 .color_999:hover{color: #999;}
 .color_666{color: #666;}
 .color_link{color: #4276DF;}
+.color_F5320D{color: #F5320D;}
 
 /******背景颜色*******/
 .bg_title{background: #00AA88;}
@@ -82,6 +83,7 @@ a:hover{color: #00AA88;}
 .margin_top_15{margin-top: 15px;}
 .margin_top_20{margin-top: 20px;}
 .margin_top_30{margin-top: 30px;}
+.margin_top_40{margin-top: 40px;}
 .margin_top_50{margin-top: 50px;}
 
 .margin_bottom_20{margin-bottom: 20px}
@@ -96,7 +98,7 @@ a:hover{color: #00AA88;}
 .margin_right_30{margin-right: 30px;}
 .margin_right_40{margin-right: 40px;}
 
-/******padding*******/    
+/******padding*******/
 .padding_20{padding: 20px;}
 .padding_15{padding: 15px;}
 .padding_top_3{padding-top: 3px;}
@@ -106,7 +108,7 @@ a:hover{color: #00AA88;}
 .padding_top_40{padding-top: 40px;}
 .padding_top_50{padding-top: 50px;}
 
-.padding_left_5{padding-left: 5px;} 
+.padding_left_5{padding-left: 5px;}
 .padding_left_14{padding-left: 14px;}
 .padding_left_10{padding-left: 10px;}
 .padding_left_20{padding-left: 20px;}
@@ -149,7 +151,7 @@ a:hover{color: #00AA88;}
 /*内容居中容器*/
 .box_center_1200{
    width:1200px;
-   margin:0 auto; 
+   margin:0 auto;
 }
 /*修改分页样式*/
 .container .ivu-page-item{background: #F5F5F5;}

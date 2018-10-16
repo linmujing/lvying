@@ -1,6 +1,6 @@
 <template>
   <div>
-      <NavBar nowIndex="2" :showItem='true' :catCode="typeId"></NavBar>
+    <NavBar nowIndex="1" :showItem='true' :catCode="typeId"></NavBar>
     <!--banner-->
     <div>
       <Carousel  radius-dot v-model="value" autoplay loop>
@@ -29,7 +29,10 @@
               <div class="float_left width_290px height_170 padding_left_25">
                 <p class="font_18 font_weight_bold">{{item.productTitle}}</p>
                 <div class="twoline_ellipsis margin_top_10 color_666" v-html="item.productDesc"></div>
-                <div class="clearfix margin_top_10">
+                <div class="text_right margin_top_5">
+                  <span class="color_title pointer" @click="toDetail(item.productCode)">查看详情》</span>
+                </div>
+                <div class="clearfix">
                   <div class="float_left">
                     <span class="font_20 color_title">￥{{item.productPrice}}</span>
                   </div>
@@ -37,15 +40,9 @@
                     <span class="padding_left_25 color_999 line_height_30px">{{item.saleCount}}人看过</span>
                   </div>
                 </div>
-                <div class="margin_top_15 clearfix">
-                  <p class="pointer float_left">
-                    <Icon type="ios-headset-outline" size="26"/>
-                    <span class="font_16 color_666 vertical_middle">试听</span>
-                  </p>
-                  <div class="float_left margin_left_10">
-                    <Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
-                    <Button type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(item.productCode)">立即购买</Button>
-                  </div>
+                <div class="margin_top_5">
+                  <Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
+                  <Button type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(item.productCode)">立即购买</Button>
                 </div>
               </div>
             </div>
@@ -71,15 +68,11 @@
             <div class="float_right color_999 line_height_25px">{{item.saleCount}}人看过</div>
           </div>
           <div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px" v-html="item.productDesc"></div>
-          <div class="text_right margin_top_5"><span class="color_title" @click="toDetail(item.productCode)">查看详情》</span></div>
+          <div class="text_right margin_top_5"><span class="color_title pointer" @click="toDetail(item.productCode)">查看详情》</span></div>
           <div class="margin_top_15 clearfix">
-            <div class="pointer float_left">
-              <p class="float_left inline_block"><span class="font_20 color_title">￥{{item.productPrice}}</span></p>
-              <p class="float_left pointer margin_left_30 padding_top_3">
-                <Icon type="ios-headset-outline" size="26"/>
-                <span class="font_16 color_666 vertical_middle">试听</span>
-              </p>
-            </div>
+            <p class="pointer float_left">
+              <span class="font_20 color_title">￥{{item.productPrice}}</span>
+            </p>
             <div class="float_right">
               <Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
               <Button type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(item.productCode)">立即购买</Button>
@@ -100,9 +93,8 @@ export default {
     },
     data() {
         return {
-          typeId: 3,
-          typeName: '视频课程',
-          catCode: 3,
+          typeId: 2,
+          typeName: '法律动态管控',
           hotArr:[],
           laborArr:[],
           banner: [],
@@ -114,7 +106,7 @@ export default {
 
     },
     mounted(){
-      this.getCaseProduct(4)
+      this.getCaseProduct(3)
       this.getNavTitle()
     },
     methods: {
@@ -151,7 +143,7 @@ export default {
             // 保存轮播数据
             this.banner = eval(res.data.content[2].caseUrl)
             for(let item of content){
-              if(item.caseName=="音频推荐" || item.caseName=="视频推荐"){
+              if(item.caseName=="劳动推荐"){
                 this.getProductShowCase(item.productCode, item.productSortBy, 1)
               }else if(item.caseName=="热门推荐"){
                 this.getProductShowCase(item.productCode, item.productSortBy, 2)
@@ -165,7 +157,6 @@ export default {
           this.$Spin.hide()
         })
           .catch((error) => {
-            this.$Spin.hide()
             console.log('发生错误！', error);
           });
       },
@@ -195,7 +186,6 @@ export default {
             this.$Spin.hide()
           })
           .catch((error) => {
-            this.$Spin.hide()
             console.log('发生错误！', error);
           });
       },
@@ -206,7 +196,7 @@ export default {
         for(var i=0;i<navTitle.length;i++){
           if(navTitle[i].catName == this.typeName){
             this.$router.push({
-              path:'/videoCourseList',
+              path:'/industryDynamicList',
               query: {
                 catName: this.typeName,
                 catCode: navTitle[i].catCode,
@@ -219,7 +209,7 @@ export default {
       // 查看详情
       toDetail(productCode){
         this.$router.push({
-          path:'/videoCourseDetail',
+          path:'/industryDynamicDetail',
           query: {
             productCode: productCode,
             typeId: this.typeId

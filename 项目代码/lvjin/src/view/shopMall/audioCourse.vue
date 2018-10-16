@@ -1,6 +1,6 @@
 <template>
   <div>
-      <NavBar nowIndex="2" :showItem='true' :catCode="typeId"></NavBar>
+      <NavBar nowIndex="3" :showItem='true' :catCode="typeId"></NavBar>
     <!--banner-->
     <div>
       <Carousel  radius-dot v-model="value" autoplay loop>
@@ -100,9 +100,8 @@ export default {
     },
     data() {
         return {
-          typeId: 3,
-          typeName: '视频课程',
-          catCode: 3,
+          typeId: 4,
+          typeName: '音频课程',
           hotArr:[],
           laborArr:[],
           banner: [],
@@ -114,7 +113,7 @@ export default {
 
     },
     mounted(){
-      this.getCaseProduct(4)
+      this.getCaseProduct(5)
       this.getNavTitle()
     },
     methods: {

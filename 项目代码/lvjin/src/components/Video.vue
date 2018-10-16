@@ -379,7 +379,7 @@ export default {
             //
             // }
           var lists = []
-          var arr = eval(this.videoParams.productSection)
+          var arr = this.videoParams
           if(!arr == '' || !arr == null){
             console.log(222)
             for(var i=0;i<arr.length;i++){
