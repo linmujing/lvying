@@ -213,8 +213,8 @@ export default {
           navTitle: [
             {name: '行业动态管控', id: 1},
             {name: '法律动态管控', id: 2},
-            {name: '视频动态管控', id: 3},
-            {name: '音频动态管控', id: 4}
+            {name: '视频课程', id: 3},
+            {name: '音频课程', id: 4}
           ],
 					videoArr:[],
 					musicArr:[],
@@ -250,7 +250,7 @@ export default {
                 this.getProductShowCase(item.productCode, item.productSortBy, 3)
               }else if(item.caseName=="法律动态管控"){
                 this.getProductShowCase(item.productCode, item.productSortBy, 4)
-              }else if(item.caseName=="律赢商城"){
+              }else if(item.caseName=="律赢商城" || item.caseName=="律瀛商城"){
                 this.getProductShowCase(item.productCode, item.productSortBy, 5)
               }
             }
