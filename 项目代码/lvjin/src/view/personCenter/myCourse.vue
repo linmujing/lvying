@@ -7,11 +7,10 @@
             <span>我的课程</span>
         </div>
 
-
          <!-- 课程列表 -->
         <div class="list_box padding_left_20 padding_top_30">
             <ul class="list">
-                <li  v-for="(items, index) in courseData.courseList" :key="index"  @click="goDetail(items.id)" v-if="index < 6">
+                <li  v-for="(items, index) in courseList" :key="index"  @click="goDetail(items.id)" v-if="index < 6">
                     <Col :span="8">
                         <div class="item">
                             <p class="item_img"> 
@@ -36,14 +35,14 @@
             </ul>
 
             <!-- 订单分页 -->
-            <div class="list_page" v-if="courseData.courseList.length > 5 ">
-                <Page :total="courseData.pageData.total" :current="courseData.pageData.current"   :page-size="courseData.pageData.pageSize"  
+            <div class="list_page" v-if="courseList.length > 6 ">
+                <Page :total="pageData.total" :current="pageData.current"   :page-size="pageData.pageSize"  
                     @on-change="changeOrderPage" size="small" show-total show-elevator />
             </div>
         </div>
 
         <!-- 没有课程 -->
-        <div class="order_has_not color_ccc" v-if="courseData.courseList.length == 0 ">
+        <div class="order_has_not color_ccc" v-if="courseList.length == 0 ">
             暂无课程
         </div>
 
@@ -57,62 +56,63 @@ export default {
     data() {
         return {
 
-            /*课程对象*/
-            courseData:{
+            // 课程列表
+            courseList:[],
 
-                // 课程列表
-                courseList:[
-                    {
-                        title: '法律动态管控一级',
-                        type: '0',
-                        source: '法院大讲堂',
-                        imgSrc: require('../../assets/images/image/my_course_01.png'),
-                        id: '1'
-                    },{
-                        title: '法律动态管控一级',
-                        type: '0',
-                        source: '法院大讲堂',
-                        imgSrc: require('../../assets/images/image/my_course_02.png'),
-                        id: '1'
-                    },{
-                        title: '法律动态管控一级',
-                        type: '0',
-                        source: '法院大讲堂',
-                        imgSrc: require('../../assets/images/image/my_course_03.png'),
-                        id: '1'
-                    },{
-                        title: '法律动态管控一级',
-                        type: '0',
-                        source: '法院大讲堂',
-                        imgSrc: require('../../assets/images/image/my_course_04.png'),
-                        id: '1'
-                    },{
-                        title: '法律动态管控一级',
-                        type: '0',
-                        source: '法院大讲堂',
-                        imgSrc: require('../../assets/images/image/my_course_01.png'),
-                        id: '1'
-                    },{
-                        title: '法律动态管控一级',
-                        type: '0',
-                        source: '法院大讲堂',
-                        imgSrc: require('../../assets/images/image/my_course_01.png'),
-                        id: '1'
-                    },{
-                        title: '法律动态管控一级',
-                        type: '0',
-                        source: '法院大讲堂',
-                        imgSrc: require('../../assets/images/image/my_course_01.png'),
-                        id: '1'
-                    },
-                ],
-                // 分页
-                pageData:{
-                    total: 7,
-                    pageSize: 5,
-                    current: 1
-                } 
-            }
+            // 分页
+            pageData:{
+                total: 0,
+                pageSize: 5,
+                current: 1
+            }, 
+
+
+            // 课程列表
+            courseList1:[
+                {
+                    title: '法律动态管控一级',
+                    type: '0',
+                    source: '法院大讲堂',
+                    imgSrc: require('../../assets/images/image/my_course_01.png'),
+                    id: '1'
+                },{
+                    title: '法律动态管控一级',
+                    type: '0',
+                    source: '法院大讲堂',
+                    imgSrc: require('../../assets/images/image/my_course_02.png'),
+                    id: '1'
+                },{
+                    title: '法律动态管控一级',
+                    type: '0',
+                    source: '法院大讲堂',
+                    imgSrc: require('../../assets/images/image/my_course_03.png'),
+                    id: '1'
+                },{
+                    title: '法律动态管控一级',
+                    type: '0',
+                    source: '法院大讲堂',
+                    imgSrc: require('../../assets/images/image/my_course_04.png'),
+                    id: '1'
+                },{
+                    title: '法律动态管控一级',
+                    type: '0',
+                    source: '法院大讲堂',
+                    imgSrc: require('../../assets/images/image/my_course_01.png'),
+                    id: '1'
+                },{
+                    title: '法律动态管控一级',
+                    type: '0',
+                    source: '法院大讲堂',
+                    imgSrc: require('../../assets/images/image/my_course_01.png'),
+                    id: '1'
+                },{
+                    title: '法律动态管控一级',
+                    type: '0',
+                    source: '法院大讲堂',
+                    imgSrc: require('../../assets/images/image/my_course_01.png'),
+                    id: '1'
+                },
+            ],
 
         }
         
@@ -125,20 +125,45 @@ export default {
 
             this.$router.push({ name: '', params: {id: id}})
         },
-        // 请求我的课程
+        // 获取我的课程
         getMyCourse(){
-            let pageNo=this.courseData.pageData.current;
-            let pageSize=6;
-            let ciCode=this.$store.state.userData.cicode;
-            let param=this.$Qs.stringify({pageNo,pageSize,ciCode})
+
+            let pageNo = this.pageData.current;
+            let pageSize = 6;
+            let ciCode = this.$store.state.userData.cicode;
+            let param = this.$Qs.stringify({pageNo,pageSize,ciCode})
+
+            this.$Spin.show();
+
             this.$api.getmyCourseList(param).then((res)=>{
+
                 console.log(res);
-                // if(res.code===200){
-                //     let {content}=res.data;
-                //     for(item of content.list){
-                        
-                //     }
-                // }
+
+                if(res.data.code == 200){
+
+                    let  data = res.data.content.list, arr= [];
+                    this.pageData.total = res.data.content.count;
+
+                    for(let item of data){
+                        arr.push({
+                            title: item.productName,
+                            type: '0',
+                            source: item.merchantNm,
+                            imgSrc: item.productProfileUrl,
+                        })
+                    }
+
+                    this.courseList = arr;
+                    console.log(arr)
+
+                    this.$Spin.hide();
+
+                }else{
+                    
+                    this.$Spin.hide();
+                    this.$Message.warning(res.data.message);
+
+                }
                 
             })
         },
@@ -146,7 +171,7 @@ export default {
         //@param value 返回当前页码
         changeOrderPage(value){
 
-            this.courseData.pageData.current = value;
+            this.pageData.current = value;
             
         },
         //监听课程数量添加滚动事件
@@ -155,7 +180,7 @@ export default {
             //当页面课程商品数量大于5条时，就给列表添加滚动
             let n = 0;
 
-            let data = this.courseData.orderList;
+            let data = this.orderList;
 
             for(let i = 0 ; i < data.length ; i++ ){
 
@@ -174,7 +199,10 @@ export default {
 
     },
     mounted(){
-        this.getMyCourse()
+
+        // 获取我的课程
+        this.getMyCourse();
+
     }
 }
 </script>
@@ -232,6 +260,7 @@ export default {
 
                     img{
                         width:100%;
+                        height: 100%;
                     }
                 }
                 .item_content{
