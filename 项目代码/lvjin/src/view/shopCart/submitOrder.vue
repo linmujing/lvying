@@ -108,6 +108,7 @@
                                             <Row>
                                                 <Col span="24">
                                                     <div class="item_list_describe">
+                                                        <p>{{item.productTitle}}</p>
                                                         <p v-html="item.describe"></p>
                                                     </div>
                                                 </Col>
@@ -463,6 +464,8 @@ export default {
 
             this.cartDate.listTotal = (this.cartDate.listTotal / 10000).toFixed(2);
 
+            this.$Spin.hide()
+
         },
 
         /*地址功能块*/
@@ -566,7 +569,7 @@ export default {
                 if(res.data.code == 200){
 
                     // 去结算页面
-                    this.$router.push({ path: '/confirmOrder', query: { orderCode: res.data.content.orderCode} })
+                    this.$router.push({ path: '/confirmOrder', query: { orderCode: res.data.content} })
 
 
                 }else{
@@ -586,6 +589,7 @@ export default {
             }); 
  
         },
+
         // 获取创建订单参数
         getOrderParam(){
 
@@ -640,40 +644,67 @@ export default {
 
                     if (data == null || data.length == 0) { return ;}
 
-                    // 压入商户
-                    arr.push({
-                        id: '',
-                        itemState: false,
-                        itemTitle: data.merchantNm,
-                        itemCode: data.merchantCode,
-                        itemTotal: 0.00,
-                        //小列表
-                        items:[]
-                    });
+                    // 单个商品
+                    if(data.productType == '1'){
 
-                    // 压入商品
-                    arr[0].items.push({
-                        id: data.id,
-                        productCode: data.productCode,
-                        state: false,
-                        price: data.productPrice,
-                        num: data.productNum,
-                        describe: data.productDesc,
-                        imgSrc: data.productProfileUrl
-                    })
+                        // 压入商户
+                        arr.push({
+                            id: '',
+                            itemState: false,
+                            itemTitle: data.merchantNm,
+                            itemCode: data.merchantCode,
+                            itemTotal: 0.00,
+                            //小列表
+                            items:[]
+                        });
+
+                        // 压入商品
+                        arr[0].items.push({
+                            id: data.id,
+                            productCode: data.productCode,
+                            state: false,
+                            price: data.productPrice,
+                            num: data.productNum,
+                            name: data.productName,
+                            describe: data.productDesc,
+                            imgSrc: data.productProfileUrl
+                        })
+
+                    }else{
+
+                        // 组合包商品
+                        // 压入组合包
+                        arr.push({
+                            id: '',
+                            itemType: data.productType ,
+                            itemState: false,
+                            itemTitle: data.productTitle,
+                            itemTotal: 0.00,
+                            productCode: data.productCode,
+                            num: 1,
+                            productSubCode: data.productSubCode,
+                            //小列表
+                            items:[]
+                        });
+
+                        // 是否为组合包
+                        this.isGroup = true;
+
+                    }
 
                     // 压入到购物车
                     this.cartDate.cartList = arr;
 
-                    //计算小计与合计
-                    this.calculatePrice();
+                    // 判断是否为组合包
+                    this.isGroup ? this.getGroupCartItem() : this.calculatePrice();    
 
                 }else{
 
+                    this.$Spin.hide()
                     this.$Message.warning(res.data.message);  
                     
                 }
-                this.$Spin.hide()
+                
 
             })
             .catch((error) => {
@@ -705,8 +736,6 @@ export default {
 
                 this.allCount = res.data.content.count;
                 console.log(res)
-
-                this.$Spin.hide()
 
                 if(res.data.code == 200){
                     
@@ -754,6 +783,7 @@ export default {
                                         state: false,
                                         price: data[i].productInfo.productPrice,
                                         num: cartNun[codeIndex],
+                                        productTitle: data[i].productInfo.productTitle,
                                         describe: data[i].productInfo.productDesc,
                                         imgSrc: data[i].productInfo.productProfileUrl
                                     })
@@ -766,6 +796,7 @@ export default {
                                         state: false,
                                         price: data[i].productInfo.productPrice,
                                         num: cartNun[codeIndex],
+                                        productTitle: data[i].productInfo.productTitle,
                                         describe: data[i].productInfo.productDesc,
                                         imgSrc: data[i].productInfo.productProfileUrl
                                     })
@@ -807,6 +838,8 @@ export default {
                     this.isGroup ? this.getGroupCartItem() : this.calculatePrice();                   
                    
                 }else{
+
+                    this.$Spin.show();
 
                     this.$Message.warning(res.data.message);
 
@@ -895,11 +928,11 @@ export default {
                         
                         }else{
 
+                            this.$Spin.hide()
+
                             this.$Message.warning(res.data.message);
 
                         }
-
-                        this.$Spin.hide()
 
                     })
 
@@ -907,9 +940,7 @@ export default {
       
             }    
 
-           console.log(CartList);
            this.cartDate.cartList = CartList;
-           console.log(this.cartDate.cartList)
 
         },      
 
@@ -918,8 +949,6 @@ export default {
         getAddressData(){
 
             let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 ,'ciCode': this.userData.ciCode }) ;
-        
-            this.$Spin.show();
 
             this.$api.getAddressList( param )
 
@@ -977,12 +1006,9 @@ export default {
 
                 }
 
-                this.$Spin.hide();
-
             })
             .catch((error) => {
 
-                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -1005,8 +1031,6 @@ export default {
 
             // 判断是保存还是新增地址
             this.addressData.addOrAdit ? '' : param.addressCode = data.addressCode ;
-         
-            this.$Spin.show();
 
             this.$api.saveAddress(  this.$Qs.stringify(param) )
 
@@ -1031,7 +1055,6 @@ export default {
 
                 }
 
-                this.$Spin.hide();
                 this.addressData.addressModelValue = false;
 
             })
@@ -1234,6 +1257,7 @@ export default {
                 .item_list_img img{
                     vertical-align: middle;
                     height: 100px;
+                    width: 100px;
                 }
                 .item_list_describe{
                     display:table;

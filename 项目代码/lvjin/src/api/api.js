@@ -118,5 +118,15 @@ export const getProductCommentList = params => { return instance.post(`order/com
 //查看订单物流
 export const getOrderTrack = params => { return instance.post(`order/track/getOrderTrack`, params ); };
 
+/** 订单交易 **/
+// 阿里支付回调
+export const aliPayNotify = params => { return instance.post(`/trade/aliPay/aliPayNotify`, params ); };
+// 阿里支付请求
+export const aliPayRequest = params => { return instance.post(`/trade/aliPay/aliPayRequest`, params ); };
+// 微信支付回调
+export const payBack = params => { return instance.post(`/trade/weixinPay/payBack`, params ); };
+// 阿微信支付请求
+export const appPerPay = params => { return instance.post(`/trade/weixinPay/appPerPay`, params ); };
+
 
 
