@@ -136,7 +136,7 @@ export default {
                 console.log(res)
 
                 if(res.data.code == 200){
-
+                    
                     this.$Spin.hide();
                     this.$Message.warning('该帐号已经注册!');
                     return;
@@ -177,13 +177,12 @@ export default {
 
                 }else{
 
-                    this.$Spin.hide();
-
                     this.$Message.warning(res.data.message);
 
                 }
 
-              
+                this.$Spin.hide();
+
             })
             .catch((error) => {
 
@@ -292,6 +291,7 @@ export default {
             .then( (res) => {
 
                 console.log(res)
+                this.$Spin.hide();
 
                 if(res.data.code == 200){
 
@@ -310,8 +310,6 @@ export default {
                     this.$Message.warning(res.data.message);
 
                 }
-
-                this.$Spin.hide();
 
             })
             .catch((error) => {

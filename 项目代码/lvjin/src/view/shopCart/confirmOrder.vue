@@ -30,7 +30,6 @@
 
             <!-- 订单部分 -->
             <div class="shopping_cart_container" style="position:relative;">
-                <div v-if="!submitType" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;"></div>
                 <div class="list_box" >
 
                     <!-- 订单列表头部 #submitType#-->
@@ -45,12 +44,12 @@
                     </div>
                     
                     <!-- 订单列表 -->
-                    <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="items.id">
+                    <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="index1">
                         <li>
-                            <div v-if="submitType" class="item_title padding_left_14"> {{items.itemTitle}} </div>
+                            <div class="item_title padding_left_14"> {{items.itemTitle}} </div>
                             <ul class="item_list">
                                 <!-- 列表 #submitType# 调整背景色-->
-                                <li class="padding_left_14" v-for="(item, index2) in items.items" :key="item.id" v-bind:class="[ submitType ? '':'active']">
+                                <li class="padding_left_14" v-for="(item, index2) in items.items" :key="index2" v-bind:class="[ submitType ? '':'active']">
                                     <Row>
                                         <Col span="4">
                                             <span class="item_list_img">
@@ -61,49 +60,47 @@
                                             <Row>
                                                 <Col span="24">
                                                     <div class="item_list_describe">
+                                                        <p>{{item.productTitle}}</p>
                                                         <p v-html="item.describe"></p>
                                                     </div>
                                                 </Col>
                                             </Row>
                                         </Col>
                                         <Col span="5"><span class="block_center">{{item.price}}</span></Col>
-                                        <Col span="6">
-                                            <div class="relative">
-                                                <!-- 加减数量 -->
-                                            <div class="number_add_reduce" >
-                                                <span class="reduce"  @click="reduceNumber" onselectstart="return false" :data-index1="index1" :data-index2="index2"
-                                                >-</span><b class="number_value">{{item.num}}</b><span class="add" @click="addNumber" onselectstart="return false" 
-                                                    :data-index1="index1" :data-index2="index2">+</span>
-                                            </div> 
-                                            </div>
-                                            
-                                        </Col>
-                                        <!-- 优惠券  #submitType#-->
-                                        <Col span="0">
-                                            <!-- 可选状态 -->
-                                            <!-- <span class="block_center item_coupon" style="line-height:20px;padding-top:45px;" v-if="submitType">        
-                                                <i class="item_coupon" >{{item.itemCoupon}}  </i>                              
-                                                <Select v-model="item.itemCoupon" size="small" style="width:100px">
-                                                    <Option v-for="itemC in item.itemCouponList" :value="itemC.value" :key="itemC.value">{{ itemC.label }}</Option>
-                                                </Select>
-                                            </span> -->
-                                            <!-- 不可选状态 -->
-                                            <!-- <span class="block_center item_list_describe" v-if="!submitType">        
-                                                <p class="item_coupon" >{{item.itemCoupon}}  </p>                              
-                                            </span> -->
-                                        </Col>
+                                        <Col span="6"><span class="block_center">{{item.num}}</span></Col>
                                         <!-- 小计 -->
                                         <Col span="2"><span class="block_center">{{items.itemTotal}}</span></Col>
                                     </Row>
                                 </li>
                             </ul>
                             <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： {{items.itemTotal}}</div>
-                            <!-- 其他操作  #submitType#-->
-                            <div class="item_shipping_methods padding_left_14" v-if="!submitType">配送方式： {{items.shippingMethods}}</div>
+                            <!-- 其他操作  -->
+                            <div class="item_shipping_methods padding_left_14" >
+                                <span style="display:inline-block;width:100px;">配送方式：</span>   
+                                <el-select v-model="shippingMethods.value" size="mini" placeholder="请选择">
+                                    <el-option
+                                    v-for="(item, index) in shippingMethods.options"
+                                    :key="index"
+                                    :label="item.label"
+                                    :value="item.value">
+                                    </el-option>
+                                </el-select> 
+                            </div>
+                            <div class="item_shipping_methods padding_left_14" >
+                                <span style="display:inline-block;width:100px;">优惠券：</span>   
+                                <el-select v-model="Coupon.value"  size="mini" placeholder="请选择"  @change="onCouponChange">
+                                    <el-option
+                                    v-for="(item,index) in Coupon.options"
+                                    :key="index"
+                                    :label="item.label"
+                                    :value="item.value">
+                                    </el-option>
+                                </el-select> 
+                            </div>
                         </li>
                     </ul>
-                    <!-- 其他操作 #submitType#-->
-                    <div class="list_operate padding_left_14" v-if="!submitType">
+                    <!-- 其他操作 -->
+                    <div class="list_operate padding_left_14" >
                         <div class="all_total padding_right_24">
                             <h4>总计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
                         </div>
@@ -114,7 +111,7 @@
             <!-- 提交订单块 -->
             <div class="sumbit_block">
                 <div class="padding_right_24 font_18">实付金额：<b class="">{{cartDate.listTotal}}</b></div>
-                <p class="padding_right_24"><Button shape="circle" type="warning" size="large" @click="submitOrderClick">{{submitType ? '确定订单' : '提交订单'}}</Button></p>
+                <p class="padding_right_24"><Button shape="circle" type="warning" size="large" @click="submitOrderClick">提交订单</Button></p>
             </div>
 
         </div>
@@ -235,7 +232,19 @@ export default {
                 // 收货地址数据列表
                 addressList:[],
             },
-            
+
+            // 配送方式
+            shippingMethods:{
+                value: '快递包邮',
+                options:[]
+            },
+
+            // 优惠券
+            Coupon:{
+                value: '',
+                options:[]
+            },
+
             // 用户信息
             userData: {
                 ciCode: '',
@@ -246,7 +255,6 @@ export default {
         
     },
     methods: {
-
         /*订单数据计算*/    
         // 计算小计与合计
         calculatePrice(){
@@ -256,7 +264,7 @@ export default {
 
             // 计算小计
             for(let x = 0 ; x < m ; x++){
-  
+
                 let n = this.cartDate.cartList[x].items.length;
 
                 // 重置小计
@@ -274,86 +282,36 @@ export default {
 
             }
 
-            // 重置合计
-            this.cartDate.listTotal = 0;
             
-            // 计算合计
-            for(let i = 0 ; i < m ; i++){
-                
-                let item = this.cartDate.cartList[i];
 
-                this.cartDate.listTotal += item.itemTotal *10000;
+            this.$Spin.hide()
 
-            }  
+        },         
+        // 监听优惠券改变
+        onCouponChange(){
 
-            this.cartDate.listTotal = (this.cartDate.listTotal / 10000).toFixed(2);
+            if(this.Coupon.value != '' || this.Coupon.value != '暂无可用优惠券'){
+
+                this.getOrderCouponTotal();
+
+            }else{
+
+                this.Coupon.value = '暂无可用优惠券'
+            }
 
         },
-
         /*订单提交*/   
         submitOrderClick(){   
+
+            // 去结算页面
+            this.$router.push({ path: '/shopGoPay', query: { orderCode: this.$route.query.orderCode} })
             
-            if(this.submitType){
-                this.submitType = false;
-            }else{
-                // 去结算页面
-                this.$router.push({ name: 'shopGoPay', params: { type: true} })
-            }
-            
-        },     
+        }, 
 
         /**数据**/
-        // 获取地址列表
-        getAddressData(){
-
-            let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 10 ,'ciCode': this.userData.ciCode }) ;
-
-            this.$api.getAddressList( param )
-
-            .then( (res) => {
-
-                //console.log(res)
-
-                if(res.data.code == 200){
-
-                    let data = res.data.content.list , arr = [];
-
-                    if(data.length == 0){ this.addressData.addressList = []; return ;}
-
-                    if(this.addressData.addressModelData.addressCode == ""){
-
-                        arr.push({
-                            addressCode: data[0].addressCode,
-                            name:  data[0].addressPersonName,
-                            phone:  data[0].addressPhone,
-                            province:  data[0].province,
-                            city:  data[0].city,
-                            county:  data[0].zone,
-                            addressDetail:  data[0].address,
-                            isDefalut:  data[0].isDefalut,
-                        })
-
-                    }
-
-                    this.addressData.addressList = arr;
-
-                }else{
-
-                    this.$Message.warning(res.data.message);
-
-                }
-
-            })
-            .catch((error) => {
-
-                this.$Spin.hide();
-                console.log('发生错误！', error);
-
-            });
-        },
         // 获取订单详情商品数据
         // param orderCode string 订单编号
-        getOrderDetail(orderCode){
+        getOrderProduct(orderCode){
 
             this.$Spin.show();
 
@@ -368,8 +326,6 @@ export default {
                 if(res.data.code == 200){
 
                     let data = res.data.content.list , arr = [], merchantArr = [];
-
-                    if (data == null || data.length == 0) { return ;}
 
                     for(let i = 0 ; i < data.length; i++){
 
@@ -399,9 +355,10 @@ export default {
                                 cartId: data[i].id,
                                 productCode: data[i].productCode,
                                 state: false,
-                                price: data[i].productInfo.productPrice,
-                                num: cartNun[codeIndex],
-                                describe: data[i].productInfo.productDesc,
+                                price: data[i].productPrice,
+                                num: data[i].productCount,
+                                productTitle: data[i].productInfo.productTitle,
+                                describe:data[i].productInfo.productDesc,
                                 imgSrc: data[i].productInfo.productProfileUrl
                             })
 
@@ -409,11 +366,13 @@ export default {
 
                             // 压入商品
                             arr[index].items.push({
+                                cartId: data[i].id,
                                 productCode: data[i].productCode,
                                 state: false,
-                                price: data[i].productInfo.productPrice,
+                                price: data[i].productPrice,
                                 num: data[i].productCount,
-                                describe: data[i].productInfo.productDesc,
+                                productTitle: data[i].productInfo.productTitle,
+                                describe:data[i].productInfo.productDesc,
                                 imgSrc: data[i].productInfo.productProfileUrl
                             })
 
@@ -424,8 +383,14 @@ export default {
                     // 压入到购物车
                     this.cartDate.cartList = arr;
 
-                    //计算小计与合计
+                    // 计算小计与合计
                     this.calculatePrice();
+
+                    // 获取订单详情 获取订单金额
+                    this.getOrderDetail();
+
+                    // 获取订单可用优惠券
+                    this.getOrderCoupon();
 
                 }else{
 
@@ -442,9 +407,89 @@ export default {
                 console.log('发生错误！', error);
 
             });
-        }
-        
+        },
+        // 获取订单金额
+        getOrderDetail(){
 
+            this.$api.getOrderInfo( this.$Qs.stringify({'orderCode': this.$route.query.orderCode }) )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    this.cartDate.listTotal = res.data.content.orderPayAmount;
+
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+            })
+        },
+        // 获取订单可用优惠券
+        getOrderCoupon(){
+
+            let param = this.$Qs.stringify({ 'ciCode': this.userData.ciCode, 'orderCode': this.$route.query.orderCode ,'orderAmount': this.cartDate.listTotal }) ;
+
+            this.$api.getOrderCoupon( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    let data = res.data.content , arr = [];
+
+                    for(let item of data){
+
+                        arr.push({ value: item.couponCode, label: item.couponInfo.couponTitle })
+                    }
+
+                    this.Coupon.options = arr;
+
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+            })
+
+        },
+        // 获取选择优惠券后的价格
+        getOrderCouponTotal(){
+
+            this.$Spin.show();
+
+            let param = this.$Qs.stringify({ 'couponCode': this.Coupon.value, 'orderCode': this.$route.query.orderCode ,'orderAmount': this.cartDate.listTotal }) ;
+            console.log(param)
+            this.$api.getOrderCouponAmount( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    let data = res.data.content ;
+
+                    this.cartDate.listTotal = res.data.content.orderPayAmount;
+
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+                this.$Spin.hide();
+
+            })
+
+        },
 
     },
 
@@ -455,25 +500,25 @@ export default {
         this.userData.phone = this.$store.state.userData.ciphone ;
 
         // 获取订单详情
-        this.getOrderDetail(this.$route.query.orderCode);
+        this.getOrderProduct(this.$route.query.orderCode);
 
     }
 }
 </script>
 <style scoped>
-     .ivu-modal .ivu-modal-header {
-        border-bottom:0;
-        padding: 10px 16px;
-        height:60px;
-        line-height: 50px;
-        background: #f8f8f8;
-    }  
+
     .ivu-modal .ivu-modal-content{
         border-radius: 0;
     }
     .ivu-modal-close .ivu-icon-ios-close{
         top:5px;
     } 
+    .el-input--mini .el-input__inner{
+        color: #f09105;
+    }
+    .el-select-dropdown__item.selected{
+        color: #f09105;
+    }
 </style>
 <style scoped lang='less'>
 
@@ -591,6 +636,7 @@ export default {
                 .item_list_img img{
                     vertical-align: middle;
                     height: 100px;
+                    width: 100px;
                 }
                 .item_list_describe{
                     display:table;
