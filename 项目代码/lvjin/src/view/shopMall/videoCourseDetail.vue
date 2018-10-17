@@ -33,18 +33,18 @@
 						</p>
           </div>
           <div class="margin_top_10">
-            <Dropdown trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
+            <Dropdown v-show="cuponList.length > 0" trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
               <a href="javascript:void(0)" @click="handleOpen">
                 <Tag color="orange">优惠</Tag>
                 <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
               </a>
               <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
-                <DropdownItem v-for="(item,index) in 3" :key="index" :name="'优惠券' + (index + 1)" style="background: #FFF3E5;margin-bottom: 10px;">
+                <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="'优惠券' + (index + 1)" style="background: #FFF3E5;margin-bottom: 10px;">
                   <Row style="width: 300px;">
                     <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
-                      <div>￥<span class="font_20 font_weight_bold"> 20 </span>店铺优惠券</div>
-                      <div class="margin_top_5">满399使用</div>
-                      <div class="margin_top_5">有效期2018.09.04-2018.09.30</div>
+                      <div>￥<span class="font_20 font_weight_bold"> {{item.couponValuePrice}} </span>店铺优惠券</div>
+                      <div class="margin_top_5">满{{item.couponValueDiscount}}使用</div>
+                      <div class="margin_top_5">有效期{{item.couponStartTime}}-{{item.couponEndTime}}</div>
                     </Col>
                     <Col span="8">
                       <div class="color_F5320D font_20 text_center margin_left_10" style="line-height: 60px">立即领取</div>
@@ -259,7 +259,8 @@ export default {
           visible: false,
           videoData: [],
           audioData: [],
-          showAudio: false
+          showAudio: false,
+          cuponList: []
         }
 
     },
@@ -299,26 +300,45 @@ export default {
       selectCoupon(name){
         this.$Message.success('领取'+name+'成功');
       },
+      // 获取优惠券列表
+      getProductCoupon(productCode, merchantCode){
+        let params = this.$Qs.stringify({'pageNo': 1, 'pageSize': 100, 'productCode': productCode, 'merchantCode': merchantCode});
+        this.$api.getProductCoupon( params )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+              this.cuponList = res.data.content.list
+            }else if (res.data.code == 500){
+              this.$Message.warning(res.data.message);
+            }
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
       // 查看产品详情
       getProductInfo(productCode){
         // 查看产品详情
         this.$api.getProductInfo( this.$Qs.stringify({'productCode': productCode}) )
 
           .then( (res) => {
-            console.log(res);
+            // console.log(res);
             if(res.data.code == 200){
-
-              this.dataDetail = res.data.content
-              this.getMerchantInfo(res.data.content.merchantCode)
+              var result = res.data.content
+              this.dataDetail = result
+              this.getMerchantInfo(result.merchantCode)
               //获取推荐产品
               // this.getProductShowCase('P121212121213,P121212121212,P121212121211,P121212121214') //测试
-              if(!res.data.content.productRecommendCode == '' || !res.data.content.productRecommendCode == null){
-                this.getProductShowCase(res.data.content.productRecommendCode)
+              if(!result.productRecommendCode == '' || !result.productRecommendCode == null){
+                this.getProductShowCase(result.productRecommendCode)
               }
+              //获取优惠券列表
+              this.getProductCoupon(this.productCode, result.merchantCode)
               //商品评分
-              res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
+              result.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
               // 课程目录
-              var productSection = eval(res.data.content.productSection)
+              var productSection = eval(result.productSection)
               // 获取视频音频数据
               var videoSection = []
               var audioSection = []
@@ -362,7 +382,7 @@ export default {
         this.$api.getProductCommentList( params )
 
           .then( (res) => {
-            console.log(res);
+            // console.log(res);
             if(res.data.code == 200){
               this.evaluateList = res.data.content.list
               this.total = res.data.content.count
@@ -392,7 +412,7 @@ export default {
         this.$api.getProductShowCase( this.$Qs.stringify({'productCode': productCode}) )
 
           .then( (res) => {
-            console.log(res);
+            // console.log(res);
             if(res.data.code == 200){
 
               if(res.data.content.length > 3){
@@ -420,7 +440,7 @@ export default {
         this.$api.getMerchantInfo( this.$Qs.stringify({'merchantCode': code}) )
 
           .then( (res) => {
-            console.log(res);
+            // console.log(res);
             if(res.data.code == 200){
               this.merchantInfo.productCount = res.data.content.productCount
               this.merchantInfo.ciCount = res.data.content.ciCount

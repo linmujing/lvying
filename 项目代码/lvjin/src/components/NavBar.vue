@@ -60,8 +60,8 @@
         navTitle: [
           {name: '行业动态管控', id: 1},
           {name: '法律动态管控', id: 2},
-          {name: '视频动态管控', id: 3},
-          {name: '音频动态管控', id: 4}
+          {name: '视频课程', id: 3},
+          {name: '音频课程', id: 4}
         ],
         secondNavTitle: [],
         thirdNavTitle: [],
