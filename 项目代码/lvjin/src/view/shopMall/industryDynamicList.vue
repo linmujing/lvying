@@ -97,7 +97,7 @@ export default {
     methods: {
       jumpDetail(productCode){
         this.$router.push({
-          path:'/videoCourseDetail',
+          path:'/industryDynamicDetail',
           query: {
             productCode: productCode,
             typeId: this.$route.query.typeId

@@ -39,12 +39,12 @@
                 <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
               </a>
               <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
-                <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="'优惠券' + (index + 1)" style="background: #FFF3E5;margin-bottom: 10px;">
+                <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="item.couponCode+','+item.couponForm" v-show="item.couponCount>0" style="background: #FFF3E5;margin-bottom: 10px;">
                   <Row style="width: 300px;">
                     <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
-                      <div>￥<span class="font_20 font_weight_bold"> {{item.couponValuePrice}} </span>店铺优惠券</div>
-                      <div class="margin_top_5">满{{item.couponValueDiscount}}使用</div>
-                      <div class="margin_top_5">有效期{{item.couponStartTime}}-{{item.couponEndTime}}</div>
+                      <div class="font_16 font_weight_bold">{{item.couponTitle}}</div>
+                      <div class="margin_top_5">{{item.couponDesc}}</div>
+                      <div class="margin_top_5">有效期{{dateFormat(item.couponStartTime)}} 至 {{dateFormat(item.couponEndTime)}}</div>
                     </Col>
                     <Col span="8">
                       <div class="color_F5320D font_20 text_center margin_left_10" style="line-height: 60px">立即领取</div>
@@ -238,6 +238,7 @@ export default {
           // 产品详情数据
           dataDetail:{},
           productCode: '',
+          merchantCode: '',
           // 评价列表
           evaluateList: [],
           total: 0,
@@ -297,8 +298,30 @@ export default {
         this.visible = false;
       },
       // 选择优惠券
-      selectCoupon(name){
-        this.$Message.success('领取'+name+'成功');
+      selectCoupon(couponCode){
+			  var arr = couponCode.split(",")
+			  var ciCode = this.$store.state.userData.cicode
+        if(ciCode == null || ciCode == "null" || ciCode == undefined){
+          this.$Message.warning('您还没有登录，请登录后再尝试！');
+          return ;
+        }
+        let params = this.$Qs.stringify({'ciCode': ciCode, 'couponCode': arr[0], 'couponForm': arr[1]});
+        this.$api.addCoupont( params )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+              this.$Message.success('领取成功');
+              // 刷新优惠券列表
+              this.getProductCoupon(this.productCode,this.merchantCode)
+            }else{
+              this.$Message.warning(res.data.message);
+            }
+          })
+          .catch((error) => {
+            this.$Message.warning('领取失败');
+            console.log('发生错误！', error);
+          });
       },
       // 获取优惠券列表
       getProductCoupon(productCode, merchantCode){
@@ -308,7 +331,14 @@ export default {
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
-              this.cuponList = res.data.content.list
+              var arr = res.data.content.list
+              var list = []
+              for(var i=0;i<arr.length;i++){
+                if(arr[i].couponEffectiveType == 1){
+                  list.push(arr[i])
+                }
+              }
+              this.cuponList = list
             }else if (res.data.code == 500){
               this.$Message.warning(res.data.message);
             }
@@ -327,6 +357,7 @@ export default {
             if(res.data.code == 200){
               var result = res.data.content
               this.dataDetail = result
+              this.merchantCode = result.merchantCode
               this.getMerchantInfo(result.merchantCode)
               //获取推荐产品
               // this.getProductShowCase('P121212121213,P121212121212,P121212121211,P121212121214') //测试
@@ -487,6 +518,21 @@ export default {
           this.showAudio = true
           this.$refs.myAudio.startPlay();
         }
+      },
+      //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+      dateFormat:function(time) {
+        var date=new Date(time);
+        var year=date.getFullYear();
+        /* 在日期格式中，月份是从0开始的，因此要加0
+         * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+         * */
+        var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+        var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+        // var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+        // var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+        // var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+        // 拼接
+        return year+"-"+month+"-"+day;
       },
       /** 数据 **/
       // 添加商品到购物车 MT

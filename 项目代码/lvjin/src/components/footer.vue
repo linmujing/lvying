@@ -26,12 +26,12 @@
 						</Col>
 					</Row>
 				</div>
-				<div>公司地址：上海市闵行区紫星路588号2幢2062室  客服热线：400-838-5616</div>
-				<div class="line padding_20">信息网络传播视听节目许可证1908287号  |  互联网直播服务备案号：沪ILS备201708210007   沪网文【2016】6034-453号沪ICP备13027243号-3  沪公网安备 31011502005603号</div>
-				<div class="padding_20">
-					<div>Copyright © 2012-2018 www.ximalaya.com lnc.ALL Rights Reserved</div>
-					<div class="margin_top_10">上海证大喜马拉雅网络科技有限公司 版权所有</div>
-				</div>
+				<!--<div>公司地址：上海市闵行区紫星路588号2幢2062室  客服热线：400-838-5616</div>-->
+				<!--<div class="line padding_20">信息网络传播视听节目许可证1908287号  |  互联网直播服务备案号：沪ILS备201708210007   沪网文【2016】6034-453号沪ICP备13027243号-3  沪公网安备 31011502005603号</div>-->
+				<!--<div class="padding_20">-->
+					<!--<div>Copyright © 2012-2018 www.ximalaya.com lnc.ALL Rights Reserved</div>-->
+					<!--<div class="margin_top_10">上海证大喜马拉雅网络科技有限公司 版权所有</div>-->
+				<!--</div>-->
 			</div>
 		</div>
 	</div>

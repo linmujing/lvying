@@ -4,7 +4,7 @@
 			<div class="top">
 				<div class="center clearfix">
 					<div class="float_left">
-				
+
 						<div v-if="phone=='null' || phone==null">
 							<router-link tag="a" to="/user/userLogin">
 								<span class="color_title">亲，请登录</span>
@@ -12,7 +12,7 @@
 							<router-link tag="a"  to="/user/userRegister" class="padding_left_25">注册</router-link>
 						</div>
 						<div v-else>
-								欢迎你，亲爱的<span  class="color_title"> {{user!='null' && user!=null ? user : phone}} </span> <span class="pointer" style="color:red;" @click="quitLogin">退出</span>
+								欢迎您，亲爱的<span  class="color_title"> {{user!='null' && user!=null ? user : phone}} </span> <span class="pointer" style="color:red;" @click="quitLogin">退出</span>
 						</div>
 					</div>
 					<div class="float_right">
@@ -138,7 +138,7 @@
 
 					},
 					onCancel: () => {
-							
+
 					}
 				});
 
@@ -147,7 +147,7 @@
 		computed: {
 			// 监听登录状态变化 修改页面值
 			getLoginChange() {
-				
+
 				this.user = this.$store.state.userData.ciname;
 
 				this.phone = this.$store.state.userData.ciphone;
