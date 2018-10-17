@@ -104,11 +104,11 @@
                   <Button size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                 </div>
                 <div v-show="detailId === 2">
-                  <Button size="small" shape="circle" class="button_title">视频</Button>
+                  <Button @click="playerVideo(item)" size="small" shape="circle" class="button_title">视频</Button>
                   <Button size="small" shape="circle" class="button_title">音频</Button>
                   <Button size="small" shape="circle" class="button_title">文字</Button>
                   <Button v-show="parseInt(item.docStatus) === 0" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
-                  <Button v-show="parseInt(item.docStatus) === 0" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>
+                  <Button v-show="parseInt(item.docStatus) === 0" @click="downloadDoc(item.docUrl)" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>
                 </div>
               </div>
             </div>
@@ -217,6 +217,14 @@ export default {
       },
       handleClose () {
         this.visible = false;
+      },
+      // 查看视频
+      playerVideo(item){
+			  console.log(item)
+      },
+      // 下载文件
+      downloadDoc(doc){
+        window.open(doc)
       },
       // 选择优惠券
       selectCoupon(couponCode){

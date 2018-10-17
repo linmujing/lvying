@@ -381,7 +381,6 @@ export default {
           var lists = []
           var arr = this.videoParams
           if(!arr == '' || !arr == null){
-            console.log(222)
             for(var i=0;i<arr.length;i++){
               var obj = {
                 name: arr[i].sectionName,
