@@ -33,18 +33,18 @@
             </div>
           </div>
           <div class="margin_top_10">
-            <Dropdown trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
+            <Dropdown v-show="cuponList.length > 0" trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
               <a href="javascript:void(0)" @click="handleOpen">
                 <Tag color="orange">优惠</Tag>
                 <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
               </a>
               <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
-                <DropdownItem v-for="(item,index) in 3" :key="index" :name="'优惠券' + (index + 1)" style="background: #FFF3E5;margin-bottom: 10px;">
+                <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="item.couponCode+','+item.couponForm" v-show="item.couponCount>0" style="background: #FFF3E5;margin-bottom: 10px;">
                   <Row style="width: 300px;">
                     <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
-                      <div>￥<span class="font_20 font_weight_bold"> 20 </span>店铺优惠券</div>
-                      <div class="margin_top_5">满399使用</div>
-                      <div class="margin_top_5">有效期2018.09.04-2018.09.30</div>
+                      <div class="font_16 font_weight_bold text_ellipsis">{{item.couponTitle}}</div>
+                      <div class="margin_top_5 twoline_ellipsis">{{item.couponDesc}}</div>
+                      <div class="margin_top_5 text_ellipsis">有效期{{dateFormat(item.couponStartTime)}} 至 {{dateFormat(item.couponEndTime)}}</div>
                     </Col>
                     <Col span="8">
                       <div class="color_F5320D font_20 text_center margin_left_10" style="line-height: 60px">立即领取</div>
@@ -99,13 +99,17 @@
             <div class="margin_left_30 margin_top_10 clearfix">
               <span>{{item.sectionName}}</span>
               <div class="float_right">
-                <Button v-if="detailId == 1 || detailId == 2" size="small" shape="circle" class="bg_a5 color_fff">查看详情</Button>
-                <Button v-if="detailId == 1 || detailId == 2" size="small" type="success" shape="circle" class="bg_title" @click="goBuy(item.productCode)">立即购买</Button>
-                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">视频</Button>
-                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">音频</Button>
-                <Button v-if="detailId == 3" size="small" shape="circle" class="button_title">文字</Button>
-                <Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
-                <Button v-if="detailId == 3" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>
+                <div v-show="detailId === 1">
+                  <Button size="small" shape="circle" class="bg_a5 color_fff">查看详情</Button>
+                  <Button size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
+                </div>
+                <div v-show="detailId === 2">
+                  <Button size="small" shape="circle" class="button_title">视频</Button>
+                  <Button size="small" shape="circle" class="button_title">音频</Button>
+                  <Button size="small" shape="circle" class="button_title">文字</Button>
+                  <Button v-show="parseInt(item.docStatus) === 0" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
+                  <Button v-show="parseInt(item.docStatus) === 0" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>
+                </div>
               </div>
             </div>
           </div>
@@ -177,6 +181,7 @@ export default {
           // 产品详情数据
           dataDetail:{},
           productCode: '',
+          merchantCode: '',
           // 评价列表
           evaluateList: [],
           total: 0,
@@ -184,7 +189,8 @@ export default {
           // 课程目录
           productSection: [],
           detailId: 1,
-          visible: false
+          visible: false,
+          cuponList: []
         }
 
     },
@@ -213,8 +219,54 @@ export default {
         this.visible = false;
       },
       // 选择优惠券
-      selectCoupon(name){
-        this.$Message.success('领取'+name+'成功');
+      selectCoupon(couponCode){
+        var arr = couponCode.split(",")
+        var ciCode = this.$store.state.userData.cicode
+        if(ciCode == null || ciCode == "null" || ciCode == undefined){
+          this.$Message.warning('您还没有登录，请登录后再尝试！');
+          return ;
+        }
+        let params = this.$Qs.stringify({'ciCode': ciCode, 'couponCode': arr[0], 'couponForm': arr[1]});
+        this.$api.addCoupont( params )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+              this.$Message.success('领取成功');
+              // 刷新优惠券列表
+              this.getProductCoupon(this.productCode,this.merchantCode)
+            }else{
+              this.$Message.warning(res.data.message);
+            }
+          })
+          .catch((error) => {
+            this.$Message.warning('领取失败');
+            console.log('发生错误！', error);
+          });
+      },
+      // 获取优惠券列表
+      getProductCoupon(productCode, merchantCode){
+        let params = this.$Qs.stringify({'pageNo': 1, 'pageSize': 100, 'productCode': productCode, 'merchantCode': merchantCode});
+        this.$api.getProductCoupon( params )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+              var arr = res.data.content.list
+              var list = []
+              for(var i=0;i<arr.length;i++){
+                if(arr[i].couponEffectiveType == 1){
+                  list.push(arr[i])
+                }
+              }
+              this.cuponList = list
+            }else if (res.data.code == 500){
+              this.$Message.warning(res.data.message);
+            }
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
       },
       // 查看产品详情
       getProductInfo(productCode){
@@ -224,12 +276,19 @@ export default {
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
-
-              this.dataDetail = res.data.content
+              var result = res.data.content
+              this.dataDetail = result
+              this.merchantCode = result.merchantCode
+              //获取优惠券列表
+              this.getProductCoupon(this.productCode, result.merchantCode)
               //商品评分
-              res.data.content.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
+              result.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = result.productScore
               // 课程目录
-              this.productSection = eval(res.data.content.productSection)
+              var productProperty = result.productProperty.split(',')
+              if(productProperty.length === 3){
+                this.detailId = 2
+              }
+              this.productSection = eval(result.productSection)
               console.log(this.productSection)
 
             }else if (res.data.code == 500){
@@ -273,6 +332,21 @@ export default {
         }
         this.pageSize += 3
         this.getEvaluateList(this.pageSize, this.productCode)
+      },
+      //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+      dateFormat:function(time) {
+        var date=new Date(time);
+        var year=date.getFullYear();
+        /* 在日期格式中，月份是从0开始的，因此要加0
+         * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+         * */
+        var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+        var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+        // var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+        // var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+        // var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+        // 拼接
+        return year+"-"+month+"-"+day;
       },
       /** 数据 **/
       // 添加商品到购物车 MT
