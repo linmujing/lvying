@@ -25,9 +25,9 @@
 							</li>
 							<li>
                 <Poptip v-model="visible" trigger="hover">
-                  <a>手机XXX</a>
+                  <a>手机公众号</a>
                   <div slot="content">
-                    <img src="../assets/logo.png">
+                    <img src="../assets/images/image/wx.jpg" width="260">
                   </div>
                 </Poptip>
 							</li>

@@ -112,7 +112,6 @@ export default {
     methods: {
       // 获取导航标题
       getNavTitle(){
-        this.$Spin.show()
         this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
 
           .then( (res) => {
@@ -127,7 +126,6 @@ export default {
               this.$Message.warning(res.data.message);
 
             }
-            this.$Spin.hide()
           })
           .catch((error) => {
             console.log('发生错误！', error);
@@ -139,6 +137,7 @@ export default {
         this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1, pageLocat: pageLocat})).then((res)=>{
 
           if(res.data.code == 200){
+            this.$Spin.hide()
             let {content}=res.data;
             // 保存轮播数据
             this.banner = eval(res.data.content[2].caseUrl)
@@ -150,13 +149,13 @@ export default {
               }
             }
           }else{
-
+            this.$Spin.hide()
             this.$Message.warning(res.data.message);
 
           }
-          this.$Spin.hide()
         })
           .catch((error) => {
+            this.$Spin.hide()
             console.log('发生错误！', error);
           });
       },

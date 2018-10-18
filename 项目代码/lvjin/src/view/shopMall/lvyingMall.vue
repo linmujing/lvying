@@ -97,24 +97,23 @@ export default {
       },
       // 获取商品展示
       getProductList(page,sort){
+        this.$Spin.show()
         // 获取产品分类列表
         this.$api.getProductList( this.$Qs.stringify({'pageNo': page, 'pageSize': 12, 'productCat': this.catCode, 'orderByStr': sort}) )
 
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
-
+              this.$Spin.hide()
               this.productList = res.data.content.list
               this.total = res.data.content.count
-
-            }else if (res.data.code == 500){
-
+            }else {
+              this.$Spin.hide()
               this.$Message.warning(res.data.message);
-
             }
-
           })
           .catch((error) => {
+            this.$Spin.hide()
             console.log('发生错误！', error);
           });
       },

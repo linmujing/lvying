@@ -66,14 +66,14 @@ export default {
             isSend: false,
             isSendText: '获取验证码',
         }
-        
+
     },
     methods: {
         // 点击提交
 		clickRegister () {
 
             let reg = new RegExp(/^1(3|4|5|7|8)\d{9}$/);
- 
+
             // 正则验证手机号
             if( !reg.test(this.formRight.phone) ){
 
@@ -126,8 +126,8 @@ export default {
                     return;
 
                 }else if (res.data.code == 200){
-                    
-                    // 注册 
+                    this.$Spin.hide()
+                    // 注册
                     this.resetPassWordFn();
 
                 }
@@ -161,17 +161,14 @@ export default {
 
                 }else{
 
-                    this.$Spin.hide();
-
                     this.$Message.warning(res.data.message);
 
                 }
 
-              
+
             })
             .catch((error) => {
 
-                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -180,7 +177,7 @@ export default {
 
         // 发送短信验证码
         sendVerifyCiPhone(){
-            
+
             this.$Spin.show();
 
             // 正则验证手机号
@@ -200,12 +197,12 @@ export default {
                 console.log(res)
 
                 if(res.data.code == 500){
-
+                    this.$Spin.hide()
                     this.$Message.error('该帐号还未注册!');
                     return;
 
                 }else if(res.data.code == 500){
-
+                    this.$Spin.hide()
                     // 发送验证码
                     this.$api.sendSms( this.$Qs.stringify({ 'phoneNo': this.formRight.phone, 'type': '2' }) )
 
@@ -244,13 +241,13 @@ export default {
 
             let t = null;
 
-            t = setInterval(()=>{ 
+            t = setInterval(()=>{
 
                 if(timer > 0){
 
                     timer-- ;
                     this.isSendText = timer + 'S';
-                    
+
                 }else{
 
                     this.isSendText = '重新获取';
@@ -259,7 +256,7 @@ export default {
                     return ;
 
                 }
-                    
+
             },1000)
 
         },

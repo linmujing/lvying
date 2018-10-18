@@ -146,6 +146,7 @@ export default {
         this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1, pageLocat: pageLocat})).then((res)=>{
 
           if(res.data.code == 200){
+            this.$Spin.hide()
             let {content}=res.data;
             // 保存轮播数据
             this.banner = eval(res.data.content[2].caseUrl)
@@ -157,11 +158,9 @@ export default {
               }
             }
           }else{
-
+            this.$Spin.hide()
             this.$Message.warning(res.data.message);
-
           }
-          this.$Spin.hide()
         })
           .catch((error) => {
             this.$Spin.hide()

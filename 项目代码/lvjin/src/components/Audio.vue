@@ -267,10 +267,7 @@ export default {
 
     },
     mounted(){
-
-        // 加载中
-        this.$Spin.show();
-      console.log(this.audioParams)
+      // console.log(this.audioParams)
       if(this.audioParams.length === 1){
         this.audioTitle = this.audioParams[0].sectionName
         this.url = this.audioParams[0].voiceUrl

@@ -10,7 +10,7 @@
         <!-- 优惠券类型切换 -->
         <div>
             <ul class="coupon_type padding_left_20 padding_top_30">
-                <li :class="[couponData.couponIndex == index ? 'active' : '' ]" v-for="(items, index) in couponData.couponType" :key="index"   
+                <li :class="[couponData.couponIndex == index ? 'active' : '' ]" v-for="(items, index) in couponData.couponType" :key="index"
                 @click="changeCouponType(index)"  >{{items.text}}</li>
             </ul>
             <Select v-model="couponData.couponValue" style="width:200px" size="large">
@@ -71,11 +71,11 @@ export default {
                 platformItems:[{
                         value: '1',
                         label: '平台'
-                    }, 
+                    },
                     {
                         value: '2',
                         label: '机构'
-                    }, 
+                    },
                 ],
                 // 优惠券列表
                 couponList:[
@@ -104,7 +104,7 @@ export default {
                         state:'1',
                         platform:''
                     },
-                ] 
+                ]
             },
 
             // 用户信息
@@ -113,7 +113,7 @@ export default {
             },
 
         }
-        
+
     },
     methods: {
 
@@ -147,15 +147,15 @@ export default {
         // 获取优惠券列表
         getCouponData(){
 
-            let param = this.$Qs.stringify({ 
-                'pageNo': 1, 
-                'pageSize': 10 , 
-                'ciCode': this.userData.ciCode , 
-                'couponStatus': this.couponData.couponIndex, 
+            let param = this.$Qs.stringify({
+                'pageNo': 1,
+                'pageSize': 10 ,
+                'ciCode': this.userData.ciCode ,
+                'couponStatus': this.couponData.couponIndex,
                 'couponForm': this.couponData.couponValue
                 }) ;
 
-            this.$Spin.show();
+            // this.$Spin.show();
 
             this.$api.getCouponList( param )
 
@@ -165,7 +165,7 @@ export default {
 
                 if(res.data.code == 200){
 
-                  
+
                     let data = res.data.content.list ;
 
                     for(let i = 0 ; i < data.length; i++){
@@ -184,12 +184,12 @@ export default {
 
                 }
 
-                this.$Spin.hide();
+                // this.$Spin.hide();
 
             })
             .catch((error) => {
 
-                this.$Spin.hide();
+                // this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -212,7 +212,7 @@ export default {
 <style scoped lang='less'>
 
     //引入优惠券共用less文件
-    @import '../shopCart/shopCart.less'; 
+    @import '../shopCart/shopCart.less';
 
     // 优惠券类型
     .coupon_type{
@@ -226,12 +226,12 @@ export default {
             width: 80px;
             text-align: center;
             cursor: pointer;
-            
+
             &:hover, &.active{
                 background: @color_00aa88;
                 color:#fff;
             }
-            
+
         }
     }
 
@@ -277,7 +277,7 @@ export default {
             line-height: 30px;
         }
     }
-    
+
     // order为空判断
     .order_has_not{
         padding:250px 0 300px 0;
@@ -293,5 +293,5 @@ export default {
         overflow-y: scroll;
     }
 
-    
+
 </style>

@@ -126,24 +126,21 @@ export default {
 
               .then( (res) => {
 
-                console.log(res)
+                // console.log(res)
 
                 if(res.data.code == 200){
-
+                  this.$Spin.hide()
                   this.$Message.success(res.data.message);
                   // 完成并登陆
                   this.loginFn(this.formRight.phone, this.formRight.pwd)
 
-                }else if (res.data.code == 500){
-
+                }else {
+                  this.$Spin.hide()
                   this.$Message.warning(res.data.message);
 
                 }
-                this.$Spin.hide()
-
               })
               .catch((error) => {
-
                 this.$Spin.hide()
                 console.log('发生错误！', error);
 
@@ -160,7 +157,6 @@ export default {
           return;
 
         }
-        this.$Loading.start();
         // 判断手机号是否已注册
         this.$api.verifyMerchantPhone( this.$Qs.stringify({ 'merchantPhone':  this.formRight.phone }) )
 
@@ -192,12 +188,9 @@ export default {
 
             }
 
-            this.$Loading.finish();
-
           })
           .catch((error) => {
 
-            this.$Loading.error();
             console.log('发生错误！', error);
 
           });
@@ -239,7 +232,7 @@ export default {
       loginFn( merchantPhone, passWord){
 
         let params = this.$Qs.stringify({ 'merchantPhone': merchantPhone, 'passWord': passWord });
-        this.$Loading.start();
+        this.$Spin.show()
         // 商户登陆
         this.$api.merchantLogin( params )
 
@@ -248,7 +241,7 @@ export default {
             console.log(res)
 
             if(res.data.code == 200){
-
+              this.$Spin.hide()
               this.$Message.success(res.data.message);
               // 存储用户信息
               sessionStorage.setItem("SupplierData", JSON.stringify(res.data.content));
@@ -259,16 +252,14 @@ export default {
               //跳转函数*************************************************
 
             }else if (res.data.code == 500){
-
+              this.$Spin.hide()
               this.$Message.warning(res.data.message);
 
             }
-            this.$Loading.finish();
-
           })
           .catch((error) => {
 
-            this.$Loading.error();
+            this.$Spin.hide()
             console.log('发生错误！', error);
 
           });

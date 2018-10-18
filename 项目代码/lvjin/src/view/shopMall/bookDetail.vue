@@ -30,7 +30,7 @@
                 <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
               </a>
               <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
-                <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="item.couponCode+','+item.couponForm" v-show="item.couponCount>0" style="background: #FFF3E5;margin-bottom: 10px;">
+                <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="item.couponCode+','+item.couponForm" v-if="item.couponCount>0" style="background: #FFF3E5;margin-bottom: 10px;">
                   <Row style="width: 300px;">
                     <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
                       <div class="font_16 font_weight_bold">{{item.couponTitle}}</div>
@@ -277,6 +277,7 @@ export default {
           .then( (res) => {
             // console.log(res);
             if(res.data.code == 200){
+              this.$Spin.hide()
               var result = res.data.content
               this.dataDetail = result
               this.merchantCode = result.merchantCode
@@ -290,12 +291,11 @@ export default {
               //商品评分
               result.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = result.productScore
 
-            }else if (res.data.code == 500){
-
+            }else {
+              this.$Spin.hide()
               this.$Message.warning(res.data.message);
 
             }
-            this.$Spin.hide()
           })
           .catch((error) => {
             this.$Spin.hide()

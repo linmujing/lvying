@@ -119,16 +119,14 @@ export default {
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
-
+              this.$Spin.hide()
               this.productList = res.data.content.list
               this.total = res.data.content.count
 
-            }else if (res.data.code == 500){
-
+            }else {
+              this.$Spin.hide()
               this.$Message.warning(res.data.message);
-
             }
-            this.$Spin.hide()
           })
           .catch((error) => {
             this.$Spin.hide()

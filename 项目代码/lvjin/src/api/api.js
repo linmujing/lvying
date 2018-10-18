@@ -4,7 +4,8 @@ import axios from 'axios';
 
 var instance = axios.create({
     // baseURL: 'http://localhost:8080/',          // 本地测试
-    // baseURL: 'http://114.115.133.96:8899/law-web-api/', // 正式环境
+    // baseURL: 'http://www.luyingjiaoyu.com/api/', // 正式环境
+    // baseURL: 'http://114.115.133.96:8899/law-web-api/', // 测试环境
     baseURL: "/api/",                                      // 本地环境
     timeout: 5000,                                // 请求超时设置
     headers: { "Accept": "application/json" },

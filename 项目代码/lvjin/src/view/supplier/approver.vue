@@ -264,7 +264,7 @@ export default {
                 console.log(res)
 
                 if(res.data.code == 200){
-
+                  this.$Spin.hide()
                   this.$Message.success(res.data.message);
                   // 存储用户信息
                   sessionStorage.setItem("SupplierData", JSON.stringify(res.data.content));
@@ -272,15 +272,11 @@ export default {
                   this.$router.push({path:'/supplier/approverStatus'});
 
                 }else{
-
+                  this.$Spin.hide()
                   this.$Message.warning(res.data.message);
-
                 }
-                this.$Spin.hide()
-
               })
               .catch((error) => {
-
                 this.$Spin.hide()
                 console.log('发生错误！', error);
 

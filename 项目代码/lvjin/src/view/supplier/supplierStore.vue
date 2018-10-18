@@ -174,7 +174,7 @@ export default {
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
-
+              this.$Spin.hide()
               this.productList = res.data.content.list
               this.total = res.data.content.count
               // 排行销量
@@ -189,11 +189,10 @@ export default {
               }
 
             }else {
-
+              this.$Spin.hide()
               this.$Message.warning(res.data.message);
 
             }
-            this.$Spin.hide()
           })
           .catch((error) => {
             this.$Spin.hide()
@@ -202,7 +201,6 @@ export default {
       },
       //获取商户详细信息
       getMerchantInfo(){
-        this.$Spin.show()
         this.$api.getMerchantInfo( this.$Qs.stringify({'merchantCode': this.merchantCode}) )
 
           .then( (res) => {
@@ -216,10 +214,8 @@ export default {
               this.$Message.warning(res.data.message);
 
             }
-            this.$Spin.hide()
           })
           .catch((error) => {
-            this.$Spin.hide()
             console.log('发生错误！', error);
           });
       },
