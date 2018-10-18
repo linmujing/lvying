@@ -126,8 +126,6 @@ export default {
 
             }
 
-            this.$Spin.show();
-
             // 判断手机号是否已被注册
             this.$api.verifyCiPhone( this.$Qs.stringify({ 'ciPhone': this.formRight.phone }) )
 
@@ -137,12 +135,10 @@ export default {
 
                 if(res.data.code == 200){
 
-                    this.$Spin.hide();
                     this.$Message.warning('该帐号已经注册!');
                     return;
 
                 }else if (res.data.code == 500){
-                    this.$Spin.hide()
                     // 注册
                     this.registerFn();
 
@@ -150,7 +146,6 @@ export default {
             })
             .catch((error) => {
 
-                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -172,7 +167,7 @@ export default {
                 if(res.data.code == 200){
 
                     this.loginFn( this.formRight.phone, this.formRight.pwd, '');
-                    this.$Message.success(res.data.message);
+                    // this.$Message.success(res.data.message);
 
                 }else{
 
@@ -185,7 +180,6 @@ export default {
             })
             .catch((error) => {
 
-                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -203,8 +197,6 @@ export default {
 
             }
 
-            this.$Spin.show();
-
             // 判断手机号是否已注册
             this.$api.verifyCiPhone( this.$Qs.stringify({ 'ciPhone':  this.formRight.phone }) )
 
@@ -213,12 +205,10 @@ export default {
                 console.log(res)
 
                 if(res.data.code == 200){
-                    this.$Spin.hide();
                     this.$Message.error('该帐号已经注册!');
                     return;
 
                 }else if(res.data.code == 500){
-                    this.$Spin.hide();
                     // 发送验证码
                     this.$api.sendSms( this.$Qs.stringify({ 'phoneNo': this.formRight.phone, 'type': '1' }) )
 
@@ -227,7 +217,7 @@ export default {
                         console.log(res)
 
                         if(res.data.code == 200){
-
+                            this.$Message.success(res.data.message);
                             this.sendTimeOut();
 
                         }else {
@@ -241,7 +231,6 @@ export default {
             })
             .catch((error) => {
 
-                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });
@@ -282,16 +271,15 @@ export default {
         //@param passWord 密码
         //@param smsCode 手机验证码
         loginFn( ciPhone, passWord){
-
+            this.$Spin.show();
             this.$api.login( this.$Qs.stringify({ 'ciPhone': ciPhone, 'passWord': passWord }) )
 
             .then( (res) => {
 
                 console.log(res)
-                this.$Spin.hide();
 
                 if(res.data.code == 200){
-
+                    this.$Spin.hide();
                     this.$Message.success(res.data.message);
 
                     // 存储用户信息
@@ -303,7 +291,7 @@ export default {
                     this.$router.push({ name: 'shopMallIdex'})
 
                 }else{
-
+                    this.$Spin.hide();
                     this.$Message.warning(res.data.message);
 
                 }

@@ -187,7 +187,7 @@ export default {
                   console.log(res)
 
                   if(res.data.code == 200){
-
+                    this.$Message.success(res.data.message);
                     this.sendTimeOut();
 
                   }else {

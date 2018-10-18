@@ -139,6 +139,7 @@ export default {
 
                 }else if (res.data.code == 200){
                     this.$Spin.hide()
+
                     if(isPassWord){
 
                         this.loginFn(this.formRight.name, this.formRight.pwd, '');
@@ -237,8 +238,8 @@ export default {
                         console.log(res)
 
                         if(res.data.code == 200){
-
-                            this.sendTimeOut();
+                          this.$Message.success(res.data.message);
+                          this.sendTimeOut();
 
                         }else {
                           this.$Message.error(res.data.message);

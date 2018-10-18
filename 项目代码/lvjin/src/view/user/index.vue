@@ -1,35 +1,35 @@
 <template>
     <div class="container">
-    	
+
     	<Header :isLogin='0'></Header>
-    	
+
     	<div class="bg_f5 padding_bottom_120">
 	        <div class="box_center_1200 padding_top_20">
 	        	<div class="bg_white login_box">
 	        		<Row>
 	        			<Col span="14">
 	        				<div class="padding_90 border_right">
-	        					
+
 	        					<router-view></router-view>
-	        					
+
 	        				</div>
 	        			</Col>
 	        			<Col span="10">
 	        				<div class="padding_90 text_center">
-	        					
-	        					<p class="margin_top_30 font_18">
+
+	        					<p v-if="show" class="margin_top_30 font_18">
 	        						还没有账号，
 	        						<router-link tag="a" to="/user/userRegister">
-										<span class="color_title">立即注册</span>
-									</router-link>
+                        <span class="color_title">立即注册</span>
+                      </router-link>
 	        					</p>
-	        					<!--<p class="margin_top_30 font_18">
+	        					<p v-else class="margin_top_30 font_18">
 	        						已有，
-	        						<router-link tag="a" to="/userLogin">
-										<span class="color_title">立即登录</span>
-									</router-link>
-	        					</p>-->
-	        					
+	        						<router-link tag="a" to="/user/userLogin">
+                        <span class="color_title">立即登录</span>
+                      </router-link>
+	        					</p>
+
 	        					<div class="margin_top_50">
 	        						<p class="font_16">使用合作账号登录</p>
 	        					</div>
@@ -45,9 +45,9 @@
 	        	</div>
 	        </div>
 	    </div>
-	    
+
     	<Footer></Footer>
-		
+
     </div>
 </template>
 <script>
@@ -60,12 +60,25 @@ export default {
     },
     data() {
         return {
-        	
+          show: true,
+          name: ''
         }
-        
+
+    },
+    watch: {
+      //监听参数变化
+      $route(){
+        this.name = this.$route.name
+      },
+      name() {
+        this.show = this.$route.name !== 'userRegister';
+      },
+    },
+    mounted(){
+      this.show = this.$route.name !== 'userRegister';
     },
     methods: {
-    	
+
     }
 }
 </script>
