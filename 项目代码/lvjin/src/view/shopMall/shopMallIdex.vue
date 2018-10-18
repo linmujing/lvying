@@ -238,6 +238,7 @@ export default {
         this.$api.getProductShowCaseList(this.$Qs.stringify({appType:1, pageLocat: 1})).then((res)=>{
 
           if(res.data.code == 200){
+            this.$Spin.hide()
             let {content}=res.data;
             // 保存轮播数据
             this.banner = eval(res.data.content[6].caseUrl)
@@ -258,13 +259,12 @@ export default {
               }
             }
           }else{
-
+            this.$Spin.hide()
             this.$Message.warning(res.data.message);
-
           }
-          this.$Spin.hide()
         })
           .catch((error) => {
+            this.$Spin.hide()
             console.log('发生错误！', error);
           });
       },
@@ -314,7 +314,7 @@ export default {
           .then( (res) => {
 
             if(res.data.code == 200){
-
+              this.$Spin.hide()
               this.navDataModel = res.data.content
               // 导航标题信息
               sessionStorage.setItem("NavTitle", JSON.stringify(res.data.content));
@@ -324,9 +324,9 @@ export default {
               this.$Message.warning(res.data.message);
 
             }
-            this.$Spin.hide()
           })
           .catch((error) => {
+            this.$Spin.hide()
             console.log('发生错误！', error);
           });
       },

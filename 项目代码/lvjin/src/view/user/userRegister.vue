@@ -142,12 +142,11 @@ export default {
                     return;
 
                 }else if (res.data.code == 500){
-
+                    this.$Spin.hide()
                     // 注册
                     this.registerFn();
 
                 }
-                this.$Spin.hide()
             })
             .catch((error) => {
 

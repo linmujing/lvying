@@ -138,7 +138,7 @@ export default {
                     return;
 
                 }else if (res.data.code == 200){
-
+                    this.$Spin.hide()
                     if(isPassWord){
 
                         this.loginFn(this.formRight.name, this.formRight.pwd, '');
@@ -148,7 +148,6 @@ export default {
                         this.loginFn(this.formRightCode.phone, '', this.formRightCode.code);
 
                     }
-                    this.$Spin.hide()
                 }
 
             })

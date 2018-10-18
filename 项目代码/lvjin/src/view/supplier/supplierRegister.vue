@@ -131,7 +131,7 @@ export default {
                   console.log(res)
 
                   if(res.data.code == 200){
-
+                    this.$Spin.hide()
                     this.$Message.success(res.data.message);
                     // 存储用户信息
                     sessionStorage.setItem("SupplierData", JSON.stringify(res.data.content));
@@ -140,12 +140,11 @@ export default {
                     this.$router.push({path:'/supplier/approver'});
 
                   }else{
-
+                    this.$Spin.hide()
                     this.$Message.warning(res.data.message);
 
                   }
 
-                  this.$Spin.hide()
                 })
                 .catch((error) => {
 
@@ -158,7 +157,7 @@ export default {
       },
       // 发送短信验证码
       sendVerifyCiPhone(){
-        this.$Loading.start();
+
         // 正则验证手机号
         if(!(/^1(3|4|5|7|8)\d{9}$/.test(this.formRight.phone ))){
 
@@ -166,13 +165,12 @@ export default {
           return;
 
         }
-        this.$Spin.show()
         // 判断手机号是否已注册
         this.$api.verifyMerchantPhone( this.$Qs.stringify({ 'merchantPhone':  this.formRight.phone }) )
 
           .then( (res) => {
 
-            console.log(res)
+            // console.log(res)
 
             if(res.data.code == 200){
 
@@ -200,12 +198,9 @@ export default {
 
             }
 
-            this.$Spin.hide()
-
           })
           .catch((error) => {
 
-            this.$Spin.hide()
             console.log('发生错误！', error);
 
           });
