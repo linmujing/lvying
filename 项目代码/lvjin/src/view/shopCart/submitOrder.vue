@@ -92,12 +92,12 @@
                     </div>
                     
                     <!-- 订单列表  单一商品 -->
-                    <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="items.id" v-if="!isGroup">
+                    <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="index1" v-if="!isGroup">
                         <li>
                             <div v-if="submitType" class="item_title padding_left_14"> {{items.itemTitle}} </div>
                             <ul class="item_list">
                                 <!-- 列表 #submitType# 调整背景色-->
-                                <li class="padding_left_14" v-for="(item, index2) in items.items" :key="item.id" v-bind:class="[ submitType ? '':'active']">
+                                <li class="padding_left_14" v-for="(item, index2) in items.items" :key="index2" v-bind:class="[ submitType ? '':'active']">
                                     <Row>
                                         <Col span="4">
                                             <span class="item_list_img">

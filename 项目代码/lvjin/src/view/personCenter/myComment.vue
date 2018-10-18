@@ -8,11 +8,7 @@
         </div>
 
         <!-- 评论类型切换 -->
-        <div>
-            <ul class="comment_type padding_left_20 padding_top_30">
-                <li :class="[commentData.commentIndex == index ? 'active' : '' ]"  v-for="(items, index) in commentData.commentType" :key="index"   
-                @click="changecommentType(index)"  >{{items.text}}</li>
-            </ul>
+        <div class="comment_type padding_left_20 padding_top_30">
             <Input v-model="commentData.commentValue" size="large" placeholder="请输入关键字" style="width:200px;padding-right:10px;" />
             <Button type="success" size="large" style="background:#00aa88;width:80px;border-radius:2px;" >搜索</Button>
         </div>
@@ -77,25 +73,6 @@ export default {
             commentData:{
                 // 搜索值
                 commentValue: '',
-                // 评论切换index
-                commentIndex: '',
-                // 评论类型
-                commentType:[
-                    { text:'全部', value:'0' },
-                    { text:'好评', value:'1' },
-                    { text:'中评', value:'2' },
-                    { text:'差评', value:'3' },
-                ],
-                // 平台
-                platformItems:[{
-                        value: '平台1',
-                        label: '平台1'
-                    }, 
-                    {
-                        value: '平台2',
-                        label: '平台2'
-                    }, 
-                ],
                 // 评论列表
                 commentList:[
                     {
@@ -143,13 +120,6 @@ export default {
     },
     methods: {
 
-        /**评论类型切换**/
-        //@param index 获取当前点击的元素下标
-        changecommentType(index){
-
-            this.commentData.commentIndex = index;
-
-        },
 
         /**分页**/
         //@param value 返回当前页码
