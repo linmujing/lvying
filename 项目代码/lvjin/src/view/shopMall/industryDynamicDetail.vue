@@ -100,14 +100,14 @@
               <span>{{item.sectionName}}</span>
               <div class="float_right">
                 <div v-show="detailId === 1">
-                  <Button size="small" shape="circle" class="bg_a5 color_fff">查看详情</Button>
+                  <Button size="small" shape="circle" class="bg_a5 color_fff" style="color: #fff" @click="detailId = 2">查看详情</Button>
                   <Button size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                 </div>
                 <div v-show="detailId === 2">
-                  <Button @click="playerVideo(item)" size="small" shape="circle" class="button_title">视频</Button>
-                  <Button size="small" shape="circle" class="button_title">音频</Button>
-                  <Button size="small" shape="circle" class="button_title">文字</Button>
-                  <Button v-show="parseInt(item.docStatus) === 0" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
+                  <Button @click="playerVideo(item)" size="small" type="success" ghost shape="circle" class="button_title">视频</Button>
+                  <Button @click="playerAudio(item)" size="small" type="success" ghost shape="circle" class="button_title">音频</Button>
+                  <Button @click="openTxt(item)" size="small" type="success" ghost shape="circle" class="button_title">文字</Button>
+                  <Button v-show="parseInt(item.docStatus) === 0" @click="downloadDoc(item.docUrl)" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
                   <Button v-show="parseInt(item.docStatus) === 0" @click="downloadDoc(item.docUrl)" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>
                 </div>
               </div>
@@ -161,15 +161,29 @@
         </div>
       </div>
     </div>
+    <!--音频-->
+    <div v-if="showAudio">
+      <Audio ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl"></Audio>
+    </div>
     <!--视频弹窗-->
     <Modal
-      title="查看视频"
+      title="观看视频"
       v-model="videoModel"
       :footer-hide="true"
       width="70%"
       :mask-closable="false">
-      <div v-show="videoModel">
+      <div v-if="videoModel">
         <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" ></Video>
+      </div>
+    </Modal>
+    <!--文字弹窗-->
+    <Modal
+      v-model="txtModel"
+      :footer-hide="true"
+      width="70%"
+      :mask-closable="false">
+      <div>
+        <div v-html="txtUrl"></div>
       </div>
     </Modal>
 	</div>
@@ -207,7 +221,11 @@ export default {
           visible: false,
           cuponList: [],
           videoModel: false,
-          videoData: []
+          txtModel: false,
+          videoData: [],
+          audioData: [],
+          showAudio: false,
+          txtUrl: ''
         }
 
     },
@@ -237,14 +255,39 @@ export default {
       },
       // 查看视频
       playerVideo(item){
-        if(item.videoUrl == '' || !parseInt(item.videoStatus) == 0){
+        if(!parseInt(item.videoStatus) == 0){
+          this.$Message.warning('对不起，您需要购买后才能观看！');
+          return ;
+        }
+        if(item.videoUrl == ''){
           this.$Message.warning('对不起，当前没有播放源！');
           return ;
         }
         this.videoModel = true
         this.videoData = item
-        this.$refs.myVideo.onPlayerPlay();
-			  console.log(item)
+        // this.$refs.myVideo.onPlayerPlay();
+      },
+      // 收听音频
+      playerAudio(item){
+        if(!parseInt(item.voiceStatus) == 0){
+          this.$Message.warning('对不起，您需要购买后才能收听！');
+          return ;
+        }
+        if(item.voiceUrl == ''){
+          this.$Message.warning('对不起，当前没有播放源！');
+          return ;
+        }
+        this.showAudio = true
+        this.audioData = item
+      },
+      // 查看文字
+      openTxt(item){
+        if(item.txtUrl === ''){
+          this.$Message.warning('对不起，暂无数据！');
+          return ;
+        }
+			  this.txtUrl = item.txtUrl
+        this.txtModel = true
       },
       // 下载文件
       downloadDoc(doc){
@@ -316,10 +359,6 @@ export default {
               //商品评分
               result.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = result.productScore
               // 课程目录
-              var productProperty = result.productProperty.split(',')
-              if(productProperty.length === 3){
-                this.detailId = 2
-              }
               this.productSection = eval(result.productSection)
               console.log(this.productSection)
 

@@ -380,7 +380,8 @@ export default {
             // }
           var lists = []
           var arr = this.videoParams
-          if(!arr == '' || !arr == null){
+          console.log(arr)
+          if(arr.length > 0){
             for(var i=0;i<arr.length;i++){
               var obj = {
                 name: arr[i].sectionName,
@@ -392,9 +393,9 @@ export default {
               }
               lists.push(obj)
             }
+            this.videoMenu.lists = lists
+            this.playerOptions.sources = arr[0].videoUrl;
           }
-          this.videoMenu.lists = lists
-          this.playerOptions.sources = arr[0].videoUrl;
         },
         // 时间进度
         getTimeChange(e){
@@ -637,11 +638,10 @@ export default {
 
     },
     mounted(){
-      console.log(this.videoParams)
         // 获取视频固定参数
         this.getVideoParam();
 
-        console.log(this.$refs.videoPlayer.player)
+        // console.log(this.$refs.videoPlayer.player)
 
     },
 };

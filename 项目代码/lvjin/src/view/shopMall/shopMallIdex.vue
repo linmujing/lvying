@@ -86,8 +86,8 @@
 			</div>
 		</div>
 		<div>
-			<img src="../../assets/images/image/bg.png" class="block all_width">
-		</div>
+      <img :src="bgUrl" class="block all_width" style="max-height: 300px">
+    </div>
     <!--行业动态管控-->
 		<div class="content padding_top_30 padding_bottom_30">
 			<div class="clearfix">
@@ -222,6 +222,7 @@ export default {
 					logicArr:[],
           lvyingArr:[],
           banner: [],
+          bgUrl: '',
           value: 0
         }
 
@@ -240,6 +241,8 @@ export default {
             let {content}=res.data;
             // 保存轮播数据
             this.banner = eval(res.data.content[6].caseUrl)
+            var bgUrl = eval(res.data.content[3].caseUrl)
+            this.bgUrl = bgUrl[0].src
             sessionStorage.setItem("Banner", JSON.stringify(eval(res.data.content[6].caseUrl)));
             for(let item of content){
               if(item.caseName=="视频推荐"){
