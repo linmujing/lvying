@@ -66,20 +66,20 @@ export default {
                     { required: true, message: '验证码不能为空!', trigger: 'blur' }
                 ],
             },
- 
+
             //验证码按钮
             isSend: false,
             isSendText: '获取验证码',
             // 同意协议
             isAgree: false
         }
-        
+
     },
     methods: {
 
 		// 点击注册
 		clickRegister () {
-            
+
             // 阅读协议
             if(!this.isAgree){
 
@@ -89,7 +89,7 @@ export default {
             }
 
             let reg = new RegExp(/^1(3|4|5|7|8)\d{9}$/);
- 
+
             // 正则验证手机号
             if( !reg.test(this.formRight.phone) ){
 
@@ -136,18 +136,18 @@ export default {
                 console.log(res)
 
                 if(res.data.code == 200){
-                    
+
                     this.$Spin.hide();
                     this.$Message.warning('该帐号已经注册!');
                     return;
 
                 }else if (res.data.code == 500){
-                    
-                    // 注册 
+
+                    // 注册
                     this.registerFn();
 
                 }
-
+                this.$Spin.hide()
             })
             .catch((error) => {
 
@@ -194,7 +194,7 @@ export default {
         },
 
         // 发送短信验证码
-        sendVerifyCiPhone(){      
+        sendVerifyCiPhone(){
 
             // 正则验证手机号
             if(!(/^1(3|4|5|7|8)\d{9}$/.test(this.formRight.phone ))){
@@ -205,7 +205,7 @@ export default {
             }
 
             this.$Spin.show();
-            
+
             // 判断手机号是否已注册
             this.$api.verifyCiPhone( this.$Qs.stringify({ 'ciPhone':  this.formRight.phone }) )
 
@@ -214,12 +214,12 @@ export default {
                 console.log(res)
 
                 if(res.data.code == 200){
-
+                    this.$Spin.hide();
                     this.$Message.error('该帐号已经注册!');
                     return;
 
                 }else if(res.data.code == 500){
-
+                    this.$Spin.hide();
                     // 发送验证码
                     this.$api.sendSms( this.$Qs.stringify({ 'phoneNo': this.formRight.phone, 'type': '1' }) )
 
@@ -238,8 +238,6 @@ export default {
                     })
 
                 }
-
-                this.$Spin.hide();
 
             })
             .catch((error) => {
@@ -260,13 +258,13 @@ export default {
 
             let t = null;
 
-            t = setInterval(()=>{ 
+            t = setInterval(()=>{
 
                 if(timer > 0){
 
                     timer-- ;
                     this.isSendText = timer + 'S';
-                    
+
                 }else{
 
                     this.isSendText = '重新获取';
@@ -275,7 +273,7 @@ export default {
                     return ;
 
                 }
-                    
+
             },1000)
 
         },

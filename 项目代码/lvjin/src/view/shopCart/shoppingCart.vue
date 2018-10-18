@@ -20,12 +20,12 @@
                         <Col span="2"><span  class="block_center">操作</span></Col>
                     </Row>
                 </div>
-                
+
                 <!-- 购物车列表 -->
                 <ul class="list_content" v-for="(items, index1) in cartList" :key="index1">
                     <li>
                         <!-- 单个商品渲染 -->
-                        <div v-if="items.itemType == '1'"> 
+                        <div v-if="items.itemType == '1'">
                             <div class="item_title padding_left_14">
                                 <el-checkbox  v-model="items.itemState" @click.prevent.native="checkboxChange(index1)" >
                                     <span class="padding_left_5"> {{items.itemTitle}} </span>
@@ -35,7 +35,7 @@
                                 <li class="padding_left_14" v-for="(item, index2) in items.items" :key="index2">
                                     <Row>
                                         <Col span="5">
-                                            <el-checkbox v-model="item.state" @click.prevent.native="checkboxChange(index1, index2)" > 
+                                            <el-checkbox v-model="item.state" @click.prevent.native="checkboxChange(index1, index2)" >
                                             </el-checkbox>
                                             <span class="item_list_img">
                                                 <img :src="item.imgSrc">
@@ -45,7 +45,7 @@
                                             <Row>
                                                 <Col span="6"></Col>
                                                 <Col span="18">
-                                                    <div class="item_list_describe"> 
+                                                    <div class="item_list_describe">
                                                         <p > {{item.productTitle}} <br/> <span v-html="item.describe"></span></p>
                                                     </div>
                                                 </Col>
@@ -57,11 +57,11 @@
                                                 <!-- 加减数量 -->
                                             <div class="number_add_reduce" >
                                                 <span class="reduce"  @click="reduceNumber" onselectstart="return false" :data-index1="index1" :data-index2="index2"
-                                                >-</span><b class="number_value">{{item.num}}</b><span class="add" @click="addNumber" onselectstart="return false" 
+                                                >-</span><b class="number_value">{{item.num}}</b><span class="add" @click="addNumber" onselectstart="return false"
                                                     :data-index1="index1" :data-index2="index2">+</span>
-                                            </div> 
                                             </div>
-                                            
+                                            </div>
+
                                         </Col>
                                         <!-- 删除单个 -->
                                         <Col span="2"><span class="item_list_delete block_center"><img src="../../assets/images/icon/cart_delete.png" alt="" @click="deleteItem(index1, index2)"></span></Col>
@@ -93,7 +93,7 @@
                                                 <Row>
                                                     <Col span="6"></Col>
                                                     <Col span="18">
-                                                        <div class="item_list_describe"> 
+                                                        <div class="item_list_describe">
                                                             <p > {{child.productTitle}} <br/> <span v-html="child.describe"></span></p>
                                                         </div>
                                                     </Col>
@@ -142,7 +142,7 @@
                 <div style="height:140px;line-height:140px;font-size:16px;" >
                     <p>确定从购物车中删除所选课程吗？</p>
                 </div>
-                <div style="padding: 0 0 20px 200px; "> 
+                <div style="padding: 0 0 20px 200px; ">
                     <Button shape="circle" type="success" size="large" @click="deleteModelOk">确定删除</Button>
                     <span style="width:40px;display:inline-block;"></span>
                     <Button shape="circle" style="background:#a5a5a5;color:#fff;"  size="large" @click="modelDate.deleteModelValue = false">取消</Button>
@@ -222,9 +222,9 @@ export default {
                         }
                     ]
                 }],
-            }, 
+            },
             //购物车数据列表大列表
-            cartList:[] , 
+            cartList:[] ,
 
             /*购物车列表参数*/
             cartParams:{
@@ -244,9 +244,9 @@ export default {
                 index1:0,
                 index2:0
             }
-            
+
         }
-        
+
     },
     methods: {
 
@@ -255,9 +255,9 @@ export default {
         addNumber:function(e){
 
             // 获取商品下标
-            let index1 =  e.target.getAttribute("data-index1"), 
-                index2 =  e.target.getAttribute("data-index2"); 
-            
+            let index1 =  e.target.getAttribute("data-index1"),
+                index2 =  e.target.getAttribute("data-index2");
+
             this.cartList[index1].items[index2].num ++;
 
             //计算小计与合计
@@ -267,8 +267,8 @@ export default {
         reduceNumber:function(e){
 
             // 获取商品下标
-            let index1 =  e.target.getAttribute("data-index1"), 
-                index2 =  e.target.getAttribute("data-index2"); 
+            let index1 =  e.target.getAttribute("data-index1"),
+                index2 =  e.target.getAttribute("data-index2");
 
             if (this.cartList[index1].items[index2].num<=1){
 
@@ -290,8 +290,8 @@ export default {
         },
 
         /*checkbox监听*/
-        //商品选择 
-        //@param index1 购物车大列表下标 
+        //商品选择
+        //@param index1 购物车大列表下标
         //@param index2 购物车小列表下标
         checkboxChange(index1,index2){
 
@@ -301,7 +301,7 @@ export default {
                 this.cartList[index1].items[index2].state = !this.cartList[index1].items[index2].state;
 
                 // 当前集合是否全部选中
-                let states = true ; 
+                let states = true ;
 
                 for(let i = 0 ; i < this.cartList[index1].items.length; i++){
 
@@ -333,10 +333,10 @@ export default {
                 }
 
             }
-             
+
 
             // 所有选项是否全部选中
-            let AllStates = true ; 
+            let AllStates = true ;
 
             let All = this.cartList ;
 
@@ -345,7 +345,7 @@ export default {
                 if(this.cartList[i].itemType == '1'){
 
                     for(let x = 0 ; x < All[i].items.length; x++){
-                        
+
                         if(!All[i].items[x].state){
 
                             AllStates = false;
@@ -372,7 +372,7 @@ export default {
             let isAll = this.cartDate.listState;
 
             let n = this.cartList.length;
-            
+
             for(let i = 0 ; i < n ; i++ ){
 
                 this.cartList[i].itemState = isAll;
@@ -384,7 +384,7 @@ export default {
                         this.cartList[i].items[x].state = isAll;
 
                     }
-                
+
                 }
             }
 
@@ -393,7 +393,7 @@ export default {
 
         },
 
-        /*购物车数据计算*/    
+        /*购物车数据计算*/
         //计算小计与合计
         calculatePrice(){
 
@@ -402,7 +402,7 @@ export default {
 
             //计算小计
             for(let x = 0 ; x < m ; x++){
-  
+
                 let n = this.cartList[x].items.length;
 
                 if(this.cartList[x].itemType == '1'){
@@ -411,7 +411,7 @@ export default {
                     this.cartList[x].itemTotal = 0;
 
                     for(let i = 0 ; i < n ; i++){
-                        
+
                         let item = this.cartList[x].items[i];
 
                         //判断是否选中
@@ -419,7 +419,7 @@ export default {
 
                             this.cartList[x].itemTotal += item.num * (item.price * 10000);
 
-                        } 
+                        }
 
                     }
 
@@ -433,7 +433,7 @@ export default {
                     if(this.cartList[x].itemState){
 
                         for(let i = 0 ; i < n ; i++){
-                            
+
                             let item = this.cartList[x].items[i];
 
                             for(let child of item.items){
@@ -444,7 +444,7 @@ export default {
 
                         }
 
-                        this.cartList[x].itemTotal = (this.cartList[x].itemTotal / 10000).toFixed(2);  
+                        this.cartList[x].itemTotal = (this.cartList[x].itemTotal / 10000).toFixed(2);
                     }
 
                 }
@@ -453,16 +453,16 @@ export default {
 
             //重置合计
             this.cartDate.listTotal = 0;
-            
+
             //计算合计
             for(let i = 0 ; i < m ; i++){
-                
+
                 let item = this.cartList[i];
 
                 //判断是否选中
                 this.cartDate.listTotal += item.itemTotal *10000;
 
-            }  
+            }
 
             this.cartDate.listTotal = (this.cartDate.listTotal / 10000).toFixed(2);
 
@@ -470,16 +470,16 @@ export default {
 
         /*购物车数据删除操作*/
         //删除单个商品
-        //@param index1 购物车大列表下标 
+        //@param index1 购物车大列表下标
         //@param index2 购物车小列表下标
         deleteItem(index1,index2){
-            
+
             this.modelDate.deleteModelValue = true;
             this.modelDate.index1 = index1;
             this.modelDate.index2 = index2;
             this.modelDate.deleteType = 'a';
 
-        },  
+        },
         //删除所有选中的商品
         deleteAllItem(){
 
@@ -489,13 +489,13 @@ export default {
         },
         //弹框确定
         deleteModelOk(){
-            
+
             //a 为删除单个
             if(this.modelDate.deleteType == 'a'){
 
                 // 获取商品下标
                 let index1 = this.modelDate.index1,
-                    index2 = this.modelDate.index2; 
+                    index2 = this.modelDate.index2;
 
                 let cartId = this.cartList[index1].items[index2].cartId;
 
@@ -512,11 +512,11 @@ export default {
 
                 //计算小计
                 for(let x = 0 ; x < m ; x++){
-    
+
                     let n = this.cartList[x].items.length;
 
                     for(let i = 0 ; i < n ; i++){
-                        
+
                         let item = this.cartList[x].items[i];
 
                         //判断是否选中
@@ -524,10 +524,10 @@ export default {
 
                             cartId =='' ? cartId = item.cartId : cartId =  ',' + item.cartId ;
 
-                        } 
+                        }
 
                     }
-                    
+
                 }
 
                 // 批量删除
@@ -548,7 +548,7 @@ export default {
             for(let item of this.cartList){
 
                 if(item.itemType == '2'){
-                    
+
                     if(item.itemState){
 
                         CodeAndCount += CodeAndCount == '' ? `${item.productCode}-${item.num}` : `,${item.productCode}-${item.num}`;
@@ -564,7 +564,7 @@ export default {
 
                             CodeAndCount += CodeAndCount == '' ? `${item2.productCode}-${item2.num}` : `,${item2.productCode}-${item2.num}`;
                             typeNum2 ++;
-        
+
                         }
                     }
 
@@ -576,19 +576,19 @@ export default {
 
             if(typeNum > 1){ this.$Message.warning('组合包只能单独下单！'); return; }
 
-            if(typeNum > 0 && typeNum2 > 0){ this.$Message.warning('组合包只能单独下单！'); return; }     
-            
+            if(typeNum > 0 && typeNum2 > 0){ this.$Message.warning('组合包只能单独下单！'); return; }
+
             // 去结算页面
             this.$router.push({ path: '/submitOrder', query: { productCode: CodeAndCount , sourceType: 'cart'} })
 
         },
-   
+
         /**数据**/
         // 获取购物车列表
         getCartListData(){
 
             this.$Spin.show()
-              
+
             let param = this.$Qs.stringify({ 'pageNo': this.cartParams.pageNo, 'pageSize': this.cartParams.pageSize , 'ciCode': this.cartParams.ciCode }) ;
 
             this.$api.catGetCartList( param )
@@ -598,23 +598,23 @@ export default {
                 console.log(res)
 
                 if(res.data.code == 200){
-                    
+                  this.$Spin.hide()
                     let data = res.data.content.list ;
-                    
+
                     // 购物车商品商户分类
                     let arr = [], merchantArr = [];
 
                     if (data == null || data.length == 0) { return ;}
 
                     for(let i = 0 ; i < data.length; i++){
- 
+
                         // productType 为1时，该商品为单个商品  为2时，商品为组合包
                         if(data[i].productInfo.productType == '1'){
 
                             // 单个商品
                             let index = merchantArr.indexOf(data[i].merchantInfo.merchantNm) ;
 
-                            if( index == -1  ){ 
+                            if( index == -1  ){
 
                                 merchantArr.push(data[i].merchantInfo.merchantNm);
 
@@ -688,8 +688,8 @@ export default {
 
                     // 购物车二次加载 获取组合包的值
                     this.getGroupCartItem()
- 
-                   
+
+
                 }else{
 
                     this.$Spin.hide()
@@ -704,7 +704,7 @@ export default {
                 console.log('发生错误！', error);
 
             });
- 
+
 
         },
 
@@ -774,11 +774,11 @@ export default {
 
                                 }
 
-                            } 
+                            }
                             console.log(arr2)
 
                             CartList[i].items = arr2;
-                        
+
                         }else{
 
                             this.$Message.warning(res.data.message);
@@ -790,15 +790,15 @@ export default {
                     })
 
                 }
-      
-            }    
+
+            }
 
            console.log(CartList);
 
         },
 
         // 删除购物车商品
-        //@param cartId string 购物车商品编号 
+        //@param cartId string 购物车商品编号
         deleteCartItemData(cartId){
 
             console.log(cartId)
@@ -819,7 +819,7 @@ export default {
 
                     // 获取购物车列表
                     this.getCartListData();
-                   
+
                 }else{
 
                     this.$Message.warning(res.data.message);
@@ -833,7 +833,7 @@ export default {
                 console.log('发生错误！', error);
 
             });
- 
+
             this.modelDate.deleteModelValue = false;
 
         }
@@ -863,10 +863,10 @@ export default {
 <style scoped lang='less'>
 
     //引入购物车共用less文件
-    @import './shopCart.less'; 
+    @import './shopCart.less';
 
 
-    /**容器**/ 
+    /**容器**/
     .shopping_cart_container{
         background:#fff;
 
@@ -885,13 +885,13 @@ export default {
         .list_box{
             margin: 0 16px;
             padding-bottom:80px;
-            
+
             // 头部
             .list_header{
                 background: #fafafa;
                 height: 50px;
                 line-height: 50px;
-                
+
                 *{
                     color: @color_666;
                 }
@@ -997,5 +997,5 @@ export default {
         }
 
     }
-    
+
 </style>

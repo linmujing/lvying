@@ -161,13 +161,28 @@
         </div>
       </div>
     </div>
+    <!--视频弹窗-->
+    <Modal
+      title="查看视频"
+      v-model="videoModel"
+      :footer-hide="true"
+      width="70%"
+      :mask-closable="false">
+      <div v-show="videoModel">
+        <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" ></Video>
+      </div>
+    </Modal>
 	</div>
 </template>
 <script>
 import NavBar from '../../components/NavBar.vue'
+import Video from '../../components/Video.vue'
+import Audio from '../../components/Audio.vue'
 export default {
     components : {
       NavBar,
+      Video,
+      Audio
     },
     data() {
         return {
@@ -190,7 +205,9 @@ export default {
           productSection: [],
           detailId: 1,
           visible: false,
-          cuponList: []
+          cuponList: [],
+          videoModel: false,
+          videoData: []
         }
 
     },
@@ -220,6 +237,13 @@ export default {
       },
       // 查看视频
       playerVideo(item){
+        if(item.videoUrl == '' || !parseInt(item.videoStatus) == 0){
+          this.$Message.warning('对不起，当前没有播放源！');
+          return ;
+        }
+        this.videoModel = true
+        this.videoData = item
+        this.$refs.myVideo.onPlayerPlay();
 			  console.log(item)
       },
       // 下载文件

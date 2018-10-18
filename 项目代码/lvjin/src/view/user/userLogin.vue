@@ -79,20 +79,20 @@ export default {
             isSend: false,
             isSendText: '获取验证码'
         }
-        
+
     },
     methods: {
 
         // 点击登录
-        //@param isPassWord Boolean 是否为密码登录 
+        //@param isPassWord Boolean 是否为密码登录
 		pwdSubmit (isPassWord) {
 
             this.isPassWord = isPassWord ;
-            
+
             let phone = isPassWord ? this.formRight.name : this.formRightCode.phone ;
 
             let reg = new RegExp(/^1(3|4|5|7|8)\d{9}$/);
- 
+
             // 正则验证手机号
             if( !reg.test(phone) ){
 
@@ -103,7 +103,7 @@ export default {
 
             // 验证密码
             if(isPassWord){
-                
+
                 if(this.formRight.pwd == ""){
 
                     this.$Message.error('密码不能为空!');
@@ -138,9 +138,9 @@ export default {
                     return;
 
                 }else if (res.data.code == 200){
-                    
+
                     if(isPassWord){
-   
+
                         this.loginFn(this.formRight.name, this.formRight.pwd, '');
 
                     }else{
@@ -148,7 +148,7 @@ export default {
                         this.loginFn(this.formRightCode.phone, '', this.formRightCode.code);
 
                     }
-
+                    this.$Spin.hide()
                 }
 
             })
@@ -264,13 +264,13 @@ export default {
 
             let t = null;
 
-            t = setInterval(()=>{ 
+            t = setInterval(()=>{
 
                 if(timer > 0){
 
                     timer-- ;
                     this.isSendText = timer + 'S';
-                    
+
                 }else{
 
                     this.isSendText = '重新获取';
@@ -279,7 +279,7 @@ export default {
                     return ;
 
                 }
-                    
+
             },1000)
 
         }
