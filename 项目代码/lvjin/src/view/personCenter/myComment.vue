@@ -9,8 +9,8 @@
 
         <!-- 评论类型切换 -->
         <div class="comment_type padding_left_20 padding_top_30">
-            <Input v-model="commentData.commentValue" size="large" placeholder="请输入关键字" style="width:200px;padding-right:10px;" />
-            <Button type="success" size="large" style="background:#00aa88;width:80px;border-radius:2px;" >搜索</Button>
+            <Input v-model="commentValue" size="large" placeholder="请输入关键字" style="width:200px;padding-right:10px;" />
+            <Button type="success" size="large" style="background:#00aa88;width:80px;border-radius:2px;" @click="getProductCommentList(1)">搜索</Button>
         </div>
 
          <!-- 评论列表 -->
@@ -25,22 +25,22 @@
                     <Col :span="10">
                         <div class="table_block">
                             <p class="td_block" style="text-align:left;">
-                                <span>{{items.content}}</span> <br>
-                                <span>{{items.time}}</span>
+                                <span>{{items.commentDesc}}</span> <br>
+                                <span>{{items.createDate}}</span>
                             </p>
                         </div>
                     </Col>
                     <Col :span="4">
                         <div class="table_block">
                             <p class="td_block">
-                                <span>{{items.type}}</span> 
+                                <span>{{items.ciName}}</span>
                             </p>
                         </div>
                     </Col>
                     <Col :span="10">
                         <div class="table_block">
                             <p class="td_block">
-                                <span>{{items.title}}</span>
+                                <span>{{items.productName}}</span>
                             </p>
                         </div>
                     </Col>
@@ -48,8 +48,8 @@
             </ul>
 
             <!-- 订单分页 -->
-            <div class="list_page" v-if="commentData.commentList.length > 5 ">
-                <Page :total="commentData.pageData.total" :current="commentData.pageData.current"   :page-size="commentData.pageData.pageSize"  
+            <div class="list_page">
+                <Page :total="total" :current="page"   :page-size="pageSize"
                     @on-change="changeOrderPage" size="small" show-total show-elevator />
             </div>
         </div>
@@ -71,52 +71,28 @@ export default {
 
             /*评论对象*/
             commentData:{
-                // 搜索值
-                commentValue: '',
                 // 评论列表
                 commentList:[
-                    {
-                        content: '法律顾问',
-                        time: '2018.08.01-2018.08.31',
-                        type:'退货退款',
-                        title:'法律顾问书籍'
-                    },{
-                        content: '法律顾问',
-                        time: '2018.08.01-2018.08.31',
-                        type:'退货退款',
-                        title:'法律顾问书籍'
-                    },{
-                        content: '法律顾问',
-                        time: '2018.08.01-2018.08.31',
-                        type:'退货退款',
-                        title:'法律顾问书籍'
-                    },{
-                        content: '法律顾问',
-                        time: '2018.08.01-2018.08.31',
-                        type:'退货退款',
-                        title:'法律顾问书籍'
-                    },{
-                        content: '法律顾问',
-                        time: '2018.08.01-2018.08.31',
-                        type:'退货退款',
-                        title:'法律顾问书籍'
-                    },{
-                        content: '法律顾问',
-                        time: '2018.08.01-2018.08.31',
-                        type:'退货退款',
-                        title:'法律顾问书籍'
-                    },
-                ],
-                // 分页
-                pageData:{
-                    total: 7,
-                    pageSize: 5,
-                    current: 1
-                } 
-            }
+                    // {
+                    //     content: '法律顾问',
+                    //     time: '2018.08.01-2018.08.31',
+                    //     type:'退货退款',
+                    //     title:'法律顾问书籍'
+                    // }
+                ]
+            },
+            page: 1,
+            ciCode: this.$store.state.userData.cicode,
+            total: 0,
+            pageSize: 5,
+            // 搜索值
+            commentValue: '',
 
         }
-        
+
+    },
+    mounted(){
+      this.getProductCommentList(this.page)
     },
     methods: {
 
@@ -125,25 +101,27 @@ export default {
         //@param value 返回当前页码
         changeOrderPage(value){
 
-            this.commentData.pageData.current = value;
-
+            this.page = value;
+            this.getProductCommentList(value)
         },
-        //监听评论数量添加滚动事件
-        lisionOrderScroll(){
+        // 获取评论列表
+        getProductCommentList(page){
+          // 获取产品分类列表
+          this.$api.getProductCommentList( this.$Qs.stringify({'pageNo': page, 'pageSize': this.pageSize, 'orderCode': '', 'ciCode': this.ciCode, 'productScore': '', 'searchKey': this.commentValue}) )
 
-            //当页面评论商品数量大于5条时，就给列表添加滚动
-            let n = 0;
-            let data = this.commentData.orderList;
-
-            for(let i = 0 ; i < data.length ; i++ ){
-                for(let k = 0 ; k < data[i].items.length; k++ ){
-                    n++;
-                }
-            }
-
-            if(n > 5){
-                return true;
-            }
+            .then( (res) => {
+              console.log(res);
+              if(res.data.code == 200){
+                var result = res.data.content
+                this.commentData.commentList = result.list
+                this.total = result.count
+              }else {
+                this.$Message.warning(res.data.message);
+              }
+            })
+            .catch((error) => {
+              console.log('发生错误！', error);
+            });
         },
     }
 }
@@ -153,7 +131,7 @@ export default {
 <style scoped lang='less'>
 
     //引入评论共用less文件
-    @import '../shopCart/shopCart.less'; 
+    @import '../shopCart/shopCart.less';
 
     // 评论类型
     .comment_type{
@@ -167,18 +145,18 @@ export default {
             width: 80px;
             text-align: center;
             cursor: pointer;
-            
+
             &:hover, &.active{
                 background: @color_00aa88;
                 color:#fff;
             }
-            
+
         }
     }
 
     // 评论列表
     .list_box{
-        
+
         // 头部
         .header{
             background: @color_fafafa;
@@ -195,10 +173,10 @@ export default {
         // 列表
         .list{
             li{
-                height: 90px; 
+                height: 90px;
                 border-bottom:1px solid @color_e6e6e6;
                 .table_block{
-                    height: 90px; 
+                    height: 90px;
                     width:100%;
                     text-align: center;
                 }
@@ -218,7 +196,7 @@ export default {
         }
     }
 
-    
+
     // order为空判断
     .order_has_not{
         padding:250px 0 300px 0;
@@ -234,5 +212,5 @@ export default {
         overflow-y: scroll;
     }
 
-    
+
 </style>

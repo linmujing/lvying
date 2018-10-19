@@ -33,6 +33,11 @@
                   {{item.couponDesc}}
                 </div>
             </div>
+          <!-- 订单分页 -->
+          <div class="list_page">
+            <Page :total="total" :current="page"   :page-size="pageSize"
+                  @on-change="changeOrderPage" size="small" show-total show-elevator />
+          </div>
         </div>
 
         <!-- 没有优惠券 -->
@@ -80,8 +85,11 @@ export default {
 
             // 用户信息
             userData: {
-                ciCode: ''
-            }
+                ciCode: this.$store.state.userData.cicode,
+            },
+            page: 1,
+            total: 0,
+            pageSize: 5,
 
         }
 
@@ -97,34 +105,40 @@ export default {
             } else{
               this.couponData.couponIndex = index
             }
-            this.getCouponData()
+            this.getCouponData(1)
 
         },
 
         //监听优惠券数量添加滚动事件
-        lisionOrderScroll(){
+        // lisionOrderScroll(){
+        //
+        //     //当页面优惠券商品数量大于5条时，就给列表添加滚动
+        //     let n = 0;
+        //     let data = this.orderData.orderList;
+        //
+        //     for(let i = 0 ; i < data.length ; i++ ){
+        //         for(let k = 0 ; k < data[i].items.length; k++ ){
+        //             n++;
+        //         }
+        //     }
+        //
+        //     if(n > 5){
+        //         return true;
+        //     }
+        // },
+        /**分页**/
+        //@param value 返回当前页码
+        changeOrderPage(value){
 
-            //当页面优惠券商品数量大于5条时，就给列表添加滚动
-            let n = 0;
-            let data = this.orderData.orderList;
-
-            for(let i = 0 ; i < data.length ; i++ ){
-                for(let k = 0 ; k < data[i].items.length; k++ ){
-                    n++;
-                }
-            }
-
-            if(n > 5){
-                return true;
-            }
+          this.page = value;
+          this.getCouponData(value)
         },
-
         /*优惠券数据*/
         // 获取优惠券列表
-        getCouponData(){
+        getCouponData(page){
 
             let param = this.$Qs.stringify({
-                'pageNo': 1,
+                'pageNo': page,
                 'pageSize': 10 ,
                 'ciCode': this.userData.ciCode ,
                 'couponStatus': this.couponData.couponIndex,
@@ -141,18 +155,11 @@ export default {
 
                 if(res.data.code == 200){
 
+                    var result = res.data.content
+                    let data = result.list ;
 
-                    let data = res.data.content.list ;
-
-                    for(let i = 0 ; i < data.length; i++){
-
-                        arr.push({
-
-                        })
-
-                    }
-
-                    // 压入数据列表
+                    this.couponData.couponList = data
+                    this.total = result.count
 
                 }else{
 
@@ -189,11 +196,8 @@ export default {
     },
     mounted(){
 
-        // 获取用户信息
-        this.userData.ciCode = 12 ;//this.$store.state.userData.UserData.ciCode ;
-
         // 获取优惠券列表
-        this.getCouponData();
+        this.getCouponData(1);
 
     }
 }

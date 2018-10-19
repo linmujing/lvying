@@ -18,10 +18,12 @@
 					<div class="float_right">
 						<ul class="list_unstyled ul_inline clearfix">
 							<li>
-								<router-link tag="a"  to="/personCenter/myCourse">我的中心</router-link>
+								<!--<router-link tag="a"  to="/personCenter/myCourse">我的中心</router-link>-->
+                <a @click="toMyCourse('/personCenter/myCourse')">我的中心</a>
 							</li>
 							<li>
-								<router-link tag="a"  to="/shoppingCart">购物车</router-link>
+								<!--<router-link tag="a"  to="/shoppingCart">购物车</router-link>-->
+								<a @click="toMyCourse('/shoppingCart')">购物车</a>
 							</li>
 							<li>
                 <Poptip v-model="visible" trigger="hover">
@@ -101,6 +103,14 @@
 			jump() {
 					this.$router.push({path:'/'})
 			},
+      // 跳转判断
+      toMyCourse(path){
+        if(this.$store.state.userData.cicode == null || this.$store.state.userData.cicode == "null"){
+          this.$Message.warning('您还没有登录，请登录后再尝试！');
+          return ;
+        }
+        this.$router.push({path: path})
+      },
 			//登录按钮
 			login() {
 					this.$router.push({path:'/user/userLogin'})

@@ -13,7 +13,7 @@
                 <li  v-for="(items, index) in courseList" :key="index"  @click="goDetail(items.id)" v-if="index < 6">
                     <Col :span="8">
                         <div class="item">
-                            <p class="item_img"> 
+                            <p class="item_img">
                                 <img :src="items.imgSrc" alt="">
                             </p>
                             <div class="item_content">
@@ -36,7 +36,7 @@
 
             <!-- 订单分页 -->
             <div class="list_page" v-if="courseList.length > 6 ">
-                <Page :total="pageData.total" :current="pageData.current"   :page-size="pageData.pageSize"  
+                <Page :total="pageData.total" :current="pageData.current"   :page-size="pageData.pageSize"
                     @on-change="changeOrderPage" size="small" show-total show-elevator />
             </div>
         </div>
@@ -64,58 +64,22 @@ export default {
                 total: 0,
                 pageSize: 5,
                 current: 1
-            }, 
+            },
 
 
             // 课程列表
             courseList1:[
-                {
-                    title: '法律动态管控一级',
-                    type: '0',
-                    source: '法院大讲堂',
-                    imgSrc: require('../../assets/images/image/my_course_01.png'),
-                    id: '1'
-                },{
-                    title: '法律动态管控一级',
-                    type: '0',
-                    source: '法院大讲堂',
-                    imgSrc: require('../../assets/images/image/my_course_02.png'),
-                    id: '1'
-                },{
-                    title: '法律动态管控一级',
-                    type: '0',
-                    source: '法院大讲堂',
-                    imgSrc: require('../../assets/images/image/my_course_03.png'),
-                    id: '1'
-                },{
-                    title: '法律动态管控一级',
-                    type: '0',
-                    source: '法院大讲堂',
-                    imgSrc: require('../../assets/images/image/my_course_04.png'),
-                    id: '1'
-                },{
-                    title: '法律动态管控一级',
-                    type: '0',
-                    source: '法院大讲堂',
-                    imgSrc: require('../../assets/images/image/my_course_01.png'),
-                    id: '1'
-                },{
-                    title: '法律动态管控一级',
-                    type: '0',
-                    source: '法院大讲堂',
-                    imgSrc: require('../../assets/images/image/my_course_01.png'),
-                    id: '1'
-                },{
-                    title: '法律动态管控一级',
-                    type: '0',
-                    source: '法院大讲堂',
-                    imgSrc: require('../../assets/images/image/my_course_01.png'),
-                    id: '1'
-                },
+                // {
+                //     title: '法律动态管控一级',
+                //     type: '0',
+                //     source: '法院大讲堂',
+                //     imgSrc: require('../../assets/images/image/my_course_01.png'),
+                //     id: '1'
+                // }
             ],
 
         }
-        
+
     },
     methods: {
 
@@ -159,20 +123,23 @@ export default {
                     this.$Spin.hide();
 
                 }else{
-                    
+
                     this.$Spin.hide();
                     this.$Message.warning(res.data.message);
 
                 }
-                
             })
+              .catch((error) => {
+                this.$Message.warning('加载失败,请刷新重试!');
+                console.log('发生错误！', error);
+              });
         },
         /**分页**/
         //@param value 返回当前页码
         changeOrderPage(value){
 
             this.pageData.current = value;
-            
+
         },
         //监听课程数量添加滚动事件
         lisionOrderScroll(){
@@ -211,7 +178,7 @@ export default {
 <style scoped lang='less'>
 
     //引入课程共用less文件
-    @import '../shopCart/shopCart.less'; 
+    @import '../shopCart/shopCart.less';
 
     // 课程类型
     .course_type{
@@ -225,22 +192,22 @@ export default {
             width: 80px;
             text-align: center;
             cursor: pointer;
-            
+
             &:hover, &.active{
                 background: @color_00aa88;
                 color:#fff;
             }
-            
+
         }
     }
 
     // 课程列表
     .list_box{
-        
+
         // 列表
         .list{
             li{
-                height: 300px; 
+                height: 300px;
                 width:300px;
                 border:1px solid @color_e6e6e6;
                 overflow: hidden;
@@ -248,15 +215,15 @@ export default {
                 display: inline-block;
                 margin-bottom: 20px;
                 margin-right: 20px;
-                
+
                 .item{
                     width: 300px;
-                    
+
                 }
-                .item_img{ 
+                .item_img{
                     width:100%;
                     height:210px;
-                    
+
 
                     img{
                         width:100%;
@@ -288,7 +255,7 @@ export default {
         }
     }
 
-    
+
     // order为空判断
     .order_has_not{
         padding:250px 0 300px 0;
@@ -304,5 +271,5 @@ export default {
         overflow-y: scroll;
     }
 
-    
+
 </style>
