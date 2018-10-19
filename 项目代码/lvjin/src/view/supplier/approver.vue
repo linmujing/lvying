@@ -42,7 +42,8 @@
 					            </div>
 					        </el-form-item>
 					        <el-form-item label="资质扫描件" style="width: 450px">
-                    <Upload v-if="showMaterial" action="/api/system/file/upload"
+                    <Upload v-if="showMaterial"
+                            :action="BASE_URL"
                             :format="['jpg','gif','png']"
                             :show-upload-list="false"
                             :on-format-error="handleFormatError"
@@ -60,7 +61,8 @@
 							    </div>
 					        </el-form-item>
 					        <el-form-item label="个人资料" style="width: 420px">
-                    <Upload v-if="showInfo" action="/api/system/file/upload"
+                    <Upload v-if="showInfo"
+                            :action="BASE_URL"
                             :format="['jpg','gif','png']"
                             :show-upload-list="false"
                             :on-format-error="handleFormatError"
@@ -199,7 +201,8 @@ export default {
         isAgree: false,
         // 查看照片模态框
         viewModal: false,
-        viewUrl: ''
+        viewUrl: '',
+        BASE_URL: this.GLOBAL.BASE_URL
       }
     },
     mounted(){
