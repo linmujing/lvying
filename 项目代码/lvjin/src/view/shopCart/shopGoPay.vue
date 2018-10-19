@@ -62,14 +62,12 @@
                             <div class="item_shipping_methods padding_left_14" >
                                 <span style="display:inline-block;width:100px;"> 配送方式： </span>快递包邮
                             </div>
-
-                            <div class="item_shipping_methods padding_left_14" >
-                                <span style="display:inline-block;width:100px;"> 优惠券：</span>活动活动
-                            </div>
           
                         </li>
                     </ul>
-
+                    <div class="item_shipping_methods padding_left_14" >
+                        <span style="display:inline-block;width:100px;"> 优惠券：</span>活动活动
+                    </div>
                     <!-- 其他操作-->
                     <div class="list_operate padding_left_14" v-if="hideShowDetail">
                         <div class="all_total padding_right_24">

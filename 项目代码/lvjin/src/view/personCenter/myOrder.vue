@@ -83,7 +83,7 @@
                                             <div class="height_50px" v-for="(childs, index3) in items.childItem" :key="index3">
                                                 <div>
                                                     <Col span="12">
-                                                        <div class="item_td" v-if="index3 == 0"><p>
+                                                        <div class="item_td" v-if="index2 == 0 && index3 == 0"><p>
                                                                 {{ orderData.orderType[parseFloat(lists.orderStatus) + 1].text }}
                                                         </p></div>
                                                     </Col>
@@ -163,7 +163,7 @@
             <!-- 订单分页 -->
             <div class="list_page" v-if="orderData.pageData.total > 5 ">
                 <Page :total="orderData.pageData.total" :current="orderData.pageData.current"   :page-size="orderData.pageData.pageSize"  
-                    @on-change="changeOrderPage" size="small" show-total show-elevator />
+                    @on-change="changeOrderPage" show-total show-elevator />
             </div>
 
         </div>

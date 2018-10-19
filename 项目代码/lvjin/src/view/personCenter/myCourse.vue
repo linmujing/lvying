@@ -17,7 +17,7 @@
                                 <img :src="items.imgSrc" alt="">
                             </p>
                             <div class="item_content">
-                                <p class="title">{{items.title}}</p>
+                                <p class="title text_ellipsis" :title="items.title">{{items.title}}</p>
                                 <Row>
                                     <Col :span="12">
                                         <div class="text_left text_ellipsis">{{items.source}}</div>
@@ -35,9 +35,9 @@
             </ul>
 
             <!-- 订单分页 -->
-            <div class="list_page" v-if="courseList.length > 6 ">
+            <div class="list_page" v-if="pageData.total > 5">
                 <Page :total="pageData.total" :current="pageData.current"   :page-size="pageData.pageSize"
-                    @on-change="changeOrderPage" size="small" show-total show-elevator />
+                    @on-change="changeOrderPage"  show-total show-elevator />
             </div>
         </div>
 
@@ -139,6 +139,7 @@ export default {
         changeOrderPage(value){
 
             this.pageData.current = value;
+            this.getMyCourse();
 
         },
         //监听课程数量添加滚动事件

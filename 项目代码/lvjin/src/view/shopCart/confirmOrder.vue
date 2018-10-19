@@ -76,29 +76,34 @@
                             <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： {{items.itemTotal}}</div>
                             <!-- 其他操作  -->
                             <div class="item_shipping_methods padding_left_14" >
-                                <span style="display:inline-block;width:100px;">配送方式：</span>   
-                                <el-select v-model="shippingMethods.value" size="mini" placeholder="请选择">
-                                    <el-option
-                                    v-for="(item, index) in shippingMethods.options"
-                                    :key="index"
-                                    :label="item.label"
-                                    :value="item.value">
-                                    </el-option>
-                                </el-select> 
-                            </div>
-                            <div class="item_shipping_methods padding_left_14" >
-                                <span style="display:inline-block;width:100px;">优惠券：</span>   
-                                <el-select v-model="Coupon.value"  size="mini" placeholder="请选择"  @change="onCouponChange">
-                                    <el-option
-                                    v-for="(item,index) in Coupon.options"
-                                    :key="index"
-                                    :label="item.label"
-                                    :value="item.value">
-                                    </el-option>
-                                </el-select> 
+                                <span style="display:inline-block;width:100px;">配送方式：</span> 
+                                <span>
+                                    <el-select v-model="shippingMethods.value" size="mini" placeholder="请选择">
+                                        <el-option
+                                        v-for="(item, index) in shippingMethods.options"
+                                        :key="index"
+                                        :label="item.label"
+                                        :value="item.value">
+                                        </el-option>
+                                    </el-select> 
+                                </span>  
                             </div>
                         </li>
                     </ul>
+
+                    <!-- 组合包优惠券 -->
+                    <div class="item_shipping_methods padding_left_14" >
+                        <span style="display:inline-block;width:100px;">优惠券：</span>   
+                        <el-select v-model="Coupon.value"  size="mini" placeholder="请选择"  @change="onCouponChange"  :disabled='Coupon.options.length > 0 ? false : true' >
+                            <el-option
+                            v-for="(item,index) in Coupon.options"
+                            :key="index"
+                            :label="item.label"
+                            :value="item.value">
+                            </el-option>
+                        </el-select> 
+                    </div>
+
                     <!-- 其他操作 -->
                     <div class="list_operate padding_left_14" >
                         <div class="all_total padding_right_24">

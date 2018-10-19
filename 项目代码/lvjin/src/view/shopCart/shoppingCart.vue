@@ -817,6 +817,8 @@ export default {
 
                 if(res.data.code == 200){
 
+                    this.$Message.success(res.data.message);
+
                     // 获取购物车列表
                     this.getCartListData();
 
