@@ -56,6 +56,9 @@ import "vue-video-player/src/custom-theme.css";
 import common from '../commonFunction/common.js';
 Vue.prototype.common = common
 
+import GLOBAL from './components/Global'
+Vue.prototype.GLOBAL = GLOBAL
+
 
 Vue.config.productionTip = false
 

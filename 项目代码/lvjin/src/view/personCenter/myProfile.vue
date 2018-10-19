@@ -23,7 +23,7 @@
                 <div style="display:inline-block;">
                     <p class="head_img" ><img :src="profileData.headImg" alt=""></p>
                     <Upload
-                        action="/api/system/file/upload"
+                        :action="BASE_URL"
                         :format="['jpg','gif','png']"
                         :show-upload-list="false"
                         :on-format-error="handleFormatError"
@@ -87,7 +87,8 @@ export default {
 
             },
             // 提交按钮
-            submitLoading: false
+            submitLoading: false,
+            BASE_URL: this.GLOBAL.BASE_URL
         }
 
     },
@@ -115,7 +116,7 @@ export default {
         materialUrlSuccess (res, file) {
 
             if(res.code == 200){
-
+                console.log(res)
                 this.profileData.headImg = res.content;
 
             }else{
@@ -178,7 +179,6 @@ export default {
 
     },
     mounted(){
-
         // 获取个人信息
         this.profileData.phone = this.common.testEmpty(this.$store.state.userData.ciphone) ;
         this.profileData.name = this.common.testEmpty(this.$store.state.userData.ciname) ;
