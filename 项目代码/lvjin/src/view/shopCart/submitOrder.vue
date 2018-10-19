@@ -142,7 +142,7 @@
 
                     <!-- 订单列表  组合单 -->
                     <ul class="list_content" v-for="(lists, index1) in cartDate.cartList" :key="index1" v-if="isGroup">
-                        <li style="line-height:48px;">我是一个组合包</li>
+                        <li class="padding_left_14" style="line-height:48px;">我是一个组合包</li>
                         <li v-for="(items, index2) in lists.items" :key="index2">
                             <div v-if="submitType" class="item_title padding_left_14"> {{items.itemTitle}} </div>
                             <ul class="item_list">
@@ -235,91 +235,7 @@ export default {
                 // 大列表
                 cartList: []
             }, 
-            // 商品列表
-            cartList:  [
-                {
-                    index1: 0,
-                    itemState: false,
-                    itemTitle: '机构法院',
-                    itemTotal: 0.00,
-                    shippingMethods: '快递免邮',
-                    // 小列表
-                    items:[
-                        {
-                            index2: 0,
-                            state: false,
-                            price: 88.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字',
-                            itemCoupon: '限时优惠券省14元限时优惠券省12元限时优惠券省12元',
-                            itemCouponList: [
-                            {
-                                value: '限时优惠券省12元',
-                                label: '限时优惠券省12元'
-                            },
-                            ],
 
-                            
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        },
-                        {
-                            index2: 1,
-                            state: false,
-                            price: 101.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                            itemCoupon: '限时优惠券省13元',
-                            itemCouponList: [
-                            {
-                                value: '限时优惠券省12元',
-                                label: '限时优惠券省12元'
-                            },
-                            ],
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        }
-                    ]
-                },
-                {
-                    index1: 0,
-                    itemState: false,
-                    itemTitle: '机构法院',
-                    itemTotal: 0.00,
-                    shippingMethods: '快递免邮',
-                    // 小列表
-                    items:[
-                        {
-                            index2: 0,
-                            state: false,
-                            price: 88.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                            itemCoupon: '限时优惠券省12元',
-                            itemCouponList: [
-                            {
-                                value: '限时优惠券省16元',
-                                label: '限时优惠券省16元'
-                            },
-                            ],
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        },
-                        {
-                            index2: 1,
-                            state: false,
-                            price: 101.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                            itemCoupon: '限时优惠券省18元',
-                            itemCouponList: [
-                            {
-                                value: '限时优惠券省12元',
-                                label: '限时优惠券省12元'
-                            },
-                            ],
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        }
-                    ]
-                }
-            ],
             // 是否为组合包
             isGroup: false,
 
@@ -616,6 +532,7 @@ export default {
                 ciCode: this.userData.ciCode,
                 ciName: this.userData.name,
                 orderSource: 1,
+                orderForm: this.$route.query.sourceType != 'cart' ? 1:0,
                 productCodeAndCount: productCodeAndCount,
                 addressCode: this.addressData.addressList[0].addressCode,
             }
@@ -1215,6 +1132,7 @@ export default {
     /**订单容器**/ 
     .shopping_cart_container{
         margin-top:20px;
+        padding-top: 20px;
         background:#fff;
 
         //  订单盒子

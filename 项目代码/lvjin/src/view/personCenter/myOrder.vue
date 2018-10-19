@@ -88,6 +88,8 @@
                                                         </p></div>
                                                     </Col>
                                                     <Col span="12">
+
+                                                        <!-- 针对整个订单 -->
                                                         <div v-if="index2 == 0">
                                                             <div class="item_td" v-if="lists.orderStatus == '0' && index3 == 0"><p>
                                                                 <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
@@ -100,7 +102,7 @@
 
                                                             <div class="item_td" v-if="(lists.orderStatus == '4' && index3 == 0) || (lists.orderStatus == '5' && index3 == 0) "><p>
                                                                 <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                    @click="jumpPage(lists.orderCode)">重新购买
+                                                                    @click="jumpPage(lists.orderCode,  lists.orderStatus)">重新购买
                                                                 </Button> <br> 
                                                                 <Button type="text" shape="circle" 
                                                                     style="width:80px;height:26px;line-height:5px;padding:0" @click="openModel(lists.orderCode, 1)" >删除订单
@@ -108,17 +110,20 @@
                                                             </p></div>
                                                         </div>
 
+                                                        <!-- 针对于单个商品 -->
+                                                        <div class="item_td" v-if="lists.orderStatus == '1' || lists.orderStatus == '2'"><p>
+                                                            <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
+                                                                @click="jumpPage(lists.orderCode)">换货
+                                                            </Button> <br> 
+                                                        </p></div>
+
                                                         <div class="item_td" v-if="lists.orderStatus == '3'"><p>
                                                             <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
                                                                 @click="jumpPage(lists.orderCode)">去评价
                                                             </Button> <br> 
                                                         </p></div>
 
-                                                        <div class="item_td" v-if="lists.orderStatus == '1' || lists.orderStatus == '2'"><p>
-                                                            <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                @click="jumpPage(lists.orderCode)">换货
-                                                            </Button> <br> 
-                                                        </p></div>
+                                                        
 
                                                     </Col>
                                                 </div>
@@ -325,14 +330,19 @@ export default {
 
             switch(state){
 
-                case '0':  Url = ''; param = {orderCode: code}; break;
+                case '0':  Url = '/confirmOrder'; param = {orderCode: code}; break;
 
                 // case '待付款':  param = {state: 'a'}; break;
                 // case '已关闭':  param = {state: 'b'}; break;
                 // case '待发货':  param = {state: 'a'}; break;
             }
 
-            this.$router.push({ path: Url, query: param })
+            // 去结算页面
+             this.$router.push({ path: Url, query: param })
+
+        },
+        // 重新购买
+        againBuy(){
 
         },
         // 查看物流
