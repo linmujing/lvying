@@ -23,18 +23,14 @@
         <div class="coupon_list padding_left_20 padding_top_30" v-if="couponData.couponList.length > 0 ">
             <div class="coupon_item"  v-for="(items, index) in couponData.couponList" :key="index">
                 <div class="item_top">
-                    <p>￥<b class="font_20 padding_left_5">{{items.price}}</b></p>
-                    <p>使用条件：{{items.content}}</p>
-                    <p>使用时间：{{items.time}}</p>
+                    <p>￥<b class="font_20 padding_left_5">{{items.couponValuePrice }}</b></p>
+                    <p>使用条件：{{items.couponTitle }}</p>
+                    <p>使用时间：{{dateFormat(item.couponStartTime)}} 至 {{dateFormat(item.couponEndTime)}}</p>
                     <div class="dashed_line"></div>
                 </div>
                 <div class="item_bottom">
                     <span>使用说明：</span>
-                    请在券面所示有效期内使用，
-                    逾期失效用券应满足券面所示使用范围、
-                    满减金额。通用券可全平台通用，机构/讲
-                    师券仅限指定机构名下课程使用，课程券
-                    仅限指定课程使用
+                  {{item.couponDesc}}
                 </div>
             </div>
         </div>
@@ -43,7 +39,6 @@
         <div class="order_has_not color_ccc" v-if="couponData.couponList.length == 0 ">
             暂无可用的优惠券
         </div>
-
     </div>
 </template>
 <script>
@@ -79,38 +74,14 @@ export default {
                 ],
                 // 优惠券列表
                 couponList:[
-                    {
-                        price: '3',
-                        content: '满100减3',
-                        time: '2018.08.01-2018.08.31',
-                        state:'1',
-                        platform:''
-                    },{
-                        price: '5',
-                        content: '满200减5',
-                        time: '2018.08.01-2018.08.31',
-                        state:'2',
-                        platform:''
-                    },{
-                        price: '20',
-                        content: '满1000减20',
-                        time: '2018.08.01-2018.08.31',
-                        state:'3',
-                        platform:''
-                    },{
-                        price: '3',
-                        content: '满100减3',
-                        time: '2018.08.01-2018.08.31',
-                        state:'1',
-                        platform:''
-                    },
+
                 ]
             },
 
             // 用户信息
             userData: {
                 ciCode: ''
-            },
+            }
 
         }
 
@@ -121,7 +92,12 @@ export default {
         //@param index 获取当前点击的元素下标
         changeCouponType(index){
 
-            this.couponData.couponIndex = index;
+            if(index === 0){
+              this.couponData.couponIndex = ''
+            } else{
+              this.couponData.couponIndex = index
+            }
+            this.getCouponData()
 
         },
 
@@ -193,6 +169,21 @@ export default {
                 console.log('发生错误！', error);
 
             });
+        },
+        //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
+        dateFormat:function(time) {
+          var date=new Date(time);
+          var year=date.getFullYear();
+          /* 在日期格式中，月份是从0开始的，因此要加0
+           * 使用三元表达式在小于10的前面加0，以达到格式统一  如 09:11:05
+           * */
+          var month= date.getMonth()+1<10 ? "0"+(date.getMonth()+1) : date.getMonth()+1;
+          var day=date.getDate()<10 ? "0"+date.getDate() : date.getDate();
+          // var hours=date.getHours()<10 ? "0"+date.getHours() : date.getHours();
+          // var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
+          // var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
+          // 拼接
+          return year+"-"+month+"-"+day;
         },
 
     },

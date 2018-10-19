@@ -19,8 +19,8 @@
 		            <Button @click="sendVerifyCiPhone" :disabled="isSend" class="get_code"  size="large"> {{isSendText}} </Button>
 		        </FormItem>
 		        <FormItem>
-		        	<Checkbox v-model="isAgree">我已认真阅读并同意《XXXXX》</Checkbox></a>
-		            <Button @click="clickRegister()" size="large" type="success" shape="circle" class="all_width bg_title margin_top_10" style="width: 260px">完成并登录</Button>
+		        	  <Checkbox v-model="isAgree">我已认真阅读并同意《XXXXX》</Checkbox>
+		            <Button @click="clickRegister('formValidate')" size="large" type="success" shape="circle" class="all_width bg_title margin_top_10" style="width: 260px">完成并登录</Button>
 		        </FormItem>
 		    </Form>
     	</div>
@@ -78,78 +78,80 @@ export default {
     methods: {
 
 		// 点击注册
-		clickRegister () {
+		clickRegister (name) {
+          this.$refs[name].validate((valid) => {
+            if (valid) {
 
-            // 阅读协议
-            if(!this.isAgree){
+              let reg = new RegExp(/^1(3|4|5|7|8)\d{9}$/);
 
-                this.$Message.error('请阅读协议!');
-                return;
-
-            }
-
-            let reg = new RegExp(/^1(3|4|5|7|8)\d{9}$/);
-
-            // 正则验证手机号
-            if( !reg.test(this.formRight.phone) ){
+              // 正则验证手机号
+              if( !reg.test(this.formRight.phone) ){
 
                 this.$Message.error('请填写正确的手机号!');
                 return;
 
-            }
+              }
 
-            // 验证密码
-            if(this.formRight.pwd == ""){
+              // 验证密码
+              if(this.formRight.pwd == ""){
 
                 this.$Message.error('密码不能为空!');
                 return;
 
-            }
-            if(this.formRight.rePwd == ""){
+              }
+              if(this.formRight.rePwd == ""){
 
                 this.$Message.error('请确认密码!');
                 return;
 
-            }
-            if( this.formRight.pwd != this.formRight.rePwd  ){
+              }
+              if( this.formRight.pwd != this.formRight.rePwd  ){
 
                 this.$Message.error('密码输入不一致，请重新输入!');
                 return;
 
-            }
+              }
 
-            // 确认验证码
-            if(this.formRight.pwd == ""){
-
+              // 确认验证码
+              if(this.formRight.code == ""){
+                console.log(1111)
                 this.$Message.error('验证码不能为空!');
                 return;
 
-            }
+              }
+              // 阅读协议
+              if(!this.isAgree){
 
-            // 判断手机号是否已被注册
-            this.$api.verifyCiPhone( this.$Qs.stringify({ 'ciPhone': this.formRight.phone }) )
+                this.$Message.error('请阅读协议!');
+                return;
 
-            .then( (res) => {
+              }
 
-                console.log(res)
+              // 判断手机号是否已被注册
+              this.$api.verifyCiPhone( this.$Qs.stringify({ 'ciPhone': this.formRight.phone }) )
 
-                if(res.data.code == 200){
+                .then( (res) => {
+
+                  console.log(res)
+
+                  if(res.data.code == 200){
 
                     this.$Message.warning('该帐号已经注册!');
                     return;
 
-                }else if (res.data.code == 500){
+                  }else if (res.data.code == 500){
                     // 注册
                     this.registerFn();
 
-                }
-            })
-            .catch((error) => {
+                  }
+                })
+                .catch((error) => {
 
-                console.log('发生错误！', error);
+                  console.log('发生错误！', error);
 
-            });
-
+                });
+            }
+          })
         },
 
         // 注册

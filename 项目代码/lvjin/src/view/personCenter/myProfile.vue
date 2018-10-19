@@ -54,7 +54,7 @@
             <div style="padding:50px 0 0 50px;">
 
                 <Button type="success"  size="large" shape="circle" style="width:100px;"  @click="saveProfile">提交</Button>
-                 
+
             </div>
         </div>
 
@@ -84,16 +84,15 @@ export default {
                 headImg: '',
                 sex: 0,
                 personal:''
-            
+
             },
             // 提交按钮
             submitLoading: false
-
         }
-        
+
     },
     methods: {
-        
+
         /*切换页面组件*/
         changePage(state){
 
@@ -126,21 +125,21 @@ export default {
             }
 
             this.$Spin.hide();
-            
+
         },
 
         /**数据**/
         // 保存个人信息
         saveProfile(){
 
-            this.$Spin.show();	
+            this.$Spin.show();
 
-            let param = this.$Qs.stringify({ 
-                'ciCode': this.$store.state.userData.cicode, 
-                'ciName': this.profileData.name, 
-                'ciSex': this.profileData.sex, 
-                'ciIntroduce': this.profileData.personal, 
-                'ciProfileUrl': this.profileData.headImg 
+            let param = this.$Qs.stringify({
+                'ciCode': this.$store.state.userData.cicode,
+                'ciName': this.profileData.name,
+                'ciSex': this.profileData.sex,
+                'ciIntroduce': this.profileData.personal,
+                'ciProfileUrl': this.profileData.headImg
             }) ;
 
             this.$api.saveCustomerInfo( param )
@@ -159,7 +158,7 @@ export default {
                     this.$store.commit('userData/saveUserData', res.data.content);
 
                     this.$Message.success(res.data.message);
-                   
+
                 }else{
 
                     this.$Message.warning(res.data.message);
@@ -174,12 +173,12 @@ export default {
                 console.log('发生错误！', error);
 
             });
- 
+
         },
 
     },
     mounted(){
-    
+
         // 获取个人信息
         this.profileData.phone = this.common.testEmpty(this.$store.state.userData.ciphone) ;
         this.profileData.name = this.common.testEmpty(this.$store.state.userData.ciname) ;
@@ -192,8 +191,8 @@ export default {
             this.profileData.headImg = headImg;
         }else{
             this.profileData.headImg = require('../../assets/images/icon/head_img_icon.png');
-            
-        } 
+
+        }
 
 
 
@@ -210,9 +209,9 @@ export default {
 <style scoped lang='less'>
 
     //引入资料共用less文件
-    @import '../shopCart/shopCart.less'; 
+    @import '../shopCart/shopCart.less';
 
-    // 资料标题  
+    // 资料标题
     .order_title{
         span{
             border-bottom:0;
@@ -232,7 +231,7 @@ export default {
             width: 120px;
             text-align: right;
         }
-        
+
     }
 
     .head_img{
@@ -251,5 +250,5 @@ export default {
         }
     }
 
-    
+
 </style>
