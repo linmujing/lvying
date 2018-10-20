@@ -191,7 +191,7 @@
             <!-- 提交订单块 -->
             <div class="sumbit_block">
                 <div class="padding_right_24 font_18">实付金额：<b class="">{{cartDate.listTotal}}</b></div>
-                <p class="padding_right_24"><Button shape="circle" type="warning" size="large" @click="submitOrderClick">{{submitType ? '确定订单' : '提交订单'}}</Button></p>
+                <p class="padding_right_24"><Button shape="circle" type="warning" size="large" @click="submitOrderClick">{{submitType ? '确认订单' : '提交订单'}}</Button></p>
             </div>
 
         </div>
@@ -505,7 +505,6 @@ export default {
             }); 
  
         },
-
         // 获取创建订单参数
         getOrderParam(){
 
@@ -562,7 +561,7 @@ export default {
                     if (data == null || data.length == 0) { return ;}
 
                     // 单个商品
-                    if(data.productType == '1'){
+                    if(data.productType != '2'){
 
                         // 压入商户
                         arr.push({
@@ -609,7 +608,7 @@ export default {
 
                     }
 
-                    // 压入到购物车
+                    // 压入到商品列表
                     this.cartDate.cartList = arr;
 
                     // 判断是否为组合包
@@ -631,128 +630,80 @@ export default {
 
             });
         },
-        // 获取购物车产品数据
+        // 获取多个产品数据
         getProductCartData(productCode){
 
-            let cartString = productCode.split(','), cartCode = [], cartNun = [];
+            let cartString = productCode.split(','), cartCode = [], cartNun = [], codeStr = '';
 
             for(let item of cartString){
 
                 cartCode.push(item.split('-')[0]);
                 cartNun.push(item.split('-')[1]);
-
+                codeStr += codeStr== '' ? item.split('-')[0] : ',' + item.split('-')[0];
             }
 
             this.$Spin.show()
               
-            let param = this.$Qs.stringify({ 'pageNo': 1, 'pageSize': 50 , 'ciCode': this.userData.ciCode }) ;
-
-            this.$api.catGetCartList( param )
+            this.$api.getProductShowCase( this.$Qs.stringify({ 'productCode': codeStr }) )
 
             .then( (res) => {
 
-                this.allCount = res.data.content.count;
                 console.log(res)
 
                 if(res.data.code == 200){
-                    
-                    let data = res.data.content.list , arr = [], merchantArr = [];
 
-                    if (data == null || data.length == 0) { return ;}
+                    let Data = res.data.content ;
 
-                    for(let i = 0 ; i < data.length; i++){
+                    // 对组合包里的商品进行商户分类
+                    let arr2 = [], merchantArr2 = [] ;
 
-                        // 购物车商品判断
-                        let codeIndex = cartCode.indexOf(data[i].productCode);
+                    for(let child of Data){
 
-                        // 判断是否是该商品
-                        if( codeIndex != -1) {
+                        let childIndex = merchantArr2.indexOf(child.merchantCode);
 
-                            let index = merchantArr.indexOf(data[i].merchantInfo.merchantNm) ;
+                        if(childIndex == -1){
 
-                            console.log(index)
+                            merchantArr2.push(child.merchantCode);
 
-                            // 单个商品
-                            if(data[i].productInfo.productType == '1'){
+                            arr2.push({
+                                id: '',
+                                itemTitle: child.merchantNm,
+                                itemTotal: 0.00,
+                                //小列表
+                                items:[]
+                            })
 
-                                if( index == -1  ){ 
+                            childIndex = merchantArr2.indexOf(child.merchantCode);
 
-                                    merchantArr.push(data[i].merchantInfo.merchantNm);
+                            // 压入商品
+                            arr2[childIndex].items.push({
+                                productCode: child.productCode,
+                                price: child.productPrice,
+                                num: 1, //child.productNum,
+                                productTitle: child.productTitle,
+                                describe: child.productDesc,
+                                imgSrc: child.productProfileUrl
+                            })
 
-                                    // 压入商户
-                                    arr.push({
-                                        id: '',
-                                        itemState: false,
-                                        itemType: data[i].productInfo.productType ,
-                                        itemTitle: data[i].merchantInfo.merchantNm,
-                                        itemCode: data[i].merchantInfo.merchantCode,
-                                        itemTotal: 0.00,
-                                        //小列表
-                                        items:[]
-                                    });
+                        }else{
 
-                                    index = merchantArr.indexOf(data[i].merchantInfo.merchantNm);
-
-                                    // 压入商品
-                                    arr[index].items.push({
-                                        cartId: data[i].id,
-                                        productCode: data[i].productCode,
-                                        state: false,
-                                        price: data[i].productInfo.productPrice,
-                                        num: cartNun[codeIndex],
-                                        productTitle: data[i].productInfo.productTitle,
-                                        describe: data[i].productInfo.productDesc,
-                                        imgSrc: data[i].productInfo.productProfileUrl
-                                    })
-
-                                }else{
-
-                                    // 压入商品
-                                    arr[index].items.push({
-                                        productCode: data[i].productCode,
-                                        state: false,
-                                        price: data[i].productInfo.productPrice,
-                                        num: cartNun[codeIndex],
-                                        productTitle: data[i].productInfo.productTitle,
-                                        describe: data[i].productInfo.productDesc,
-                                        imgSrc: data[i].productInfo.productProfileUrl
-                                    })
-
-                                }
-
-                            }else{
-
-                               // 组合包商品
-                                merchantArr.push(data[i].productCode);
-
-                                // 压入组合包
-                                arr.push({
-                                    id: '',
-                                    itemType: data[i].productInfo.productType ,
-                                    itemState: false,
-                                    itemTitle: data[i].productInfo.productTitle,
-                                    itemTotal: 0.00,
-                                    productCode: data[i].productCode,
-                                    num: 1,
-                                    productSubCode: data[i].productInfo.productSubCode,
-                                    //小列表
-                                    items:[]
-                                });
-
-                                // 是否为组合包
-                                this.isGroup = true;
-
-                            }
+                            // 压入商品
+                            arr2[childIndex].items.push({
+                                productCode: child.productCode,
+                                price: child.productPrice,
+                                num: 1,//child.productNum,
+                                productTitle: child.productTitle,
+                                describe: child.productDesc,
+                                imgSrc: child.productProfileUrl
+                            })
 
                         }
 
-                    }
+                    } 
 
-                    // 压入到购物车
-                    this.cartDate.cartList = arr;
-
-                    // 判断是否为组合包
-                    this.isGroup ? this.getGroupCartItem() : this.calculatePrice();                   
+                    // 压入到商品列表
+                    this.cartDate.cartList = arr2;    
+                    this.calculatePrice();        
                    
                 }else{
 
@@ -774,7 +725,7 @@ export default {
         // 组合包数据加载
         getGroupCartItem(){
 
-            // 获取购物车一次加载列表
+            // 获取商品列表一次加载列表
             let CartList = this.cartDate.cartList ;
 
             for(let i = 0; i < CartList.length; i++ ){
@@ -1013,7 +964,7 @@ export default {
         this.getAddressData();
 
         // 获取页面数据来源 
-        if(this.$route.query.sourceType != 'cart'){
+        if(this.$route.query.productCode.split(',').length == 1){
 
             this.getProductDetailData(this.$route.query.productCode);
 

@@ -128,7 +128,7 @@ export default {
 
             /* 退款状态 */ 
             // a: 退款  b:退款中  c:退款成功
-            pageState: 'c',
+            pageState: 'a',
 
             /* 退款商品数据 */
             storeData:{
@@ -170,6 +170,8 @@ export default {
     methods: {
        pageChange(){
 
+
+
            switch(this.pageState){
                 case 'a': this.pageState = 'b'; break; 
                 case 'b': this.pageState = 'c'; break;
@@ -182,7 +184,7 @@ export default {
     },
     mounted(){
         // 获取页面类型
-        this.pageState = this.$route.params.state;
+        this.pageState = 'a';//this.$route.params.state;
 
 
     }

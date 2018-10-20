@@ -48,7 +48,7 @@
             </ul>
 
             <!-- 订单分页 -->
-            <div class="list_page">
+            <div class="list_page" v-if="total > 5 ">
                 <Page :total="total" :current="page"   :page-size="pageSize"
                     @on-change="changeOrderPage" size="small" show-total show-elevator />
             </div>
@@ -106,11 +106,14 @@ export default {
         },
         // 获取评论列表
         getProductCommentList(page){
+
+            this.$Spin.show();
           // 获取产品分类列表
           this.$api.getProductCommentList( this.$Qs.stringify({'pageNo': page, 'pageSize': this.pageSize, 'orderCode': '', 'ciCode': this.ciCode, 'productScore': '', 'searchKey': this.commentValue}) )
 
             .then( (res) => {
               console.log(res);
+                this.$Spin.hide();
               if(res.data.code == 200){
                 var result = res.data.content
                 this.commentData.commentList = result.list

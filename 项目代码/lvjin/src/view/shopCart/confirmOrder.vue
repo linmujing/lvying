@@ -67,7 +67,7 @@
                                             </Row>
                                         </Col>
                                         <Col span="5"><span class="block_center">{{item.price}}</span></Col>
-                                        <Col span="6"><span class="block_center">{{item.num}}</span></Col>
+                                        <Col span="6"><span class="block_center">×{{item.num}}</span></Col>
                                         <!-- 小计 -->
                                         <Col span="2"><span class="block_center">{{items.itemTotal}}</span></Col>
                                     </Row>

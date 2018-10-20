@@ -7,35 +7,7 @@
             <div class="check_logistics" >
 
                 <!-- 查看物流标题 -->
-                <div class="order_title"><span>查看物流</span></div>
-
-                <!-- 带参数查看物流 -->
-                <div class="logistics_box" v-if="pageState !='c'">
-                    <Col :span="9">
-                        <div class="logistics_detail">
-                            <p class="title">物流信息</p>
-                            <div class="item_box"><span>物流单号：</span><div>{{logisticsData.id}}</div></div>
-                            <div class="item_box"><span>发货地址：</span><div>{{logisticsData.deliveryAddress}}</div></div>
-                            <div class="item_box"><span>收货人：</span><div><b>{{logisticsData.person}}</b>  </div></div>
-                            <div class="item_box"><span>收货地址：</span><div>{{logisticsData.collectAddress}}</div></div>
-                        </div>
-                    </Col>
-                    <Col :span="15">
-                        <div class="order_detail">
-                            <div class="padding_top_30"><b>订单状态：</b>{{logisticsData.orderStateText}}</div>
-                            <p class="padding_top_30">物流单号：{{logisticsData.id}}</p>
-                            <p >物流：{{logisticsData.logisticCompany}}</p>
-                            <p v-if="logisticsData.orderStateText == '待付款'">
-                                <Button type="warning" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" >去付款</Button>
-                                <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0">取消订单</Button>
-                            </p>
-                            <p v-if="logisticsData.orderStateText == '已关闭'">
-                                <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" >重新购买</Button>
-                                <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0">删除订单</Button>
-                            </p>
-                        </div>
-                    </Col>
-                </div>
+                <div class="order_title"><span>查看物流</span><i class="text_hover_color padding_right_20 float_right" @click="$router.go(-1)">返回</i></div>
 
                 <!-- 普通查看物流 -->
                 <div class="logistics_box" v-if="pageState =='c'">
@@ -51,8 +23,8 @@
                     <Col :span="13">
                         <div class="store_list">
                             <div class="store_item">
-                                <p class="img_box"><img src="../../assets/images/image/cart_book.png" alt=""></p>
-                                <span>500 * 1</span>
+                                <p class="img_box"><img :src="productUrl" alt=""></p>
+                                <span>￥{{productPrice}} * {{productNum}}</span>
                             </div>
                         </div>
                     </Col>
@@ -77,47 +49,70 @@ export default {
 
             /* 查看物流数据 */
             logisticsData:{
-                id:'2018020141452',
-                deliveryAddress:'湖南省长沙市芙蓉区芙蓉大道建设八一路口32号湖南省长沙市芙蓉区芙蓉大道建设八一路口32号',
-                person:'666先生',
-                collectAddress:'湖南省长沙市芙蓉区芙蓉大道建设八一路口33号湖南省长沙市芙蓉区芙蓉大道建设八一路口33号',
-                logisticCompany:'圆通',
-                orderState:'',
-                orderStateText:'待付款',
-            },
-
+                id:'',
+                deliveryAddress:'',
+                person:'',
+                collectAddress:'',
+                logisticCompany:'',
+            },   
             
+            // 商品信息 orderCode, trackNo, productProfileUrl, productPirce, productNun
+            productUrl: this.$route.query.productProfileUrl,
+            productPrice: this.$route.query.productPirce,
+            productNum: this.$route.query.productNun
             
         }
         
     },
     methods: {
-       pageChange(){
 
-           switch(this.pageState){
-                case 'a': 
-                    this.pageState = 'a';
-                    this.logisticsData.orderStateText = '待付款';
-                    break; 
-                case 'b': 
-                    this.pageState = 'b'; 
-                    this.logisticsData.orderStateText = '已关闭';
-                    break;
-                case 'c': 
-                    this.pageState = 'c';
-                    break;
-           }
+        // 查看物流
+        checkLogistics(){
 
+            this.$Spin.show()
+              
+            let param = this.$Qs.stringify({ 
+                'orderCode': this.$route.query.orderCode,
+                'trackNo': this.$route.query.trackNo,
+                }) ;
 
-       }
+            this.$api.getOrderTrack( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                this.$Spin.hide()
+
+                if(res.data.code == 200){
+
+                    this.logisticsData = {
+                        id: res.data.content.trackNo ,
+                        deliveryAddress: res.data.content.sendAddressId ,
+                        person: res.data.content.signName ,
+                        collectAddress: res.data.content.signAddressId ,
+                    }
+                   
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+            })
+            .catch((error) => {
+
+                this.$Spin.hide();
+                console.log('发生错误！', error);
+
+            });  
+        },
 
     },
     mounted(){
-        // 获取页面类型
-        this.pageState = this.$route.params.state;
 
-        // 监听页面变化
-        this.pageChange();
+        this.checkLogistics();
+
     }
 }
 </script>
