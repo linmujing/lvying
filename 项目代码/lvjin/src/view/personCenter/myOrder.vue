@@ -308,6 +308,7 @@ export default {
         changeOrderType(index){
 
             this.orderData.orderTypeIndex = index;
+            this.orderData.pageData.current = 1
             // 获取订单列表
             this.getOrderList();
 
