@@ -25,41 +25,43 @@
             </div>
             <div class="float_left color_999 line_height_30px margin_left_30">{{dataDetail.saleCount}}人看过</div>
           </div>
-          <div class="margin_top_30 clearfix">
-            <p class="float_left"><span class="color_title font_20">￥{{dataDetail.productPrice}}</span></p>
-            <p class="float_left pointer margin_left_30" @click="audition">
-							<Icon type="ios-headset-outline" size="28"/>
-							<span class="font_16 color_666 vertical_middle">试听</span>
-						</p>
-          </div>
-          <div class="margin_top_10">
-            <Dropdown v-show="cuponList.length > 0" trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
-              <a href="javascript:void(0)" @click="handleOpen">
-                <Tag color="orange">优惠</Tag>
-                <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
-              </a>
-              <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
-                <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="item.couponCode+','+item.couponForm" v-if="item.couponCount>0" style="background: #FFF3E5;margin-bottom: 10px;">
-                  <Row style="width: 300px;">
-                    <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
-                      <div class="font_16 font_weight_bold">{{item.couponTitle}}</div>
-                      <div class="margin_top_5">{{item.couponDesc}}</div>
-                      <div class="margin_top_5">有效期{{dateFormat(item.couponStartTime)}} 至 {{dateFormat(item.couponEndTime)}}</div>
-                    </Col>
-                    <Col span="8">
-                      <div class="color_F5320D font_20 text_center margin_left_10" style="line-height: 60px">立即领取</div>
-                    </Col>
-                  </Row>
-                </DropdownItem>
-                <div style="text-align: right;margin:10px;">
-                  <Button type="success" size="small" ghost @click="handleClose">关闭</Button>
-                </div>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          <div class="margin_top_40">
-            <Button size="large" type="warning" shape="circle" @click="addProductCart(dataDetail.productCode)">加入购物车</Button>
-            <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
+          <div v-if="hasBuy == 0">
+            <div class="margin_top_30 clearfix">
+              <p class="float_left"><span class="color_title font_20">￥{{dataDetail.productPrice}}</span></p>
+              <p class="float_left pointer margin_left_30" @click="audition">
+                <Icon type="ios-headset-outline" size="28"/>
+                <span class="font_16 color_666 vertical_middle">试听</span>
+              </p>
+            </div>
+            <div class="margin_top_10">
+              <Dropdown v-show="cuponList.length > 0" trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
+                <a href="javascript:void(0)" @click="handleOpen">
+                  <Tag color="orange">优惠</Tag>
+                  <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
+                </a>
+                <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
+                  <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="item.couponCode+','+item.couponForm" v-if="item.couponCount>0" style="background: #FFF3E5;margin-bottom: 10px;">
+                    <Row style="width: 300px;">
+                      <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
+                        <div class="font_16 font_weight_bold">{{item.couponTitle}}</div>
+                        <div class="margin_top_5">{{item.couponDesc}}</div>
+                        <div class="margin_top_5">有效期{{dateFormat(item.couponStartTime)}} 至 {{dateFormat(item.couponEndTime)}}</div>
+                      </Col>
+                      <Col span="8">
+                        <div class="color_F5320D font_20 text_center margin_left_10" style="line-height: 60px">立即领取</div>
+                      </Col>
+                    </Row>
+                  </DropdownItem>
+                  <div style="text-align: right;margin:10px;">
+                    <Button type="success" size="small" ghost @click="handleClose">关闭</Button>
+                  </div>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+            <div class="margin_top_40">
+              <Button size="large" type="warning" shape="circle" @click="addProductCart(dataDetail.productCode)">加入购物车</Button>
+              <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
+            </div>
           </div>
         </Col>
       </Row>
@@ -102,7 +104,10 @@
                   </div>
                   <div class="float_right">
                     <span>{{item.videoTime}}</span>
-                    <div class="inline_block width_100px margin_left_20">
+                    <div v-if="hasBuy == 1" class="inline_block width_100px margin_left_20">
+                      <Button size="small" type="success" shape="circle" class="bg_title" @click="audition">立即播放</Button>
+                    </div>
+                    <div v-else class="inline_block width_100px margin_left_20">
                       <Button v-if="parseInt(item.videoStatus) === 0" size="small" type="warning" shape="circle" style="width: 60px" @click="audition">试听</Button>
                       <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                     </div>
@@ -117,8 +122,11 @@
                   </div>
                   <div class="float_right">
                     <span>{{item.audioTime}}</span>
-                    <div class="inline_block width_100px margin_left_20">
-                      <Button v-if="parseInt(item.voiceStatus) === 0" size="small" type="warning" shape="circle" style="width: 60px">试听</Button>
+                    <div v-if="hasBuy == 1" class="inline_block width_100px margin_left_20">
+                      <Button size="small" type="success" shape="circle" class="bg_title" @click="audition">立即播放</Button>
+                    </div>
+                    <div v-else class="inline_block width_100px margin_left_20">
+                      <Button v-if="parseInt(item.voiceStatus) === 0" size="small" type="warning" shape="circle" @click="audition">试听</Button>
                       <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                     </div>
                   </div>
@@ -261,7 +269,9 @@ export default {
           videoData: [],
           audioData: [],
           showAudio: false,
-          cuponList: []
+          cuponList: [],
+          // 已经购买
+          hasBuy: 0
         }
 
     },
@@ -277,6 +287,9 @@ export default {
       },
     },
     mounted(){
+      if(!this.$route.query.hasBuy == ''){
+        this.hasBuy = 1
+      }
       this.productCode = this.$route.query.productCode
       // this.productCode = 'P153942083696397'
       this.getProductInfo(this.productCode)

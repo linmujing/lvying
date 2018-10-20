@@ -22,44 +22,46 @@
           <!--<div class="margin_top_20">-->
             <!--<span v-for="item in 3" class="tag">标签</span>-->
           <!--</div>-->
-          <div class="margin_top_30">
-            <span class="color_title font_20">￥{{dataDetail.productPrice}}</span>
-            <div class="inline_block relative">
-              <del class="color_999 font_20 padding_left_20">￥{{dataDetail.productOrgPrice}}</del>
-              <!--<div v-if="detailId != 3" class="tooltip">-->
+          <div v-if="hasBuy == 0">
+            <div class="margin_top_30">
+              <span class="color_title font_20">￥{{dataDetail.productPrice}}</span>
+              <div class="inline_block relative">
+                <del class="color_999 font_20 padding_left_20">￥{{dataDetail.productOrgPrice}}</del>
+                <!--<div v-if="detailId != 3" class="tooltip">-->
                 <!--<div class="triangle"></div>-->
                 <!--<div class="tooltip_txt">特价仅剩4天6小时35分钟</div>-->
-              <!--</div>-->
+                <!--</div>-->
+              </div>
             </div>
-          </div>
-          <div class="margin_top_10">
-            <Dropdown v-show="cuponList.length > 0" trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
-              <a href="javascript:void(0)" @click="handleOpen">
-                <Tag color="orange">优惠</Tag>
-                <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
-              </a>
-              <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
-                <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="item.couponCode+','+item.couponForm" v-if="item.couponCount>0" style="background: #FFF3E5;margin-bottom: 10px;">
-                  <Row style="width: 300px;">
-                    <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
-                      <div class="font_16 font_weight_bold text_ellipsis">{{item.couponTitle}}</div>
-                      <div class="margin_top_5 twoline_ellipsis">{{item.couponDesc}}</div>
-                      <div class="margin_top_5 text_ellipsis">有效期{{dateFormat(item.couponStartTime)}} 至 {{dateFormat(item.couponEndTime)}}</div>
-                    </Col>
-                    <Col span="8">
-                      <div class="color_F5320D font_20 text_center margin_left_10" style="line-height: 60px">立即领取</div>
-                    </Col>
-                  </Row>
-                </DropdownItem>
-                <div style="text-align: right;margin:10px;">
-                  <Button type="success" size="small" ghost @click="handleClose">关闭</Button>
-                </div>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
-          <div class="margin_top_40" >
-            <Button size="large" type="warning" shape="circle" @click="addProductCart(dataDetail.productCode)">加入购物车</Button>
-            <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
+            <div class="margin_top_10">
+              <Dropdown v-show="cuponList.length > 0" trigger="custom" :visible="visible" placement="bottom-start" @on-click="selectCoupon">
+                <a href="javascript:void(0)" @click="handleOpen">
+                  <Tag color="orange">优惠</Tag>
+                  <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
+                </a>
+                <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
+                  <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="item.couponCode+','+item.couponForm" v-if="item.couponCount>0" style="background: #FFF3E5;margin-bottom: 10px;">
+                    <Row style="width: 300px;">
+                      <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
+                        <div class="font_16 font_weight_bold text_ellipsis">{{item.couponTitle}}</div>
+                        <div class="margin_top_5 twoline_ellipsis">{{item.couponDesc}}</div>
+                        <div class="margin_top_5 text_ellipsis">有效期{{dateFormat(item.couponStartTime)}} 至 {{dateFormat(item.couponEndTime)}}</div>
+                      </Col>
+                      <Col span="8">
+                        <div class="color_F5320D font_20 text_center margin_left_10" style="line-height: 60px">立即领取</div>
+                      </Col>
+                    </Row>
+                  </DropdownItem>
+                  <div style="text-align: right;margin:10px;">
+                    <Button type="success" size="small" ghost @click="handleClose">关闭</Button>
+                  </div>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+            <div class="margin_top_40" >
+              <Button size="large" type="warning" shape="circle" @click="addProductCart(dataDetail.productCode)">加入购物车</Button>
+              <Button size="large" type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
+            </div>
           </div>
         </Col>
       </Row>
@@ -101,7 +103,7 @@
               <div class="float_right">
                 <div v-show="detailId === 1">
                   <Button size="small" shape="circle" class="bg_a5 color_fff" style="color: #fff" @click="detailId = 2">查看详情</Button>
-                  <Button size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
+                  <Button v-if="hasBuy == 0" size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                 </div>
                 <div v-show="detailId === 2">
                   <Button @click="playerVideo(item)" size="small" type="success" ghost shape="circle" class="button_title">视频</Button>
@@ -225,11 +227,16 @@ export default {
           videoData: [],
           audioData: [],
           showAudio: false,
-          txtUrl: ''
+          txtUrl: '',
+          // 已经购买
+          hasBuy: 0
         }
 
     },
     mounted(){
+      if(!this.$route.query.hasBuy == ''){
+        this.hasBuy = 1
+      }
       this.productCode = this.$route.query.productCode
       this.getProductInfo(this.productCode)
       this.getEvaluateList(this.pageSize,  this.productCode)

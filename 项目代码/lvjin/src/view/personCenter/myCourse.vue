@@ -84,19 +84,21 @@ export default {
     methods: {
 
         /*点击打开详情*/
-        //@param index 返回当前选项的下标
+        //@param code 商品编号，attr 商品属性1-实物，2-音频 3-视频 4-文档 包含多个使用逗号链接
         goDetail(code, attr){
           var arr = attr.split(',')
-          console.log(arr)
-          console.log(code)
+          // 包含多个跳转到动态管控详情页
           if(arr.length > 1){
             this.$router.push({
               path:'/industryDynamicDetail',
               query: {
-                productCode: code
+                productCode: code,
+                // hasBuy 购买后跳转过去的状态
+                hasBuy: 1
               }
             })
           }else {
+            // 1-实物，2-音频 3-视频
             switch (attr) {
               case '1':
                 this.$router.push({
@@ -111,7 +113,9 @@ export default {
                   path:'/videoCourseDetail',
                   query: {
                     productCode: code,
-                    typeId: 4
+                    // typeId 单独只有音频或视频时需传的参数 typeId：4-音频 3-视频
+                    typeId: 4,
+                    hasBuy: 1
                   }
                 })
                 break
@@ -120,7 +124,8 @@ export default {
                   path:'/videoCourseDetail',
                   query: {
                     productCode: code,
-                    typeId: 3
+                    typeId: 3,
+                    hasBuy: 1
                   }
                 })
                 break
