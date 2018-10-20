@@ -23,9 +23,11 @@
                                         <div class="text_left text_ellipsis">{{items.source}}</div>
                                     </Col>
                                     <Col :span="12">
-                                        <div class="text_right">
-                                            <Button type="success" shape="circle" size="small"  style="background:#00aa88;width:80px;" >查看详情</Button>
-                                        </div>
+                                        <router-link :to="{ path: '/videoCourseDetail', query: { productCode: items.productCode,typeId: 4 }}">
+                                            <div class="text_right">
+                                                <Button type="success" shape="circle" size="small"  style="background:#00aa88;width:80px;" >查看详情</Button>
+                                            </div>
+                                        </router-link>
                                     </Col>
                                 </Row>
                             </div>
@@ -112,6 +114,7 @@ export default {
                         arr.push({
                             title: item.productName,
                             type: '0',
+                            productCode: item.productCode,
                             source: item.merchantNm,
                             imgSrc: item.productProfileUrl,
                         })
