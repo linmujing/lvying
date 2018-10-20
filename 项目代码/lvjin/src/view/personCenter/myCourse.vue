@@ -10,7 +10,7 @@
          <!-- 课程列表 -->
         <div class="list_box padding_left_20 padding_top_30">
             <ul class="list">
-                <li  v-for="(items, index) in courseList" :key="index"  @click="goDetail(items.id)" v-if="index < 6">
+                <li  v-for="(items, index) in courseList" :key="index"  @click="goDetail(items.productCode,items.productProperty)">
                     <Col :span="8">
                         <div class="item">
                             <p class="item_img">
@@ -23,11 +23,9 @@
                                         <div class="text_left text_ellipsis">{{items.source}}</div>
                                     </Col>
                                     <Col :span="12">
-                                        <router-link :to="{ path: '/videoCourseDetail', query: { productCode: items.productCode,typeId: 4 }}">
-                                            <div class="text_right">
-                                                <Button type="success" shape="circle" size="small"  style="background:#00aa88;width:80px;" >查看详情</Button>
-                                            </div>
-                                        </router-link>
+                                        <div class="text_right">
+                                            <Button type="success" shape="circle" size="small"  style="background:#00aa88;width:80px;" >查看详情</Button>
+                                        </div>
                                     </Col>
                                 </Row>
                             </div>
@@ -87,9 +85,48 @@ export default {
 
         /*点击打开详情*/
         //@param index 返回当前选项的下标
-        goDetail(id){
+        goDetail(code, attr){
+          var arr = attr.split(',')
+          console.log(arr)
+          console.log(code)
+          if(arr.length > 1){
+            this.$router.push({
+              path:'/industryDynamicDetail',
+              query: {
+                productCode: code
+              }
+            })
+          }else {
+            switch (attr) {
+              case '1':
+                this.$router.push({
+                  path:'/bookDetail',
+                  query: {
+                    productCode: code
+                  }
+                })
+                break
+              case '2':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    typeId: 4
+                  }
+                })
+                break
+              case '3':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    typeId: 3
+                  }
+                })
+                break
+            }
+          }
 
-            this.$router.push({ name: '', params: {id: id}})
         },
         // 获取我的课程
         getMyCourse(){
@@ -145,28 +182,6 @@ export default {
             this.getMyCourse();
 
         },
-        //监听课程数量添加滚动事件
-        lisionOrderScroll(){
-
-            //当页面课程商品数量大于5条时，就给列表添加滚动
-            let n = 0;
-
-            let data = this.orderList;
-
-            for(let i = 0 ; i < data.length ; i++ ){
-
-                for(let k = 0 ; k < data[i].items.length; k++ ){
-
-                    n++;
-
-                }
-
-            }
-
-            if(n > 6){ return true }
-        },
-
-        //
 
     },
     mounted(){
