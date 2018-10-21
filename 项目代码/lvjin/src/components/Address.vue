@@ -5,7 +5,7 @@
             <!-- 新增地址 -->
             <li class="new_add" v-if="addressList.length < 10">
                 <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0"
-                        @click="openAddressModel" >新增地址</Button>
+                        @click="openAddressModel" >+ 新增地址</Button>
             </li>
             <!-- 地址列表 -->
             <li v-for="(items, index1) in addressList" :key="index1">

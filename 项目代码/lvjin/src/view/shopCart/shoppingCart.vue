@@ -353,6 +353,14 @@ export default {
                         }
 
                     }
+                }else{
+
+                    if(!this.cartList[i].itemState){
+
+                        AllStates = false;
+
+                    }
+
                 }
 
             }
