@@ -43,11 +43,11 @@
                     <div class="address_input">
                         <div class="input_box" >
                             <span class="input_box_span" >收件人：</span>
-                            <Input v-model="addressData.addressModelData.name"  size="large" clearable style="width: 280px" />
+                            <Input v-model.trim="addressData.addressModelData.name"  size="large" clearable style="width: 280px" />
                         </div>
                         <div class="input_box" >
                             <span class="input_box_span" >手机号码：</span>
-                            <Input v-model="addressData.addressModelData.phone"  size="large" clearable style="width: 280px" />
+                            <Input v-model.trim="addressData.addressModelData.phone"  size="large" clearable style="width: 280px" />
                         </div>
                         <div class="input_box" >
                             <span class="input_box_span" >所在地区：</span>
@@ -64,7 +64,7 @@
                         </div>
                         <div class="input_box" >
                             <span class="input_box_span" >详细地址：</span>
-                            <Input v-model="addressData.addressModelData.addressDetail"  size="large" clearable style="width: 480px" />
+                            <Input v-model.trim="addressData.addressModelData.addressDetail"  size="large" clearable style="width: 480px" />
                         </div>
                     </div>
                     <div style="padding: 30px 0 20px 100px; "> 
@@ -397,9 +397,10 @@ export default {
                     return ;
 
             }
-            if(modelData.phone == ""){
+            const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
+            if(!reg.test(modelData.phone)){
                 
-                    this.$Message.warning('联系方式不能为空！');
+                    this.$Message.warning('请输入正确的手机号！');
                     return ;
                     
             }
