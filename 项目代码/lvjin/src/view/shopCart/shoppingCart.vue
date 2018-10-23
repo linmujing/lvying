@@ -10,9 +10,10 @@
                 <div class="list_header padding_left_14">
                     <Row>
                         <Col span="5">
-                            <el-checkbox v-model="cartDate.listState"  @click.prevent.native="setAllCheckboxChange">
+                            <!-- <el-checkbox v-model="cartDate.listState"  @click.prevent.native="setAllCheckboxChange">
                                 <span class="padding_left_5">全选</span>
-                            </el-checkbox>
+                            </el-checkbox> -->
+                            &nbsp;
                         </Col>
                         <Col span="9"><span>课程名称</span></Col>
                         <Col span="4"><span class="block_center">单价（元）</span></Col>
@@ -170,61 +171,11 @@ export default {
                 merchantAllArr:[],
                 //总价格
                 listTotal: 0.00,
-                //大列表
-                cartList:[
-                {
-                    index1: 0,
-                    itemState: false,
-                    itemTitle: '机构法院',
-                    itemTotal: 0.00,
-                    //小列表
-                    items:[
-                        {
-                            index2: 0,
-                            state: false,
-                            price: '88.01',
-                            num: 1,
-                            describe: '暂无',
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        },
-                        {
-                            index2: 1,
-                            state: false,
-                            price: '101.01',
-                            num: 1,
-                            describe: '很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字很多文字',
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        }
-                    ]
-                },
-                {
-                    index1: 0,
-                    itemState: false,
-                    itemTitle: '机构法院',
-                    itemTotal: 0.00,
-                    //小列表
-                    items:[
-                        {
-                            index2: 0,
-                            state: false,
-                            price: '88.01',
-                            num: 1,
-                            describe: '暂无',
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        },
-                        {
-                            index2: 1,
-                            state: false,
-                            price: '101.01',
-                            num: 1,
-                            describe: '暂无',
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        }
-                    ]
-                }],
             },
             //购物车数据列表大列表
             cartList:[] ,
+            // 购物车删除多个商品存值
+            cartId:'',
 
             /*购物车列表参数*/
             cartParams:{
@@ -491,6 +442,48 @@ export default {
         //删除所有选中的商品
         deleteAllItem(){
 
+            //获取商品个数
+            let m = this.cartList.length;
+
+            //购物车商品编码
+            let cartId = '';
+
+            //判断是否有选中
+            for(let x = 0 ; x < m ; x++){
+
+                let n = this.cartList[x].items.length;
+
+                //判断是否选中
+                if(this.cartList[x].itemType == '2' && this.cartList[x].itemState){
+
+                    cartId =='' ? cartId = this.cartList[x].productCode : cartId =  ',' + this.cartList[x].productCode ;
+
+                }
+
+                for(let i = 0 ; i < n ; i++){
+
+                    let item = this.cartList[x].items[i];
+
+                    //判断是否选中
+                    if(item.state){
+
+                        cartId =='' ? cartId = item.cartId : cartId =  ',' + item.cartId ;
+
+                    }
+
+                }
+
+            }
+
+            if(cartId == ''){
+
+                this.$Message.warning('您还没有选择商品！');
+                return ;
+
+            }
+
+            this.cartId = cartId;
+
             this.modelDate.deleteModelValue = true;
             this.modelDate.deleteType = 'b';
 
@@ -512,34 +505,8 @@ export default {
 
             }else{
 
-                //获取商品个数
-                let m = this.cartList.length;
-
-                //购物车商品编码
-                let cartId = '';
-
-                //计算小计
-                for(let x = 0 ; x < m ; x++){
-
-                    let n = this.cartList[x].items.length;
-
-                    for(let i = 0 ; i < n ; i++){
-
-                        let item = this.cartList[x].items[i];
-
-                        //判断是否选中
-                        if(item.state){
-
-                            cartId =='' ? cartId = item.cartId : cartId =  ',' + item.cartId ;
-
-                        }
-
-                    }
-
-                }
-
                 // 批量删除
-                this.deleteCartItemData(cartId);
+                this.deleteCartItemData(this.cartId);
 
             }
 
