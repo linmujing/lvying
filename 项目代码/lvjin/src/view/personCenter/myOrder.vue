@@ -261,8 +261,8 @@ export default {
                     { text: '交易成功', value: 3},
                     { text: '交易取消', value: 4},
                     { text: '交易关闭', value: 5},
-                    { text: '未知状态', value: 6},
-                    { text: '未知状态', value: 7},
+                    { text: '订单异常', value: 6},
+                    { text: '其他', value: 7},
                 ],
 
                 // 订单数据真实数据

@@ -456,22 +456,25 @@ export default {
                 //判断是否选中
                 if(this.cartList[x].itemType == '2' && this.cartList[x].itemState){
 
-                    cartId =='' ? cartId = this.cartList[x].productCode : cartId =  ',' + this.cartList[x].productCode ;
+                    cartId =='' ? cartId = this.cartList[x].cartId : cartId +=  ',' + this.cartList[x].cartId ;
 
-                }
+                }else{
+                    for(let i = 0 ; i < n ; i++){
 
-                for(let i = 0 ; i < n ; i++){
+                        let item = this.cartList[x].items[i];
 
-                    let item = this.cartList[x].items[i];
+                        //判断是否选中
+                        if(item.state){
 
-                    //判断是否选中
-                    if(item.state){
+                            cartId =='' ? cartId = item.cartId : cartId +=  ',' + item.cartId ;
 
-                        cartId =='' ? cartId = item.cartId : cartId =  ',' + item.cartId ;
+                        }
 
                     }
 
                 }
+
+
 
             }
 
@@ -481,7 +484,7 @@ export default {
                 return ;
 
             }
-
+            console.log(cartId)
             this.cartId = cartId;
 
             this.modelDate.deleteModelValue = true;
@@ -622,6 +625,7 @@ export default {
 
                                 // 压入商品
                                 arr[index].items.push({
+                                    cartId: data[i].id,
                                     productCode: data[i].productCode,
                                     state: false,
                                     price: data[i].productInfo.productPrice,
@@ -641,6 +645,7 @@ export default {
                             // 压入组合包
                             arr.push({
                                 id: '',
+                                cartId: data[i].id,
                                 itemType: data[i].productInfo.productType ,
                                 itemState: false,
                                 itemTitle: data[i].productInfo.productTitle,
@@ -776,8 +781,6 @@ export default {
         //@param cartId string 购物车商品编号
         deleteCartItemData(cartId){
 
-            console.log(cartId)
-
             this.$Spin.show()
 
             let param = this.$Qs.stringify({ 'recordId': cartId }) ;
@@ -796,6 +799,8 @@ export default {
 
                     // 获取购物车列表
                     this.getCartListData();
+
+                    this.setAllCheckboxChange();
 
                 }else{
 
