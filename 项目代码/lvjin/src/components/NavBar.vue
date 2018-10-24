@@ -12,7 +12,7 @@
 
 	            <div v-for="(items,index1) in secondNavTitle" :key="index1">
 
-	              <div @mouseenter="boxMouseOver(items.id, index1)" @click="jumpDown(items.catCode,items.catName)"
+	              <div @mouseenter="boxMouseOver(items.id, index1)" @click="jumpDown(items.id,items.catName)"
 										class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
 	                <span class="float_left color_fff font_18">{{items.catName}}</span>
 	                <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
@@ -24,7 +24,7 @@
                       <!--<div @click="jumpDown(2)" class="font_18 pointer hover_title">{{itemss.catName}}</div>-->
 
                       <ul class="list_unstyled ul_inline clearfix margin_bottom_20">
-                        <li @click="jumpDown(itemss.catCode,itemss.catName)" class="margin_top_5 margin_right_30 pointer hover_title">{{itemss.catName}}</li>
+                        <li @click="jumpDown(itemss.id,itemss.catName)" class="margin_top_5 margin_right_30 pointer hover_title">{{itemss.catName}}</li>
                       </ul>
 
                     </div>
