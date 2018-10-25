@@ -51,7 +51,9 @@ export const getProductList = params => { return instance.post(`product/info/get
 export const getProductCatList = params => { return instance.post(`product/cat/getProductCatList`, params ); };
 // 获取橱窗推荐
 export const getProductShowCase = params => { return instance.post(`product/info/getShowCaseProduct`, params ); };
-// 获取橱窗列表
+// 详情页点击横向导航获取内容列表
+export const getSectionIndex = params => { return instance.post(`product/info/getProductSectionIndexContent`, params ); };
+// // 获取橱窗列表
 export const getProductShowCaseList = params => { return instance.post(`system/showCase/getShowCaseList`, params ); };
 
 /** 系统接口 **/

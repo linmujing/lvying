@@ -89,36 +89,41 @@
       <div id="detail2">
         <div class="font_weight_bold bg_f5 border_e6 padding_15">全程动态管控系统</div>
         <div class="">
-          <!--<div class="margin_left_20 margin_top_30 margin_bottom_30 font_18">-->
-            <!--<div class="inline_block" v-for="(item,index) in 3" @click="classBtn(index)">-->
-              <!--<span class="pointer" :class="{color_title: classCur == index}">项目启动文件</span>-->
-              <!--<Icon v-show="index != 2" type="ios-arrow-round-forward" size="30"/>-->
-            <!--</div>-->
-          <!--</div>-->
-
-          <div v-for="item in productSection" class="margin_15 border_bottom_e6 padding_bottom_10">
-            <p class="font_18">{{item.sectionIndex}}</p>
-            <div class="margin_left_30 margin_top_10 clearfix">
-              <span>{{item.sectionName}}</span>
-              <div class="float_right">
-                <div v-show="detailId === 1">
-                  <Button size="small" shape="circle" class="bg_a5 color_fff" style="color: #fff" @click="detailId = 2">查看详情</Button>
-                  <Button v-if="hasBuy == 0" size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
-                </div>
-                <div v-show="detailId === 2">
-                  <Button @click="playerVideo(item)" size="small" type="success" ghost shape="circle" class="button_title">视频</Button>
-                  <Button @click="playerAudio(item)" size="small" type="success" ghost shape="circle" class="button_title">音频</Button>
-                  <Button @click="openTxt(item)" size="small" type="success" ghost shape="circle" class="button_title">文字</Button>
-                  <Button v-show="parseInt(item.docStatus) === 0" @click="downloadDoc(item.docUrl)" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
-                  <Button v-show="parseInt(item.docStatus) === 0" @click="downloadDoc(item.docUrl)" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>
-                </div>
-              </div>
+          <div class="margin_left_20 margin_top_30 margin_bottom_30 font_18">
+            <div class="inline_block" v-for="(item,index) in sectionNav" @click="classBtn(index,item.sectionIndex)">
+              <span class="pointer" :class="{color_title: classCur == index}">{{item.sectionName}}</span>
+              <Icon v-show="index != (sectionNav.length-1) " type="ios-arrow-round-forward" size="30"/>
             </div>
           </div>
 
-        </div>
-        <div class="text_center padding_top_20 padding_bottom_30">
-        	<!--<span class="pointer">查看更多》</span>-->
+          <div v-if="sectionList.length > 0">
+            <div v-for="item in sectionList" class="margin_15 border_bottom_e6 padding_bottom_10">
+              <!--<p class="font_18">{{item.sectionIndex}}</p>-->
+              <div class="margin_left_30 margin_top_10 clearfix">
+                <span>{{item.sectionName}}</span>
+                <div class="float_right">
+                  <div v-show="detailId === 1">
+                    <Button size="small" shape="circle" class="bg_a5 color_fff" style="color: #fff" @click="detailId = 2">查看详情</Button>
+                    <Button v-if="hasBuy == 0" size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
+                  </div>
+                  <div v-show="detailId === 2">
+                    <Button @click="playerVideo(item)" size="small" type="success" ghost shape="circle" class="button_title">视频</Button>
+                    <Button @click="playerAudio(item)" size="small" type="success" ghost shape="circle" class="button_title">音频</Button>
+                    <Button @click="openTxt(item)" size="small" type="success" ghost shape="circle" class="button_title">文字</Button>
+                    <Button v-show="parseInt(item.docStatus) === 0" @click="downloadDoc(item.docUrl)" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
+                    <Button v-show="parseInt(item.docStatus) === 0" @click="downloadDoc(item.docUrl)" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text_center padding_top_20 padding_bottom_30">
+              <span class="pointer" @click="seeMore(1)">查看更多》</span>
+            </div>
+          </div>
+          <div v-else class="text_center">
+            暂无数据
+          </div>
+
         </div>
       </div>
       <!--评价-->
@@ -158,8 +163,8 @@
 	            </Col>
 	          </Row>
 	    	</div>
-        <div class="text_center padding_top_20 padding_bottom_30">
-          <span class="pointer" @click="seeMore">查看更多》</span>
+        <div v-if="evaluateList.length>0" class="text_center padding_top_20 padding_bottom_30">
+          <span class="pointer" @click="seeMore(2)">查看更多》</span>
         </div>
       </div>
     </div>
@@ -229,7 +234,12 @@ export default {
           showAudio: false,
           txtUrl: '',
           // 已经购买
-          hasBuy: 0
+          hasBuy: 0,
+          sectionNav: [],
+          sectionList: [],
+          sectionSize: 6,
+          sectionCont: 0,
+          sectionIndex: 0
         }
 
     },
@@ -237,7 +247,8 @@ export default {
       if(!this.$route.query.hasBuy == ''){
         this.hasBuy = 1
       }
-      this.productCode = this.$route.query.productCode
+      // this.productCode = this.$route.query.productCode
+      this.productCode = 'P154036432807121'
       this.getProductInfo(this.productCode)
       this.getEvaluateList(this.pageSize,  this.productCode)
     },
@@ -247,8 +258,10 @@ export default {
 				this.isCur = i;
 			},
       //课程
-      classBtn(i){
+      classBtn(i,sIndex){
         this.classCur = i;
+        this.sectionIndex = sIndex
+        this.getSectionIndex(sIndex)
       },
 			//评价
 			evaluateBtn(i){
@@ -368,9 +381,13 @@ export default {
               this.getProductCoupon(this.productCode, result.merchantCode)
               //商品评分
               result.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = result.productScore
+              // 动态管控列表
+              this.sectionNav = result.productSectionIndexList
+              this.sectionIndex = result.productSectionIndexList[0].sectionIndex
+              // 动态管控课程目录
+              this.sectionList = result.productSectionList
               // 课程目录
-              this.productSection = eval(result.productSection)
-              console.log(this.productSection)
+              this.productSection = result.productSection
 
             }else {
               this.$Spin.hide()
@@ -404,14 +421,52 @@ export default {
             console.log('发生错误！', error);
           });
       },
+      // 获取动态管控列表
+      getSectionIndex(sectionIndex){
+        let params = this.$Qs.stringify({'pageNo': 1, 'pageSize': this.sectionSize,'productSectionIndex': sectionIndex, 'productSection': this.productSection});
+        this.$api.getProductCommentList( params )
+
+          .then( (res) => {
+            console.log(res);
+            if(res.data.code == 200){
+              var result = res.data.content
+              var arr = []
+              for (var i = 0; i < result.list.length; i++) {
+                arr.push(result.list[i].productInfo.productSectionList)
+              }
+              this.sectionList = arr
+              this.sectionCont = result.count
+              console.log(arr)
+
+            }else if (res.data.code == 500){
+
+              this.$Message.warning(res.data.message);
+
+            }
+
+          })
+          .catch((error) => {
+            console.log('发生错误！', error);
+          });
+      },
       // 查看更多
-      seeMore(){
-        if(this.pageSize >= this.total){
-          this.$Message.warning('已经没有更多了');
-          return
+      seeMore(type){
+			  if(type == 1){
+          if(this.sectionSize >= this.sectionCont){
+            this.$Message.warning('已经没有更多了');
+            return
+          }
+          this.sectionSize += 6
+          this.getSectionIndex()
+        }else {
+          if(this.pageSize >= this.total){
+            this.$Message.warning('已经没有更多了');
+            return
+          }
+          this.pageSize += 3
+          this.getEvaluateList(this.pageSize, this.productCode)
         }
-        this.pageSize += 3
-        this.getEvaluateList(this.pageSize, this.productCode)
+
       },
       //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
       dateFormat:function(time) {
