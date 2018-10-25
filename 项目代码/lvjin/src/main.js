@@ -9,10 +9,8 @@ import iView from 'iview'
 import axios from 'axios'
 import Qs from 'qs'
 
-
 //解决ie9+浏览器兼容问题
 import 'babel-polyfill';
-
 
 // 引入接口配置文件
 import * as api from './api/api'

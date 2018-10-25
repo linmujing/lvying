@@ -146,91 +146,7 @@ export default {
                 // 大列表
                 cartList: []
             }, 
-            // 商品列表
-            cartList:  [
-                {
-                    index1: 0,
-                    itemState: false,
-                    itemTitle: '机构法院',
-                    itemTotal: 0.00,
-                    shippingMethods: '快递免邮',
-                    // 小列表
-                    items:[
-                        {
-                            index2: 0,
-                            state: false,
-                            price: 88.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字',
-                            itemCoupon: '限时优惠券省14元限时优惠券省12元限时优惠券省12元',
-                            itemCouponList: [
-                            {
-                                value: '限时优惠券省12元',
-                                label: '限时优惠券省12元'
-                            },
-                            ],
 
-                            
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        },
-                        {
-                            index2: 1,
-                            state: false,
-                            price: 101.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                            itemCoupon: '限时优惠券省13元',
-                            itemCouponList: [
-                            {
-                                value: '限时优惠券省12元',
-                                label: '限时优惠券省12元'
-                            },
-                            ],
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        }
-                    ]
-                },
-                {
-                    index1: 0,
-                    itemState: false,
-                    itemTitle: '机构法院',
-                    itemTotal: 0.00,
-                    shippingMethods: '快递免邮',
-                    // 小列表
-                    items:[
-                        {
-                            index2: 0,
-                            state: false,
-                            price: 88.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                            itemCoupon: '限时优惠券省12元',
-                            itemCouponList: [
-                            {
-                                value: '限时优惠券省16元',
-                                label: '限时优惠券省16元'
-                            },
-                            ],
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        },
-                        {
-                            index2: 1,
-                            state: false,
-                            price: 101.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                            itemCoupon: '限时优惠券省18元',
-                            itemCouponList: [
-                            {
-                                value: '限时优惠券省12元',
-                                label: '限时优惠券省12元'
-                            },
-                            ],
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        }
-                    ]
-                }
-            ],
 
             /*收货地址数据*/
             addressData:{
@@ -424,7 +340,7 @@ export default {
 
                 if(res.data.code == 200){
 
-                    this.cartDate.listTotal = res.data.content.orderPayAmount;
+                    this.cartDate.listTotal = (res.data.content.orderPayAmount).toFixed(2);
 
                 }else{
 
@@ -482,7 +398,7 @@ export default {
 
                     let data = res.data.content ;
 
-                    this.cartDate.listTotal = res.data.content.orderPayAmount;
+                    this.cartDate.listTotal = (res.data.content.orderPayAmount).toFixed(2);
 
                 }else{
 

@@ -62,15 +62,6 @@
                             style="width: 300px"
                             @change="handleChange"
                             ></el-cascader>
-                        <!-- <Select v-model="addressSelectData.province.value"  size="large" style="width:150px">
-                            <Option v-for="item in addressSelectData.provinceList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                        <Select v-model="addressSelectData.city.value"  size="large" style="width:150px">
-                            <Option v-for="item in addressSelectData.cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select>
-                        <Select v-model="addressSelectData.county.value"  size="large" style="width:150px">
-                            <Option v-for="item in addressSelectData.countyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                        </Select> -->
                     </div>  
                 </div>
                 <div class="input_box" >
@@ -160,7 +151,7 @@
 
                 // 用户信息
                 userData: {
-                    ciCode: ''
+                    ciCode: this.$store.state.userData.cicode
                 },
                 
 			}
@@ -314,10 +305,6 @@
 
                     }
 
-
-
-                    
-
                     this.$Spin.hide();
 
                 })
@@ -432,9 +419,6 @@
 
             // 获取地址信息
             this.cityList = province();
-
-            // 获取用户信息
-            this.userData.ciCode = this.$store.state.userData.cicode ;
 
             // 获取用户地址列表
             this.getAddressData();

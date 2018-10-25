@@ -25,7 +25,7 @@
     // 个人中心导航
     NavIndex(state, n) {  state.navIndex = n; },
     // 当地址为空时
-    setAddressState(state, n){  state.addressState = n  },
+    setAddressState(state, n) {  state.addressState = n  },
 
   }
   

@@ -50,7 +50,7 @@
                                                 </Col>
                                             </Row>
                                         </Col>
-                                        <Col span="11"><span class="block_center">{{item.num}}</span></Col>
+                                        <Col span="11"><span class="block_center">×{{item.num}}</span></Col>
                                        
                                         <!-- 小计 -->
                                         <Col span="2"><span class="block_center">{{items.itemTotal}}</span></Col>
@@ -86,18 +86,23 @@
                             <Button shape="circle" type="warning" size="large" style="width:110px;" @click="submitOrderClick">去支付</Button>
                             <span class="pay_msg" ><img src="../../assets/images/icon/pay_msg.png" alt=""><i>下单后请在24小时内完成支付, 超过24小时再支付可能会导致购买失败，需重新下单购买。</i></span>
                         </div>
-                        <div class="padding_top_30">
+                        <!-- <div class="padding_top_30">
                             <Checkbox v-model="payTypeData.single"> </Checkbox> 
                             <span style="display:inline-block;padding-left:5px;vertical-align:middle;" >我已经同意并阅读并同意<i class="color_f09105">《法律课堂用户付费协议》</i></span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
-
+            
+            <div style="position:fixed;top:50%;left:50%;">
+                <div id="qrcode" style="width:100px;height:100px;background:#ccc;" ></div>
+            </div>
         </div>
     </div>
 </template>
 <script>
+
+import QRCode from 'qrcodejs2'
 
 export default {
     components : {
@@ -362,7 +367,7 @@ export default {
 
                 if(res.data.code == 200){
 
-                    this.cartDate.listTotal = res.data.content.orderPayAmount;
+                    this.cartDate.listTotal = (res.data.content.orderPayAmount).toFixed(2);
 
                 }else{
 
@@ -377,7 +382,7 @@ export default {
         // 阿里支付
         aliPayRequest(){
 
-            let param = this.$Qs.stringify({ 'orderCode': this.$route.query.orderCode, 'truePayMoney': this.cartDate.listTotal ,'ciCode': this.userData.ciCode , 'payCommet': '' }) ;
+            let param = this.$Qs.stringify({ 'orderCode': this.$route.query.orderCode }) ;
 
             this.$api.aliPayRequest( param )
 
@@ -387,7 +392,7 @@ export default {
 
                 if(res.data.code == 200){
 
-                    location.href = res.data.content;
+                    this.qrcode1(res.data.content);
 
                 }else{
 
@@ -397,31 +402,19 @@ export default {
 
             })
         },
-        // 阿里支付回调
-        aliPayBack(){
+        // 生成二维码
+        qrcode1(value){
 
-            let param = this.$Qs.stringify({ 'orderCode': this.$route.query.orderCode, 'truePayMoney': this.cartDate.listTotal ,'ciCode': this.userData.ciCode , 'payCommet': '' }) ;
-
-            this.$api.aliPayNotify( param )
-
-            .then( (res) => {
-
-                console.log(res)
-
-                if(res.data.code == 200){
-
-                    
-
-                }else{
-
-                    this.$Message.warning(res.data.message);
-
-                }
-
+            new QRCode('qrcode', {
+                width: 100,
+                height: 100, // 高度
+                text: value,
+                // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+                // background: '#f0f'
+                // foreground: '#ff0'
             })
-
+            
         }
-
 
     },
     mounted(){

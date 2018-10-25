@@ -7,7 +7,7 @@ var instance = axios.create({
     // baseURL: 'http://www.luyingjiaoyu.com/law-web-api/', // 正式环境
     // baseURL: 'http://114.115.133.96:8899/law-web-api/', // 测试环境
     baseURL: "/api/",                                      // 本地环境
-    timeout: 5000,                                // 请求超时设置
+    timeout: 20000,                                // 请求超时设置
     headers: { "Accept": "application/json" },
 });
 
@@ -124,10 +124,9 @@ export const getProductCommentList = params => { return instance.post(`order/com
 export const getOrderTrack = params => { return instance.post(`order/track/getOrderTrack`, params ); };
 
 /** 订单交易 **/
-// 阿里支付回调
-export const aliPayNotify = params => { return instance.post(`/trade/aliPay/aliPayNotify`, params ); };
 // 阿里支付请求
-export const aliPayRequest = params => { return instance.post(`/trade/aliPay/aliPayRequest`, params ); };
+export const aliPayRequest = params => { return instance.post(`/trade/aliPay/aliPay`, params ); };
+
 // 微信支付回调
 export const payBack = params => { return instance.post(`/trade/weixinPay/payBack`, params ); };
 // 阿微信支付请求
