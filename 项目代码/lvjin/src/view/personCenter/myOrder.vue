@@ -394,9 +394,6 @@ export default {
                     Url = '/submitOrder'; 
                     param = {productCode:  codestr}; 
                     break;
-                // case '待付款':  param = {state: 'a'}; break;
-                // case '已关闭':  param = {state: 'b'}; break;
-                // case '待发货':  param = {state: 'a'}; break;
             }
 
              this.$router.push({ path: Url, query: param })
