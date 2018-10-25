@@ -187,14 +187,7 @@ export default {
 
         // 头像
         let headImg = this.$store.state.userData.ciProfileUrl;
-        if(headImg){
-            this.profileData.headImg = headImg;
-        }else{
-            this.profileData.headImg = require('../../assets/images/icon/head_img_icon.png');
-
-        }
-
-
+        this.profileData.headImg =  headImg != null && headImg != undefined && headImg != 'null'? headImg : require('../../assets/images/icon/head_img_icon.png');
 
     }
 }

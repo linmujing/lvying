@@ -164,7 +164,7 @@
                                             </Row>
                                         </Col>
                                         <Col span="5"><span class="block_center">{{item.price}}</span></Col>
-                                        <Col span="6"><span class="block_center">{{item.num}}</span></Col>
+                                        <Col span="6"><span class="block_center">×{{item.num}}</span></Col>
                                         <!-- 优惠券  #submitType#-->
                                         <Col span="0">
                                         </Col>
@@ -369,11 +369,14 @@ export default {
 
                         for(let item of items.items){
                             
-                            lists.itemTotal += item.num * (item.price * 10000);
+                            items.itemTotal += item.num * (item.price * 10000);
                         }
+
+                        this.cartDate.listTotal += items.itemTotal;
+                        items.itemTotal = (items.itemTotal/10000).toFixed(2);
+
                     }
 
-                    this.cartDate.listTotal += lists.itemTotal;
                 }
 
             }
@@ -701,7 +704,6 @@ export default {
                         }
 
                     } 
-
                     // 压入到商品列表
                     this.cartDate.cartList = arr2;    
                     this.calculatePrice();        
@@ -790,8 +792,9 @@ export default {
                                 }
 
                             } 
-
+    
                             CartList[i].items = arr2;
+                            console.log(CartList)
 
                             this.calculatePrice();
                         
