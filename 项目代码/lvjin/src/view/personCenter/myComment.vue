@@ -47,7 +47,7 @@
                 </li>
             </ul>
 
-            <!-- 订单分页 -->
+            <!-- 分页 -->
             <div class="list_page" v-if="total > 5 ">
                 <Page :total="total" :current="page"   :page-size="pageSize"
                     @on-change="changeOrderPage" size="small" show-total show-elevator />

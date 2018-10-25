@@ -93,11 +93,16 @@
                     </div>
                 </div>
             </div>
-
+            
+            <div style="position:fixed;top:50%;left:50%;">
+                <div id="qrcode" style="width:100px;height:100px;background:#ccc;" ></div>
+            </div>
         </div>
     </div>
 </template>
 <script>
+
+import QRCode from 'qrcodejs2'
 
 export default {
     components : {
@@ -387,7 +392,7 @@ export default {
 
                 if(res.data.code == 200){
 
-                    location.href = res.data.content;
+                    this.qrcode1(res.data.content);
 
                 }else{
 
@@ -420,8 +425,20 @@ export default {
 
             })
 
-        }
+        },
+        // 生成二维码
+        qrcode1(value){
 
+            new QRCode('qrcode', {
+                width: 100,
+                height: 100, // 高度
+                text: value,
+                // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+                // background: '#f0f'
+                // foreground: '#ff0'
+            })
+            
+        }
 
     },
     mounted(){

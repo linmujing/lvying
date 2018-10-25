@@ -172,6 +172,7 @@ export default {
                 //总价格
                 listTotal: 0.00,
             },
+
             //购物车数据列表大列表
             cartList:[] ,
             // 购物车删除多个商品存值
@@ -249,8 +250,6 @@ export default {
             //监听商品是否选中 || 监听商家店里所有商品是否选中
             if(index2 != undefined){
 
-                this.cartList[index1].items[index2].state = !this.cartList[index1].items[index2].state;
-
                 // 当前集合是否全部选中
                 let states = true ;
 
@@ -265,23 +264,6 @@ export default {
                 }
 
                 this.cartList[index1].itemState = states;
-
-            }else{
-
-                this.cartList[index1].itemState = !this.cartList[index1].itemState;
-
-                if(this.cartList[index1].itemType == '1'){
-
-                    for(let i = 0 ; i < this.cartList[index1].items.length; i++ ){
-
-                        this.cartList[index1].items[i].state = this.cartList[index1].itemState;
-
-                    }
-
-                }else{
-
-                    console.log(this.cartList[index1].itemState)
-                }
 
             }
 
@@ -473,8 +455,6 @@ export default {
                     }
 
                 }
-
-
 
             }
 
