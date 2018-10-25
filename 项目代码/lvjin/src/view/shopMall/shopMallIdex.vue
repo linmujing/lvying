@@ -369,7 +369,7 @@ export default {
                   path:'/videoCourseList',
                   query: {
                     catName: name,
-                    catCode: arr[i].catCode,
+                    catCode: arr[i].id,
                     typeId: typeId
                   }
                 })
@@ -380,7 +380,7 @@ export default {
                   path:'/industryDynamicList',
                   query: {
                     catName: name,
-                    catCode: arr[i].catCode,
+                    catCode: arr[i].id,
                     typeId: typeId
                   }
                 })
@@ -390,7 +390,7 @@ export default {
                   path:'/lvyingMall',
                   query: {
                     catName: '律瀛商城',
-                    catCode: arr[i].catCode,
+                    catCode: arr[i].id,
                     typeId: typeId
                   }
                 })

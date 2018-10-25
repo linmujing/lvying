@@ -5,24 +5,24 @@
 				<div class="link">
 					<Row style="font-size: 16px;">
 						<Col span="6">
-							<router-link tag="a" target="_blank" to="">
-								<span class="color_999">关于我们</span>
-							</router-link>
+							<!--<router-link tag="a" target="_blank" to="">-->
+								<!--<span class="color_999">关于我们</span>-->
+							<!--</router-link>-->
 						</Col>
 						<Col span="6">
-							<router-link tag="a" target="_blank" to="">
-								<span class="color_999">联系我们</span>
-							</router-link>
+							<!--<router-link tag="a" target="_blank" to="">-->
+								<!--<span class="color_999">联系我们</span>-->
+							<!--</router-link>-->
 						</Col>
 						<Col span="6">
-							<router-link tag="a" target="_blank" to="">
-								<span class="color_999">帮助中心</span>
-							</router-link>
+							<!--<router-link tag="a" target="_blank" to="">-->
+								<!--<span class="color_999">帮助中心</span>-->
+							<!--</router-link>-->
 						</Col>
 						<Col span="6">
-							<router-link tag="a" target="_blank" to="">
-								<span class="color_999">使用协议</span>
-							</router-link>
+							<!--<router-link tag="a" target="_blank" to="">-->
+								<!--<span class="color_999">使用协议</span>-->
+							<!--</router-link>-->
 						</Col>
 					</Row>
 				</div>

@@ -99,7 +99,7 @@
 		          <div v-if="typeId == 3">
                 <div v-for="(item, index) in productSection.videoSection" :key="index" class="bg_f5 border_e6 padding_15 margin_top_10 clearfix">
                   <div class="float_left">
-                    <div class="inline_block width_40px">{{item.sectionIndex}}</div>
+                    <!--<div class="inline_block width_40px">{{item.sectionIndex}}</div>-->
                     <span>{{item.sectionName}}</span>
                   </div>
                   <div class="float_right">
@@ -174,7 +174,7 @@
 			            </Col>
 			          </Row>
 			    	</div>
-		        <div class="text_center padding_top_20 padding_bottom_30">
+		        <div v-if="evaluateList.length>0" class="text_center padding_top_20 padding_bottom_30">
 		        	<span class="pointer" @click="seeMore">查看更多》</span>
 		        </div>
 		      </div>
@@ -392,12 +392,12 @@ export default {
               var audioData = []
               for (var i=0;i<productSection.length;i++){
                 var section = productSection[i]
-                if(!section.videoUrl == ''){
+                // if(!section.videoUrl == ''){
                   videoSection.push(section)
-                }
-                if(!section.voiceUrl == ''){
+                // }
+                // if(!section.voiceUrl == ''){
                   audioSection.push(section)
-                }
+                // }
                 //获取试用视频音频数据tatuss = 0
                 if(parseInt(section.videoStatus) === 0){
                   videoData.push(section)

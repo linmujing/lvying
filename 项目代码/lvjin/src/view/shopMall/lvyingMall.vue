@@ -74,7 +74,7 @@ export default {
           current: 1,
           pageSize: 12,
           productList: [],
-          catCode: 10005,
+          catCode: 5,
           catName: '律瀛商城',
         }
 
