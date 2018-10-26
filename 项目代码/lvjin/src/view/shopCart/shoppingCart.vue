@@ -250,6 +250,8 @@ export default {
             //监听商品是否选中 || 监听商家店里所有商品是否选中
             if(index2 != undefined){
 
+                this.cartList[index1].items[index2].state = !this.cartList[index1].items[index2].state;
+
                 // 当前集合是否全部选中
                 let states = true ;
 
@@ -264,6 +266,17 @@ export default {
                 }
 
                 this.cartList[index1].itemState = states;
+
+            }else{
+
+                // 对商户下的商品进行全选操作
+                this.cartList[index1].itemState = !this.cartList[index1].itemState ;
+
+                for(let i = 0 ; i < this.cartList[index1].items.length; i++){
+
+                    this.cartList[index1].items[i].state = this.cartList[index1].itemState;
+
+                }
 
             }
 

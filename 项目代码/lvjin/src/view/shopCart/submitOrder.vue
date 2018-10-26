@@ -130,7 +130,7 @@
                                         <Col span="0">
                                         </Col>
                                         <!-- 小计 -->
-                                        <Col span="2"><span class="block_center">{{items.itemTotal}}</span></Col>
+                                        <Col span="2"><span class="block_center">{{ (item.num * item.price).toFixed(2) }}</span></Col>
                                     </Row>
                                 </li>
                             </ul>

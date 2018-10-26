@@ -22,7 +22,8 @@
                         <Row>
                             <Col span="4"><div style="height:1px;"></div></Col>
                             <Col span="7"><span>商品名称</span></Col>
-                            <Col span="11"><span class="block_center">数量</span></Col>
+                            <Col span="6"  class="block_center"><span>价格（元）</span></Col>
+                            <Col span="5"><span class="block_center">数量</span></Col>
                             <Col span="2"><span class="block_center">小计（元）</span></Col>
                         </Row>
                     </div>
@@ -50,10 +51,11 @@
                                                 </Col>
                                             </Row>
                                         </Col>
-                                        <Col span="11"><span class="block_center">×{{item.num}}</span></Col>
+                                        <Col span="6"><span class="block_center">{{item.price}}</span></Col>
+                                        <Col span="5"><span class="block_center">×{{item.num}}</span></Col>
                                        
                                         <!-- 小计 -->
-                                        <Col span="2"><span class="block_center">{{items.itemTotal}}</span></Col>
+                                        <Col span="2"><span class="block_center">{{ (item.num * item.price).toFixed(2) }}</span></Col>
                                     </Row>
                                 </li>
                             </ul>
