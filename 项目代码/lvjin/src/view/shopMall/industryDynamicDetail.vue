@@ -247,8 +247,8 @@ export default {
       if(!this.$route.query.hasBuy == ''){
         this.hasBuy = 1
       }
-      // this.productCode = this.$route.query.productCode
-      this.productCode = 'P154036432807121'
+      this.productCode = this.$route.query.productCode
+      // this.productCode = 'P154036432807121'
       this.getProductInfo(this.productCode)
       this.getEvaluateList(this.pageSize,  this.productCode)
     },

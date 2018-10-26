@@ -169,9 +169,9 @@
 			<div class="margin_top_30">
 				<Row :gutter="16">
 			        <Col span="6" v-for="(item,index) in lvyingArr" :key="index">
-			            <div class="mallBox padding_top_20 padding_bottom_20 padding_right_10 padding_left_10">
+			            <div class="mallBox padding_top_20 padding_bottom_20 padding_right_10 padding_left_10 margin_bottom_20">
 			            	<div class="text_center" @click="toDetail(item.productCode,5)">
-                      <img :src="item.productProfileUrl" class="all_width" style="max-height: 280px">
+                      <img :src="item.productProfileUrl" class="all_width" style="min-height: 280px">
 			            	</div>
 			            	<div class="font_18 text_ellipsis margin_top_20">{{item.productTitle}}</div>
 			            	<div class="color_666 text_ellipsis margin_top_10" v-html="item.productDesc"></div>
