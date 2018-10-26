@@ -9,7 +9,7 @@
       </ul>
     </div>
       <!--banner-->
-    <div>
+    <div v-if="banner.length > 0"> 
       <Carousel  radius-dot v-model="value" autoplay loop>
         <CarouselItem v-for="(item,index) in banner" :key="index">
           <div class="carousel">

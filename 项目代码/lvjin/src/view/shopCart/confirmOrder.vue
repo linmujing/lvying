@@ -66,14 +66,14 @@
                                                 </Col>
                                             </Row>
                                         </Col>
-                                        <Col span="5"><span class="block_center">{{item.price}}</span></Col>
+                                        <Col span="5"><span class="block_center">¥ {{item.price}}</span></Col>
                                         <Col span="6"><span class="block_center">×{{item.num}}</span></Col>
                                         <!-- 小计 -->
-                                        <Col span="2"><span class="block_center">{{items.itemTotal}}</span></Col>
+                                        <Col span="2"><span class="block_center">¥ {{ (item.num * item.price).toFixed(2)  }}</span></Col>
                                     </Row>
                                 </li>
                             </ul>
-                            <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： {{items.itemTotal}}</div>
+                            <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： ¥ {{items.itemTotal}}</div>
                             <!-- 其他操作  -->
                             <div class="item_shipping_methods padding_left_14" >
                                 <span style="display:inline-block;width:100px;">配送方式：</span> 
@@ -107,7 +107,7 @@
                     <!-- 其他操作 -->
                     <div class="list_operate padding_left_14" >
                         <div class="all_total padding_right_24">
-                            <h4>总计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
+                            <h4>总计：<b class="font_16"> ¥ {{cartDate.listTotal}} </b></h4>
                         </div>
                     </div>
                 </div>

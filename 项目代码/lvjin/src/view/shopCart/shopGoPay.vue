@@ -22,7 +22,8 @@
                         <Row>
                             <Col span="4"><div style="height:1px;"></div></Col>
                             <Col span="7"><span>商品名称</span></Col>
-                            <Col span="11"><span class="block_center">数量</span></Col>
+                            <Col span="6"  class="block_center"><span>价格（元）</span></Col>
+                            <Col span="5"><span class="block_center">数量</span></Col>
                             <Col span="2"><span class="block_center">小计（元）</span></Col>
                         </Row>
                     </div>
@@ -50,10 +51,11 @@
                                                 </Col>
                                             </Row>
                                         </Col>
-                                        <Col span="11"><span class="block_center">×{{item.num}}</span></Col>
+                                        <Col span="6"><span class="block_center">{{item.price}}</span></Col>
+                                        <Col span="5"><span class="block_center">×{{item.num}}</span></Col>
                                        
                                         <!-- 小计 -->
-                                        <Col span="2"><span class="block_center">{{items.itemTotal}}</span></Col>
+                                        <Col span="2"><span class="block_center">{{ (item.num * item.price).toFixed(2) }}</span></Col>
                                     </Row>
                                 </li>
                             </ul>
@@ -94,9 +96,6 @@
                 </div>
             </div>
             
-            <div style="position:fixed;top:50%;left:50%;">
-                <div id="qrcode" style="width:100px;height:100px;background:#ccc;" ></div>
-            </div>
         </div>
     </div>
 </template>
@@ -120,73 +119,13 @@ export default {
                 cartList:[]
             }, 
             
-            // 商品列表
-            cartList:[
-                {
-                    index1: 0,
-                    itemState: false,
-                    itemTitle: '机构法院',
-                    itemTotal: 0.00,
-                    shippingMethods: '快递免邮',
-                    //小列表
-                    items:[
-                        {
-                            index2: 0,
-                            state: false,
-                            price: 88.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字',
-                            validityPeriod: '永久有效',
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        },
-                        {
-                            index2: 1,
-                            state: false,
-                            price: 101.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                            validityPeriod: '永久有效',
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        }
-                    ]
-                },
-                {
-                    index1: 0,
-                    itemState: false,
-                    itemTitle: '机构法院',
-                    itemTotal: 0.00,
-                    shippingMethods: '快递免邮',
-                    //小列表
-                    items:[
-                        {
-                            index2: 0,
-                            state: false,
-                            price: 88.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                            validityPeriod: '永久有效',
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        },
-                        {
-                            index2: 1,
-                            state: false,
-                            price: 101.01,
-                            num: 1,
-                            describe: '我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，我是多行文字，',
-                            validityPeriod: '永久有效',
-                            imgSrc: require('../../assets/images/image/cart_book.png')
-                        }
-                    ]
-                }
-            ],
-
             // 是否隐藏商品详情
             hideShowDetail: true,
             
             //支付方式
             payTypeData:{
                 payTypeValue: 0,
-                single:false,
+                single:true,
                 payType:[
                     { id: 0, url: require("../../assets/images/image/pay_type_01.png") },
                     { id: 1, url: require("../../assets/images/image/pay_type_02.png") },
@@ -196,8 +135,8 @@ export default {
 
             /*个人信息*/
             userData: {
-                ciCode: '',
-                phone: '',
+                cicode: this.$store.state.userData.cicode,
+                phone: this.$store.state.userData.ciphone,
             },
             
         }
@@ -237,7 +176,6 @@ export default {
             this.$Spin.hide()
 
         },
-
         /*订单提交*/   
         submitOrderClick(){
             
@@ -248,6 +186,10 @@ export default {
                     // 阿里支付
                     case 0:
                     this.aliPayRequest();
+                    break;
+                    // 微信支付
+                    case 1:
+                    this.wxPayRequest();
                     break;
 
                 }
@@ -392,7 +334,59 @@ export default {
 
                 if(res.data.code == 200){
 
-                    this.qrcode1(res.data.content);
+                    //location.href = res.data.content;
+
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+            })
+        },
+        // 微信支付
+        wxPayRequest(){
+
+            let param = this.$Qs.stringify({ 
+                'orderCode': this.$route.query.orderCode , 
+                'ciCode': this.userData.cicode , 
+                'truePayMoney': this.cartDate.listTotal, 
+                'payCommet': ''
+                }) ;
+
+            this.$api.appPerPay( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    this.wxPayback();
+
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+            })
+        },
+        // 微信回调
+        wxPayback(){
+
+            let param = this.$Qs.stringify({ 
+                }) ;
+
+            this.$api.payBack( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    //location.href = res.data.content;
 
                 }else{
 
@@ -418,10 +412,6 @@ export default {
 
     },
     mounted(){
-
-        // 获取用户信息
-        this.userData.ciCode = this.$store.state.userData.cicode ;
-        this.userData.phone = this.$store.state.userData.ciphone ;
 
         // 获取订单详情
         this.getOrderProduct(this.$route.query.orderCode);
