@@ -52,7 +52,7 @@
                                                 </Col>
                                             </Row>
                                         </Col>
-                                        <Col span="4"><span  class="block_center">{{item.price}}</span></Col>
+                                        <Col span="4"><span  class="block_center">¥ {{item.price}}</span></Col>
                                         <Col span="4">
                                             <div class="relative">
                                                 <!-- 加减数量 -->
@@ -69,7 +69,7 @@
                                     </Row>
                                 </li>
                             </ul>
-                            <div class="item_total padding_right_24">该机构小计： {{items.itemTotal}}</div>
+                            <div class="item_total padding_right_24">该机构小计： ¥ {{items.itemTotal}}</div>
                         </div>
 
                         <!-- 组合包商品渲染 -->
@@ -100,7 +100,7 @@
                                                     </Col>
                                                 </Row>
                                             </Col>
-                                            <Col span="4"><span  class="block_center">{{child.price}}</span></Col>
+                                            <Col span="4"><span  class="block_center">¥ {{child.price}}</span></Col>
                                             <Col span="4"><span  class="block_center">{{child.num}} </span></Col>
                                             <!-- 删除单个 -->
                                             <Col span="2">   &nbsp;</Col>
@@ -108,7 +108,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div class="item_total padding_right_24">该组合包小计： {{items.itemTotal}}</div>
+                            <div class="item_total padding_right_24">该组合包小计：¥ {{items.itemTotal}}</div>
 
                         </div>
                     </li>
@@ -124,7 +124,7 @@
                         <Col span="10"><span class="pointer list_delete" @click="deleteAllItem" >删除所选课程</span></Col>
                         <Col span="9">
                             <div class="all_total">
-                                <h4>合计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
+                                <h4>合计：<b class="font_16">¥ {{cartDate.listTotal}} </b></h4>
                                 <p>(若购买享有优惠，相应金额将在订单结算页面减扣)</p>
                             </div>
                         </Col>

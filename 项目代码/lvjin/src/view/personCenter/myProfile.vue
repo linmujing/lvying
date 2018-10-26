@@ -26,9 +26,11 @@
                         :action="BASE_URL"
                         :format="['jpg','gif','png']"
                         :show-upload-list="false"
+                        :on-progress="onUpload"
                         :on-format-error="handleFormatError"
                         :on-exceeded-size="handleMaxSize"
                         :on-success="materialUrlSuccess"
+                        :on-error="loadError"
                         :max-size="10240">
                         <Button type="success" shape="circle" size="small" ghost style="width:90px;" >修改头像</Button>
                         <span class="padding_left_20 font_12 color_999">图片要清晰，支持jpg，png，gif格式，最大不超过10M</span>
@@ -86,6 +88,7 @@ export default {
                 personal:''
 
             },
+
             // 提交按钮
             submitLoading: false,
             BASE_URL: this.GLOBAL.BASE_URL
@@ -112,13 +115,22 @@ export default {
             this.$Message.warning({ content: '上传图片过大，最大不能超过10M'  });
 
         },
+        // 文件开始上传
+        onUpload(){
+            this.$Spin.show();
+        },
+        // 上传失败
+        loadError(){
+            this.$Message.warning({ content: '图片上传失败，请重新上传'  });
+            this.$Spin.hide();
+        },
         //图片上传成功
         materialUrlSuccess (res, file) {
 
             if(res.code == 200){
                 console.log(res)
                 this.profileData.headImg = res.content;
-
+                this.$Message.success({ content: '图片上传成功！'  });
             }else{
 
                 this.$Message.warning({ content: '图片上传失败，请重新上传'  });

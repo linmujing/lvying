@@ -114,7 +114,7 @@
                                                 </Col>
                                             </Row>
                                         </Col>
-                                        <Col span="5"><span class="block_center">{{item.price}}</span></Col>
+                                        <Col span="5"><span class="block_center">¥ {{item.price}}</span></Col>
                                         <Col span="6">
                                             <div class="relative">
                                                 <!-- 加减数量 -->
@@ -130,11 +130,11 @@
                                         <Col span="0">
                                         </Col>
                                         <!-- 小计 -->
-                                        <Col span="2"><span class="block_center">{{ (item.num * item.price).toFixed(2) }}</span></Col>
+                                        <Col span="2"><span class="block_center">¥ {{ (item.num * item.price).toFixed(2) }}</span></Col>
                                     </Row>
                                 </li>
                             </ul>
-                            <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： {{items.itemTotal}}</div>
+                            <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： ¥ {{items.itemTotal}}</div>
                             <!-- 其他操作  #submitType#-->
                             <div class="item_shipping_methods padding_left_14" v-if="!submitType">配送方式： {{items.shippingMethods}}</div>
                         </li>
@@ -163,17 +163,17 @@
                                                 </Col>
                                             </Row>
                                         </Col>
-                                        <Col span="5"><span class="block_center">{{item.price}}</span></Col>
+                                        <Col span="5"><span class="block_center">¥ {{item.price}}</span></Col>
                                         <Col span="6"><span class="block_center">×{{item.num}}</span></Col>
                                         <!-- 优惠券  #submitType#-->
                                         <Col span="0">
                                         </Col>
                                         <!-- 小计 -->
-                                        <Col span="2"><span class="block_center">{{item.price}}</span></Col>
+                                        <Col span="2"><span class="block_center">¥ {{item.price}}</span></Col>
                                     </Row>
                                 </li>
                             </ul>
-                            <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： {{items.itemTotal}}</div>
+                            <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： ¥ {{items.itemTotal}}</div>
                             <!-- 其他操作  #submitType#-->
                             <div class="item_shipping_methods padding_left_14" v-if="!submitType">配送方式： {{items.shippingMethods}}</div>
                         </li>
@@ -182,7 +182,7 @@
                     <!-- 其他操作 #submitType#-->
                     <div class="list_operate padding_left_14" v-if="!submitType">
                         <div class="all_total padding_right_24">
-                            <h4>总计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
+                            <h4>总计：<b class="font_16"> ¥ {{cartDate.listTotal}} </b></h4>
                         </div>
                     </div>
                 </div>
@@ -190,7 +190,7 @@
 
             <!-- 提交订单块 -->
             <div class="sumbit_block">
-                <div class="padding_right_24 font_18">实付金额：<b class="">{{cartDate.listTotal}}</b></div>
+                <div class="padding_right_24 font_18">实付金额：<b class="">¥ {{cartDate.listTotal}}</b></div>
                 <p class="padding_right_24"><Button shape="circle" type="warning" size="large" @click="submitOrderClick">{{submitType ? '确认订单' : '提交订单'}}</Button></p>
             </div>
 
@@ -203,7 +203,7 @@
                 <span >选择地址</span>
                 <i class="text_hover_color padding_right_20 float_right" @click="addressData.addressPageShow = false" >关闭</i>
             </div>
-            <Address :pState="1" @hidebox="listenAddressChoose" ></Address>
+            <Address :pState="1" @hidebox="listenAddressChoose" style="background:#fff;"></Address>
         </div>
     </div>
 </template>
@@ -264,15 +264,15 @@ export default {
             },
 
             // 地址城市列表 new
-            cityList: [ { value: '天津',label: '天津' }, ],
+            cityList: province(),
             // 选中的城市数组
             addressValue:[],
-            
+
             // 用户信息
             userData: {
-                ciCode: '',
-                phone: '',
-                name:''
+                ciCode: this.$store.state.userData.cicode,
+                phone: this.$store.state.userData.ciphone,
+                name: this.$store.state.userData.ciname
             },
             
         }
@@ -548,9 +548,19 @@ export default {
         // 获取产品详情数据
         getProductDetailData(productCode){
 
+            let isCart = productCode.indexOf('-'), cartCode = productCode , cartNun = 1;
+
+            // 如果是从购物车来的数据
+            if(isCart != -1){
+                
+                cartCode = productCode.split('-')[0];
+                cartNun = productCode.split('-')[1];
+
+            }
+
             this.$Spin.show()
 
-            let param = {'productCode': productCode}
+            let param = {'productCode': cartCode}
 
             this.$api.getProductInfo(  this.$Qs.stringify(param) )
 
@@ -561,8 +571,6 @@ export default {
                 if(res.data.code == 200){
 
                     let data = res.data.content , arr = [];
-
-                    if (data == null || data.length == 0) { return ;}
 
                     // 单个商品
                     if(data.productType != '2'){
@@ -584,7 +592,7 @@ export default {
                             productCode: data.productCode,
                             state: false,
                             price: data.productPrice,
-                            num: data.productNum,
+                            num:  cartNun,
                             name: data.productName,
                             describe: data.productDesc,
                             imgSrc: data.productProfileUrl
@@ -601,7 +609,7 @@ export default {
                             itemTitle: data.productTitle,
                             itemTotal: 0.00,
                             productCode: data.productCode,
-                            num: 1,
+                            num: cartNun,
                             productSubCode: data.productSubCode,
                             //小列表
                             items:[]
@@ -661,7 +669,9 @@ export default {
                     // 对组合包里的商品进行商户分类
                     let arr2 = [], merchantArr2 = [] ;
 
-                    for(let child of Data){
+                    for(let i = 0 ; i < Data.length; i++){
+
+                        let child = Data[i];
 
                         let childIndex = merchantArr2.indexOf(child.merchantCode);
 
@@ -683,7 +693,7 @@ export default {
                             arr2[childIndex].items.push({
                                 productCode: child.productCode,
                                 price: child.productPrice,
-                                num: 1, //child.productNum,
+                                num: cartNun[i], //child.productNum,
                                 productTitle: child.productTitle,
                                 describe: child.productDesc,
                                 imgSrc: child.productProfileUrl
@@ -695,7 +705,7 @@ export default {
                             arr2[childIndex].items.push({
                                 productCode: child.productCode,
                                 price: child.productPrice,
-                                num: 1,//child.productNum,
+                                num: cartNun[i],//child.productNum,
                                 productTitle: child.productTitle,
                                 describe: child.productDesc,
                                 imgSrc: child.productProfileUrl
@@ -854,14 +864,14 @@ export default {
                             if(this.addressData.addressModelData.addressCode == item.addressCode){
 
                                 arr.push({
-                                    addressCode: data[0].addressCode,
-                                    name:  data[0].addressPersonName,
-                                    phone:  data[0].addressPhone,
-                                    province:  data[0].province,
-                                    city:  data[0].city,
-                                    county:  data[0].zone,
-                                    addressDetail:  data[0].address,
-                                    isDefalut:  data[0].isDefalut,
+                                    addressCode: item.addressCode,
+                                    name:  item.addressPersonName,
+                                    phone:  item.addressPhone,
+                                    province:  item.province,
+                                    city:  item.city,
+                                    county:  item.zone,
+                                    addressDetail:  item.address,
+                                    isDefalut:  item.isDefalut,
                                 })
 
                             }
@@ -958,11 +968,6 @@ export default {
 
         // 获取地址信息
         this.cityList = province();
-
-        // 获取用户信息
-        this.userData.ciCode = this.$store.state.userData.cicode ;
-        this.userData.phone = this.$store.state.userData.ciphone ;
-        this.userData.name = this.$store.state.userData.ciname ;
 
         // 获取用户地址列表
         this.getAddressData();
