@@ -127,7 +127,7 @@ export const getOrderTrack = params => { return instance.post(`order/track/getOr
 // 阿里支付请求
 export const aliPayRequest = params => { return instance.post(`/trade/aliPay/aliPay`, params ); };
 
-// 微信支付回调
+// 微信支付回调/trade/weixinPay/appPerPay
 export const payBack = params => { return instance.post(`/trade/weixinPay/payBack`, params ); };
 // 阿微信支付请求
 export const appPerPay = params => { return instance.post(`/trade/weixinPay/appPerPay`, params ); };
