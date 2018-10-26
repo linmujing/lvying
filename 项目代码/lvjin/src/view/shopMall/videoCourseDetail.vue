@@ -76,7 +76,7 @@
                 <a href="#detail3" @click="anchorBtn(2)" :class="{cur:isCur == 2}" class="inline_block padding_20_15 width_150px">课程评价</a>
               </div>
             </Affix>
-		        <div class="padding_20 margin_bottom_20" v-html="dataDetail.productDesc">
+		        <div class="padding_20 margin_bottom_20 classImg" v-html="dataDetail.productDesc">
 		          <!--<Row class="margin_top_10">-->
 		            <!--<Col span="2" class="font_weight_bold">适应人群 </Col>-->
 		            <!--<Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>-->

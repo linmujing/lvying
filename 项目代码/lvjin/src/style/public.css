@@ -206,5 +206,8 @@ a:hover{color: #00AA88;}
   box-shadow: 0 1px 6px rgba(0,0,0,.2);
   white-space: nowrap;
 }
-
+/*图片*/
+.classImg img{
+  width: 100%;
+}
 

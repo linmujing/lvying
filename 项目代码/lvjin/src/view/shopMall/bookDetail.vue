@@ -65,7 +65,7 @@
               </div>
             </Affix>
             <!--商品详情-->
-		        <div class="padding_20 margin_bottom_20" v-html="dataDetail.productSpecification"></div>
+		        <div class="padding_20 margin_bottom_20 classImg" v-html="dataDetail.productSpecification"></div>
             <!--<div class="margin_top_30">-->
               <!--<p>目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</p>-->
               <!--<p class="padding_left_20 margin_top_10">第一章日常消费法律知识——天天315</p>-->
