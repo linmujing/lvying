@@ -26,22 +26,35 @@
                         <Input v-model="item.commentRemark" type="textarea" style="width:100%;" placeholder="宝贝满足你的期待吗？" :rows="15"  />
                         <div class="remark_img">
 
-                                    <span class="upload_img_active">
-                                        <Upload
-                                            :action="BASE_URL"
-                                            :format="['jpg','gif','png']"
-                                            :show-upload-list="false"
-                                            :on-format-error="handleFormatError"
-                                            :on-exceeded-size="handleMaxSize"
-                                            :on-success="materialUrlSuccess"
-                                            :max-size="10240">
-                                            <span class="img_content img_middle_center" v-if="item.commentPicUrl != ''" >
-                                                <img :src="item.commentPicUrl" alt="" style="vertical-align: bottom;" >
-                                            </span>
-                                            <span class="upload_btn" v-if="item.commentPicUrl == ''"><img src="../../assets/images/icon/img_up.png" alt="" style="vertical-align: bottom;"></span>
-                                            <span class="padding_left_20 font_12 color_999">图片要清晰，支持jpg，png，gif格式，最大不超过10M</span>
-                                        </Upload>
-                                    </span>
+                            <div class="demo-upload-list" v-for="(item, index) in uploadList" :key="index" >
+                                <template>
+                                    <img :src="item.url">
+                                    <div class="demo-upload-list-cover">
+                                        <Icon type="ios-eye-outline" @click.native="handleView(item.url)"></Icon>
+                                        <Icon type="ios-trash-outline" @click.native="handleRemove(item)"></Icon>
+                                    </div>
+                                </template>
+                            </div>
+                            <Upload
+                                ref="upload"
+                                :show-upload-list="false"
+                                :on-success="handleSuccess"
+                                :format="['jpg','jpeg','png']"
+                                :max-size="2048"
+                                :on-format-error="handleFormatError"
+                                :on-exceeded-size="handleMaxSize"
+                                :before-upload="handleBeforeUpload"
+                                multiple
+                                type="drag"
+                                :action="BASE_URL"
+                                style="display: inline-block;width:58px;">
+                                <div style="width: 58px;height:58px;line-height: 58px;">
+                                    <Icon type="ios-camera" size="20"></Icon>
+                                </div>
+                            </Upload>
+                            <Modal title="查看图片" v-model="visible">
+                                <img :src="imgsrc" v-if="visible" style="width: 100%">
+                            </Modal>
 
                         </div>
 
@@ -91,14 +104,7 @@ export default {
 
             /* 发表评价商品数据 */
             commentData:{
-                // // 评价类型值
-                // typeValue:'',
-                // // 评价类型
-                // typeList:[
-                //     {text: '好评', value: '1'},
-                //     {text: '中评', value: '2'},
-                //     {text: '差评', value: '3'},
-                // ],
+
                 list:[{
                     imgsrc: this.$route.query.productProfileUrl ,
                     name: this.$route.query.productName,
@@ -107,7 +113,6 @@ export default {
                     // 评分
                     gradeValue1: 0,
                     gradeValue2: 0,
-                    commentPicUrl: ''
                 }],
 
                 // 发布弹框
@@ -115,44 +120,76 @@ export default {
                 
             },
 
+            // 图片上传
+            imgsrc:'',
+            imglist: [],
+            visible: false,
+            uploadList: [],
             BASE_URL: this.GLOBAL.BASE_URL
 
         }
         
     },
     methods: {
-
-        //图片格式
-        handleFormatError (file) {
-
-            this.$Message.warning({  content: '图片格式只能为jpg、png、gif!'  });
-
+        
+        /** 图片上传 **/
+        // 图片展示
+        handleView (url) {
+            this.imgsrc = url;
+            this.visible = true;
         },
-        //图片上传尺寸
-        handleMaxSize (file) {
-
-            this.$Message.warning({ content: '上传图片过大，最大不能超过10M'  });
-
+        // 图片移除
+        handleRemove (file) {
+            this.uploadList.splice(this.uploadList.indexOf(file), 1);
         },
-        //图片上传成功
-        materialUrlSuccess (res, file) {
+        handleSuccess (res, file) {
 
-            if(res.code == 200){
-                console.log(res)
-                this.commentData.list[0].commentPicUrl = res.content;
-
-            }else{
-
-                this.$Message.warning({ content: '图片上传失败，请重新上传'  });
-
-            }
+            console.log(res)
 
             this.$Spin.hide();
+
+            if(res.code == 200){
+
+                file.url = res.content ;
+                file.name = ' ';
+
+                this.uploadList.push({ 'url': res.content, 'name': ''})
+
+            }else{
+                this.$Message.warning({ content: '图片上传失败，请重新上传'  })
+            }
+
+        },
+        handleFormatError (file) {
+            this.$Spin.hide();
+            this.$Message.warning({  content: '图片格式只能为jpg、png、gif，且不能包含“%￥*&……@”等特殊字符！'  });
+        },
+        handleMaxSize (file) {
+            this.$Spin.hide();
+            this.$Message.warning({ content: '上传图片过大，最大不能超过10M'  });
+        },
+        // 开始上传
+        handleBeforeUpload () {
+
+            this.$Spin.show();
+
+            let check = this.uploadList.length < 3;
+
+            if (!check) {
+               this.$Message.warning({ content: '最多只能上传3张图片！'  });
+               this.$Spin.hide();
+               return ;
+            }
+
+            return check;
 
         },
 
         // 评论
         goCommentData(){
+
+            let urlStr = '';
+            for(let item of this.uploadList){ urlStr += urlStr == '' ? item.url : ',' + item.url }
 
             this.$Spin.show()
               
@@ -160,7 +197,7 @@ export default {
                 'ciCode': this.$store.state.userData.cicode , 
                 'productCode': this.$route.query.productCode, 
                 'orderCode': this.$route.query.orderCode,
-                'commentPicUrl': this.commentData.list[0].commentPicUrl,
+                'commentPicUrl': urlStr,
                 'commentDesc': this.commentData.list[0].commentRemark,
                 'helpConsist': this.commentData.list[0].gradeValue1,
                 'desConsist': this.commentData.list[0].gradeValue2,
@@ -192,6 +229,9 @@ export default {
 
             });  
         },
+    },
+    mounted(){
+        // this.uploadList = this.$refs.upload.fileList;
     }
 }
 </script>
@@ -212,6 +252,43 @@ export default {
     } 
     .ivu-icon-ios-close:before{
         content: "\F178";
+    }
+
+    .demo-upload-list{
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        line-height: 60px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        overflow: hidden;
+        background: #fff;
+        position: relative;
+        box-shadow: 0 1px 1px rgba(0,0,0,.2);
+        margin-right: 4px;
+    }
+    .demo-upload-list img{
+        width: 100%;
+        height: 100%;
+    }
+    .demo-upload-list-cover{
+        display: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0,0,0,.6);
+    }
+    .demo-upload-list:hover .demo-upload-list-cover{
+        display: block;
+    }
+    .demo-upload-list-cover i{
+        color: #fff;
+        font-size: 20px;
+        cursor: pointer;
+        margin: 0 2px;
     }
 
 </style>

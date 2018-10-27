@@ -9,8 +9,6 @@
     ciSex: localStorage.getItem("ciSex"),
     ciIntroduce: localStorage.getItem("ciIntroduce"),
     ciname: localStorage.getItem("ciname"),
-
-    SupplierData: {}
   }
   
   // getters

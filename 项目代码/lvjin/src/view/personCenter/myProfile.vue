@@ -99,21 +99,15 @@ export default {
 
         /*切换页面组件*/
         changePage(state){
-
             this.profileState = state;
-
         },
         //图片格式
         handleFormatError (file) {
-
             this.$Message.warning({  content: '图片格式只能为jpg、png、gif!'  });
-
         },
         //图片上传尺寸
         handleMaxSize (file) {
-
             this.$Message.warning({ content: '上传图片过大，最大不能超过10M'  });
-
         },
         // 文件开始上传
         onUpload(){
@@ -194,8 +188,14 @@ export default {
         // 获取个人信息
         this.profileData.phone = this.common.testEmpty(this.$store.state.userData.ciphone) ;
         this.profileData.name = this.common.testEmpty(this.$store.state.userData.ciname) ;
-        this.profileData.sex = this.$store.state.userData.ciSex;
-        this.profileData.personal = this.common.testEmpty(this.$store.state.userData.ciIntroduce);
+
+        // 性别
+        let sex = this.$store.state.userData.ciSex;
+        this.profileData.sex = sex != null && sex != undefined && sex != 'null' ? sex : 0;
+
+        // 简介
+        let personal = this.common.testEmpty(this.$store.state.userData.ciIntroduce);
+        this.profileData.personal = personal != null && personal != undefined && personal != 'null' ? personal : '';
 
         // 头像
         let headImg = this.$store.state.userData.ciProfileUrl;
