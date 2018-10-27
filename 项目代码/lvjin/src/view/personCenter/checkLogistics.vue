@@ -23,8 +23,8 @@
                     <Col :span="13">
                         <div class="store_list">
                             <div class="store_item">
-                                <p class="img_box"><img :src="productUrl" alt=""></p>
-                                <span>￥{{productPrice}} * {{productNum}}</span>
+                                <p class="img_box"><img :src="product.imgSrc" alt=""></p>
+                                <span>￥{{product.price}} * {{1}}</span>
                             </div>
                         </div>
                     </Col>
@@ -56,10 +56,8 @@ export default {
                 logisticCompany:'',
             },   
             
-            // 商品信息 orderCode, trackNo, productProfileUrl, productPirce, productNun
-            productUrl: this.$route.query.productProfileUrl,
-            productPrice: this.$route.query.productPirce,
-            productNum: this.$route.query.productNun
+            // 商品信息
+            product: {}
             
         }
         
@@ -108,10 +106,55 @@ export default {
             });  
         },
 
+        // 获取产品详情
+        getProduct(){
+
+            let param = {'productCode': this.$route.query.productCode}
+
+            this.$api.getProductInfo(  this.$Qs.stringify(param) )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    let data = res.data.content , arr = [];
+
+                    this.product = {
+                        productCode: data.productCode,
+                        price: data.productPrice,
+                        num:  cartNun,
+                        name: data.productName,
+                        describe: data.productDesc,
+                        imgSrc: data.productProfileUrl
+                    }
+                    
+                    this.$toast.clear();
+
+                }else{
+
+                    this.$toast.clear()
+                    this.$toast(res.data.message);  
+                    
+                }
+                
+
+            })
+            .catch((error) => {
+
+                this.$toast.clear();
+                console.log('发生错误！', error);
+
+            });
+        }
+
     },
     mounted(){
 
         this.checkLogistics();
+
+        this.getProduct();
 
     }
 }

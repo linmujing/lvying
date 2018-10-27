@@ -132,5 +132,7 @@ export const payBack = params => { return instance.post(`/trade/weixinPay/payBac
 // 阿微信支付请求
 export const appPerPay = params => { return instance.post(`/trade/weixinPay/appPerPay`, params ); };
 
+// 文件上传接口
+export const upload = params => { return instance.post(`/system/file/upload`, params ); };
 
 

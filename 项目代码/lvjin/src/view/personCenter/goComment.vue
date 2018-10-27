@@ -13,9 +13,9 @@
                     <!-- 评价头部 -->
                     <div class="comment_header padding_left_20 padding_top_40">
                         <span class="img_box img_middle_center">
-                            <img :src="item.imgsrc" alt="" style="height:100%;">
+                            <img :src="product.imgsrc" alt="" style="height:100%;">
                         </span>
-                        <span style="line-height:30px">{{item.name}}</span>
+                        <span style="line-height:30px">{{product.name}}</span>
                         <!-- <span class="comment_type" :class=" [commentData.typeValue == items.value ? 'color_f09105':'' ]"  v-for="(items, index) in commentData.typeList" :key="index"   
                             @click="commentData.typeValue = items.value" >{{items.text}}</span> -->
                     </div>
@@ -40,7 +40,7 @@
                                 :show-upload-list="false"
                                 :on-success="handleSuccess"
                                 :format="['jpg','jpeg','png']"
-                                :max-size="2048"
+                                :max-size="1073741824"
                                 :on-format-error="handleFormatError"
                                 :on-exceeded-size="handleMaxSize"
                                 :before-upload="handleBeforeUpload"
@@ -111,8 +111,8 @@ export default {
                     // 评价
                     commentRemark:'',
                     // 评分
-                    gradeValue1: 0,
-                    gradeValue2: 0,
+                    gradeValue1: 5,
+                    gradeValue2: 5,
                 }],
 
                 // 发布弹框
@@ -125,7 +125,10 @@ export default {
             imglist: [],
             visible: false,
             uploadList: [],
-            BASE_URL: this.GLOBAL.BASE_URL
+            BASE_URL: this.GLOBAL.BASE_URL,
+
+            // 商品信息
+            product:{}
 
         }
         
@@ -162,12 +165,13 @@ export default {
         },
         handleFormatError (file) {
             this.$Spin.hide();
-            this.$Message.warning({  content: '图片格式只能为jpg、png、gif，且不能包含“%￥*&……@”等特殊字符！'  });
+            this.$Message.warning({  content: '图片格式只能为jpg、png、gif'  });
         },
         handleMaxSize (file) {
             this.$Spin.hide();
             this.$Message.warning({ content: '上传图片过大，最大不能超过10M'  });
         },
+        
         // 开始上传
         handleBeforeUpload () {
 
@@ -229,9 +233,54 @@ export default {
 
             });  
         },
+
+        // 获取产品详情
+        getProduct(){
+
+            let param = {'productCode': this.$route.query.productCode}
+
+            this.$api.getProductInfo(  this.$Qs.stringify(param) )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    let data = res.data.content , arr = [];
+
+                    this.product = {
+                        productCode: data.productCode,
+                        price: data.productPrice,
+                        num:  cartNun,
+                        name: data.productName,
+                        describe: data.productDesc,
+                        imgSrc: data.productProfileUrl
+                    }
+                    
+                    this.$toast.clear();
+
+                }else{
+
+                    this.$toast.clear()
+                    this.$toast(res.data.message);  
+                    
+                }
+                
+
+            })
+            .catch((error) => {
+
+                this.$toast.clear();
+                console.log('发生错误！', error);
+
+            });
+        }
     },
     mounted(){
-        // this.uploadList = this.$refs.upload.fileList;
+         
+        this.getProduct();
+
     }
 }
 </script>

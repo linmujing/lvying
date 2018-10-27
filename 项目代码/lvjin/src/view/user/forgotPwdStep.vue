@@ -201,7 +201,8 @@ export default {
                     this.$Message.error('该帐号还未注册!');
                     return;
 
-                }else if(res.data.code == 500){
+                }else if(res.data.code == 200){
+                    
                     this.$Spin.hide()
                     // 发送验证码
                     this.$api.sendSms( this.$Qs.stringify({ 'phoneNo': this.formRight.phone, 'type': '2' }) )

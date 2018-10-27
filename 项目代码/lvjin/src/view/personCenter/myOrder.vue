@@ -160,14 +160,14 @@
                                                                 <!-- 评价  组合包交易成功只有一个评价-->
                                                                 <div class="item_td" v-if="lists.orderStatus == '3' && index2 == 0 && index3 == 0 && lists.orderCommetStatus == 0"><p>
                                                                         <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                            @click="goComment(lists.orderCode, childs.productCode, childs.productProfileUrl, childs.name)">去评价
+                                                                            @click="goComment(lists.orderCode, childs.productCode)">去评价
                                                                         </Button> <br> 
                                                                 </p></div>
 
                                                                 <!-- 物流 只要是实质商品都有物流-->
                                                                 <div v-if=" (lists.orderStatus == '1' && childs.productProperty == '1' )|| (lists.orderStatus == '2' && childs.productProperty == '1')">
                                                                     <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                        @click="checkLogistics(items.itemCode, items.itemTrackNo, childs.productProfileUrl, childs.price, childs.num)">查看物流
+                                                                        @click="checkLogistics(items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
                                                                     </Button> <br>   
                                                                 </div>
                                                             </div>
@@ -185,14 +185,14 @@
                                                                 <!-- 评价 普通商品交易成功，每个都有评价-->
                                                                 <div class="item_td" v-if="lists.orderStatus == '3' && childs.commetStatus == '2'" ><p>
                                                                         <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                            @click="goComment(lists.orderCode, childs.productCode, childs.productProfileUrl, childs.name)">去评价
+                                                                            @click="goComment(lists.orderCode, childs.productCode)">去评价
                                                                         </Button> <br> 
                                                                 </p></div>
 
                                                                 <!-- 物流 只要是实质商品都有物流 (orderCode, trackNo, productProfileUrl, productPirce, productNun)-->
                                                                 <div v-if=" (lists.orderStatus == '1' && childs.productProperty == '1' )|| (lists.orderStatus == '2' && childs.productProperty == '1')">
                                                                     <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                        @click="checkLogistics(items.itemCode, items.itemTrackNo, childs.productProfileUrl, childs.price, childs.num)">查看物流
+                                                                        @click="checkLogistics(items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
                                                                     </Button> <br>   
                                                                 </div>
                                                             </div>      
@@ -429,11 +429,9 @@ export default {
         // 查看物流
         // @param orderCode string 获取当前点击的订单子单号
         // @param trackNo string 获取当前点击的子订单运单单号
-        // @param productProfileUrl string 商品图片
-        // @param productPirce string 商品价格
-        // @param productNun string 商品个数
-        checkLogistics(orderCode, trackNo, productProfileUrl, productPirce, productNun){
-            this.$router.push({ path: '/personCenter/checkLogistics', query: {orderCode, trackNo, productProfileUrl, productCount, productNun} })
+        // @param productCode string 商品编号
+        checkLogistics(orderCode, trackNo, productCode ){
+            this.$router.push({ path: '/personCenter/checkLogistics', query: {orderCode, trackNo, productCode } })
         },
 
         // 去评论
@@ -441,8 +439,8 @@ export default {
         // @param productCode string 获取当前点击的商品编号
         // @param productProfileUrl string 获取当前点击的商品图片
         // @param productName string 获取当前点击的商品名字
-        goComment(orderCode, productCode, productProfileUrl, productName){
-            this.$router.push({ path: '/personCenter/goComment', query: {orderCode, productCode, productProfileUrl, productName} })
+        goComment(orderCode, productCode ){
+            this.$router.push({ path: '/personCenter/goComment', query: {orderCode, productCode } })
         },
 
         /** 数据获取 **/

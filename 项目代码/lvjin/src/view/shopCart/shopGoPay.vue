@@ -96,6 +96,7 @@
                 </div>
             </div>
             
+            <div id="qrcode" style="width:100px;height:100px;"></div>
         </div>
     </div>
 </template>
@@ -324,7 +325,12 @@ export default {
         // 阿里支付
         aliPayRequest(){
 
-            let param = this.$Qs.stringify({ 'orderCode': this.$route.query.orderCode }) ;
+            let param = this.$Qs.stringify({ 
+                'orderCode': this.$route.query.orderCode , 
+                'ciCode': this.userData.cicode , 
+                'truePayMoney': this.cartDate.listTotal, 
+                'payCommet': ''
+             }) ;
 
             this.$api.aliPayRequest( param )
 
@@ -334,7 +340,8 @@ export default {
 
                 if(res.data.code == 200){
 
-                    //location.href = res.data.content;
+                    location.href = res.data.content;
+                    // this.createQrcode(res.data.content)
 
                 }else{
 
@@ -397,7 +404,7 @@ export default {
             })
         },
         // 生成二维码
-        qrcode1(value){
+        createQrcode(value){
 
             new QRCode('qrcode', {
                 width: 100,
