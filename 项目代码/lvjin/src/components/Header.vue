@@ -49,7 +49,7 @@
 				</div>
 				<div class="float_right padding">
 					<div v-if="loginStatus == 1">
-						<Input search placeholder="视频/音频/合同" class="search_box"/>
+						<Input v-model="searchVal" search placeholder="视频/音频/合同" class="search_box" @on-search="search"/>
 					</div>
 					<div v-else-if="loginStatus === 0" class="margin_top_10">
 						<Button @click="login" shape="circle" class="width_80px">登录</Button>
@@ -70,7 +70,8 @@
 				visible:false,
 				navigationList: [],
 				user: null,
-				phone: null
+				phone: null,
+        searchVal: ''
 			}
 		},
     mounted(){
@@ -152,7 +153,16 @@
 					}
 				});
 
-			}
+			},
+      // 搜索
+      search(value){
+        this.$router.push({
+          path:'/searchList',
+          query: {
+            searchVal: value,
+          }
+        })
+      }
 		},
 		computed: {
 			// 监听登录状态变化 修改页面值

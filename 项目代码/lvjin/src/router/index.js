@@ -206,6 +206,14 @@ const router = new Router({
           },
         },
         {
+          path: '/searchList',
+          name: 'searchList',
+          component:resolve => require(['@/view/shopMall/searchList'],resolve),
+          meta:{
+            title:'搜索',
+          },
+        },
+        {
           path: '/videoCourseDetail',
           name: 'videoCourseDetail',
           component:resolve => require(['@/view/shopMall/videoCourseDetail'],resolve),

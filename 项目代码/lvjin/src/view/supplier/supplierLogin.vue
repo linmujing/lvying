@@ -104,7 +104,7 @@ export default {
                   // this.$router.push({ name: '', params: {id: id}})
 
                   //跳转函数*************************************************
-
+                  window.location.href = 'http://114.115.172.162:8088/#/dashboard'
                 }else{
                   this.$Spin.hide()
                   this.$Message.warning(res.data.message);
