@@ -396,7 +396,7 @@ export default {
                     break;
             }
 
-             this.$router.push({ path: Url, query: param })
+            this.$router.push({ path: Url, query: param })
 
         },
 
@@ -665,6 +665,11 @@ export default {
 
     },
     mounted(){
+
+        // 带参进入订单页
+        if(this.$route.query.orderState){
+            this.orderData.orderTypeIndex = this.$route.query.orderState;
+        }
 
         // 获取订单列表
         this.getOrderList();

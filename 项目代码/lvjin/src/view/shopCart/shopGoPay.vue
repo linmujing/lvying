@@ -12,7 +12,7 @@
                         <div  style="line-height:30px;">
                             <div>请在24小时内完成支付</div> 
                             <div class="padding_bottom_20"><span> 超过24小时再支付可能会导致购买失败，需重新下单购买</span> </div>
-                            <div class="relative" style="line-height:50px;" ><span> 实付金额：<i class="color_f09105">{{cartDate.listTotal}}</i></span> <s class="line"></s></div>
+                            <div class="relative" style="line-height:50px;" ><span> 实付金额：<i class="color_f09105">￥ {{cartDate.listTotal}}</i></span> <s class="line"></s></div>
                         </div>
                         <p class="font_16 pointer" style="line-height:80px;" @click="hideShowDetail = !hideShowDetail">订单详情 <i :class="[hideShowDetail ? 'triangle_up':'triangle_down']"></i></p>
                     </div>
@@ -37,7 +37,7 @@
                                 <li class="padding_left_14" v-for="(item, index2) in items.items" :key="item.id" >
                                     <Row>
                                         <Col span="4">
-                                            <span class="item_list_img">
+                                            <span class="item_list_img pointer" @click="goDetail(item.productCode, item.productProperty)">
                                                 <img :src="item.imgSrc">
                                             </span>
                                         </Col>
@@ -46,7 +46,6 @@
                                                 <Col span="24">
                                                     <div class="item_list_describe">
                                                         <p>{{item.productTitle}}</p>
-                                                        <p v-html="item.describe"></p>
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -95,7 +94,23 @@
                     </div>
                 </div>
             </div>
-            
+
+            <!--支付扫码弹框 -->
+            <Modal v-model="payModel" :onCancel="closePayModel" width="680" footer-hide >
+                <p slot="header" >
+                    <span class="font_18" style="font-weight:400;">扫码支付</span>
+                </p>
+                <div style="width:648px;height:270px;position:relative;">
+                    <div style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;">
+                        <iframe :src="alipayUrl" width="250" height="250" frameborder="0" scrolling="auto"></iframe>
+                    </div>
+                </div>
+                <div class="text_center font_14">
+                    {{payType}}
+                </div>
+            </Modal>
+
+
             <div id="qrcode" style="width:100px;height:100px;"></div>
         </div>
     </div>
@@ -133,6 +148,14 @@ export default {
                     { id: 2, url: require("../../assets/images/image/pay_type_03.png") }
                 ],
             },
+            // 扫码弹框
+            payModel: false,
+            // 阿里支付链接
+            alipayUrl:'',
+            // 支付提示
+            payType: '',
+            // 订单轮询定时器
+            payTimer: null,
 
             /*个人信息*/
             userData: {
@@ -144,6 +167,60 @@ export default {
         
     },
     methods: {
+
+        /*点击打开详情*/
+        //@param code 商品编号
+        //@param attr 商品属性1-实物，2-音频 3-视频 4-文档 包含多个使用逗号链接
+        goDetail(code, attr){
+            console.log(attr)
+          var arr = attr;
+          if(attr.indexOf(',') != -1){ attr = attr.split(',') }
+          // 包含多个跳转到动态管控详情页
+          if(arr.length > 1  || arr == '4'){
+            this.$router.push({
+              path:'/industryDynamicDetail',
+              query: {
+                productCode: code,
+                // hasBuy 购买后跳转过去的状态
+                hasBuy: 1
+              }
+            })
+          }else {
+            // 1-实物，2-音频 3-视频
+            switch (attr) {
+              case '1':
+                this.$router.push({
+                  path:'/bookDetail',
+                  query: {
+                    productCode: code
+                  }
+                })
+                break
+              case '2':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    // typeId 单独只有音频或视频时需传的参数 typeId：4-音频 3-视频
+                    typeId: 4,
+                    hasBuy: 1
+                  }
+                })
+                break
+              case '3':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    typeId: 3,
+                    hasBuy: 1
+                  }
+                })
+                break
+            }
+          }
+
+        },
 
         /*订单数据计算*/    
         // 计算小计与合计
@@ -202,6 +279,14 @@ export default {
             }
         },
 
+        // 关闭扫码弹框
+        closePayModel(){
+
+            this.payModel = false ;
+            this.alipayUrl = ''
+
+        },
+
         /**数据**/
         // 获取订单详情商品数据
         // param orderCode string 订单编号
@@ -252,6 +337,7 @@ export default {
                                 price: data[i].productPrice,
                                 num: data[i].productCount,
                                 productTitle: data[i].productInfo.productTitle,
+                                productProperty: data[i].productInfo.productProperty,
                                 describe:data[i].productInfo.productDesc,
                                 imgSrc: data[i].productInfo.productProfileUrl
                             })
@@ -266,6 +352,7 @@ export default {
                                 price: data[i].productPrice,
                                 num: data[i].productCount,
                                 productTitle: data[i].productInfo.productTitle,
+                                productProperty: data[i].productInfo.productProperty,
                                 describe:data[i].productInfo.productDesc,
                                 imgSrc: data[i].productInfo.productProfileUrl
                             })
@@ -325,6 +412,11 @@ export default {
         // 阿里支付
         aliPayRequest(){
 
+            this.$Spin.show();
+
+            // 先去除定时器
+            clearInterval(this.payTimer);
+
             let param = this.$Qs.stringify({ 
                 'orderCode': this.$route.query.orderCode , 
                 'ciCode': this.userData.cicode , 
@@ -337,11 +429,15 @@ export default {
             .then( (res) => {
 
                 console.log(res)
+                this.$Spin.hide();
 
                 if(res.data.code == 200){
-
-                    location.href = res.data.content;
-                    // this.createQrcode(res.data.content)
+                    
+                    this.alipayUrl = res.data.content;
+                    this.payModel = true;
+                    this.payType = '请用支付宝进行支付';
+            
+                    this.payTimer = setInterval(this.getOrderState, 3000);
 
                 }else{
 
@@ -402,6 +498,30 @@ export default {
                 }
 
             })
+        },
+        // 查询订单状态
+        getOrderState(){
+
+            this.$api.getOrderInfo( this.$Qs.stringify({ 'orderCode': this.$route.query.orderCode })  )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    if(res.data.content.orderStatus == '1'){
+                        this.$router.push({ path: '/personCenter/myOrder', query: { orderState: 1}})
+                    }
+
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+            })
+
         },
         // 生成二维码
         createQrcode(value){

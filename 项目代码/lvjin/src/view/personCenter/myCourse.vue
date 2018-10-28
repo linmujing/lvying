@@ -10,7 +10,7 @@
          <!-- 课程列表 -->
         <div class="list_box padding_left_20 padding_top_30">
             <ul class="list">
-                <li  v-for="(items, index) in courseList" :key="index"  @click="goDetail(items.productCode,items.productProperty)">
+                <li  v-for="(items, index) in courseList" :key="index"  @click="goDetail(items.productCode,items.type)">
                     <Col :span="8">
                         <div class="item">
                             <p class="item_img">
@@ -20,7 +20,7 @@
                                 <p class="title text_ellipsis" :title="items.title">{{items.title}}</p>
                                 <Row>
                                     <Col :span="12">
-                                        <div class="text_left text_ellipsis">{{items.source}}</div>
+                                        <div class="text_left text_ellipsis">{{items.source}} &nbsp;</div>
                                     </Col>
                                     <Col :span="12">
                                         <div class="text_right">
@@ -66,17 +66,8 @@ export default {
                 current: 1
             },
 
-
             // 课程列表
-            courseList1:[
-                // {
-                //     title: '法律动态管控一级',
-                //     type: '0',
-                //     source: '法院大讲堂',
-                //     imgSrc: require('../../assets/images/image/my_course_01.png'),
-                //     id: '1'
-                // }
-            ],
+            courseList1:[],
 
         }
 
@@ -84,11 +75,14 @@ export default {
     methods: {
 
         /*点击打开详情*/
-        //@param code 商品编号，attr 商品属性1-实物，2-音频 3-视频 4-文档 包含多个使用逗号链接
+        //@param code 商品编号
+        //@param attr 商品属性1-实物，2-音频 3-视频 4-文档 包含多个使用逗号链接
         goDetail(code, attr){
-          var arr = attr.split(',')
+            console.log(attr)
+          var arr = attr;
+          if(attr.indexOf(',') != -1){ attr = attr.split(',') }
           // 包含多个跳转到动态管控详情页
-          if(arr.length > 1){
+          if(arr.length > 1 || arr == '4'){
             this.$router.push({
               path:'/industryDynamicDetail',
               query: {
@@ -133,6 +127,7 @@ export default {
           }
 
         },
+
         // 获取我的课程
         getMyCourse(){
 
@@ -149,7 +144,7 @@ export default {
 
                 if(res.data.code == 200){
 
-                    let  data = res.data.content.list, arr= [];
+                    let  data = res.data.content.list, arr= [], codeStr = '';
                     this.pageData.total = res.data.content.count;
 
                     for(let item of data){
@@ -160,10 +155,13 @@ export default {
                             source: item.merchantNm,
                             imgSrc: item.productProfileUrl,
                         })
+                        codeStr += codeStr = '' ? item.productCode : ',' + item.productCode;
                     }
 
                     this.courseList = arr;
                     console.log(arr)
+                    // 获取多个产品数据
+                    this.getProductCartData(codeStr);
 
                     this.$Spin.hide();
 
@@ -178,6 +176,42 @@ export default {
                 this.$Message.warning('加载失败,请刷新重试!');
                 console.log('发生错误！', error);
               });
+        },
+        // 获取多个产品数据
+        getProductCartData(productCode){        
+
+            this.$api.getProductShowCase( this.$Qs.stringify({ 'productCode': productCode }) )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    let Data = res.data.content ;
+
+                    for(let lists of Data){
+                        for(let items of this.courseList){
+                            if(lists.productCode == items.productCode){
+                                items.type = lists.productProperty ;
+                            }
+                        }
+                    }
+
+                }else{
+
+                    this.$Message.warning(res.data.message);
+
+                }
+
+            })
+            .catch((error) => {
+
+                this.$Spin.hide();
+                console.log('发生错误！', error);
+
+            });
+
         },
         /**分页**/
         //@param value 返回当前页码

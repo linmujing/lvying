@@ -38,7 +38,7 @@
                                         <Col span="5">
                                             <el-checkbox v-model="item.state" @click.prevent.native="checkboxChange(index1, index2)" >
                                             </el-checkbox>
-                                            <span class="item_list_img">
+                                            <span class="item_list_img pointer" @click="goDetail(item.productCode, item.productProperty)">
                                                 <img :src="item.imgSrc">
                                             </span>
                                         </Col>
@@ -47,7 +47,7 @@
                                                 <Col span="6"></Col>
                                                 <Col span="18">
                                                     <div class="item_list_describe">
-                                                        <p > {{item.productTitle}} <br/> <span v-html="item.describe"></span></p>
+                                                        <p > {{item.productTitle}} </span></p>
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -86,7 +86,7 @@
                                     <li class="padding_left_14" v-for="(child, index3) in item.items" :key="index3">
                                         <Row>
                                             <Col span="5">
-                                                <span class="item_list_img" style="padding-left:16px;">
+                                                <span class="item_list_img pointer" style="padding-left:16px;" @click="goDetail(child.productCode, child.productProperty)">
                                                     <img :src="child.imgSrc">
                                                 </span>
                                             </Col>
@@ -95,7 +95,7 @@
                                                     <Col span="6"></Col>
                                                     <Col span="18">
                                                         <div class="item_list_describe">
-                                                            <p > {{child.productTitle}} <br/> <span v-html="child.describe"></span></p>
+                                                            <p > {{child.productTitle}} </span></p>
                                                         </div>
                                                     </Col>
                                                 </Row>
@@ -508,6 +508,60 @@ export default {
 
         },
 
+         /*点击打开详情*/
+        // @param code 商品编号
+        // @param attr 商品属性1-实物，2-音频 3-视频 4-文档 包含多个使用逗号链接
+        goDetail(code, attr){
+          console.log(attr)
+          var arr = attr;
+          if(attr.indexOf(',') != -1){ attr = attr.split(',') }
+          // 包含多个跳转到动态管控详情页
+          if(arr.length > 1  || arr == '4'){
+            this.$router.push({
+              path:'/industryDynamicDetail',
+              query: {
+                productCode: code,
+                // hasBuy 购买后跳转过去的状态
+                hasBuy: 1
+              }
+            })
+          }else {
+            // 1-实物，2-音频 3-视频
+            switch (attr) {
+              case '1':
+                this.$router.push({
+                  path:'/bookDetail',
+                  query: {
+                    productCode: code
+                  }
+                })
+                break
+              case '2':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    // typeId 单独只有音频或视频时需传的参数 typeId：4-音频 3-视频
+                    typeId: 4,
+                    hasBuy: 1
+                  }
+                })
+                break
+              case '3':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    typeId: 3,
+                    hasBuy: 1
+                  }
+                })
+                break
+            }
+          }
+
+        },
+
         // 去结算页面
         goBuy(){
 
@@ -610,6 +664,7 @@ export default {
                                     price: data[i].productInfo.productPrice,
                                     num: 1,//data[i].productInfo.productNum,
                                     productTitle: data[i].productInfo.productTitle,
+                                    productType:  data[i].productInfo.productType,
                                     describe: data[i].productInfo.productDesc,
                                     imgSrc: data[i].productInfo.productProfileUrl
                                 })
@@ -624,6 +679,7 @@ export default {
                                     price: data[i].productInfo.productPrice,
                                     num: 1 ,//data[i].productCount,
                                     productTitle: data[i].productInfo.productTitle,
+                                    productProperty :  data[i].productInfo.productProperty ,
                                     describe: data[i].productInfo.productDesc,
                                     imgSrc: data[i].productInfo.productProfileUrl
                                 })
@@ -729,6 +785,7 @@ export default {
                                         price: child.productPrice,
                                         num: 1, //child.productNum,
                                         productTitle: child.productTitle,
+                                        productProperty : child.productProperty ,
                                         describe: child.productDesc,
                                         imgSrc: child.productProfileUrl
                                     })
@@ -741,6 +798,7 @@ export default {
                                         price: child.productPrice,
                                         num: 1,//child.productNum,
                                         productTitle: child.productTitle,
+                                        productProperty : child.productProperty ,
                                         describe: child.productDesc,
                                         imgSrc: child.productProfileUrl
                                     })

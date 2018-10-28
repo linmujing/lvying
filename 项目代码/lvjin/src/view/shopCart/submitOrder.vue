@@ -100,7 +100,7 @@
                                 <li class="padding_left_14" v-for="(item, index2) in items.items" :key="index2" v-bind:class="[ submitType ? '':'active']">
                                     <Row>
                                         <Col span="4">
-                                            <span class="item_list_img">
+                                            <span class="item_list_img pointer" @click="goDetail(item.productCode, item.productProperty)">
                                                 <img :src="item.imgSrc">
                                             </span>
                                         </Col>
@@ -109,7 +109,6 @@
                                                 <Col span="24">
                                                     <div class="item_list_describe">
                                                         <p>{{item.productTitle}}</p>
-                                                        <p v-html="item.describe"></p>
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -150,7 +149,7 @@
                                 <li class="padding_left_14" v-for="(item, index3) in items.items" :key="index3" v-bind:class="[ submitType ? '':'active']">
                                     <Row>
                                         <Col span="4">
-                                            <span class="item_list_img">
+                                            <span class="item_list_img pointer" @click="goDetail(item.productCode, item.productProperty)">
                                                 <img :src="item.imgSrc">
                                             </span>
                                         </Col>
@@ -424,6 +423,60 @@ export default {
             this.addAddressData();
 
         },
+
+        /*点击打开详情*/
+        //@param code 商品编号
+        //@param attr 商品属性1-实物，2-音频 3-视频 4-文档 包含多个使用逗号链接
+        goDetail(code, attr){
+            console.log(attr)
+          var arr = attr;
+          if(attr.indexOf(',') != -1){ attr = attr.split(',') }
+          // 包含多个跳转到动态管控详情页
+          if(arr.length > 1  || arr == '4'){
+            this.$router.push({
+              path:'/industryDynamicDetail',
+              query: {
+                productCode: code,
+                // hasBuy 购买后跳转过去的状态
+                hasBuy: 1
+              }
+            })
+          }else {
+            // 1-实物，2-音频 3-视频
+            switch (attr) {
+              case '1':
+                this.$router.push({
+                  path:'/bookDetail',
+                  query: {
+                    productCode: code
+                  }
+                })
+                break
+              case '2':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    // typeId 单独只有音频或视频时需传的参数 typeId：4-音频 3-视频
+                    typeId: 4,
+                    hasBuy: 1
+                  }
+                })
+                break
+              case '3':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    typeId: 3,
+                    hasBuy: 1
+                  }
+                })
+                break
+            }
+          }
+
+        },
         //  编辑打开地址
         aditAddressItem(){
 
@@ -595,6 +648,7 @@ export default {
                             num:  cartNun,
                             name: data.productName,
                             describe: data.productDesc,
+                            productProperty :  data.productProperty ,
                             imgSrc: data.productProfileUrl
                         })
 
@@ -696,6 +750,7 @@ export default {
                                 num: cartNun[i], //child.productNum,
                                 productTitle: child.productTitle,
                                 describe: child.productDesc,
+                                productProperty : child.productProperty ,
                                 imgSrc: child.productProfileUrl
                             })
 
@@ -708,6 +763,7 @@ export default {
                                 num: cartNun[i],//child.productNum,
                                 productTitle: child.productTitle,
                                 describe: child.productDesc,
+                                productProperty : child.productProperty ,
                                 imgSrc: child.productProfileUrl
                             })
 
@@ -720,7 +776,7 @@ export default {
                    
                 }else{
 
-                    this.$Spin.show();
+                    this.$Spin.hide();
 
                     this.$Message.warning(res.data.message);
 
@@ -784,6 +840,7 @@ export default {
                                         num: 1, //child.productNum,
                                         productTitle: child.productTitle,
                                         describe: child.productDesc,
+                                        productProperty : child.productProperty ,
                                         imgSrc: child.productProfileUrl
                                     })
 
@@ -796,6 +853,7 @@ export default {
                                         num: 1,//child.productNum,
                                         productTitle: child.productTitle,
                                         describe: child.productDesc,
+                                        productProperty : child.productProperty ,
                                         imgSrc: child.productProfileUrl
                                     })
 

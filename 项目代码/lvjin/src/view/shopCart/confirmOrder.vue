@@ -3,31 +3,6 @@
     <div class="bg_f5 padding_top_30 padding_bottom_80" >
         <div class="box_center_1200" >
 
-            <!-- 订单地址 #submitType#-->
-            <div class="order_address" v-if="false" >
-
-                <!-- 地址列表 -->
-                <div class="address_box">
-                    <Row>
-                        <Col span="3"><span class="block_center address_box_title">收件人信息：</span></Col>
-                        <Col span="21">
-                            <div style="display:inline-block;position:relative;">
-                                <ul class="address_box_list">
-                                    <li v-for="(items, index1) in addressData.addressList" :key="index1">
-                                        <Row class="address_li_top">
-                                            <Col span="12"><div class="text_ellipsis">{{items.name}}</div> </Col>
-                                            <Col span="12" class="text_right"><span >{{items.phone}}</span></Col>
-                                        </Row>
-                                        <p class="twoline_ellipsis">{{items.province +" " + items.city +" " + items.county +" " + items.addressDetail}}</p>
-                                        
-                                    </li>
-                                </ul>
-                            </div>
-                        </Col>
-                    </Row>
-                </div>
-            </div>
-
             <!-- 订单部分 -->
             <div class="shopping_cart_container" style="position:relative;">
                 <div class="list_box" >
@@ -52,7 +27,7 @@
                                 <li class="padding_left_14" v-for="(item, index2) in items.items" :key="index2" v-bind:class="[ submitType ? '':'active']">
                                     <Row>
                                         <Col span="4">
-                                            <span class="item_list_img">
+                                            <span class="item_list_img pointer" @click="goDetail(item.productCode, item.productProperty)">
                                                 <img :src="item.imgSrc">
                                             </span>
                                         </Col>
@@ -115,7 +90,7 @@
 
             <!-- 提交订单块 -->
             <div class="sumbit_block">
-                <div class="padding_right_24 font_18">实付金额：<b class="">{{cartDate.listTotal}}</b></div>
+                <div class="padding_right_24 font_18">实付金额：<b class=""> ¥ {{cartDate.listTotal}}</b></div>
                 <p class="padding_right_24"><Button shape="circle" type="warning" size="large" @click="submitOrderClick">提交订单</Button></p>
             </div>
 
@@ -147,13 +122,6 @@ export default {
                 cartList: []
             }, 
 
-
-            /*收货地址数据*/
-            addressData:{
-                // 收货地址数据列表
-                addressList:[],
-            },
-
             // 配送方式
             shippingMethods:{
                 value: '快递包邮',
@@ -168,8 +136,8 @@ export default {
 
             // 用户信息
             userData: {
-                ciCode: '',
-                phone: ''
+                ciCode: this.$store.state.userData.cicode,
+                phone:  this.$store.state.userData.ciphone
             },
             
         }
@@ -228,6 +196,60 @@ export default {
             this.$router.push({ path: '/shopGoPay', query: { orderCode: this.$route.query.orderCode} })
             
         }, 
+
+        /*点击打开详情*/
+        //@param code 商品编号
+        //@param attr 商品属性1-实物，2-音频 3-视频 4-文档 包含多个使用逗号链接
+        goDetail(code, attr){
+            console.log(attr)
+          var arr = attr;
+          if(attr.indexOf(',') != -1){ attr = attr.split(',') }
+          // 包含多个跳转到动态管控详情页
+          if(arr.length > 1  || arr == '4'){
+            this.$router.push({
+              path:'/industryDynamicDetail',
+              query: {
+                productCode: code,
+                // hasBuy 购买后跳转过去的状态
+                hasBuy: 1
+              }
+            })
+          }else {
+            // 1-实物，2-音频 3-视频
+            switch (attr) {
+              case '1':
+                this.$router.push({
+                  path:'/bookDetail',
+                  query: {
+                    productCode: code
+                  }
+                })
+                break
+              case '2':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    // typeId 单独只有音频或视频时需传的参数 typeId：4-音频 3-视频
+                    typeId: 4,
+                    hasBuy: 1
+                  }
+                })
+                break
+              case '3':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    typeId: 3,
+                    hasBuy: 1
+                  }
+                })
+                break
+            }
+          }
+
+        },
 
         /**数据**/
         // 获取订单详情商品数据
@@ -384,8 +406,6 @@ export default {
         // 获取选择优惠券后的价格
         getOrderCouponTotal(){
 
-            this.$Spin.show();
-
             let param = this.$Qs.stringify({ 'couponCode': this.Coupon.value, 'orderCode': this.$route.query.orderCode ,'orderAmount': this.cartDate.listTotal }) ;
             console.log(param)
             this.$api.getOrderCouponAmount( param )
@@ -415,10 +435,6 @@ export default {
     },
 
     mounted(){
-
-        // 获取用户信息
-        this.userData.ciCode = this.$store.state.userData.cicode ;
-        this.userData.phone = this.$store.state.userData.ciphone ;
 
         // 获取订单详情
         this.getOrderProduct(this.$route.query.orderCode);
