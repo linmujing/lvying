@@ -110,7 +110,7 @@ export default {
           path:'/videoCourseDetail',
           query: {
             productCode: productCode,
-            typeId: this.typeId
+            typeId: 3
           }
         })
       },
