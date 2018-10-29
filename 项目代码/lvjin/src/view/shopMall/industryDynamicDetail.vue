@@ -10,7 +10,7 @@
         </Col>
         <Col span="12" class="padding_20">
           <div class="font_20 font_weight_bold text_ellipsis">{{dataDetail.productTitle}}</div>
-          <div class="color_999 twoline_ellipsis margin_top_20" v-html="dataDetail.productDesc"></div>
+          <div class="color_999 twoline_ellipsis margin_top_20">{{dataDetail.productKeyWord}}</div>
           <div class="clearfix margin_top_30">
             <div class="float_left">
               <Rate show-text allow-half disabled v-model="valueCustomText">

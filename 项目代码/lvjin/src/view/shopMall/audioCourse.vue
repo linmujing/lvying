@@ -28,7 +28,7 @@
               </div>
               <div class="float_left width_290px height_170 padding_left_25">
                 <p class="font_18 font_weight_bold">{{item.productTitle}}</p>
-                <div class="twoline_ellipsis margin_top_10 color_666" v-html="item.productDesc"></div>
+                <div class="twoline_ellipsis margin_top_10 color_666">{{item.productKeyWord}}</div>
                 <div class="clearfix margin_top_10">
                   <div class="float_left">
                     <span class="font_20 color_title">￥{{item.productPrice}}</span>
@@ -70,7 +70,7 @@
             <div class="float_left font_weight_bold font_18">{{item.productTitle}}</div>
             <div class="float_right color_999 line_height_25px">{{item.saleCount}}人看过</div>
           </div>
-          <div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px" v-html="item.productDesc"></div>
+          <div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px">{{item.productKeyWord}}</div>
           <div class="text_right margin_top_5"><span class="color_title" @click="toDetail(item.productCode)">查看详情》</span></div>
           <div class="margin_top_15 clearfix">
             <div class="pointer float_left">

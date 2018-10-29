@@ -11,7 +11,7 @@
               </div>
               <div class="float_left width_290px height_170 padding_left_25">
                 <p class="font_18 font_weight_bold">{{item.productTitle}}</p>
-                <div class="twoline_ellipsis margin_top_10 color_666" v-html="item.productDesc"></div>
+                <div class="twoline_ellipsis margin_top_10 color_666">{{item.productKeyWord}}</div>
                 <div class="clearfix margin_top_10">
                   <div class="float_left">
                     <span class="font_20 color_title">￥{{item.productPrice}}</span>

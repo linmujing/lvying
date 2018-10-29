@@ -16,7 +16,7 @@
         </Col>
         <Col span="12" class="padding_20">
           <div class="font_20 font_weight_bold text_ellipsis">{{dataDetail.productTitle}}</div>
-          <div class="color_999 twoline_ellipsis margin_top_20" v-html="dataDetail.productDesc"></div>
+          <div class="color_999 twoline_ellipsis margin_top_20">{{dataDetail.productKeyWord}}</div>
           <div class="clearfix margin_top_30">
             <div class="float_left">
               <Rate show-text allow-half disabled v-model="valueCustomText">
@@ -202,7 +202,7 @@
 				          <div class="list_item">
 				            <div class="font_18 font_weight_bold text_ellipsis">{{item.productTitle}}</div>
 				            <div class="margin_top_10 clearfix color_999">
-				              <div class="float_left width_50 text_ellipsis" v-html="item.productDesc"></div>
+				              <div class="float_left width_50 text_ellipsis">{{item.productKeyWord}}</div>
 				              <div class="float_right">{{item.saleCount}}人看过</div>
 				            </div>
 				            <div class="clearfix margin_top_5">

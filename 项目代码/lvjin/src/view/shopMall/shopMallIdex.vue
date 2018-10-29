@@ -105,7 +105,7 @@
 						<div class="float_left font_weight_bold font_18">{{item.productTitle}}</div>
 						<div class="float_right color_999 line_height_25px">{{item.saleCount}}人看过</div>
 					</div>
-					<div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px" v-html="item.productDesc"></div>
+					<div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px">{{item.productKeyWord}}</div>
 					<div class="text_right margin_top_5">
             <span class="color_title pointer" @click="toDetail(item.productCode,1)">查看详情》</span>
           </div>
@@ -137,7 +137,7 @@
 						<div class="float_left videoBox" @click="toDetail(item.productCode,2)"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left width_900px margin_left_20 margin_top_5">
 							<div class="font_weight_bold font_18">{{item.productTitle}}</div>
-              <div class="color_666 text_ellipsis margin_top_10" v-html="item.productDesc"></div>
+              <div class="color_666 text_ellipsis margin_top_10">{{item.productKeyWord}}</div>
 							<div class="clearfix margin_top_10">
 								<div class="float_left">
 									<span class="font_20 color_title">￥{{item.productPrice}}</span>
@@ -174,7 +174,7 @@
                       <img :src="item.productProfileUrl" class="all_width" style="min-height: 280px">
 			            	</div>
 			            	<div class="font_18 text_ellipsis margin_top_20">{{item.productTitle}}</div>
-			            	<div class="color_666 text_ellipsis margin_top_10" v-html="item.productDesc"></div>
+			            	<div class="color_666 text_ellipsis margin_top_10">{{item.productKeyWord}}</div>
 			            	<div class="margin_top_15 clearfix">
                       <p class="pointer float_left">
                         <span class="font_20 color_title">￥{{item.productPrice}}</span>

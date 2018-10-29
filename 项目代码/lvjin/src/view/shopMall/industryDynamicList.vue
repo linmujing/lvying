@@ -46,7 +46,7 @@
           <div class="list_item">
             <div class="font_18 font_weight_bold text_ellipsis">{{item.productTitle}}</div>
             <div class="margin_top_10 clearfix color_999">
-              <div class="float_left width_50 text_ellipsis" v-html="item.productDesc"></div>
+              <div class="float_left width_50 text_ellipsis">{{item.productKeyWord}}</div>
               <div class="float_right">{{item.saleCount}}人看过</div>
             </div>
             <div class="margin_top_15 clearfix">
