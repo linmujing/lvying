@@ -135,7 +135,7 @@ export default {
                 }else{
 
                     this.$Spin.hide()
-                    this.$toast(res.data.message);  
+                    this.$$Message.warning(res.data.message);  
                     
                 }
                 
