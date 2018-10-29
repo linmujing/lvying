@@ -7,7 +7,9 @@
 
 	        		<div>
         				<p class="title">认证状态</p>
-        				<p class="margin_top_30 font_16 padding_100">您好，您所提交的认证信息正在审核中，我们会在1-3个工作日内审核完毕，并将审核结果及时发短信给您，请耐心等待。</p>
+        				<p v-if="SupplierData.merchantStatus == 0" class="margin_top_30 font_16 padding_100">您好，您所提交的认证信息正在审核中，我们会在1-3个工作日内审核完毕，并将审核结果及时发短信给您，请耐心等待。</p>
+                <p v-else-if="SupplierData.merchantStatus == 1" class="margin_top_30 font_16 padding_100">您好，您所提交的认证信息已通过审核</p>
+                <p v-else-if="SupplierData.merchantStatus == 2" class="margin_top_30 font_16 padding_100">您好，您所提交的认证信息审核失败</p>
         			</div>
         			<div class="margin_top_50">
         				<p class="title">已提交的认证信息</p>
