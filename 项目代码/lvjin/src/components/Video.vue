@@ -24,49 +24,73 @@
       </video-player>
     </div>
 
+    <div style="position:absolute;width:">
+
+        <!-- 开关 -->
+        <span class="video_control_icon"
+            @click="onPlayerPause"
+            v-show="!videoControl.videoOff">
+            <span class="vjs-icon-pause"></span>
+        </span>
+
+        <span class="video_control_icon"
+            @click="onPlayerPlay"
+            v-show="videoControl.videoOff">
+            <span class="vjs-icon-play"></span>
+        </span>
+
+    </div>
+
     <!-- 视频控制器 -->
     <div class="video_control text_center" v-show="videoControl.isShow">
         <Row>
             <Col span="3">
-                <!-- 上一个 -->
-                <span class="video_control_icon" @click="previousClick">
-                    <span class="vjs-icon-previous-item"></span>
-                </span>
-                <!-- 开关 -->
-                <span class="video_control_icon"
-                    style="padding:0 10px;"
-                    @click="onPlayerPause"
-                    v-show="!videoControl.videoOff">
-                    <span class="vjs-icon-pause"></span>
-                </span>
-                <span class="video_control_icon"
-                    style="padding:0 10px;"
-                    @click="onPlayerPlay"
-                    v-show="videoControl.videoOff">
-                    <span class="vjs-icon-play"></span>
-                </span>
-                <!-- 下一个 -->
-                <span class="video_control_icon" @click="nextClick">
-                    <span class="vjs-icon-next-item"></span>
-                </span>
-
+                <Row>
+                    <Col span="8">
+                        <!-- 上一个 -->
+                        <span class="video_control_icon" @click="previousClick">
+                            <span class="vjs-icon-previous-item"></span>
+                        </span>
+                    </Col>
+                    <Col span="8">
+                    <!-- 开关 -->
+                        <span class="video_control_icon"
+                            @click="onPlayerPause"
+                            v-show="!videoControl.videoOff">
+                            <span class="vjs-icon-pause"></span>
+                        </span>
+                    </Col>
+                    <Col span="8">
+                        <span class="video_control_icon"
+                            @click="onPlayerPlay"
+                            v-show="videoControl.videoOff">
+                            <span class="vjs-icon-play"></span>
+                        </span>
+                    </Col>
+                    <Col span="8">
+                        <!-- 下一个 -->
+                        <span class="video_control_icon" @click="nextClick">
+                            <span class="vjs-icon-next-item"></span>
+                        </span>
+                    </Col>
+                </Row>
             </Col>
             <!-- 时间 -->
             <Col span="3">
                 <span> {{videoControl.timeDivider}} / {{videoControl.timeDuration}} </span>
             </Col>
             <!-- 时间进度条 -->
-            <Col span="12">
+            <Col span="14">
 
 
-                <div style="padding-top:2px;">
+                <div style="padding:0 5%;position:relative;top:2px;">
                     <Slider v-model="videoControl.timeProgress"
                         @on-change="getTimeChange" :tip-format="setTimeTip">
                     </Slider>
                </div>
             </Col>
             <!-- 音量 -->
-            <Col span="3">
+            <Col span="1">
                 <div style="text-align:right;">
                     <span class="video_control_icon" @click="videoControl.volume == 0 ?  videoControl.volume = 50 : videoControl.volume = 0">
                         <span class="vjs-icon-volume-mute"  v-show="videoControl.volume == 0"></span>
@@ -95,12 +119,14 @@
     <div class="video_menu" :class="[videoMenu.Off ? 'video_menu_active' : '']"
         v-show="videoControl.isShow">
 
-        <!-- 侧边栏开关 -->
-        <div class="video_menu_btn video_menu_off" @click="videoMenu.Off = false" v-show="videoMenu.Off">
-           <span><Icon type="md-reorder" size="26" /></span>
-        </div>
-        <div class="video_menu_btn video_menu_close" @click="videoMenu.Off = true" v-show="!videoMenu.Off">
-            <span style="position:absolute;left:-5px;top:45%;"><Icon type="ios-arrow-forward" size="22"  /></span>
+        <div v-if="videoControl.fullScreen">
+            <!-- 侧边栏开关 -->
+            <div class="video_menu_btn video_menu_off" @click="videoMenu.Off = false" v-show="videoMenu.Off">
+            <span><Icon type="md-reorder" size="26" /></span>
+            </div>
+            <div class="video_menu_btn video_menu_close" @click="videoMenu.Off = true" v-show="!videoMenu.Off">
+                <span style="position:absolute;left:-5px;top:45%;"><Icon type="ios-arrow-forward" size="22"  /></span>
+            </div>
         </div>
 
         <!-- 视频内容列表 -->
@@ -193,87 +219,7 @@ export default {
               Off: true,
               lists: []
             },
-            // videoMenu:{
-            //     Off: true,
-            //     lists:[
-            //         {
-            //             title: '大章节',
-            //             items:[
-            //                 {
-            //                     text: '01 小章节列表',
-            //                     isActive: false,
-            //                     videoSource:[
-            //                         {
-            //                             type: "video/mp4",
-            //                             // mp4
-            //                             src: "http://221.228.226.23/11/t/j/v/b/tjvbwspwhqdmgouolposcsfafpedmb/sh.yinyuetai.com/691201536EE4912BF7E4F1E2C67B8119.mp4"
-            //                         },
-            //                     ]
-            //                 },
-            //                 {
-            //                     text: '02 小章节列表',
-            //                     isActive: false,
-            //                     videoSource:[
-            //                         {
-            //                             type: "video/mp4",
-            //                             // mp4
-            //                             src: "http://221.228.226.5/14/z/w/y/y/zwyyobhyqvmwslabxyoaixvyubmekc/sh.yinyuetai.com/4599015ED06F94848EBF877EAAE13886.mp4"
-            //                         },
-            //                     ]
-            //                 },
-            //                 {
-            //                     text: '03 小章节列表',
-            //                     isActive: false,
-            //                     videoSource:[
-            //                         {
-            //                             type: "video/mp4",
-            //                             // mp4
-            //                             src: "http://221.228.226.5/15/t/s/h/v/tshvhsxwkbjlipfohhamjkraxuknsc/sh.yinyuetai.com/88DC015DB03C829C2126EEBBB5A887CB.mp4"
-            //                         }
-            //                     ]
-            //                 },
-            //             ]
-            //         },
-            //         {
-            //             title: '大章节',
-            //             items:[
-            //                 {
-            //                     text: '01 小章节列表',
-            //                     isActive: false,
-            //                     videoSource:[
-            //                         {
-            //                             type: "video/mp4",
-            //                             // mp4
-            //                             src: "http://221.228.226.23/11/t/j/v/b/tjvbwspwhqdmgouolposcsfafpedmb/sh.yinyuetai.com/691201536EE4912BF7E4F1E2C67B8119.mp4"
-            //                         },
-            //                     ]
-            //                 },
-            //                 {
-            //                     text: '02 小章节列表',
-            //                     isActive: false,
-            //                     videoSource:[
-            //                         {
-            //                             type: "video/mp4",
-            //                             // mp4
-            //                             src: "http://221.228.226.5/14/z/w/y/y/zwyyobhyqvmwslabxyoaixvyubmekc/sh.yinyuetai.com/4599015ED06F94848EBF877EAAE13886.mp4"
-            //                         },
-            //                     ]
-            //                 },
-            //                 {
-            //                     text: '03 小章节列表',
-            //                     isActive: false,
-            //                     videoSource:[
-            //                         {
-            //                             type: "video/mp4",
-            //                             // mp4
-            //                             src: "http://221.228.226.5/15/t/s/h/v/tshvhsxwkbjlipfohhamjkraxuknsc/sh.yinyuetai.com/88DC015DB03C829C2126EEBBB5A887CB.mp4"
-            //                         }
-            //                     ]
-            //                 },
-            //             ]
-            //         }
-            //     ]
-            // },
+        
             curIndex: 0
         };
     },
@@ -500,7 +446,7 @@ export default {
 
                 let timer = null;
 
-                timer = setTimeout(()=>{this.videoControl.isShow = false;},5000)
+                timer = setTimeout(()=>{this.videoControl.isShow = false;},10000)
 
             }
 
@@ -577,25 +523,6 @@ export default {
         //@param index 大列表下标
         //@param index2 小列表下标
         changeItem(index){
-            // let data = this.videoMenu.lists;
-            //
-            // for(let i = 0 ; i < data.length; i++){
-            //
-            //     for(let x = 0; x < data[i].items.length; x++){
-            //
-            //         if(data[i].items[x].isActive){
-            //
-            //             this.videoMenu.lists[i].items[x].isActive = false;
-            //
-            //         }
-            //     }
-            //
-            // }
-
-            // this.videoMenu.lists[index].items[index2].isActive = true;
-
-            // 压入视频
-            // this.playerOptions.sources = this.videoMenu.lists[index].items[index2].videoSource;
           this.curIndex = index
           if(this.videoMenu.lists.length > 1){
             // 压入视频
@@ -658,9 +585,23 @@ export default {
     }
     .ivu-slider-wrap {
         background-color: #ccc;
+        height:2px;
     }
     .ivu-slider-bar{
         background: #059E7F;
+        height: 2px;
+        border-radius: 2px;
+    }
+    .ivu-slider-button{
+        width: 8px;
+        height: 8px;
+    }
+    .ivu-slider-button-wrap{
+        top: -6px;
+    }
+    .vjs-custom-skin > .video-js .vjs-big-play-button {
+        font-size: 2em;
+        line-height: 1.9em !important;
     }
     .video-js .vjs-big-play-button{
       /*
@@ -672,6 +613,7 @@ export default {
       border-radius: 1em;
       outline: none;
     }
+
 </style>
 <style scoped lang='less'>
 
@@ -714,9 +656,10 @@ export default {
         line-height: 40px;
         background:#1E242C;
         color: #ccc;
-        border-top:2px solid #585858;
+        border-top:1px solid #585858;
         transition: 0.5s;
         z-index: 999;
+        font-size: 10px;
       .prgress_box{
         .progress_wrap{
           width:100%;
@@ -739,7 +682,7 @@ export default {
       }
         .video_control_icon{
             cursor: pointer;
-            font-size: 24px;
+            font-size: 20px;
 
         }
         .video_control_icon:hover{
@@ -753,7 +696,7 @@ export default {
         position: absolute;
         top:0;
         right:0;
-        width:232px;
+        width:30%;
         height:100%;
         background:#1E242C;
         transition: 0.5s;
@@ -763,7 +706,7 @@ export default {
         .video_menu_btn{
             position: absolute;
             top:45%;
-            left:-44px;
+            left:-26px;
             width:26px;
             height:26px;
             background:#1E242C;
@@ -820,7 +763,7 @@ export default {
         }
     }
     .video_menu.video_menu_active{
-        right:-251px;
+        right:-30%;
     }
 
 

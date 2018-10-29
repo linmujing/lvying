@@ -175,6 +175,7 @@ export default {
 
             //购物车数据列表大列表
             cartList:[] ,
+            cartList:[] ,
             // 购物车删除多个商品存值
             cartId:'',
 
@@ -809,6 +810,7 @@ export default {
                             console.log(arr2)
 
                             CartList[i].items = arr2;
+                            
 
                         }else{
 

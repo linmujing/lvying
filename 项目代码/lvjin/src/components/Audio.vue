@@ -211,7 +211,9 @@ export default {
         },
         // 时间进度
         getTimeChange(e){
-
+            
+            this.audioControl.timeProgress = e;
+            
             let current =  parseInt(e / 100  * this.audioControl.timesecond);
 
             this.$refs.audio.currentTime = current;
@@ -288,9 +290,19 @@ export default {
     }
     .ivu-slider-wrap {
         background-color: #ccc;
+        height:2px;
     }
     .ivu-slider-bar{
         background: #059E7F;
+        height: 2px;
+        border-radius: 2px;
+    }
+    .ivu-slider-button{
+        width: 8px;
+        height: 8px;
+    }
+    .ivu-slider-button-wrap{
+        top: -8px;
     }
     .ivu-slider-wrap {
         margin: 10px 0;

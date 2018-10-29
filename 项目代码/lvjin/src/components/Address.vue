@@ -9,24 +9,31 @@
             </li>
             <!-- 地址列表 -->
             <li v-for="(items, index1) in addressList" :key="index1">
-                <div>
-                    姓名：<span  style="margin-right:100px;">{{items.name}}</span>电话：<span  >{{items.phone}}</span>
-                </div>
-                <div>
-                    地址：<span >{{items.province +" " + items.city +" " + items.county +" " + items.addressDetail  }}</span><br/>
-                </div>
-                <div class="text_right" style="width:100%">
+                <Row>
+                    <Col span="19">
+                        <div>
+                            姓名：<span  style="margin-right:100px;">{{items.name}}</span>电话：<span  >{{items.phone}}</span>
+                        </div>
+                        <div>
+                            地址：<span >{{items.province +" " + items.city +" " + items.county +" " + items.addressDetail  }}</span><br/>
+                        </div>  
+                    </Col>
+                    <Col span="5">
+                        <div class="text_right" style="padding-top:60px;">
+                            <div class="float_left" style="position:relative;" >
+                                <div style="width:100%;height:100%;position:absolute;left:0top:0;z-index:10;" v-show="items.isDefalut" ></div>
+                                <Checkbox v-model="items.isDefalut" label="设置默认地址" v-show="false"> 设置默认地址 </Checkbox>
+                            </div>
+                            <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0"
+                                @click="aditAddressItem(index1)" >编辑</Button>
+                            <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0;color:red;"
+                                @click="deleteAddress(index1)" >删除</Button>
+                            
+                        </div>
+                    </Col>
+                </Row>
 
-                    <div class="float_left" style="position:relative;" >
-                        <div style="width:100%;height:100%;position:absolute;left:0top:0;z-index:10;" v-show="items.isDefalut" ></div>
-                        <Checkbox v-model="items.isDefalut" label="设置默认地址" v-show="false"> 设置默认地址 </Checkbox>
-                    </div>
-                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0"
-                        @click="aditAddressItem(index1)" >编辑</Button>
-                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0;color:red;"
-                        @click="deleteAddress(index1)" >删除</Button>
-                    
-                </div>
+
                 <span class="choose_address" v-if="addressState == 1"> 
                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:20px;padding:0" @click="chooseAddressItem(index1)" >选择</Button>
                 </span>
@@ -39,7 +46,7 @@
         <!-- 订单添加地址弹框 -->
         <Modal v-model="addressData.addressModelValue" width="680" footer-hide >
             <p slot="header" style="background:#f8f8f8;">
-                <span class="font_18" style="font-weight:400;" >新增收货地址</span>
+                <span class="font_18" style="font-weight:400;" >编辑收货地址</span>
             </p>
             <!-- 地址信息输入框 -->
             <div>
@@ -66,7 +73,7 @@
                 </div>
                 <div class="input_box" >
                     <span class="input_box_span" >详细地址：</span>
-                    <Input v-model.trim="addressData.addressModelData.addressDetail"  size="large" clearable style="width: 480px" />
+                    <Input v-model.trim="addressData.addressModelData.addressDetail"  size="large" clearable style="width: 480px" :maxlength="100"/>
                 </div>
                 <div class="input_box" v-show="false">
                     <span class="input_box_span" >默认地址：</span>
