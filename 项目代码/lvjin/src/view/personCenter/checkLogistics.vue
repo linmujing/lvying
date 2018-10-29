@@ -130,11 +130,11 @@ export default {
                         imgSrc: data.productProfileUrl
                     }
                     
-                    this.$toast.clear();
+                    this.$Spin.hide();
 
                 }else{
 
-                    this.$toast.clear()
+                    this.$Spin.hide()
                     this.$toast(res.data.message);  
                     
                 }
@@ -143,7 +143,7 @@ export default {
             })
             .catch((error) => {
 
-                this.$toast.clear();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });

@@ -101,8 +101,11 @@
                     <span class="font_18" style="font-weight:400;">扫码支付</span>
                 </p>
                 <div style="width:648px;height:270px;position:relative;">
-                    <div style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;">
+                    <div v-show="alipay" style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;">
                         <iframe :src="alipayUrl" width="250" height="250" frameborder="0" scrolling="auto"></iframe>
+                    </div>
+                    <div v-show="wxpay" style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;">
+                        <div id="qrcode" style="width:250px;height:250px;"></div>
                     </div>
                 </div>
                 <div class="text_center font_14">
@@ -111,7 +114,7 @@
             </Modal>
 
 
-            <div id="qrcode" style="width:100px;height:100px;"></div>
+           
         </div>
     </div>
 </template>
@@ -155,7 +158,13 @@ export default {
             // 支付提示
             payType: '',
             // 订单轮询定时器
-            payTimer: null,
+            payTimer: true,
+            // 二维码盒子
+            codeBox: null,
+
+            // 二维码显示隐藏
+            alipay: 'false',
+            wxpay: 'false',
 
             /*个人信息*/
             userData: {
@@ -283,7 +292,8 @@ export default {
         closePayModel(){
 
             this.payModel = false ;
-            this.alipayUrl = ''
+            this.alipay = false;
+            this.wxpay = false;
 
         },
 
@@ -414,14 +424,11 @@ export default {
 
             this.$Spin.show();
 
-            // 先去除定时器
-            clearInterval(this.payTimer);
-
             let param = this.$Qs.stringify({ 
                 'orderCode': this.$route.query.orderCode , 
                 'ciCode': this.userData.cicode , 
-                'truePayMoney': this.cartDate.listTotal, 
-                'payCommet': ''
+                'truePayMoney': '0.01', //this.cartDate.listTotal,
+                'payCommet': '支付备注'
              }) ;
 
             this.$api.aliPayRequest( param )
@@ -433,28 +440,37 @@ export default {
 
                 if(res.data.code == 200){
                     
-                    this.alipayUrl = res.data.content;
+                    this.alipay = true;
                     this.payModel = true;
                     this.payType = '请用支付宝进行支付';
+
+                    this.alipayUrl = res.data.content;
             
-                    this.payTimer = setInterval(this.getOrderState, 3000);
+                    this.payTimer ?  setInterval(this.getOrderState, 3000) : '';
 
                 }else{
-
                     this.$Message.warning(res.data.message);
 
                 }
 
             })
+            .catch((error) => {
+
+                this.$Spin.hide();
+                console.log('发生错误！', error);
+
+            });
         },
         // 微信支付
         wxPayRequest(){
 
+            this.$Spin.show();
+
             let param = this.$Qs.stringify({ 
                 'orderCode': this.$route.query.orderCode , 
                 'ciCode': this.userData.cicode , 
-                'truePayMoney': this.cartDate.listTotal, 
-                'payCommet': ''
+                'truePayMoney': '0.01', //this.cartDate.listTotal,
+                'payCommet': '支付备注'
                 }) ;
 
             this.$api.appPerPay( param )
@@ -462,10 +478,21 @@ export default {
             .then( (res) => {
 
                 console.log(res)
+                this.$Spin.hide();
 
-                if(res.data.code == 200){
+                if(res.data.code == 1){
 
-                    this.wxPayback();
+                    this.wxpay = true;
+                    this.payModel = true;
+                    this.payType = '请用微信进行支付';
+
+                    if(this.codeBox != null){
+                        $(qrcode).html('')
+                    }
+
+                    this.createQrcode(res.data.content.codeUrl);
+                    
+                    this.payTimer ?  setInterval(this.getOrderState, 3000) : '';
 
                 }else{
 
@@ -474,6 +501,12 @@ export default {
                 }
 
             })
+            .catch((error) => {
+
+                this.$Spin.hide();
+                console.log('发生错误！', error);
+
+            });
         },
         // 微信回调
         wxPayback(){
@@ -502,6 +535,8 @@ export default {
         // 查询订单状态
         getOrderState(){
 
+            this.payTimer = false;
+
             this.$api.getOrderInfo( this.$Qs.stringify({ 'orderCode': this.$route.query.orderCode })  )
 
             .then( (res) => {
@@ -511,6 +546,7 @@ export default {
                 if(res.data.code == 200){
 
                     if(res.data.content.orderStatus == '1'){
+                        this.$store.state.personCenter.navIndex = 3;
                         this.$router.push({ path: '/personCenter/myOrder', query: { orderState: 1}})
                     }
 
@@ -526,9 +562,9 @@ export default {
         // 生成二维码
         createQrcode(value){
 
-            new QRCode('qrcode', {
-                width: 100,
-                height: 100, // 高度
+            this.codeBox = new QRCode('qrcode', {
+                width: 250,
+                height: 250, // 高度
                 text: value,
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
                 // background: '#f0f'
@@ -547,7 +583,21 @@ export default {
     
 }
 </script>
-
+<style >
+     .ivu-modal .ivu-modal-header {
+        border-bottom:0;
+        padding: 10px 16px;
+        height:60px;
+        line-height: 50px;
+        background: #f8f8f8;
+    }  
+    .ivu-modal .ivu-modal-content{
+        border-radius: 0;
+    }
+    .ivu-modal-close .ivu-icon-ios-close{
+        top:5px;
+    } 
+</style>
 <style scoped lang='less'>
 
     //引入订单共用less文件
