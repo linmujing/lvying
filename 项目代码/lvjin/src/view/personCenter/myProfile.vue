@@ -141,12 +141,16 @@ export default {
 
             this.$Spin.show();
 
+            // 头像
+            let headImg = this.$store.state.userData.ciProfileUrl;
+            headImg =  headImg != null && headImg != undefined && headImg != 'null'? headImg : '';
+
             let param = this.$Qs.stringify({
                 'ciCode': this.$store.state.userData.cicode,
                 'ciName': this.profileData.name,
                 'ciSex': this.profileData.sex,
                 'ciIntroduce': this.profileData.personal,
-                'ciProfileUrl': this.profileData.headImg
+                'ciProfileUrl': headImg 
             }) ;
 
             this.$api.saveCustomerInfo( param )

@@ -144,24 +144,20 @@ export default {
 
                 if(res.data.code == 200){
 
-                    let  data = res.data.content.list, arr= [], codeStr = '';
+                    let  data = res.data.content.list, arr= [];
                     this.pageData.total = res.data.content.count;
 
                     for(let item of data){
                         arr.push({
                             title: item.productName,
-                            type: '0',
+                            type: item.productProperty,
                             productCode: item.productCode,
                             source: item.merchantNm,
                             imgSrc: item.productProfileUrl,
                         })
-                        codeStr += codeStr = '' ? item.productCode : ',' + item.productCode;
                     }
 
                     this.courseList = arr;
-                    console.log(arr)
-                    // 获取多个产品数据
-                    this.getProductCartData(codeStr);
 
                     this.$Spin.hide();
 
@@ -177,42 +173,7 @@ export default {
                 console.log('发生错误！', error);
               });
         },
-        // 获取多个产品数据
-        getProductCartData(productCode){        
-
-            this.$api.getProductShowCase( this.$Qs.stringify({ 'productCode': productCode }) )
-
-            .then( (res) => {
-
-                console.log(res)
-
-                if(res.data.code == 200){
-
-                    let Data = res.data.content ;
-
-                    for(let lists of Data){
-                        for(let items of this.courseList){
-                            if(lists.productCode == items.productCode){
-                                items.type = lists.productProperty ;
-                            }
-                        }
-                    }
-
-                }else{
-
-                    this.$Message.warning(res.data.message);
-
-                }
-
-            })
-            .catch((error) => {
-
-                this.$Spin.hide();
-                console.log('发生错误！', error);
-
-            });
-
-        },
+    
         /**分页**/
         //@param value 返回当前页码
         changeOrderPage(value){
