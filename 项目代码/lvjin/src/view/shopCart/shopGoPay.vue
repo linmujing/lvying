@@ -139,7 +139,7 @@ export default {
             }, 
             
             // 是否隐藏商品详情
-            hideShowDetail: true,
+            hideShowDetail: false,
             
             //支付方式
             payTypeData:{
@@ -159,6 +159,7 @@ export default {
             payType: '',
             // 订单轮询定时器
             payTimer: true,
+            myInterval: null,
             // 二维码盒子
             codeBox: null,
 
@@ -441,12 +442,13 @@ export default {
                 if(res.data.code == 200){
                     
                     this.alipay = true;
+                    this.wxpay = false;
                     this.payModel = true;
                     this.payType = '请用支付宝进行支付';
 
                     this.alipayUrl = res.data.content;
             
-                    this.payTimer ?  setInterval(this.getOrderState, 3000) : '';
+                    this.payTimer ?  this.myInterval = setInterval(this.getOrderState, 3000) : '';
 
                 }else{
                     this.$Message.warning(res.data.message);
@@ -483,6 +485,7 @@ export default {
                 if(res.data.code == 1){
 
                     this.wxpay = true;
+                    this.alipay = false;
                     this.payModel = true;
                     this.payType = '请用微信进行支付';
 
@@ -492,7 +495,9 @@ export default {
 
                     this.createQrcode(res.data.content.codeUrl);
                     
-                    this.payTimer ?  setInterval(this.getOrderState, 3000) : '';
+                    if(this.payTimer ){
+                        setInterval(this.getOrderState, 3000)
+                    } 
 
                 }else{
 
@@ -573,6 +578,14 @@ export default {
             
         }
 
+    },
+    //离开当前页面
+    beforeRouteLeave(to, from, next) {
+
+        window.clearInterval(this.myInterval);
+
+        //清除定时器
+        next();
     },
     mounted(){
 
