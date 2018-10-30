@@ -80,7 +80,7 @@ export default {
       // 获取商品列表
       getProductList(page){
         this.$Spin.show()
-        this.$api.getProductList( this.$Qs.stringify({'pageNo': page, 'pageSize': 12, 'productCat': this.catCode, 'searchKey': this.searchValue}) )
+        this.$api.getProductList( this.$Qs.stringify({'pageNo': page, 'pageSize': 12, 'searchKey': this.searchValue}) )
 
           .then( (res) => {
             console.log(res);
