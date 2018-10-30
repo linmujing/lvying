@@ -583,9 +583,10 @@ export default {
     beforeRouteLeave(to, from, next) {
 
         window.clearInterval(this.myInterval);
-
+        
         //清除定时器
         next();
+
     },
     mounted(){
 
@@ -596,21 +597,6 @@ export default {
     
 }
 </script>
-<style >
-     .ivu-modal .ivu-modal-header {
-        border-bottom:0;
-        padding: 10px 16px;
-        height:60px;
-        line-height: 50px;
-        background: #f8f8f8;
-    }  
-    .ivu-modal .ivu-modal-content{
-        border-radius: 0;
-    }
-    .ivu-modal-close .ivu-icon-ios-close{
-        top:5px;
-    } 
-</style>
 <style scoped lang='less'>
 
     //引入订单共用less文件

@@ -45,14 +45,14 @@
 
         <!-- 订单添加地址弹框 -->
         <Modal v-model="addressData.addressModelValue" width="680" footer-hide >
-            <p slot="header" style="background:#f8f8f8;">
+            <p slot="header" >
                 <span class="font_18" style="font-weight:400;" >编辑收货地址</span>
             </p>
             <!-- 地址信息输入框 -->
             <div>
                 <div class="input_box" >
                     <span class="input_box_span" >收件人：</span>
-                    <Input v-model.trim="addressData.addressModelData.name"  size="large" clearable style="width: 280px" />
+                    <Input v-model.trim="addressData.addressModelData.name"  size="large" clearable style="width: 280px" :maxlength="20"/>
                 </div>
                 <div class="input_box" >
                     <span class="input_box_span" >手机号码：</span>
@@ -87,7 +87,10 @@
 
         <!-- 删除弹框 -->
         <Modal v-model="addressData.deleteModel.Value" width="480" footer-hide >
-            <div style="height:140px;line-height:140px;font-size:16px;" >
+            <p slot="header" >
+                <span class="font_18" style="font-weight:400;" >提示</span>
+            </p>
+            <div style="height:100px;line-height:100px;font-size:16px;" >
                 <p>确定删除该地址吗？</p>
             </div>
             <div style="padding: 0 0 20px 200px; "> 
@@ -434,21 +437,7 @@
 	}
 </script>
 
-<style >
-     .ivu-modal .ivu-modal-header {
-        border-bottom:0;
-        padding: 10px 16px;
-        height:60px;
-        line-height: 50px;
-        background: #f8f8f8;
-    }  
-    .ivu-modal .ivu-modal-content{
-        border-radius: 0;
-    }
-    .ivu-modal-close .ivu-icon-ios-close{
-        top:5px;
-    } 
-</style>
+
 
 <style lang='less' scoped>
     // 引入订单共用less文件
@@ -465,9 +454,6 @@
                 line-height: 30px;
                 position: relative;
 
-                >div{
-                    width:80%;
-                }
                 span{
                     color:#666;
                 }

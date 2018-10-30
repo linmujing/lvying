@@ -140,7 +140,10 @@
 
             <!-- 删除弹框 -->
             <Modal v-model="modelDate.deleteModelValue" width="480" footer-hide >
-                <div style="height:140px;line-height:140px;font-size:16px;" >
+                <p slot="header" >
+                    <span class="font_14" style="font-weight:400;">提示</span>
+                </p>
+                <div style="height:100px;line-height:100px;font-size:16px;" >
                     <p>确定从购物车中删除所选课程吗？</p>
                 </div>
                 <div style="padding: 0 0 20px 200px; ">
@@ -886,14 +889,6 @@ export default {
     }
 }
 </script>
-
-<style>
-    /* iview Model样式修改 */
-    .ivu-modal .ivu-modal-content{
-        border-radius: 0;
-    }
-
-</style>
 
 <style scoped lang='less'>
 

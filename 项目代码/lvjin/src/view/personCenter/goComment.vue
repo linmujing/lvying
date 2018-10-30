@@ -79,7 +79,7 @@
                 
                 <!-- 发布操作弹框 -->
                 <Modal v-model="commentData.modelValue" width="480" footer-hide >
-                    <p slot="header" style="background:#f8f8f8;">
+                    <p slot="header" >
                         <span class="font_14" style="font-weight:400;">提示</span>
                     </p>
                     <div class="font_16 padding_top_30 padding_bottom_40 padding_left_10" >评价成功</div>
@@ -286,22 +286,6 @@ export default {
 </script>
 
 <style>
-     .ivu-modal .ivu-modal-header {
-        border-bottom:0;
-        padding: 0 16px;
-        height:30px;
-        line-height: 40px;
-        background: #f8f8f8;
-    }  
-    .ivu-modal .ivu-modal-content{
-        border-radius: 0;
-    }
-    .ivu-modal-close .ivu-icon-ios-close{
-        top:-5px;
-    } 
-    .ivu-icon-ios-close:before{
-        content: "\F178";
-    }
 
     .demo-upload-list{
         display: inline-block;

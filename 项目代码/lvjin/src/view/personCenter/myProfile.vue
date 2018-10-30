@@ -142,7 +142,8 @@ export default {
             this.$Spin.show();
 
             // 头像
-            let headImg = this.$store.state.userData.ciProfileUrl;
+            let headImg = this.profileData.headImg;
+            console.log(headImg)
             headImg =  headImg != null && headImg != undefined && headImg != 'null'? headImg : '';
 
             let param = this.$Qs.stringify({
