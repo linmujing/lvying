@@ -169,13 +169,14 @@ export default {
       },
       //获取推荐商品
       getProductShowCase(productCode, productSortBy, type){
+        this.$Spin.show()
         var params = this.$Qs.stringify({'productCode': productCode, 'productSortBy': productSortBy})
         this.$api.getProductShowCase( params )
 
           .then( (res) => {
 
             if(res.data.code == 200){
-
+              this.$Spin.hide()
               switch (type) {
                 case 1:
                   this.laborArr = res.data.content
@@ -186,11 +187,10 @@ export default {
               }
 
             }else{
-
+              this.$Spin.hide()
               this.$Message.warning(res.data.message);
 
             }
-            this.$Spin.hide()
           })
           .catch((error) => {
             this.$Spin.hide()
