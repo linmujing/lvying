@@ -187,14 +187,14 @@ export default {
                 return;
 
             }
-            this.sendTimeOut();
+
 
             // 判断手机号是否已注册
             this.$api.verifyCiPhone( this.$Qs.stringify({ 'ciPhone':  this.formRight.phone }) )
 
             .then( (res) => {
 
-                console.log(res)
+                // console.log(res)
 
                 if(res.data.code == 500){
                     this.$Spin.hide()

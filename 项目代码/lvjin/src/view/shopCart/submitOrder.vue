@@ -36,7 +36,7 @@
 
                 <!-- 订单添加地址弹框 -->
                 <Modal v-model="addressData.addressModelValue" width="680" footer-hide >
-                    <p slot="header" style="background:#f8f8f8;">
+                    <p slot="header" >
                         <span class="font_18" style="font-weight:400;">新增收货地址</span>
                     </p>
                     <!-- 地址信息输入框 -->
@@ -1046,19 +1046,6 @@ export default {
 }
 </script>
 <style >
-     .ivu-modal .ivu-modal-header {
-        border-bottom:0;
-        padding: 10px 16px;
-        height:60px;
-        line-height: 50px;
-        background: #f8f8f8;
-    }  
-    .ivu-modal .ivu-modal-content{
-        border-radius: 0;
-    }
-    .ivu-modal-close .ivu-icon-ios-close{
-        top:5px;
-    } 
     .address_input .input_box{
         height:40px;
         line-height:40px;
