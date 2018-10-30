@@ -68,15 +68,15 @@
       <Row class="margin_top_50">
       	<Col span="18">
       		<!--简介-->
-          <div id="detail1" class="">
+          <div class="">
             <Affix>
               <div class="bg_f5 clearfix border_e6">
-                <a href="#detail1" @click="anchorBtn(0)" :class="{cur:isCur == 0}" class="inline_block padding_20_15 width_150px">课程简介</a>
-                <a href="#detail2" @click="anchorBtn(1)" :class="{cur:isCur == 1}" class="inline_block padding_20_15">课程目录</a>
-                <a href="#detail3" @click="anchorBtn(2)" :class="{cur:isCur == 2}" class="inline_block padding_20_15 width_150px">课程评价</a>
+                <a @click="anchorBtn(0)" :class="{cur:isCur == 0}" class="inline_block padding_20_15 width_150px">课程简介</a>
+                <a @click="anchorBtn(1)" :class="{cur:isCur == 1}" class="inline_block padding_20_15">课程目录</a>
+                <a @click="anchorBtn(2)" :class="{cur:isCur == 2}" class="inline_block padding_20_15 width_150px">课程评价</a>
               </div>
             </Affix>
-		        <div class="padding_20 margin_bottom_20 classImg" v-html="dataDetail.productDesc">
+		        <div v-show="isCur == 0" class="padding_20 classImg" v-html="dataDetail.productDesc">
 		          <!--<Row class="margin_top_10">-->
 		            <!--<Col span="2" class="font_weight_bold">适应人群 </Col>-->
 		            <!--<Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>-->
@@ -92,8 +92,8 @@
 		        </div>
 		      </div>
 		      <!--课程目录-->
-		      <div>
-		        <div id="detail2" class="font_weight_bold bg_f5 border_e6 padding_15">课程目录</div>
+		      <div v-show="isCur == 0 || isCur == 1">
+		        <div class="font_weight_bold bg_f5 border_e6 padding_15 margin_top_20">课程目录</div>
 		        <div>
 		          <!--<p class="font_18 classTitle">第一章 入职管理</p>-->
 		          <div v-if="typeId == 3">
@@ -138,8 +138,8 @@
 		        </div>-->
 		      </div>
 		      <!--评价-->
-		      <div class="margin_top_50">
-		        <div id="detail3" class="font_weight_bold bg_f5 border_e6 padding_15">评价（{{total}}）</div>
+		      <div v-show="isCur == 0 || isCur == 2" class="margin_top_50">
+		        <div class="font_weight_bold bg_f5 border_e6 padding_15">评价（{{total}}）</div>
 		        <div class="padding_15">
 		        	<span>评分：</span>
 		        	<Rate show-text allow-half disabled v-model="valueCustomText">
@@ -183,12 +183,13 @@
       		<div class="margin_left_30">
       			<div @click="toSupplierStore(dataDetail.merchantCode)" class="bg_f5 clearfix padding_15 pointer">
       				<div class="float_left bg_white">
-      					<img src="../../assets/images/image/falv.png"/>
+      					<img v-if="merchantInfo.merchantProfileUrl  == '' || merchantInfo.merchantProfileUrl  == null" src="../../assets/images/image/falv.png"/>
+      					<img v-else :src="merchantInfo.merchantProfileUrl" width="100"/>
       				</div>
-      				<div class="float_left margin_left_20 margin_top_15">
-      					<p class="font_18 font_weight_bold">法律援助</p>
-                <p class="color_666 margin_top_5">课程数：{{merchantInfo.productCount == null ? '' : merchantInfo.productCount}}</p>
-                <p class="color_666 margin_top_5">用户数：{{merchantInfo.ciCount == null ? '' : merchantInfo.ciCount}}</p>
+      				<div class="float_left margin_left_20 margin_top_15" style="width: 120px">
+      					<p class="font_18 font_weight_bold">{{merchantInfo.merchantNm}}</p>
+                <p class="color_666 margin_top_5 text_ellipsis">课程数：{{merchantInfo.productCount == null ? '' : merchantInfo.productCount}}</p>
+                <p class="color_666 margin_top_5 text_ellipsis">用户数：{{merchantInfo.ciCount == null ? '' : merchantInfo.ciCount}}</p>
       				</div>
       			</div>
       			<!--热门课程-->
@@ -258,10 +259,7 @@ export default {
           },
           // 推荐产品
           recommendList: [],
-          merchantInfo: {
-            productCount: '',
-            ciCount: ''
-          },
+          merchantInfo: {},
           dataStates: false,
           typeId: parseInt(this.$route.query.typeId),
           nowIndex: this.$route.query.typeId-1,
@@ -486,8 +484,7 @@ export default {
           .then( (res) => {
             // console.log(res);
             if(res.data.code == 200){
-              this.merchantInfo.productCount = res.data.content.productCount
-              this.merchantInfo.ciCount = res.data.content.ciCount
+              this.merchantInfo = res.data.content
             }else {
               this.$Message.warning(res.data.message);
             }

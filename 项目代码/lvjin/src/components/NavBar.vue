@@ -14,7 +14,7 @@
 
 	              <div @mouseenter="boxMouseOver(items.id, index1)" @click="jumpDown(items.id,items.catName)"
 										class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
-	                <span class="float_left color_fff font_18">{{items.catName}}</span>
+	                <span class="float_left color_fff font_18 inline_block text_ellipsis" style="width: 120px">{{items.catName}}</span>
 	                <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
 	              </div>
 
@@ -208,6 +208,9 @@
 		}
 	}
 </script>
+<style>
+  .text_ellipsis{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
+</style>
 <style lang='less' scoped>
   .navbar .cur{
     background: #F09105;
@@ -226,7 +229,7 @@
       position: absolute;top: 67px;left: 0;z-index: 99;
       .listItem{background: rgba(0,0,0,0.5);width:180px;}
       .listItem:hover{background: #00aa88}
-      .itemBox{position: absolute;top:0;left:180px;padding: 20px;min-height: 200px}
+      .itemBox{position: absolute;top:0;left:180px;padding: 10px;min-height: 200px}
     }
     .width_1000px{width: 1000px;}
   }

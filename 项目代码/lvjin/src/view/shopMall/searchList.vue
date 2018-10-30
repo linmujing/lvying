@@ -34,7 +34,7 @@
             </div>
           </div>
         </div>
-        <div class="text_center">暂无无数据</div>
+        <div v-else class="text_center">暂无无数据</div>
       </div>
       <!-- 订单分页 -->
       <div v-if="productList.length > 0" class="margin_80 text_center">

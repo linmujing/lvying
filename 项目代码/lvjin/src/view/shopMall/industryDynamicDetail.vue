@@ -66,15 +66,15 @@
         </Col>
       </Row>
       <!--简介-->
-      <div id="detail1" class="margin_top_50">
+      <div class="margin_top_50">
         <Affix>
           <div class="bg_f5 clearfix border_e6">
-            <a href="#detail1" @click="anchorBtn(0)" :class="{cur:isCur == 0}" class="inline_block padding_20_15 width_150px">简介</a>
-            <a href="#detail2" @click="anchorBtn(1)" :class="{cur:isCur == 1}" class="inline_block padding_20_15">全程动态管控系统</a>
-            <a href="#detail3" @click="anchorBtn(2)" :class="{cur:isCur == 2}" class="inline_block padding_20_15 width_150px">评价</a>
+            <a @click="anchorBtn(0)" :class="{cur:isCur == 0}" class="inline_block padding_20_15 width_150px">简介</a>
+            <a @click="anchorBtn(1)" :class="{cur:isCur == 1}" class="inline_block padding_20_15">全程动态管控系统</a>
+            <a @click="anchorBtn(2)" :class="{cur:isCur == 2}" class="inline_block padding_20_15 width_150px">评价</a>
           </div>
         </Affix>
-        <div class="padding_20 margin_bottom_20 classImg" v-html="dataDetail.productDesc">
+        <div v-show="isCur == 0" class="padding_20 classImg" v-html="dataDetail.productDesc">
           <!--<Row class="margin_top_10">-->
             <!--<Col span="2" class="font_weight_bold">适应企业</Col>-->
             <!--<Col span="22" class="line_height_25px">课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程课程</Col>-->
@@ -86,8 +86,8 @@
         </div>
       </div>
       <!--全程动态管控系统-->
-      <div id="detail2">
-        <div class="font_weight_bold bg_f5 border_e6 padding_15">全程动态管控系统</div>
+      <div v-show="isCur == 0 || isCur == 1">
+        <div class="font_weight_bold bg_f5 border_e6 padding_15 margin_top_20">全程动态管控系统</div>
         <div class="">
           <div class="margin_left_20 margin_top_30 margin_bottom_30 font_18">
             <div class="inline_block" v-for="(item,index) in sectionNav" @click="classBtn(index,item.sectionIndex)">
@@ -127,7 +127,7 @@
         </div>
       </div>
       <!--评价-->
-      <div id="detail3" class="margin_top_20">
+      <div v-show="isCur == 0 || isCur == 2" class="margin_top_20">
         <div class="font_weight_bold bg_f5 border_e6 padding_15">评价（{{total}}）</div>
         <div class="padding_15">
         	<span>评分：</span>
