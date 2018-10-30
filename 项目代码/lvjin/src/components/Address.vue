@@ -52,7 +52,7 @@
             <div>
                 <div class="input_box" >
                     <span class="input_box_span" >收件人：</span>
-                    <Input v-model.trim="addressData.addressModelData.name"  size="large" clearable style="width: 280px" />
+                    <Input v-model.trim="addressData.addressModelData.name"  size="large" clearable style="width: 280px" :maxlength="20"/>
                 </div>
                 <div class="input_box" >
                     <span class="input_box_span" >手机号码：</span>
@@ -465,9 +465,6 @@
                 line-height: 30px;
                 position: relative;
 
-                >div{
-                    width:80%;
-                }
                 span{
                     color:#666;
                 }

@@ -583,9 +583,10 @@ export default {
     beforeRouteLeave(to, from, next) {
 
         window.clearInterval(this.myInterval);
-
+        
         //清除定时器
         next();
+
     },
     mounted(){
 
