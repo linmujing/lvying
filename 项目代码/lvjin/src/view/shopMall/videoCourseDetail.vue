@@ -183,10 +183,11 @@
       		<div class="margin_left_30">
       			<div @click="toSupplierStore(dataDetail.merchantCode)" class="bg_f5 clearfix padding_15 pointer">
       				<div class="float_left bg_white">
-      					<img src="../../assets/images/image/falv.png"/>
+      					<img v-if="merchantInfo.merchantProfileUrl  == '' || merchantInfo.merchantProfileUrl  == null" src="../../assets/images/image/falv.png"/>
+      					<img v-else :src="merchantInfo.merchantProfileUrl "/>
       				</div>
-      				<div class="float_left margin_left_20 margin_top_15">
-      					<p class="font_18 font_weight_bold">法律援助</p>
+      				<div class="float_left margin_left_20 margin_top_15" style="width: 120px">
+      					<p class="font_18 font_weight_bold">{{merchantInfo.merchantNm}}</p>
                 <p class="color_666 margin_top_5 text_ellipsis">课程数：{{merchantInfo.productCount == null ? '' : merchantInfo.productCount}}</p>
                 <p class="color_666 margin_top_5 text_ellipsis">用户数：{{merchantInfo.ciCount == null ? '' : merchantInfo.ciCount}}</p>
       				</div>
@@ -258,10 +259,7 @@ export default {
           },
           // 推荐产品
           recommendList: [],
-          merchantInfo: {
-            productCount: '',
-            ciCount: ''
-          },
+          merchantInfo: {},
           dataStates: false,
           typeId: parseInt(this.$route.query.typeId),
           nowIndex: this.$route.query.typeId-1,
@@ -486,8 +484,7 @@ export default {
           .then( (res) => {
             // console.log(res);
             if(res.data.code == 200){
-              this.merchantInfo.productCount = res.data.content.productCount
-              this.merchantInfo.ciCount = res.data.content.ciCount
+              this.merchantInfo = res.data.content
             }else {
               this.$Message.warning(res.data.message);
             }

@@ -23,12 +23,13 @@
 
                 <div class="bg_f5 clearfix padding_15">
                   <div class="float_left bg_white">
-                    <img src="../../assets/images/image/falv.png"/>
+                    <img v-if="merchantInfo.merchantProfileUrl  == '' || merchantInfo.merchantProfileUrl  == null" src="../../assets/images/image/falv.png"/>
+                    <img v-else :src="merchantInfo.merchantProfileUrl "/>
                   </div>
-                  <div class="float_left margin_left_20 margin_top_15">
-                    <p class="font_18 font_weight_bold">法律援助</p>
-                    <p class="color_666 margin_top_5">课程数：{{merchantInfo.productCount}}</p>
-                    <p class="color_666 margin_top_5">用户数：{{merchantInfo.ciCount}}</p>
+                  <div class="float_left margin_left_20 margin_top_15" style="width: 120px">
+                    <p class="font_18 font_weight_bold">{{merchantInfo.merchantNm}}</p>
+                    <p class="color_666 margin_top_5 text_ellipsis">课程数：{{merchantInfo.productCount}}</p>
+                    <p class="color_666 margin_top_5 text_ellipsis">用户数：{{merchantInfo.ciCount}}</p>
                   </div>
                 </div>
                 <!--购买量排行-->
