@@ -441,6 +441,7 @@ export default {
                 if(res.data.code == 200){
                     
                     this.alipay = true;
+                    this.wxpay = false;
                     this.payModel = true;
                     this.payType = '请用支付宝进行支付';
 
@@ -483,6 +484,7 @@ export default {
                 if(res.data.code == 1){
 
                     this.wxpay = true;
+                    this.alipay = false;
                     this.payModel = true;
                     this.payType = '请用微信进行支付';
 
