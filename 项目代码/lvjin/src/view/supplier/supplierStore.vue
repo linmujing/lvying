@@ -24,7 +24,7 @@
                 <div class="bg_f5 clearfix padding_15">
                   <div class="float_left bg_white">
                     <img v-if="merchantInfo.merchantProfileUrl  == '' || merchantInfo.merchantProfileUrl  == null" src="../../assets/images/image/falv.png"/>
-                    <img v-else :src="merchantInfo.merchantProfileUrl "/>
+                    <img v-else :src="merchantInfo.merchantProfileUrl" width="100"/>
                   </div>
                   <div class="float_left margin_left_20 margin_top_15" style="width: 120px">
                     <p class="font_18 font_weight_bold">{{merchantInfo.merchantNm}}</p>
