@@ -57,15 +57,15 @@
       <Row class="margin_top_50">
       	<Col span="18">
       		<!--商品详情-->
-          <div id="detail1" class="">
+          <div>
             <Affix>
               <div class="bg_f5 clearfix border_e6">
-                <a href="#detail1" @click="anchorBtn(0)" :class="{cur:isCur == 0}" class="inline_block padding_20_15 width_150px">商品详情</a>
-                <a href="#detail2" @click="anchorBtn(1)" :class="{cur:isCur == 1}" class="inline_block padding_20_15 width_150px">商品评价</a>
+                <a @click="anchorBtn(0)" :class="{cur:isCur == 0}" class="inline_block padding_20_15 width_150px">商品详情</a>
+                <a @click="anchorBtn(1)" :class="{cur:isCur == 1}" class="inline_block padding_20_15 width_150px">商品评价</a>
               </div>
             </Affix>
             <!--商品详情-->
-		        <div class="padding_20 margin_bottom_20 classImg" v-html="dataDetail.productSpecification"></div>
+		        <div v-show="isCur == 0" class="padding_20 margin_bottom_20 classImg" v-html="dataDetail.productSpecification"></div>
             <!--<div class="margin_top_30">-->
               <!--<p>目&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</p>-->
               <!--<p class="padding_left_20 margin_top_10">第一章日常消费法律知识——天天315</p>-->
@@ -75,7 +75,7 @@
             <!--</div>-->
 		      </div>
 		      <!--评价-->
-		      <div class="margin_top_50">
+		      <div v-show="isCur == 0 || isCur == 1" class="margin_top_50">
 		        <div id="detail2" class="font_weight_bold bg_f5 border_e6 padding_15">评价（{{total}}）</div>
 		        <div class="padding_15">
 		        	<span>评分：</span>

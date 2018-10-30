@@ -26,7 +26,7 @@
         						<span>执业证扫描件：</span>
         						<img :src="SupplierData.materialUrl" width="300" height="200" style="vertical-align: top;"/>
         					</div>
-                  <div class="margin_top_30">
+                  <div v-if="!SupplierData.personIntroduce == ''" class="margin_top_30">
                     <span>个人资料：</span>
                     <img :src="SupplierData.personIntroduce" width="300" height="200" style="vertical-align: top;"/>
                   </div>
