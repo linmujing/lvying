@@ -270,7 +270,7 @@ export default {
       },
       //获取推荐商品
       getProductShowCase(productCode, productSortBy, type){
-        this.$Spin.show()
+
         var params = this.$Qs.stringify({'productCode': productCode, 'productSortBy': productSortBy})
         this.$api.getProductShowCase( params )
 
@@ -309,13 +309,13 @@ export default {
       },
       // 获取导航标题
       getNavTitle(){
-        this.$Spin.show()
+        
         this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
 
           .then( (res) => {
 
             if(res.data.code == 200){
-              this.$Spin.hide()
+
               this.navDataModel = res.data.content
               // 导航标题信息
               sessionStorage.setItem("NavTitle", JSON.stringify(res.data.content));
@@ -327,7 +327,7 @@ export default {
             }
           })
           .catch((error) => {
-            this.$Spin.hide()
+
             console.log('发生错误！', error);
           });
       },

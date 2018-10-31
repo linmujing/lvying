@@ -59,18 +59,18 @@
                                 </li>
                             </ul>
                             <div class="item_total padding_right_24" >小计： {{items.itemTotal}}</div>
-                            <!-- 其他操作 -->
-                            <div class="item_shipping_methods padding_left_14" >
-                                <span style="display:inline-block;width:100px;"> 配送方式： </span>快递包邮
-                            </div>
-          
                         </li>
                     </ul>
-                    <div class="item_shipping_methods padding_left_14" >
-                        <span style="display:inline-block;width:100px;"> 优惠券：</span>活动活动
-                    </div>
+
                     <!-- 其他操作-->
-                    <div class="list_operate padding_left_14" v-if="hideShowDetail">
+                    <div class="list_operate padding_left_14 line_height_50px" v-if="hideShowDetail">
+                        <div class="item_shipping_methods padding_left_14" >
+                            <span style="display:inline-block;width:100px;"> 配送方式： </span>快递包邮
+                        </div>
+                        <div class="item_shipping_methods padding_left_14" >
+                            <span style="display:inline-block;width:100px;"> 优惠券：</span>活动活动
+                        </div>
+
                         <div class="all_total padding_right_24">
                             <h4>总计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
                         </div>
@@ -496,7 +496,7 @@ export default {
                     this.createQrcode(res.data.content.codeUrl);
                     
                     if(this.payTimer ){
-                        setInterval(this.getOrderState, 3000)
+                        this.myInterval = setInterval(this.getOrderState, 3000);
                     } 
 
                 }else{
@@ -551,6 +551,7 @@ export default {
                 if(res.data.code == 200){
 
                     if(res.data.content.orderStatus == '1'){
+           
                         this.$store.state.personCenter.navIndex = 3;
                         this.$router.push({ path: '/personCenter/myOrder', query: { orderState: 1}})
                     }
@@ -578,6 +579,13 @@ export default {
             
         }
 
+    },
+    beforeDestroy() {
+
+        if(this.myInterval) { //如果定时器还在运行 或者直接关闭，不用判断
+            clearInterval(this.myInterval); //关闭
+             console.log(this.myInterval)
+        }
     },
     //离开当前页面
     beforeRouteLeave(to, from, next) {
@@ -712,8 +720,6 @@ export default {
 
             // 订单列表操作
             .list_operate{
-                height: 70px;
-                line-height: 70px;
 
                 .all_total{
                     text-align: right;
