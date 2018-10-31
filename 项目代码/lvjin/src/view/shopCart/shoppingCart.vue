@@ -669,6 +669,7 @@ export default {
                                     num: 1,//data[i].productInfo.productNum,
                                     productTitle: data[i].productInfo.productTitle,
                                     productType:  data[i].productInfo.productType,
+                                    productProperty :  data[i].productInfo.productProperty ,
                                     describe: data[i].productInfo.productDesc,
                                     imgSrc: data[i].productInfo.productProfileUrl
                                 })

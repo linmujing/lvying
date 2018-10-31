@@ -69,7 +69,7 @@
                                                     <Col span="10"> <div class="text_left padding_left_20">
                                                         <div class="item_td">
                                                             <p >
-                                                                <span class="twoline_ellipsis" style="color:#666;" :data-product="childs.productCode" >{{childs.title}} {{childs.name}} {{childs.desc}}</span>    
+                                                                <span class="twoline_ellipsis" style="color:#666;" :data-product="childs.productCode" >{{childs.title}} </span>    
                                                             </p>
                                                         </div>
                                                     </div> </Col>
@@ -155,6 +155,9 @@
                                                                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
                                                                         @click="productChange(lists.orderCode, childs.productCode)">换货
                                                                     </Button> <br> 
+                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
+                                                                        @click="checkLogistics(items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
+                                                                    </Button>  
                                                                 </p></div>
 
                                                                 <!-- 评价  组合包交易成功只有一个评价-->
@@ -164,12 +167,7 @@
                                                                         </Button> <br> 
                                                                 </p></div>
 
-                                                                <!-- 物流 只要是实质商品都有物流-->
-                                                                <div v-if=" (lists.orderStatus == '1' && childs.productProperty == '1' )|| (lists.orderStatus == '2' && childs.productProperty == '1')">
-                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                        @click="checkLogistics(items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
-                                                                    </Button> <br>   
-                                                                </div>
+                                         
                                                             </div>
 
                                                             <!-- 针对于单个商品 -->
@@ -178,8 +176,11 @@
                                                                 <div class="item_td" v-if=" (lists.orderStatus == '1' && childs.productProperty == '1' )|| (lists.orderStatus == '2' && childs.productProperty == '1')"><p>
                                                                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
                                                                         @click="productChange(lists.orderCode, childs.productCode)">
-                                                                        {{childs.isExchange == 0 ? '换货' : childs.isExchange == 1 ? '申请中' : '已同意'}}
+                                                                        {{childs.isExchange == 0 ? '换货' : childs.isExchange == 1 ? '换货申请中' : '换货已同意'}}
                                                                     </Button> <br> 
+                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
+                                                                        @click="checkLogistics(items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
+                                                                    </Button>
                                                                 </p></div>
                                                                 
                                                                 <!-- 评价 普通商品交易成功，每个都有评价-->
@@ -189,12 +190,7 @@
                                                                         </Button> <br> 
                                                                 </p></div>
 
-                                                                <!-- 物流 只要是实质商品都有物流 (orderCode, trackNo, productProfileUrl, productPirce, productNun)-->
-                                                                <div v-if=" (lists.orderStatus == '1' && childs.productProperty == '1' )|| (lists.orderStatus == '2' && childs.productProperty == '1')">
-                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                        @click="checkLogistics(items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
-                                                                    </Button> <br>   
-                                                                </div>
+                            
                                                             </div>      
 
                                                         </Col>
