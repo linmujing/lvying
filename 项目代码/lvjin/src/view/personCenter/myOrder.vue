@@ -749,17 +749,7 @@ export default {
                 }
             }
         }
-        // 订单分页
-        .list_page{
-            float: right;
-            padding-right:20px;
-            padding-top:30px;
-        }
-        &:after{
-            display: block;
-            content: '';
-            clear: both;
-        }
+
     }
     // order为空判断
     .order_has_not{

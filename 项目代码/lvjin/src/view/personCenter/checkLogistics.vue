@@ -124,7 +124,7 @@ export default {
                     this.product = {
                         productCode: data.productCode,
                         price: data.productPrice,
-                        num:  cartNun,
+                        num:  1,
                         name: data.productName,
                         describe: data.productDesc,
                         imgSrc: data.productProfileUrl
