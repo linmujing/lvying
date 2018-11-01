@@ -199,7 +199,7 @@ export default {
               path:'/industryDynamicList',
               query: {
                 catName: this.typeName,
-                catCode: navTitle[i].catCode,
+                catCode: navTitle[i].id,
                 typeId: this.typeId
               }
             })
