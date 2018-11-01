@@ -157,7 +157,7 @@
 import { videoPlayer } from "vue-video-player";
 
 export default {
-  props:['videoParams', 'imgUrl'],
+  props:['videoParams', 'imgUrl', 'activeIndex'],
     data() {
         return {
 
@@ -219,7 +219,7 @@ export default {
               Off: true,
               lists: []
             },
-        
+
             curIndex: 0
         };
     },
@@ -340,7 +340,13 @@ export default {
               lists.push(obj)
             }
             this.videoMenu.lists = lists
-            this.playerOptions.sources = arr[0].videoUrl;
+            var index = this.activeIndex
+            if(index == '' || index == null || index == undefined){
+              this.playerOptions.sources = arr[0].videoUrl;
+            }else {
+              this.playerOptions.sources = arr[index].videoUrl;
+            }
+            console.log(this.activeIndex)
           }
         },
         // 时间进度

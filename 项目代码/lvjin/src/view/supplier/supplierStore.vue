@@ -49,7 +49,7 @@
                       <div class="font_18 text_ellipsis">{{item.productTitle}}</div>
                       <div class="color_666 text_ellipsis margin_top_10 clearfix">
                         <div class="float_left">{{item.createBy}}</div>
-                        <div class="float_right">{{item.saleCount}}人听过</div>
+                        <div class="float_right text_ellipsis">{{item.lookCount}}人听过</div>
                       </div>
                     </div>
                   </li>
@@ -81,7 +81,7 @@
                     <div class="margin_left_10 margin_right_10 margin_top_10">
                       <div class="font_18 text_ellipsis">{{item.productTitle}}</div>
                       <div class="color_666 margin_top_5 clearfix">
-                        <div class="float_left color_999 width_50 text_ellipsis" v-html="item.productDesc"></div>
+                        <div class="float_left color_999 width_50 text_ellipsis">{{item.productKeyWord}}</div>
                         <div class="float_right text_ellipsis">{{item.saleCount}}人购买过</div>
                       </div>
                       <div class="margin_top_10 clearfix">

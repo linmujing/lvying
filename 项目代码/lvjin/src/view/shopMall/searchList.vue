@@ -17,7 +17,7 @@
                     <span class="font_20 color_title">￥{{item.productPrice}}</span>
                   </div>
                   <div class="float_right">
-                    <span class="padding_left_25 color_999 line_height_30px">{{item.saleCount}}人看过</span>
+                    <span class="padding_left_25 color_999 line_height_30px text_ellipsis">{{item.lookCount}}人看过</span>
                   </div>
                 </div>
                 <div class="margin_top_15 clearfix">

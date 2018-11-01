@@ -37,7 +37,7 @@
 							<p class="color_999 margin_top_10">{{item.createBy}}</p>
 							<div class="margin_top_10">
 								<span class="font_20 color_title">￥{{item.productPrice}}</span>
-								<span class="padding_left_25 color_999">{{item.saleCount}}人看过</span>
+                <span class="padding_left_25 color_999 text_ellipsis">{{item.lookCount}}人看过</span>
 							</div>
 							<div class="margin_top_15 clearfix">
 								<p @click="toDetail(item.productCode,3)" class="pointer float_left">
@@ -68,7 +68,7 @@
 							<p class="color_999 margin_top_10">{{item.createBy}}</p>
 							<div class="margin_top_10">
 								<span class="font_20 color_title">￥{{item.productPrice}}</span>
-								<span class="padding_left_25 color_999">{{item.saleCount}}人看过</span>
+								<span class="padding_left_25 color_999 text_ellipsis">{{item.lookCount}}人看过</span>
 							</div>
 							<div class="margin_top_15 clearfix">
 								<p @click="toDetail(item.productCode,4)" class="pointer float_left">
@@ -103,7 +103,7 @@
 					<div class="width_560px height_310px border" @click="toDetail(item.productCode,1)"><img :src="item.productProfileUrl" alt=""></div>
 					<div class="clearfix margin_top_15">
 						<div class="float_left font_weight_bold font_18">{{item.productTitle}}</div>
-						<div class="float_right color_999 line_height_25px">{{item.saleCount}}人看过</div>
+						<div class="float_right color_999 line_height_25px text_ellipsis">{{item.lookCount}}人看过</div>
 					</div>
 					<div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px">{{item.productKeyWord}}</div>
 					<div class="text_right margin_top_5">
@@ -141,7 +141,7 @@
 							<div class="clearfix margin_top_10">
 								<div class="float_left">
 									<span class="font_20 color_title">￥{{item.productPrice}}</span>
-									<span class="padding_left_25 color_999">{{item.saleCount}}人看过</span>
+									<span class="padding_left_25 color_999 text_ellipsis">{{item.lookCount}}人看过</span>
 								</div>
 								<div class="float_right text_right">
 									<span class="color_title pointer" @click="toDetail(item.productCode,2)">查看详情》</span>
@@ -309,7 +309,7 @@ export default {
       },
       // 获取导航标题
       getNavTitle(){
-        
+
         this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
 
           .then( (res) => {
