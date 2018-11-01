@@ -24,7 +24,7 @@
             <div class="coupon_item"  v-for="(items, index) in couponData.couponList" :key="index">
                 <div class="item_top" :style="{background: returnType(items.couponStatus) }">
                     <p style="line-height:40px;height:50px;"><b class="font_22">￥{{items.couponInfo.couponValuePrice }}</b></p>
-                    <p :title="items.couponInfo.couponValueDiscount">使用条件：{{items.couponInfo.couponValueDiscount }}</p>
+                    <p :title="items.couponInfo.couponTitle ">使用条件：{{items.couponInfo.couponTitle  }}</p>
                     <p>使用时间：{{dateFormat(items.couponInfo.couponStartTime)}} - {{dateFormat(items.couponInfo.couponEndTime)}}</p>
                     <div class="dashed_line"></div>
                 </div>

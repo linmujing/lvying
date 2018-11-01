@@ -14,7 +14,7 @@
                             <div class="padding_bottom_20"><span> 超过24小时再支付可能会导致购买失败，需重新下单购买</span> </div>
                             <div class="relative" style="line-height:50px;" ><span> 实付金额：<i class="color_f09105">￥ {{cartDate.listTotal}}</i></span> <s class="line"></s></div>
                         </div>
-                        <p class="font_16 pointer" style="line-height:80px;" @click="hideShowDetail = !hideShowDetail">订单详情 <i :class="[hideShowDetail ? 'triangle_up':'triangle_down']"></i></p>
+                        <p class="font_16 pointer" style="line-height:80px;position:relative;" @click="hideShowDetail = !hideShowDetail">订单详情 <i :class="[hideShowDetail ? 'triangle_up':'triangle_down']"></i></p>
                     </div>
 
                     <!-- 订单列表头部-->
@@ -550,12 +550,15 @@ export default {
 
                 if(res.data.code == 200){
 
-                    if(res.data.content.orderStatus == '1'){
-           
-                        this.$store.state.personCenter.navIndex = 3;
+                    if(res.data.content.orderStatus != '0'){
+                        
                         // 订单类型状态更改
-                        this.$store.commit('personCenter/setOrderType', 1);
+                        this.$store.commit('personCenter/setOrderType', parseFloat(res.data.content.orderStatus) + 1);
+                        // 页面跳转
+                        this.$store.commit('personCenter/NavIndex', 3);
+
                         this.$router.push({ path: '/personCenter/myOrder'})
+
                     }
 
                 }else{
@@ -642,9 +645,9 @@ export default {
                 border-width:0 8px 8px;
                 border-style:solid;
                 border-color:transparent transparent #333;/*透明 透明  灰*/
-                position:relative;
-                top:-13px;
-                left:5px;
+                position:absolute;
+                top:35px;
+                left:100px;
             }
             .triangle_down{
                 width:0;
@@ -652,9 +655,9 @@ export default {
                 border-width:8px 8px 0;
                 border-style:solid;
                 border-color:#333 transparent transparent;/*灰 透明 透明 */
-                position:relative;
-                top:13px;
-                left:5px;
+                position:absolute;
+                top:35px;
+                left:100px;
             }
             // 订单列表
             .list_content{

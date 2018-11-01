@@ -332,9 +332,6 @@ export default {
                     // 获取订单详情 获取订单金额
                     this.getOrderDetail();
 
-                    // 获取订单可用优惠券
-                    this.getOrderCoupon();
-
                 }else{
 
                     this.$Message.warning(res.data.message);
@@ -363,6 +360,9 @@ export default {
                 if(res.data.code == 200){
 
                     this.cartDate.listTotal = (res.data.content.orderPayAmount).toFixed(2);
+
+                    // 获取订单可用优惠券
+                    this.getOrderCoupon();
 
                 }else{
 
