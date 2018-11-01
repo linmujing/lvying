@@ -9,6 +9,7 @@
 export default {
   name: 'App'
 }
+console.log('版本日期：2018-11-01')
 </script>
 
 <style>

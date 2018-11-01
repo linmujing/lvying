@@ -6,11 +6,11 @@
         <Col span="12">
           <div v-if="dataStates" class="width_600px border">
             <div v-if="typeId == 3" style="max-height: 400px">
-              <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" ></Video>
+                <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="curIndex"></Video>
             </div>
             <div v-else style="height: 400px">
               <img :src="dataDetail.productProfileUrl" class="all_width all_height">
-              <Audio v-show="showAudio" ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl"></Audio>
+              <Audio v-show="showAudio" ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="curIndex"></Audio>
             </div>
           </div>
         </Col>
@@ -23,12 +23,12 @@
                 <span style="color: #f5a623">{{ valueCustomText }}</span>
               </Rate>
             </div>
-            <div class="float_left color_999 line_height_30px margin_left_30">{{dataDetail.saleCount}}人看过</div>
+            <div class="float_left color_999 line_height_30px margin_left_30 text_ellipsis">{{dataDetail.lookCount}}人看过</div>
           </div>
           <div v-if="hasBuy == 0">
             <div class="margin_top_30 clearfix">
               <p class="float_left"><span class="color_title font_20">￥{{dataDetail.productPrice}}</span></p>
-              <p class="float_left pointer margin_left_30" @click="audition">
+              <p class="float_left pointer margin_left_30" @click="audition(0)">
                 <Icon type="ios-headset-outline" size="28"/>
                 <span class="font_16 color_666 vertical_middle">试听</span>
               </p>
@@ -105,10 +105,10 @@
                   <div class="float_right">
                     <span>{{item.videoTime}}</span>
                     <div v-if="hasBuy == 1" class="inline_block width_100px margin_left_20">
-                      <Button size="small" type="success" shape="circle" class="bg_title" @click="audition">立即播放</Button>
+                      <Button size="small" type="success" shape="circle" class="bg_title" @click="audition(index)">立即播放</Button>
                     </div>
                     <div v-else class="inline_block width_100px margin_left_20">
-                      <Button v-if="parseInt(item.videoStatus) === 0" size="small" type="warning" shape="circle" style="width: 60px" @click="audition">试听</Button>
+                      <Button v-if="parseInt(item.videoStatus) === 0" size="small" type="warning" shape="circle" style="width: 60px" @click="audition(index)">试听</Button>
                       <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                     </div>
                   </div>
@@ -123,10 +123,10 @@
                   <div class="float_right">
                     <span>{{item.audioTime}}</span>
                     <div v-if="hasBuy == 1" class="inline_block width_100px margin_left_20">
-                      <Button size="small" type="success" shape="circle" class="bg_title" @click="audition">立即播放</Button>
+                      <Button size="small" type="success" shape="circle" class="bg_title" @click="audition(index)">立即播放</Button>
                     </div>
                     <div v-else class="inline_block width_100px margin_left_20">
-                      <Button v-if="parseInt(item.voiceStatus) === 0" size="small" type="warning" shape="circle" @click="audition">试听</Button>
+                      <Button v-if="parseInt(item.voiceStatus) === 0" size="small" type="warning" shape="circle" @click="audition(index)">试听</Button>
                       <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                     </div>
                   </div>
@@ -204,7 +204,7 @@
 				            <div class="font_18 font_weight_bold text_ellipsis">{{item.productTitle}}</div>
 				            <div class="margin_top_10 clearfix color_999">
 				              <div class="float_left width_50 text_ellipsis">{{item.productKeyWord}}</div>
-				              <div class="float_right">{{item.saleCount}}人看过</div>
+				              <div class="float_right text_ellipsis">{{item.lookCount}}人看过</div>
 				            </div>
 				            <div class="clearfix margin_top_5">
 				            	<div class="float_left font_20 color_title">￥{{item.productPrice}}</div>
@@ -269,7 +269,8 @@ export default {
           showAudio: false,
           cuponList: [],
           // 已经购买
-          hasBuy: 0
+          hasBuy: 0,
+          curIndex: ''
         }
 
     },
@@ -397,10 +398,10 @@ export default {
                   audioSection.push(section)
                 // }
                 //获取试用视频音频数据tatuss = 0
-                if(parseInt(section.videoStatus) === 0){
+                if(parseInt(section.videoStatus) === 0 || parseInt(section.videoStatus) === 1){
                   videoData.push(section)
                 }
-                if(parseInt(section.voiceStatus) === 0){
+                if(parseInt(section.voiceStatus) === 0 || parseInt(section.voiceStatus) === 1){
                   audioData.push(section)
                 }
               }
@@ -513,8 +514,9 @@ export default {
         })
       },
       // 试听视频
-      audition(){
+      audition(index){
         if(this.typeId == 3){
+          this.curIndex = index
           this.$refs.myVideo.onPlayerPlay();
         }else {
           if(this.audioData.length === 0){

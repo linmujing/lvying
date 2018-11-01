@@ -34,7 +34,7 @@
                     <span class="font_20 color_title">￥{{item.productPrice}}</span>
                   </div>
                   <div class="float_right">
-                    <span class="padding_left_25 color_999 line_height_30px">{{item.saleCount}}人看过</span>
+                    <span class="padding_left_25 color_999 line_height_30px text_ellipsis">{{item.lookCount}}人看过</span>
                   </div>
                 </div>
                 <div class="margin_top_15 clearfix">
@@ -68,7 +68,7 @@
           </div>
           <div class="clearfix margin_top_15">
             <div class="float_left font_weight_bold font_18">{{item.productTitle}}</div>
-            <div class="float_right color_999 line_height_25px">{{item.saleCount}}人看过</div>
+            <div class="float_right color_999 line_height_25px text_ellipsis">{{item.lookCount}}人看过</div>
           </div>
           <div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px">{{item.productKeyWord}}</div>
           <div class="text_right margin_top_5"><span class="color_title" @click="toDetail(item.productCode)">查看详情》</span></div>

@@ -17,7 +17,7 @@
                 <span style="color: #f5a623">{{ valueCustomText }}</span>
               </Rate>
             </div>
-            <div class="float_left color_999 line_height_30px margin_left_30">{{dataDetail.saleCount}}人看过</div>
+            <div class="float_left color_999 line_height_30px margin_left_30 text_ellipsis">{{dataDetail.lookCount}}人看过</div>
           </div>
           <!--<div class="margin_top_20">-->
             <!--<span v-for="item in 3" class="tag">标签</span>-->
@@ -170,7 +170,7 @@
     </div>
     <!--音频-->
     <div v-if="showAudio">
-      <Audio ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl"></Audio>
+      <Audio ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="curIndex"></Audio>
     </div>
     <!--视频弹窗-->
     <Modal
@@ -180,7 +180,7 @@
       width="70%"
       :mask-closable="false">
       <div v-if="videoModel">
-        <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" ></Video>
+        <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="curIndex"></Video>
       </div>
     </Modal>
     <!--文字弹窗-->
@@ -239,7 +239,8 @@ export default {
           sectionList: [],
           sectionSize: 6,
           sectionCont: 0,
-          sectionIndex: 0
+          sectionIndex: 0,
+          curIndex: 0
         }
 
     },
@@ -275,7 +276,7 @@ export default {
       },
       // 查看视频
       playerVideo(item){
-        if(!parseInt(item.videoStatus) == 0){
+        if(!parseInt(item.videoStatus) == 0 || !parseInt(item.videoStatus) == 1){
           this.$Message.warning('对不起，您需要购买后才能观看！');
           return ;
         }
@@ -289,7 +290,7 @@ export default {
       },
       // 收听音频
       playerAudio(item){
-        if(!parseInt(item.voiceStatus) == 0){
+        if(!parseInt(item.voiceStatus) == 0 || !parseInt(item.voiceStatus) == 1){
           this.$Message.warning('对不起，您需要购买后才能收听！');
           return ;
         }

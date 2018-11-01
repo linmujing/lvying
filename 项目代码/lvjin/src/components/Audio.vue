@@ -91,7 +91,7 @@
 <script>
 
 export default {
-  props:['audioParams', 'imgUrl'],
+  props:['audioParams', 'imgUrl', 'activeIndex'],
     data() {
         return {
 
@@ -211,9 +211,9 @@ export default {
         },
         // 时间进度
         getTimeChange(e){
-            
+
             this.audioControl.timeProgress = e;
-            
+
             let current =  parseInt(e / 100  * this.audioControl.timesecond);
 
             this.$refs.audio.currentTime = current;
@@ -269,10 +269,14 @@ export default {
 
     },
     mounted(){
-      // console.log(this.audioParams)
+      // console.log(this.audioParams)his.playerOptions.sources = arr[index].videoUrl;
       if(this.audioParams.length === 1){
         this.audioTitle = this.audioParams[0].sectionName
         this.url = this.audioParams[0].voiceUrl
+      }else if(this.audioParams.length > 1){
+        var index = this.activeIndex
+        this.audioTitle = this.audioParams[index].sectionName
+        this.url = this.audioParams[index].voiceUrl
       }
 
     },
