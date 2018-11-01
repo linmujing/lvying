@@ -553,7 +553,9 @@ export default {
                     if(res.data.content.orderStatus == '1'){
            
                         this.$store.state.personCenter.navIndex = 3;
-                        this.$router.push({ path: '/personCenter/myOrder', query: { orderState: 1}})
+                        // 订单类型状态更改
+                        this.$store.commit('personCenter/setOrderType', 1);
+                        this.$router.push({ path: '/personCenter/myOrder'})
                     }
 
                 }else{

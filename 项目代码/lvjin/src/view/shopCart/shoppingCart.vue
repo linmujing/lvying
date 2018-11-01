@@ -187,7 +187,7 @@ export default {
                 pageNo: 1,
                 pageSize: 30,
                 dataSize: 0 ,
-                ciCode: ''
+                ciCode: this.$store.state.userData.cicode
             },
 
             /*删除提示弹框对象*/
@@ -880,9 +880,6 @@ export default {
 
     },
     mounted(){
-
-        // 获取用户cicode
-        this.cartParams.ciCode = this.$store.state.userData.cicode ;
 
         // 获取购物车列表
         this.getCartListData()

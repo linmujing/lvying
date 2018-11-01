@@ -121,6 +121,8 @@ export default {
         // 获取优惠券列表
         getCouponData(){
 
+            this.$Spin.show();
+
             let param = {
                 'pageNo': this.page,
                 'pageSize': this.pageSize,
@@ -150,12 +152,12 @@ export default {
 
                 }
 
-                // this.$Spin.hide();
+                this.$Spin.hide();
 
             })
             .catch((error) => {
 
-                // this.$Spin.hide();
+                this.$Spin.hide();
                 console.log('发生错误！', error);
 
             });

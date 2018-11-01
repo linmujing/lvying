@@ -247,7 +247,7 @@ export default {
                 // 订单查询值
                 orderSearchValue:'',
                 // 订单类型下标
-                orderTypeIndex: 0,
+                orderTypeIndex: this.$store.state.personCenter.orderType,
                 // 订单类型
                 orderType:[
                     { text: '全部', value: ''},
@@ -303,6 +303,8 @@ export default {
         //@param index 获取当前点击的元素下标
         changeOrderType(index){
 
+            // 订单类型状态更改
+            this.$store.commit('personCenter/setOrderType', index);
             this.orderData.orderTypeIndex = index;
             this.orderData.pageData.current = 1
             // 获取订单列表
@@ -318,7 +320,6 @@ export default {
 
             // 获取订单列表
             this.getOrderList();
-
 
         },
 
@@ -445,15 +446,18 @@ export default {
 
             this.$Spin.show()
               
-            let param = this.$Qs.stringify({ 
+            let param = { 
                 'pageNo': this.orderData.pageData.current, 
                 'pageSize': this.orderData.pageData.pageSize,
                 'ciCode': this.$store.state.userData.cicode ,
-                'orderStatus': this.orderData.orderType[this.orderData.orderTypeIndex].value,
                 'searchKey': this.orderData.orderSearchValue,
-                }) ;
+                };
+            
+            if(this.orderData.orderType[this.orderData.orderTypeIndex].value != ''){
+                param.orderStatus = this.orderData.orderType[this.orderData.orderTypeIndex].value;
+            }
 
-            this.$api.getOrderList( param )
+            this.$api.getOrderList( this.$Qs.stringify(param) )
 
             .then( (res) => {
 
@@ -661,11 +665,6 @@ export default {
 
     },
     mounted(){
-
-        // 带参进入订单页
-        if(this.$route.query.orderState){
-            this.orderData.orderTypeIndex = this.$route.query.orderState;
-        }
 
         // 获取订单列表
         this.getOrderList();
