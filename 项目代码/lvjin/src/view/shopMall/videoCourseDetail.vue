@@ -6,11 +6,11 @@
         <Col span="12">
           <div v-if="dataStates" class="width_600px border">
             <div v-if="typeId == 3" style="max-height: 400px">
-                <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="curIndex"></Video>
+                <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="activeIndex"></Video>
             </div>
             <div v-else style="height: 400px">
               <img :src="dataDetail.productProfileUrl" class="all_width all_height">
-              <Audio v-show="showAudio" ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="curIndex"></Audio>
+              <Audio v-show="showAudio" ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="activeIndex"></Audio>
             </div>
           </div>
         </Col>
@@ -122,11 +122,11 @@
                   </div>
                   <div class="float_right">
                     <span>{{item.audioTime}}</span>
-                    <div v-if="hasBuy == 1" class="inline_block width_100px margin_left_20">
+                    <div v-if="parseInt(item.voiceStatus) === 0" class="inline_block width_100px margin_left_20">
                       <Button size="small" type="success" shape="circle" class="bg_title" @click="audition(index)">立即播放</Button>
                     </div>
                     <div v-else class="inline_block width_100px margin_left_20">
-                      <Button v-if="parseInt(item.voiceStatus) === 0" size="small" type="warning" shape="circle" @click="audition(index)">试听</Button>
+                      <Button v-if="parseInt(item.voiceStatus) === 1" size="small" type="warning" shape="circle" @click="audition(index)">试听</Button>
                       <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                     </div>
                   </div>
@@ -270,7 +270,7 @@ export default {
           cuponList: [],
           // 已经购买
           hasBuy: 0,
-          curIndex: ''
+          activeIndex: ''
         }
 
     },
@@ -384,6 +384,7 @@ export default {
               result.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
               // 课程目录
               var productSection = eval(result.productSection)
+              console.log(productSection)
               // 获取视频音频数据
               var videoSection = []
               var audioSection = []
@@ -410,6 +411,7 @@ export default {
               this.videoData = videoData
               this.audioData = audioData
               this.dataStates = true
+              console.log(audioData)
             }else{
               this.$Spin.hide()
               this.$Message.warning(res.data.message);
@@ -515,8 +517,8 @@ export default {
       },
       // 试听视频
       audition(index){
+        this.activeIndex = index
         if(this.typeId == 3){
-          this.curIndex = index
           this.$refs.myVideo.onPlayerPlay();
         }else {
           if(this.audioData.length === 0){

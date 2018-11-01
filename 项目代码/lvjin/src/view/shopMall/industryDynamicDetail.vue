@@ -276,7 +276,7 @@ export default {
       },
       // 查看视频
       playerVideo(item){
-        if(!parseInt(item.videoStatus) == 0 || !parseInt(item.videoStatus) == 1){
+        if(!parseInt(item.videoStatus) == 0 && !parseInt(item.videoStatus) == 1){
           this.$Message.warning('对不起，您需要购买后才能观看！');
           return ;
         }
@@ -286,11 +286,12 @@ export default {
         }
         this.videoModel = true
         this.videoData = item
-        // this.$refs.myVideo.onPlayerPlay();
+        this.$refs.myVideo.onPlayerPlay();
       },
       // 收听音频
       playerAudio(item){
-        if(!parseInt(item.voiceStatus) == 0 || !parseInt(item.voiceStatus) == 1){
+			  console.log(item)
+        if(!parseInt(item.voiceStatus) == 0 && !parseInt(item.voiceStatus) == 1){
           this.$Message.warning('对不起，您需要购买后才能收听！');
           return ;
         }
@@ -300,7 +301,7 @@ export default {
         }
         this.showAudio = true
         this.audioData = item
-        // this.$refs.myAudio.startPlay();
+        this.$refs.myAudio.startPlay();
       },
       // 查看文字
       openTxt(item){
@@ -385,6 +386,8 @@ export default {
               // 动态管控列表
               this.sectionNav = result.productSectionIndexList
               this.sectionIndex = result.productSectionIndexList[0].sectionIndex
+              this.videoData = result.productSectionIndexList[0]
+              this.audioData = result.productSectionIndexList[0]
               // 动态管控课程目录
               this.sectionList = result.productSectionList
               // 课程目录
