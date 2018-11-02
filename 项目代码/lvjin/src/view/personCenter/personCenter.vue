@@ -23,6 +23,11 @@
                     </Col>
                 </Row>
             </div>
+            <!-- <audio preload="auto" controls> 
+                <source src="../../assets/music/a1.wav" />
+            </audio> -->
+            <!-- <noembed><bgsound src="../../assets/music/a1.wav"></noembed>  -->
+            <!-- <embed type="audio/wav" src="../../assets/music/a1.wav" autostart=true loop=false ></embed>  -->
             <!-- <Video></Video>     -->
              <!-- <Audio></Audio>  -->
         </div>

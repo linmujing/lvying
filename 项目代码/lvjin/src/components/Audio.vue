@@ -44,7 +44,7 @@
                     </Col>
                     <!-- 时间 -->
                     <Col span="3">
-                        <div class="text_center" style="padding-top:13px;color:#fff;"> {{audioControl.timeDivider}} / {{audioControl.timeDuration}} </div>
+                        <div class="text_center" style="color:#fff;"> {{audioControl.timeDivider}} / {{audioControl.timeDuration}} </div>
                     </Col>
 
                     <!-- 音量 -->
@@ -74,14 +74,18 @@
             <div style="display:none;">
                 <!-- 这里设置了ref属性后，在vue组件中，就可以用this.$refs.audio来访问该dom元素 -->
                 <audio ref="audio" class="dn"
-                    :src="url" :preload="audio.preload"
+                    :src="url"
+                    :preload="audio.preload"
                     @play="onPlay"
                     @error="onError"
                     @waiting="onWaiting"
                     @pause="onPause"
                     @timeupdate="onTimeupdate"
                     @loadedmetadata="onLoadedmetadata"
-                ></audio>
+                >
+                
+                </audio>
+
             </div>
         </div>
     </div>
@@ -95,9 +99,9 @@ export default {
     data() {
         return {
 
-          // url: this.theUrl || 'https://wdd.js.org/element-audio/static/falling-star.mp3',
-          url: '',
-
+        //   url: this.theUrl || 'https://wdd.js.org/element-audio/static/falling-star.mp3',
+        //   url: require('../assets/music/a1.wav'),
+          url:'',
           audio: {
             preload: 'auto'
           },
@@ -132,10 +136,7 @@ export default {
 
         };
     },
-    components: {
 
-
-    },
     methods: {
 
         /** 音频函数 **/
