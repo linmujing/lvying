@@ -8,30 +8,30 @@
                     <Col span="2">
                         <span class="audio_img"> <img :src="imgUrl" alt=""> </span>
                     </Col>
-                    <Col span="3">
+                    <Col span="1">
                         <!-- 上一个-->
                         <span class="audio_control_icon" @click="previousClick">
                             <span class="vjs-icon-previous-item"></span>
                         </span>
-
+                    </Col>
+                    <Col span="1">
                         <!-- 开关 -->
                         <span class="audio_control_icon"
-                            style="padding:0 10px;"
                             @click="pausePlay"
                             v-show="!audioControl.audioOff">
                             <span class="vjs-icon-pause"></span>
                         </span>
                         <span class="audio_control_icon"
-                            style="padding:0 10px;"
                             @click="startPlay"
                             v-show="audioControl.audioOff">
                             <span class="vjs-icon-play"></span>
                         </span>
+                    </Col>
+                    <Col span="1">
                         <!-- 下一个 -->
                         <span class="audio_control_icon" @click="nextClick">
                             <span class="vjs-icon-next-item"></span>
                         </span>
-
                     </Col>
                     <!-- 时间进度条 -->
                     <Col span="12">
