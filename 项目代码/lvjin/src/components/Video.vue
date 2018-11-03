@@ -82,8 +82,8 @@
             <!-- 时间进度条 -->
             <Col span="14">
 
-
-                <div style="padding:0 5%;position:relative;top:2px;">
+                &nbsp;
+                <div class="slider_line">
                     <Slider v-model="videoControl.timeProgress"
                         @on-change="getTimeChange" :tip-format="setTimeTip">
                     </Slider>
@@ -100,7 +100,8 @@
             </Col>
             <!-- 音量进度条 -->
             <Col span="2">
-                <div style="padding: 2px 10px;">
+            &nbsp;
+                <div  class="slider_line">
                     <Slider v-model="videoControl.volume"
                         @on-input="getVolumeChange" :tip-format="setVolumeTip" >
                      </Slider>
@@ -602,7 +603,7 @@ export default {
         width: 8px;
         height: 8px;
     }
-    .ivu-slider-button-wrap{
+    .slider_line .ivu-slider-button-wrap{
         top: -6px;
     }
     .vjs-custom-skin > .video-js .vjs-big-play-button {
@@ -770,6 +771,13 @@ export default {
     }
     .video_menu.video_menu_active{
         right:-30%;
+    }
+    .slider_line{
+        position:absolute;
+        width: 90%;
+        top: 10px;
+        left:5%;
+
     }
 
 
