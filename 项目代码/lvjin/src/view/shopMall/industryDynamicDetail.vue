@@ -299,9 +299,11 @@ export default {
           this.$Message.warning('对不起，当前没有播放源！');
           return ;
         }
-        this.showAudio = true
         this.audioData = item
-        this.$refs.myAudio.startPlay();
+        this.showAudio = true
+        setTimeout(function(){
+          this.$refs.myAudio.startPlay();
+        },2ß00);
       },
       // 查看文字
       openTxt(item){

@@ -95,7 +95,7 @@
 <script>
 
 export default {
-  props:['audioParams', 'imgUrl', 'activeIndex'],
+  props:['audioParams', 'imgUrl'],
     data() {
         return {
 
@@ -190,7 +190,15 @@ export default {
         /** 音频控制器函数 **/
         // 开始播放
         startPlay() {
-
+          console.log(this.audioParams)
+          if(this.audioParams.length === 1){
+            this.audioTitle = this.audioParams[0].sectionName
+            this.url = this.audioParams[0].voiceUrl
+          }else if(this.audioParams.length > 1){
+            var index = this.activeIndex
+            this.audioTitle = this.audioParams[index].sectionName
+            this.url = this.audioParams[index].voiceUrl
+          }
             this.$refs.audio.play()
             this.audioControl.audioOff = false
 
@@ -268,6 +276,16 @@ export default {
     computed: {
 
 
+    },
+    watch: {
+      //监听参数变化
+      audioParams: {
+        handler(newValue, oldValue) {
+          console.log(newValue)
+          console.log('22',oldValue)
+        },
+        deep: true
+      }
     },
     mounted(){
       // console.log(this.audioParams)his.playerOptions.sources = arr[index].videoUrl;

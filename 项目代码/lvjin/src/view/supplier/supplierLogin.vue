@@ -104,7 +104,7 @@ export default {
                   // this.$router.push({ name: '', params: {id: id}})
 
                   //跳转函数*************************************************
-                  window.location.href = 'http://114.115.172.162:8088/#/dashboard'
+                  window.location.href = this.GLOBAL.supplier_url
                 }else{
                   this.$Spin.hide()
                   this.$Message.warning(res.data.message);
@@ -121,6 +121,9 @@ export default {
           }
         })
       },
+    },
+    mounted(){
+
     }
 }
 </script>
