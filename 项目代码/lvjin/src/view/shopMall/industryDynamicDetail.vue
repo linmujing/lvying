@@ -303,7 +303,7 @@ export default {
         this.showAudio = true
         setTimeout(function(){
           this.$refs.myAudio.startPlay();
-        },2ß00);
+        },2000);
       },
       // 查看文字
       openTxt(item){
