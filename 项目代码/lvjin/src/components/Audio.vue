@@ -95,7 +95,6 @@
 <script>
 
 export default {
-  // props:['audioParams', 'imgUrl'],
   props:{
     audioParams: {
       type: Object

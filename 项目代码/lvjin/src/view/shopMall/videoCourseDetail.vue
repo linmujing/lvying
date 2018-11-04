@@ -10,7 +10,7 @@
             </div>
             <div v-else style="height: 400px">
               <img :src="dataDetail.productProfileUrl" class="all_width all_height">
-              <Audio v-show="showAudio" ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="activeIndex"></Audio>
+              <Audio v-show="showAudio" ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl"></Audio>
             </div>
           </div>
         </Col>
@@ -28,7 +28,11 @@
           <div v-if="hasBuy == 0">
             <div class="margin_top_30 clearfix">
               <p class="float_left"><span class="color_title font_20">￥{{dataDetail.productPrice}}</span></p>
-              <p class="float_left pointer margin_left_30" @click="audition(0)">
+              <p v-if="typeId == 3" class="float_left pointer margin_left_30" @click="audition(0)">
+                <Icon type="ios-headset-outline" size="28"/>
+                <span class="font_16 color_666 vertical_middle">试听</span>
+              </p>
+              <p v-else class="float_left pointer margin_left_30" @click="audition(audioData)">
                 <Icon type="ios-headset-outline" size="28"/>
                 <span class="font_16 color_666 vertical_middle">试听</span>
               </p>
@@ -123,10 +127,10 @@
                   <div class="float_right">
                     <span>{{item.audioTime}}</span>
                     <div v-if="parseInt(item.voiceStatus) === 0" class="inline_block width_100px margin_left_20">
-                      <Button size="small" type="success" shape="circle" class="bg_title" @click="audition(index)">立即播放</Button>
+                      <Button size="small" type="success" shape="circle" class="bg_title" @click="audition(item)">立即播放</Button>
                     </div>
                     <div v-else class="inline_block width_100px margin_left_20">
-                      <Button v-if="parseInt(item.voiceStatus) === 1" size="small" type="warning" shape="circle" @click="audition(index)">试听</Button>
+                      <Button v-if="parseInt(item.voiceStatus) === 1" size="small" type="warning" shape="circle" @click="audition(item)">试听</Button>
                       <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                     </div>
                   </div>
@@ -265,7 +269,7 @@ export default {
           nowIndex: this.$route.query.typeId-1,
           visible: false,
           videoData: [],
-          audioData: [],
+          audioData: {},
           showAudio: false,
           cuponList: [],
           // 已经购买
@@ -409,9 +413,9 @@ export default {
               this.productSection.videoSection = videoSection
               this.productSection.audioSection = audioSection
               this.videoData = videoData
-              this.audioData = audioData
+              this.audioData = audioData[0]
+              console.log(this.audioData)
               this.dataStates = true
-              console.log(audioData)
             }else{
               this.$Spin.hide()
               this.$Message.warning(res.data.message);
@@ -521,10 +525,12 @@ export default {
         if(this.typeId == 3){
           this.$refs.myVideo.onPlayerPlay();
         }else {
-          if(this.audioData.length === 0){
+          console.log(index)
+          if(index.voiceUrl == ''){
             this.$Message.warning('对不起，当前没有播放源！');
             return false;
           }
+          this.audioData = index
           this.showAudio = true
           this.$refs.myAudio.startPlay();
         }

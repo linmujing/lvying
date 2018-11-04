@@ -168,21 +168,23 @@
         </div>
       </div>
     </div>
-    <!--音频-->
-    <div v-if="showAudio">
-      <Audio ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="curIndex"></Audio>
-    </div>
-    <!--视频弹窗-->
-    <Modal
-      title="观看视频"
-      v-model="videoModel"
-      :footer-hide="true"
-      width="70%"
-      :mask-closable="false">
-      <div v-if="videoModel">
-        <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="curIndex"></Video>
+    <div v-if="dataStates">
+      <!--音频-->
+      <div v-show="showAudio">
+        <Audio ref="myAudio" :audioParams="audioData" :imgUrl="dataDetail.productProfileUrl"></Audio>
       </div>
-    </Modal>
+      <!--视频弹窗-->
+      <Modal
+        title="观看视频"
+        v-model="videoModel"
+        :footer-hide="true"
+        width="70%"
+        :mask-closable="false">
+        <div v-show="videoModel">
+          <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="curIndex"></Video>
+        </div>
+      </Modal>
+    </div>
     <!--文字弹窗-->
     <Modal
       v-model="txtModel"
@@ -230,7 +232,7 @@ export default {
           videoModel: false,
           txtModel: false,
           videoData: [],
-          audioData: [],
+          audioData: {},
           showAudio: false,
           txtUrl: '',
           // 已经购买
@@ -240,6 +242,7 @@ export default {
           sectionSize: 6,
           sectionCont: 0,
           sectionIndex: 0,
+          dataStates: false,
           curIndex: 0
         }
 
@@ -290,7 +293,6 @@ export default {
       },
       // 收听音频
       playerAudio(item){
-			  console.log(item)
         if(!parseInt(item.voiceStatus) == 0 && !parseInt(item.voiceStatus) == 1){
           this.$Message.warning('对不起，您需要购买后才能收听！');
           return ;
@@ -386,8 +388,10 @@ export default {
               // 动态管控列表
               this.sectionNav = result.productSectionIndexList
               this.sectionIndex = result.productSectionIndexList[0].sectionIndex
-              this.videoData = result.productSectionIndexList[0]
-              this.audioData = result.productSectionIndexList[0]
+              this.videoData = result.productSectionList[0]
+              this.audioData = result.productSectionList[0]
+              this.dataStates = true
+              console.log(this.audioData)
               // 动态管控课程目录
               this.sectionList = result.productSectionList
               // 课程目录
