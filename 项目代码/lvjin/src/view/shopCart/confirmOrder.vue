@@ -68,8 +68,9 @@
 
                     <!-- 组合包优惠券 -->
                     <div class="item_shipping_methods padding_left_14" >
-                        <span style="display:inline-block;width:100px;">优惠券：</span>
-                        <el-select v-model="Coupon.value"  size="mini" placeholder="请选择"  @change="onCouponChange"  :disabled='Coupon.options.length > 0 ? false : true' >
+
+                        <span style="display:inline-block;width:100px;">优惠券：</span>   
+                        <el-select v-model="Coupon.value"  size="mini" :placeholder="Coupon.options.length > 0 ? '请选择' : '没有优惠券'"  @change="onCouponChange"  :disabled='Coupon.options.length > 0 ? false : true' >
                             <el-option
                             v-for="(item,index) in Coupon.options"
                             :key="index"
