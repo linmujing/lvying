@@ -215,7 +215,7 @@
 				            	<div class="float_right color_666 line_height_30px text_ellipsis width_50 text_right">{{item.createBy}}</div>
 				            </div>
 				            <div class="margin_top_10 clearfix">
-				              <p class="pointer float_left">
+				              <p @click="jumpDetail(item.productCode)" class="pointer float_left">
 												<Icon type="ios-headset-outline" size="28"/>
 												<span class="font_16 color_666 vertical_middle">试听</span>
 											</p>
