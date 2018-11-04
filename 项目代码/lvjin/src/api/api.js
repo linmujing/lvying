@@ -5,8 +5,8 @@ import axios from 'axios';
 var instance = axios.create({
     // baseURL: 'http://localhost:8080/',          // 本地测试
     // baseURL: 'http://www.luyingjiaoyu.com/law-web-api/', // 正式环境
-    // baseURL: 'http://114.115.133.96:8899/law-web-api/', // 测试环境
-    baseURL: "/api/",                                      // 本地环境
+    baseURL: 'http://114.115.133.96:8899/law-web-api/', // 测试环境
+    // baseURL: "/api/",                                      // 本地环境
     timeout: 20000,                                // 请求超时设置
     headers: { "Accept": "application/json" },
 });
@@ -86,7 +86,7 @@ export const deleteAddress = params => { return instance.post(`customer/address/
 
 /** 优惠券 **/
 //会员领取优惠券
-export const addCoupont = params => { return instance.post(`customer/coupon/addCoupont`, params ); };
+export const addCoupont = params => { return instance.post(`customer/coupon/addCoupon`, params ); };
 //获取我的优惠券列表
 export const getCouponList = params => { return instance.post(`customer/coupon/getCouponList`, params ); };
 //获取产品优惠券列表

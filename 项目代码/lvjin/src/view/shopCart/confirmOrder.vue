@@ -17,7 +17,7 @@
                             <Col span="2"><span class="block_center">小计（元）</span></Col>
                         </Row>
                     </div>
-                    
+
                     <!-- 订单列表 -->
                     <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="index1">
                         <li>
@@ -51,7 +51,7 @@
                             <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： ¥ {{items.itemTotal}}</div>
                             <!-- 其他操作  -->
                             <div class="item_shipping_methods padding_left_14" >
-                                <span style="display:inline-block;width:100px;">配送方式：</span> 
+                                <span style="display:inline-block;width:100px;">配送方式：</span>
                                 <span>
                                     <el-select v-model="shippingMethods.value" size="mini" placeholder="请选择">
                                         <el-option
@@ -60,14 +60,15 @@
                                         :label="item.label"
                                         :value="item.value">
                                         </el-option>
-                                    </el-select> 
-                                </span>  
+                                    </el-select>
+                                </span>
                             </div>
                         </li>
                     </ul>
 
                     <!-- 组合包优惠券 -->
                     <div class="item_shipping_methods padding_left_14" >
+
                         <span style="display:inline-block;width:100px;">优惠券：</span>   
                         <el-select v-model="Coupon.value"  size="mini" :placeholder="Coupon.options.length > 0 ? '请选择' : '没有优惠券'"  @change="onCouponChange"  :disabled='Coupon.options.length > 0 ? false : true' >
                             <el-option
@@ -76,7 +77,7 @@
                             :label="item.label"
                             :value="item.value">
                             </el-option>
-                        </el-select> 
+                        </el-select>
                     </div>
 
                     <!-- 其他操作 -->
@@ -120,7 +121,7 @@ export default {
                 listTotal: 0.00,
                 // 大列表
                 cartList: []
-            }, 
+            },
 
             // 配送方式
             shippingMethods:{
@@ -139,12 +140,12 @@ export default {
                 ciCode: this.$store.state.userData.cicode,
                 phone:  this.$store.state.userData.ciphone
             },
-            
+
         }
-        
+
     },
     methods: {
-        /*订单数据计算*/    
+        /*订单数据计算*/
         // 计算小计与合计
         calculatePrice(){
 
@@ -160,7 +161,7 @@ export default {
                 this.cartDate.cartList[x].itemTotal = 0;
 
                 for(let i = 0 ; i < n ; i++){
-                    
+
                     let item = this.cartDate.cartList[x].items[i];
 
                     this.cartDate.cartList[x].itemTotal += item.num * (item.price * 10000);
@@ -171,11 +172,11 @@ export default {
 
             }
 
-            
+
 
             this.$Spin.hide()
 
-        },         
+        },
         // 监听优惠券改变
         onCouponChange(){
 
@@ -189,13 +190,13 @@ export default {
             }
 
         },
-        /*订单提交*/   
-        submitOrderClick(){   
+        /*订单提交*/
+        submitOrderClick(){
 
             // 去结算页面
             this.$router.push({ path: '/shopGoPay', query: { orderCode: this.$route.query.orderCode} })
-            
-        }, 
+
+        },
 
         /*点击打开详情*/
         //@param code 商品编号
@@ -276,7 +277,7 @@ export default {
 
                         console.log(index)
 
-                        if( index == -1  ){ 
+                        if( index == -1  ){
 
                             merchantArr.push(data[i].merchantInfo.merchantNm);
 
@@ -449,7 +450,7 @@ export default {
     }
     .ivu-modal-close .ivu-icon-ios-close{
         top:5px;
-    } 
+    }
     .el-input--mini .el-input__inner{
         color: #f09105;
     }
@@ -460,10 +461,10 @@ export default {
 <style scoped lang='less'>
 
     // 引入订单共用less文件
-    @import './shopCart.less'; 
+    @import './shopCart.less';
 
 
-    /**订单地址**/ 
+    /**订单地址**/
     .order_address{
         background:#fff;
 
@@ -528,7 +529,7 @@ export default {
         }
     }
 
-    /**订单容器**/ 
+    /**订单容器**/
     .shopping_cart_container{
         margin-top:20px;
         background:#fff;
@@ -536,7 +537,7 @@ export default {
         //  订单盒子
         .list_box{
             margin: 0 16px;
-            
+
             //  头部
             .list_header{
                 height: 60px;
@@ -628,7 +629,7 @@ export default {
     }
 
 
-    /**订单提交**/ 
+    /**订单提交**/
     .sumbit_block{
         margin-top:20px;
         padding:30px 14px;
@@ -643,5 +644,5 @@ export default {
             color: @color_f09105;
         }
     }
-    
+
 </style>
