@@ -83,7 +83,7 @@
                     @timeupdate="onTimeupdate"
                     @loadedmetadata="onLoadedmetadata"
                 >
-                
+
                 </audio>
 
             </div>
@@ -95,7 +95,15 @@
 <script>
 
 export default {
-  props:['audioParams', 'imgUrl'],
+  // props:['audioParams', 'imgUrl'],
+  props:{
+    audioParams: {
+      type: Object
+    },
+    imgUrl: {
+      type: String
+    }
+  },
     data() {
         return {
 
@@ -191,16 +199,12 @@ export default {
         // 开始播放
         startPlay() {
           console.log(this.audioParams)
-          if(this.audioParams.length === 1){
-            this.audioTitle = this.audioParams[0].sectionName
-            this.url = this.audioParams[0].voiceUrl
-          }else if(this.audioParams.length > 1){
-            var index = this.activeIndex
-            this.audioTitle = this.audioParams[index].sectionName
-            this.url = this.audioParams[index].voiceUrl
+          if(!Object.keys(this.audioParams).length == 0){
+            this.audioTitle = this.audioParams.sectionName
+            this.url = this.audioParams.voiceUrl
           }
-            this.$refs.audio.play()
-            this.audioControl.audioOff = false
+          this.$refs.audio.play()
+          this.audioControl.audioOff = false
 
         },
         // 暂停
@@ -282,20 +286,15 @@ export default {
       audioParams: {
         handler(newValue, oldValue) {
           console.log(newValue)
-          console.log('22',oldValue)
+          this.startPlay()
         },
         deep: true
       }
     },
     mounted(){
-      // console.log(this.audioParams)his.playerOptions.sources = arr[index].videoUrl;
-      if(this.audioParams.length === 1){
-        this.audioTitle = this.audioParams[0].sectionName
-        this.url = this.audioParams[0].voiceUrl
-      }else if(this.audioParams.length > 1){
-        var index = this.activeIndex
-        this.audioTitle = this.audioParams[index].sectionName
-        this.url = this.audioParams[index].voiceUrl
+      if(!Object.keys(this.audioParams).length == 0){
+          this.audioTitle = this.audioParams.sectionName
+          this.url = this.audioParams.voiceUrl
       }
 
     },

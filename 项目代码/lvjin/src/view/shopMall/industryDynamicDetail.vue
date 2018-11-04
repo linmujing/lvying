@@ -39,7 +39,10 @@
                   <Tag color="orange">优惠</Tag>
                   <Icon type="ios-arrow-down" color="#fa8c16"></Icon>
                 </a>
-                <DropdownMenu slot="list" style="padding: 5px 10px 0 10px">
+                <DropdownMenu slot="list" style="padding: 5px 10px 0 10px;max-height: 260px;overflow-y: scroll">
+                  <div style="text-align: right;margin:10px;">
+                    <Button type="success" size="small" ghost @click="handleClose">关闭</Button>
+                  </div>
                   <DropdownItem v-for="(item,index) in cuponList" :key="index" :name="item.couponCode+','+item.couponForm" v-if="item.couponCount>0" style="background: #FFF3E5;margin-bottom: 10px;">
                     <Row style="width: 300px;">
                       <Col span="16" class="color_F5320D font_12" style="border-right: 2px dashed #EBDFD1">
@@ -52,9 +55,6 @@
                       </Col>
                     </Row>
                   </DropdownItem>
-                  <div style="text-align: right;margin:10px;">
-                    <Button type="success" size="small" ghost @click="handleClose">关闭</Button>
-                  </div>
                 </DropdownMenu>
               </Dropdown>
             </div>
@@ -301,9 +301,7 @@ export default {
         }
         this.audioData = item
         this.showAudio = true
-        setTimeout(function(){
-          this.$refs.myAudio.startPlay();
-        },2ß00);
+        this.$refs.myAudio.startPlay();
       },
       // 查看文字
       openTxt(item){
@@ -353,13 +351,13 @@ export default {
             console.log(res);
             if(res.data.code == 200){
               var arr = res.data.content.list
-              var list = []
-              for(var i=0;i<arr.length;i++){
-                if(arr[i].couponEffectiveType == 1){
-                  list.push(arr[i])
-                }
-              }
-              this.cuponList = list
+              // var list = []
+              // for(var i=0;i<arr.length;i++){
+              //   if(arr[i].couponEffectiveType == 1){
+              //     list.push(arr[i])
+              //   }
+              // }
+              this.cuponList = arr
             }else if (res.data.code == 500){
               this.$Message.warning(res.data.message);
             }
