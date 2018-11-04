@@ -257,8 +257,6 @@ export default {
                     { text: '交易成功', value: 3},
                     { text: '交易取消', value: 4},
                     { text: '交易关闭', value: 5},
-                    { text: '订单异常', value: 6},
-                    { text: '其他', value: 7},
                 ],
 
                 // 订单数据真实数据
@@ -305,8 +303,10 @@ export default {
 
             // 订单类型状态更改
             this.$store.commit('personCenter/setOrderType', index);
+
             this.orderData.orderTypeIndex = index;
             this.orderData.pageData.current = 1
+            
             // 获取订单列表
             this.getOrderList();
 
