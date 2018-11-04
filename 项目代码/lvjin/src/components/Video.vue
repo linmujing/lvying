@@ -235,8 +235,6 @@ export default {
         // 视频播放 *
         onPlayerPlay(player) {
 
-            this.player.play();
-            console.log(this.playerOptions.sources)
             // 没有播放源提示
             if( this.playerOptions.sources.length == 0 ){
 
@@ -245,8 +243,10 @@ export default {
                 return false;
 
             }
-
-            this.videoControl.videoOff = false;
+          console.log(this.activeIndex)
+          this.changeItem(this.activeIndex)
+          this.player.play();
+          this.videoControl.videoOff = false;
 
         },
         // 视频暂停 *
@@ -569,7 +569,10 @@ export default {
 
     },
     watch: {
-
+      activeIndex(val, oldVal){
+        console.log(val)
+        this.onPlayerPlay()
+      }
     },
     mounted(){
         // 获取视频固定参数

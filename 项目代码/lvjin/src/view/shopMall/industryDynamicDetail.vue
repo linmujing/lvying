@@ -97,7 +97,7 @@
           </div>
 
           <div v-if="sectionList.length > 0">
-            <div v-for="item in sectionList" class="margin_15 border_bottom_e6 padding_bottom_10">
+            <div v-for="(item, index) in sectionList" :key="index" class="margin_15 border_bottom_e6 padding_bottom_10">
               <!--<p class="font_18">{{item.sectionIndex}}</p>-->
               <div class="margin_left_30 margin_top_10 clearfix">
                 <span>{{item.sectionName}}</span>
@@ -107,7 +107,7 @@
                     <Button v-if="hasBuy == 0" size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                   </div>
                   <div v-show="detailId === 2">
-                    <Button @click="playerVideo(item)" size="small" type="success" ghost shape="circle" class="button_title">视频</Button>
+                    <Button @click="playerVideo(index,item)" size="small" type="success" ghost shape="circle" class="button_title">视频</Button>
                     <Button @click="playerAudio(item)" size="small" type="success" ghost shape="circle" class="button_title">音频</Button>
                     <Button @click="openTxt(item)" size="small" type="success" ghost shape="circle" class="button_title">文字</Button>
                     <Button v-show="parseInt(item.docStatus) === 0" @click="downloadDoc(item.docUrl)" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
@@ -278,7 +278,7 @@ export default {
         this.visible = false;
       },
       // 查看视频
-      playerVideo(item){
+      playerVideo(index, item){
         if(!parseInt(item.videoStatus) == 0 && !parseInt(item.videoStatus) == 1){
           this.$Message.warning('对不起，您需要购买后才能观看！');
           return ;
@@ -288,7 +288,8 @@ export default {
           return ;
         }
         this.videoModel = true
-        this.videoData = item
+        this.showAudio = false
+        this.curIndex = index
         this.$refs.myVideo.onPlayerPlay();
       },
       // 收听音频
@@ -303,6 +304,7 @@ export default {
         }
         this.audioData = item
         this.showAudio = true
+        this.videoModel = false
         this.$refs.myAudio.startPlay();
       },
       // 查看文字
@@ -388,7 +390,7 @@ export default {
               // 动态管控列表
               this.sectionNav = result.productSectionIndexList
               this.sectionIndex = result.productSectionIndexList[0].sectionIndex
-              this.videoData = result.productSectionList[0]
+              this.videoData = result.productSectionList
               this.audioData = result.productSectionList[0]
               this.dataStates = true
               console.log(this.audioData)

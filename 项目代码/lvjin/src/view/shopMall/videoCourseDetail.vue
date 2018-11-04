@@ -396,13 +396,9 @@ export default {
               var audioData = []
               for (var i=0;i<productSection.length;i++){
                 var section = productSection[i]
-                // if(!section.videoUrl == ''){
                   videoSection.push(section)
-                // }
-                // if(!section.voiceUrl == ''){
                   audioSection.push(section)
-                // }
-                //获取试用视频音频数据tatuss = 0
+                //获取试用视频音频数据status = 0
                 if(parseInt(section.videoStatus) === 0 || parseInt(section.videoStatus) === 1){
                   videoData.push(section)
                 }
@@ -524,6 +520,7 @@ export default {
         this.activeIndex = index
         if(this.typeId == 3){
           this.$refs.myVideo.onPlayerPlay();
+          this.showAudio = false
         }else {
           console.log(index)
           if(index.voiceUrl == ''){
