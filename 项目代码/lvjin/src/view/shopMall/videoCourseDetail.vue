@@ -6,7 +6,8 @@
         <Col span="12">
           <div v-if="dataStates" class="width_600px border">
             <div v-if="typeId == 3" style="max-height: 400px">
-                <Video ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="activeIndex"></Video>
+                <img v-show="videoData.length==0" :src="dataDetail.productProfileUrl" class="all_width all_height">
+                <Video v-show="videoData.length>0" ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="activeIndex"></Video>
             </div>
             <div v-else style="height: 400px">
               <img :src="dataDetail.productProfileUrl" class="all_width all_height">
@@ -519,6 +520,10 @@ export default {
       audition(index){
         this.activeIndex = index
         if(this.typeId == 3){
+          if(this.videoData.length == 0){
+            this.$Message.warning('暂无试看课程！');
+            return false;
+          }
           this.$refs.myVideo.onPlayerPlay();
           this.showAudio = false
         }else {
