@@ -42,7 +42,7 @@
 							<div class="margin_top_15 clearfix">
 								<p @click="toDetail(item.productCode,3)" class="pointer float_left">
 									<Icon type="ios-headset-outline" size="30"/>
-									<span class="font_16 color_666 vertical_middle">试听</span>
+									<span class="font_16 color_666 vertical_middle">试看</span>
 								</p>
 								<div class="float_left margin_left_20">
 									<Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>

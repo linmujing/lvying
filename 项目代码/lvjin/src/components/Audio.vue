@@ -83,7 +83,7 @@
                     @timeupdate="onTimeupdate"
                     @loadedmetadata="onLoadedmetadata"
                 >
-
+                  你的浏览器不支持该播放器
                 </audio>
 
             </div>
@@ -285,7 +285,10 @@ export default {
       audioParams: {
         handler(newValue, oldValue) {
           console.log(newValue)
-          this.startPlay()
+          if(!Object.keys(this.audioParams).length == 0){
+            this.audioTitle = this.audioParams.sectionName
+            this.url = this.audioParams.voiceUrl
+          }
         },
         deep: true
       }

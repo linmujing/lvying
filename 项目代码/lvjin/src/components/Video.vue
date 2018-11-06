@@ -21,10 +21,11 @@
                     @error="onError($event)"
 
       >
+        你的浏览器不支持该播放器
       </video-player>
     </div>
 
-    <div style="position:absolute;width:">
+    <div style="position:absolute;">
 
         <!-- 开关 -->
         <span class="video_control_icon"

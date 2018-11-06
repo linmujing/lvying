@@ -49,7 +49,7 @@
                       <div class="font_18 text_ellipsis">{{item.productTitle}}</div>
                       <div class="color_666 text_ellipsis margin_top_10 clearfix">
                         <div class="float_left">{{item.createBy}}</div>
-                        <div class="float_right text_ellipsis">{{item.lookCount}}人听过</div>
+                        <div class="float_right text_ellipsis">{{item.lookCount}}人看过</div>
                       </div>
                     </div>
                   </li>
@@ -93,7 +93,7 @@
                       <div class="margin_top_5 clearfix">
                         <p class="pointer float_left">
                           <Icon type="ios-headset-outline" size="30"/>
-                          <span class="font_16 color_666 vertical_middle" @click="jumpDetail(item.productCode)">试听</span>
+                          <span class="font_16 color_666 vertical_middle" @click="jumpDetail(item.productCode)">试看</span>
                         </p>
                         <div class="float_right">
                           <Button type="success" shape="circle" class="bg_title" @click="goBuy(item.productCode)">立即购买</Button>

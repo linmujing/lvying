@@ -31,7 +31,7 @@
               <p class="float_left"><span class="color_title font_20">￥{{dataDetail.productPrice}}</span></p>
               <p v-if="typeId == 3" class="float_left pointer margin_left_30" @click="audition(0)">
                 <Icon type="ios-headset-outline" size="28"/>
-                <span class="font_16 color_666 vertical_middle">试听</span>
+                <span class="font_16 color_666 vertical_middle">试看</span>
               </p>
               <p v-else class="float_left pointer margin_left_30" @click="audition(audioData)">
                 <Icon type="ios-headset-outline" size="28"/>
@@ -113,7 +113,7 @@
                       <Button size="small" type="success" shape="circle" class="bg_title" @click="audition(index)">立即播放</Button>
                     </div>
                     <div v-else class="inline_block width_100px margin_left_20">
-                      <Button v-if="parseInt(item.videoStatus) === 0" size="small" type="warning" shape="circle" style="width: 60px" @click="audition(index)">试听</Button>
+                      <Button v-if="parseInt(item.videoStatus) === 0" size="small" type="warning" shape="circle" style="width: 60px" @click="audition(index)">试看</Button>
                       <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                     </div>
                   </div>
@@ -218,7 +218,7 @@
 				            <div class="margin_top_10 clearfix">
 				              <p @click="jumpDetail(item.productCode)" class="pointer float_left">
 												<Icon type="ios-headset-outline" size="28"/>
-												<span class="font_16 color_666 vertical_middle">试听</span>
+												<span class="font_16 color_666 vertical_middle">{{typeId == 3 ? '试看' : '试听'}}</span>
 											</p>
 				              <div class="float_right">
 				                <Button size="small" type="success" shape="circle" class="bg_title" @click="goBuy(item.productCode)">立即购买</Button>
