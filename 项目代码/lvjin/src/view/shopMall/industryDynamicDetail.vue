@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :nowIndex="nowIndex" :showItem='false'></NavBar>
+    <NavBar :nowIndex="nowIndex"></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">

@@ -4,37 +4,38 @@
 	      <div class="center relative">
 					<ul class="list_unstyled ul_inline clearfix font_18 navbar">
 	          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navTitle" :key="index" @click='tabClick(item.id,index)'>
-	            <span class="color_fff tabHover">{{item.name}}</span>
+	            <span @mouseenter="tabHover(item.id,index)" class="color_fff tabHover">{{item.name}}</span>
 	          </li>
 	        </ul>
-	        <div v-show="showItem" ref="listBox" class="listBox">
-	          <div class="">
 
-	            <div v-for="(items,index1) in secondNavTitle" :key="index1">
+	          <div v-show="showItem" ref="listBox" class="listBox" :style="{left: left + 'px'}">
+              <div class="">
 
-	              <div @mouseenter="boxMouseOver(items.id, index1)" @click="jumpDown(items.id,items.catName)"
-										class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
-	                <span class="float_left color_fff font_18 inline_block text_ellipsis" style="width: 120px">{{items.catName}}</span>
-	                <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
-	              </div>
+                <div v-for="(items,index1) in secondNavTitle" :key="index1">
 
-	              <div v-show="thirdNavTitle.length > 0">
-                  <div v-show="showBox" class="itemBox bg_white width_1000px" :style="{minHeight: listBoxHeight + 'px'}">
-                    <div v-for="(itemss,index2) in thirdNavTitle" :key="index2">
-                      <!--<div @click="jumpDown(2)" class="font_18 pointer hover_title">{{itemss.catName}}</div>-->
+                  <div @mouseenter="boxMouseOver(items.id, index1)" @click="jumpDown(items.id,items.catName)"
+                      class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
+                    <span class="float_left color_fff font_18 inline_block text_ellipsis" style="width: 120px">{{items.catName}}</span>
+                    <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
+                  </div>
 
-                      <ul class="list_unstyled ul_inline clearfix margin_bottom_20">
-                        <li @click="jumpDown(itemss.id,itemss.catName)" class="margin_top_5 margin_right_30 pointer hover_title">{{itemss.catName}}</li>
-                      </ul>
+                  <div v-show="thirdNavTitle.length > 0">
+                    <div v-show="showBox" class="itemBox bg_white" :style="{minHeight: listBoxHeight + 'px'}">
+                      <div v-for="(itemss,index2) in thirdNavTitle" :key="index2">
+                        <!--<div @click="jumpDown(2)" class="font_18 pointer hover_title">{{itemss.catName}}</div>-->
 
+                        <ul class="list_unstyled ul_inline clearfix margin_bottom_10">
+                          <li @click="jumpDown(itemss.id,itemss.catName)" class="margin_top_5 margin_right_30 pointer hover_title text_ellipsis width_180px">{{itemss.catName}}</li>
+                        </ul>
+
+                      </div>
                     </div>
                   </div>
+
                 </div>
 
-	            </div>
-
-	          </div>
-	        </div>
+              </div>
+            </div>
 
 	      </div>
 	    </div>
@@ -45,10 +46,11 @@
 <script>
 
 	export default {
-	  props:['nowIndex','showItem','catCode'],
+	  props:['nowIndex','catCode'],
 		data() {
 			return {
 
+        showItem: false,
         showBox: false,
 
         // 当前悬停位置
@@ -66,7 +68,8 @@
         secondNavTitle: [],
         thirdNavTitle: [],
         goodsCode: '',
-        listBoxHeight: ''
+        listBoxHeight: '',
+        left: 0,
 
 			}
 		},
@@ -85,30 +88,6 @@
       this.getSecondNavTitle(this.catCode, 2)
     },
 		methods:{
-      // 获取导航标题
-      // getNavTitle(){
-      //   // 获取产品分类列表
-      //   this.$api.getProductCatList( this.$Qs.stringify({'parentId': '0'}) )
-      //
-      //     .then( (res) => {
-      //
-      //       if(res.data.code == 200){
-      //
-      //         this.navTitle = res.data.content
-      //         // 导航标题信息
-      //         sessionStorage.setItem("NavTitle", JSON.stringify(res.data.content));
-      //
-      //       }else if (res.data.code == 500){
-      //
-      //         this.$Message.warning(res.data.message);
-      //
-      //       }
-      //
-      //     })
-      //     .catch((error) => {
-      //       console.log('发生错误！', error);
-      //     });
-      // },
       // hover导航标题
       getSecondNavTitle(id, type){
         // 获取产品分类列表
@@ -164,6 +143,14 @@
             break;
         }
       },
+      // 一级导航悬停
+      tabHover(id, index){
+        console.log(id)
+        this.getSecondNavTitle(id, 2)
+        this.left = 180 * index;
+        this.showBox = false;
+        this.showItem = true;
+      },
       // 二级导航鼠标悬停
       boxMouseOver(id, index){
 				this.showBox = true;
@@ -173,7 +160,8 @@
 			},
 			//鼠标移除
 			boxMouseOut(){
-				this.showBox = false;
+        this.showBox = false
+        this.showItem = false
 			},
 
       //跳转jumpDown
@@ -204,7 +192,7 @@
             })
             break;
         }
-      }
+      },
 		}
 	}
 </script>
@@ -224,13 +212,16 @@
         >span{width:100%;line-height: 67px;display: inline-block;}
         >span:hover{background: #f09105;}
       }
+      .width_180px{width: 180px}
     }
     .listBox{
       position: absolute;top: 67px;left: 0;z-index: 99;
       .listItem{background: rgba(0,0,0,0.5);width:180px;}
       .listItem:hover{background: #00aa88}
-      .itemBox{position: absolute;top:0;left:180px;padding: 10px;min-height: 200px}
+      .itemBox{position: absolute;top:0;left:180px;padding: 10px;width: 100%;min-height: 200px}
     }
-    .width_1000px{width: 1000px;}
   }
+  .show {
+      transition: all 0.5s;
+   }
 </style>

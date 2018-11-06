@@ -54,6 +54,9 @@ a:hover{color: #00AA88;}
 /******宽度*******/
 .all_width{width: 100%;}
 .width_50{width: 50%;}
+.width_30{width: 30%;}
+.width_70{width: 70%;}
+.width_290px{width: 290px;}
 
 /******高度*******/
 .all_height{height: 100%;}
@@ -92,6 +95,7 @@ a:hover{color: #00AA88;}
 .margin_top_40{margin-top: 40px;}
 .margin_top_50{margin-top: 50px;}
 
+.margin_bottom_10{margin-bottom: 10px}
 .margin_bottom_20{margin-bottom: 20px}
 .margin_bottom_30{margin-bottom: 30px}
 

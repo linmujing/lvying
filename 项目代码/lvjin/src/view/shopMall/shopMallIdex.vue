@@ -32,8 +32,8 @@
 					</div>
 					<div v-for="item in videoArr" class="margin_top_20 clearfix">
 						<div class="float_left videoBox" @click="toDetail(item.productCode,3)"><img :src="item.productProfileUrl" alt=""></div>
-						<div class="float_left height_170 padding_left_25 margin_top_15">
-							<p class="font_18 font_weight_bold">{{item.productTitle}}</p>
+						<div class="float_left width_290px height_170 padding_left_25 margin_top_15">
+							<p class="font_18 font_weight_bold text_ellipsis">{{item.productTitle}}</p>
 							<p class="color_999 margin_top_10">{{item.createBy}}</p>
 							<div class="margin_top_10">
 								<span class="font_20 color_title">￥{{item.productPrice}}</span>
@@ -44,7 +44,7 @@
 									<Icon type="ios-headset-outline" size="30"/>
 									<span class="font_16 color_666 vertical_middle">试看</span>
 								</p>
-								<div class="float_left margin_left_20">
+								<div class="float_right">
 									<Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
 									<Button type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(item.productCode)">立即购买</Button>
 								</div>
@@ -63,8 +63,8 @@
 					</div>
 					<div v-for="item in musicArr" class="margin_top_20 clearfix">
 						<div class="float_left videoBox" @click="toDetail(item.productCode,4)"><img :src="item.productProfileUrl" alt=""></div>
-						<div class="float_left height_170 padding_left_25 margin_top_15">
-							<p class="font_18 font_weight_bold">{{item.productTitle}}</p>
+						<div class="float_left width_290px height_170 padding_left_25 margin_top_15">
+							<p class="font_18 font_weight_bold text_ellipsis">{{item.productTitle}}</p>
 							<p class="color_999 margin_top_10">{{item.createBy}}</p>
 							<div class="margin_top_10">
 								<span class="font_20 color_title">￥{{item.productPrice}}</span>
@@ -75,7 +75,7 @@
 									<Icon type="ios-headset-outline" size="30"/>
 									<span class="font_16 color_666 vertical_middle">试听</span>
 								</p>
-								<div class="float_left margin_left_20">
+								<div class="float_right margin_left_20">
 									<Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
 									<Button type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(item.productCode)">立即购买</Button>
 								</div>
@@ -102,8 +102,10 @@
 				<li class="width_560px margin_top_20 margin_right_40" v-for="item in careerArr">
 					<div class="width_560px height_310px border" @click="toDetail(item.productCode,1)"><img :src="item.productProfileUrl" alt=""></div>
 					<div class="clearfix margin_top_15">
-						<div class="float_left font_weight_bold font_18">{{item.productTitle}}</div>
-						<div class="float_right color_999 line_height_25px text_ellipsis">{{item.lookCount}}人看过</div>
+						<div class="float_left width_70 font_weight_bold font_18 text_ellipsis">{{item.productTitle}}</div>
+						<div class="float_right width_30 color_999 line_height_25px text_ellipsis text_right">
+              <span>{{item.lookCount}}人看过</span>
+            </div>
 					</div>
 					<div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px">{{item.productKeyWord}}</div>
 					<div class="text_right margin_top_5">
@@ -136,7 +138,7 @@
 					<li class="clearfix margin_top_30" v-for="item in logicArr">
 						<div class="float_left videoBox" @click="toDetail(item.productCode,2)"><img :src="item.productProfileUrl" alt=""></div>
 						<div class="float_left width_900px margin_left_20 margin_top_5">
-							<div class="font_weight_bold font_18">{{item.productTitle}}</div>
+							<div class="font_weight_bold font_18 text_ellipsis">{{item.productTitle}}</div>
               <div class="color_666 text_ellipsis margin_top_10">{{item.productKeyWord}}</div>
 							<div class="clearfix margin_top_10">
 								<div class="float_left">
