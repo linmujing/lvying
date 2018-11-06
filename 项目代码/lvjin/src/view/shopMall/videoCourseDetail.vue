@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :nowIndex="nowIndex"></NavBar>
+    <NavBar :nowIndex="nowIndex" :showNav="false"></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
@@ -410,8 +410,9 @@ export default {
               this.productSection.videoSection = videoSection
               this.productSection.audioSection = audioSection
               this.videoData = videoData
-              this.audioData = audioData[0]
-              console.log(this.audioData)
+              if(audioData.length>0){
+                this.audioData = audioData[0]
+              }
               this.dataStates = true
             }else{
               this.$Spin.hide()
@@ -527,8 +528,7 @@ export default {
           this.$refs.myVideo.onPlayerPlay();
           this.showAudio = false
         }else {
-          console.log(index)
-          if(index.voiceUrl == ''){
+          if(index == undefined || index.voiceUrl == '' || Object.keys(index).length == 0){
             this.$Message.warning('对不起，当前没有播放源！');
             return false;
           }

@@ -8,8 +8,8 @@
 	          </li>
 	        </ul>
 
-	          <div v-show="showItem" ref="listBox" class="listBox" :style="{left: left + 'px'}">
-              <div class="">
+	          <div v-if="showNav">
+              <div v-show="showItem" ref="listBox" class="listBox" :style="{left: left + 'px'}">
 
                 <div v-for="(items,index1) in secondNavTitle" :key="index1">
 
@@ -40,13 +40,13 @@
 	      </div>
 	    </div>
 
-			<div class="mask"  v-show="showBox"  @mouseover="boxMouseOut" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:8;"></div>
+			<div class="mask"  v-show="showItem"  @mouseover="boxMouseOut" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:8;"></div>
 	</div>
 </template>
 <script>
 
 	export default {
-	  props:['nowIndex','catCode'],
+	  props:['nowIndex', 'showNav','catCode'],
 		data() {
 			return {
 
@@ -119,7 +119,7 @@
       },
       // 导航鼠标点击
       tabClick(id,index){
-        console.log(id)
+        // console.log(id)
         switch(id){
           case 1:
             this.$router.push({
@@ -145,7 +145,7 @@
       },
       // 一级导航悬停
       tabHover(id, index){
-        console.log(id)
+        // console.log(id)
         this.getSecondNavTitle(id, 2)
         this.left = 180 * index;
         this.showBox = false;
@@ -167,7 +167,7 @@
       //跳转jumpDown
       jumpDown(id, name){
         var typeid = this.catCode
-        console.log(name)
+        // console.log(name)
         switch(typeid){
           case 1:
           case 2:

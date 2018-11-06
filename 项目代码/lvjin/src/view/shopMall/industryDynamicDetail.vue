@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :nowIndex="nowIndex"></NavBar>
+    <NavBar :nowIndex="nowIndex" :showNav="false"></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">
@@ -391,7 +391,9 @@ export default {
               this.sectionNav = result.productSectionIndexList
               this.sectionIndex = result.productSectionIndexList[0].sectionIndex
               this.videoData = result.productSectionList
-              this.audioData = result.productSectionList[0]
+              if(result.productSectionList.length>0){
+                this.audioData = result.productSectionList[0]
+              }
               this.dataStates = true
               console.log(this.audioData)
               // 动态管控课程目录

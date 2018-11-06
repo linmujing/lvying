@@ -1,6 +1,6 @@
 <template>
   <div>
-      <NavBar nowIndex="3" :catCode="typeId"></NavBar>
+      <NavBar nowIndex="3" :showNav="true" :catCode="typeId"></NavBar>
     <!--banner-->
     <div>
       <Carousel  radius-dot v-model="value" autoplay loop>
