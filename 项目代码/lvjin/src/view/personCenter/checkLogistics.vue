@@ -10,7 +10,7 @@
                 <div class="order_title"><span>查看物流</span><i class="text_hover_color padding_right_20 float_right" @click="$router.go(-1)">返回</i></div>
 
                 <!-- 普通查看物流 -->
-                <div class="logistics_box" v-if="pageState =='c'">
+                <div class="logistics_box">
                     <Col :span="11">
                         <div class="logistics_detail">
                             <p class="title">物流信息</p>
@@ -24,7 +24,8 @@
                         <div class="store_list">
                             <div class="store_item">
                                 <p class="img_box"><img :src="product.imgSrc" alt=""></p>
-                                <span>￥{{product.price}} * {{1}}</span>
+                                <p class="text_left"><span>{{product.name}}</span></p>
+                                <p class="text_right"><span>￥{{product.price}} * 1</span></p>
                             </div>
                         </div>
                     </Col>
@@ -71,6 +72,7 @@ export default {
               
             let param = this.$Qs.stringify({ 
                 'orderCode': this.$route.query.orderCode,
+                'orderMerchantCode': this.$route.query.orderMerchantCode,
                 'trackNo': this.$route.query.trackNo,
                 }) ;
 
@@ -125,7 +127,7 @@ export default {
                         productCode: data.productCode,
                         price: data.productPrice,
                         num:  1,
-                        name: data.productName,
+                        name: data.productTitle,
                         describe: data.productDesc,
                         imgSrc: data.productProfileUrl
                     }

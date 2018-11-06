@@ -73,9 +73,9 @@
                                                             </p>
                                                         </div>
                                                     </div> </Col>
-                                                    <Col span="5"> <div class="item_td"><p>¥&nbsp;{{childs.price}}</p></div></Col>
-                                                    <Col span="4"> <div class="item_td"><p>×{{childs.num}}</p></div></Col>
-                                                    <Col span="5"> <div class="item_td"><p>¥&nbsp;{{childs.total}}</p></div></Col>
+                                                    <Col span="5"> <div class="item_td"><p>&nbsp; {{ lists.isCombination != '1' ? '￥'+childs.price : ''}}</p></div></Col>
+                                                    <Col span="4"> <div class="item_td"><p>&nbsp;{{ 'X'+childs.num }}</p></div></Col>
+                                                    <Col span="5"> <div class="item_td"><p>&nbsp;{{ lists.isCombination != '1' ? '￥'+childs.total : ''}}</p></div></Col>
                                                 </Row>
                                             </div>
                                         </div>
@@ -155,8 +155,8 @@
                                                                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
                                                                         @click="productChange(lists.orderCode, childs.productCode)">换货
                                                                     </Button> <br> 
-                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                        @click="checkLogistics(items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
+                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" v-if="lists.orderStatus == '2'"
+                                                                        @click="checkLogistics(lists.orderCode, items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
                                                                     </Button>  
                                                                 </p></div>
 
@@ -173,13 +173,13 @@
                                                             <!-- 针对于单个商品 -->
                                                             <div  v-else>
                                                                 <!-- 换货 只要是实质商品都有换货-->
-                                                                <div class="item_td" v-if=" (lists.orderStatus == '1' && childs.productProperty == '1' )|| (lists.orderStatus == '2' && childs.productProperty == '1')"><p>
+                                                                <div class="item_td" v-if=" (lists.orderStatus == '1' && childs.productProperty == '1' )||  (lists.orderStatus == '1' && childs.productProperty == '1' )|| (lists.orderStatus == '2' && childs.productProperty == '1')"><p>
                                                                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
                                                                         @click="productChange(lists.orderCode, childs.productCode)">
                                                                         {{childs.isExchange == 0 ? '换货' : childs.isExchange == 1 ? '换货申请中' : '换货已同意'}}
                                                                     </Button> <br> 
-                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                        @click="checkLogistics(items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
+                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" v-if="lists.orderStatus == '2'"
+                                                                        @click="checkLogistics(lists.orderCode, items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
                                                                     </Button>
                                                                 </p></div>
                                                                 
@@ -251,12 +251,12 @@ export default {
                 // 订单类型
                 orderType:[
                     { text: '全部', value: ''},
-                    { text: '待付款', value: 0},
-                    { text: '已付款', value: 1},
-                    { text: '已发货', value: 2},
-                    { text: '交易成功', value: 3},
-                    { text: '交易取消', value: 4},
-                    { text: '交易关闭', value: 5},
+                    { text: '待付款', value: '0'},
+                    { text: '已付款', value: '1'},
+                    { text: '已发货', value: '2'},
+                    { text: '交易成功', value: '3'},
+                    { text: '交易取消', value: '4'},
+                    { text: '交易关闭', value: '5'},
                 ],
 
                 // 订单数据真实数据
@@ -424,11 +424,12 @@ export default {
         },
 
         // 查看物流
-        // @param orderCode string 获取当前点击的订单子单号
+        // @param orderCode string 获取当前点击的订单单号
         // @param trackNo string 获取当前点击的子订单运单单号
         // @param productCode string 商品编号
-        checkLogistics(orderCode, trackNo, productCode ){
-            this.$router.push({ path: '/personCenter/checkLogistics', query: {orderCode, trackNo, productCode } })
+        // @param orderMerchantCode string 订单子订单号
+        checkLogistics(orderCode, orderMerchantCode, trackNo, productCode ){
+            this.$router.push({ path: '/personCenter/checkLogistics', query: {orderCode, orderMerchantCode, trackNo, productCode } })
         },
 
         // 去评论
@@ -452,7 +453,7 @@ export default {
                 'ciCode': this.$store.state.userData.cicode ,
                 'searchKey': this.orderData.orderSearchValue,
                 };
-            
+            console.log(this.orderData.orderType[this.orderData.orderTypeIndex].value)
             if(this.orderData.orderType[this.orderData.orderTypeIndex].value != ''){
                 param.orderStatus = this.orderData.orderType[this.orderData.orderTypeIndex].value;
             }

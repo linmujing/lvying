@@ -101,8 +101,8 @@
                     <span class="font_18" style="font-weight:400;">扫码支付</span>
                 </p>
                 <div style="width:648px;height:270px;position:relative;">
-                    <div v-show="alipay" style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;">
-                        <iframe :src="alipayUrl" width="250" height="250" frameborder="0" scrolling="auto"></iframe>
+                    <div v-show="alipay" style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;" >
+                        <!-- <iframe :src="alipayUrl" width="250" height="250" frameborder="0" scrolling="auto"></iframe> -->
                     </div>
                     <div v-show="wxpay" style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;">
                         <div id="qrcode" style="width:250px;height:250px;"></div>
@@ -432,6 +432,8 @@ export default {
                 'payCommet': '支付备注'
              }) ;
 
+            const newTab = window.open();
+
             this.$api.aliPayRequest( param )
 
             .then( (res) => {
@@ -447,6 +449,11 @@ export default {
                     this.payType = '请用支付宝进行支付';
 
                     this.alipayUrl = res.data.content;
+
+                    const div = document.createElement('div');
+                    div.innerHTML = res.data.content; // html code
+                    newTab.document.body.appendChild(div);
+                    newTab.document.forms.punchout_form.submit();
             
                     this.payTimer ?  this.myInterval = setInterval(this.getOrderState, 3000) : '';
 
