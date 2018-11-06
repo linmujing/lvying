@@ -39,7 +39,7 @@
                 </div>
                 <div class="margin_top_15 clearfix">
                   <p @click="toDetail(item.productCode)" class="pointer float_left">
-                    <Icon type="ios-headset-outline" size="26"/>
+                    <Icon type="ios-eye-outline" size="26"/>
                     <span class="font_16 color_666 vertical_middle">试看</span>
                   </p>
                   <div class="float_left margin_left_10">
@@ -78,7 +78,7 @@
             <div class="pointer float_left">
               <p class="float_left inline_block"><span class="font_20 color_title">￥{{item.productPrice}}</span></p>
               <p @click="toDetail(item.productCode)" class="float_left pointer margin_left_30 padding_top_3">
-                <Icon type="ios-headset-outline" size="26"/>
+                <Icon type="ios-eye-outline" size="26"/>
                 <span class="font_16 color_666 vertical_middle">试看</span>
               </p>
             </div>

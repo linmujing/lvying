@@ -92,7 +92,7 @@
                       </div>
                       <div class="margin_top_5 clearfix">
                         <p class="pointer float_left">
-                          <Icon type="ios-headset-outline" size="30"/>
+                          <Icon type="ios-eye-outline" size="30"/>
                           <span class="font_16 color_666 vertical_middle" @click="jumpDetail(item.productCode)">试看</span>
                         </p>
                         <div class="float_right">

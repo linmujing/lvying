@@ -6,7 +6,7 @@
         <Col span="12">
           <div v-if="dataStates" class="width_600px border">
             <div v-if="typeId == 3" style="max-height: 400px">
-                <img v-show="videoData.length==0" :src="dataDetail.productProfileUrl" class="all_width all_height">
+                <img v-show="videoData.length==0" :src="dataDetail.productProfileUrl" class="all_width" style="height: 400px">
                 <Video v-show="videoData.length>0" ref="myVideo" :videoParams="videoData" :imgUrl="dataDetail.productProfileUrl" :activeIndex="activeIndex"></Video>
             </div>
             <div v-else style="height: 400px">
@@ -30,7 +30,7 @@
             <div class="margin_top_30 clearfix">
               <p class="float_left"><span class="color_title font_20">￥{{dataDetail.productPrice}}</span></p>
               <p v-if="typeId == 3" class="float_left pointer margin_left_30" @click="audition(0)">
-                <Icon type="ios-headset-outline" size="28"/>
+                <Icon type="ios-eye-outline" size="28"/>
                 <span class="font_16 color_666 vertical_middle">试看</span>
               </p>
               <p v-else class="float_left pointer margin_left_30" @click="audition(audioData)">
@@ -217,7 +217,8 @@
 				            </div>
 				            <div class="margin_top_10 clearfix">
 				              <p @click="jumpDetail(item.productCode)" class="pointer float_left">
-												<Icon type="ios-headset-outline" size="28"/>
+                        <Icon v-if="typeId == 4" type="ios-headset-outline" size="30"/>
+                        <Icon v-else type="ios-eye-outline" size="30"/>
 												<span class="font_16 color_666 vertical_middle">{{typeId == 3 ? '试看' : '试听'}}</span>
 											</p>
 				              <div class="float_right">
