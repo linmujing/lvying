@@ -1,7 +1,9 @@
 <template>
     <div class="container">
     	<Header :isLogin='1'></Header>
-        <router-view></router-view>
+        <div style="min-height: 800px">
+          <router-view></router-view>
+        </div>
 
     	<!-- <NavBar></NavBar> -->
 
@@ -9,7 +11,7 @@
 
         <!-- vuex消息提示 -->
 		<Message></Message>
-        
+
     </div>
 </template>
 <script>
@@ -21,16 +23,16 @@ export default {
         Header,
         Footer,
         Message
-        
+
     },
     data() {
         return {
-        	
+
         }
-        
+
     },
     methods: {
-    	
+
     }
 }
 </script>

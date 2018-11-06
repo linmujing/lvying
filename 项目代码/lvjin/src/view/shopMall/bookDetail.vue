@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--导航栏-->
-    <NavBar :showItem='false'></NavBar>
+    <NavBar :showItem='false' :showNav="false"></NavBar>
     <div class="box_center_1200 detailBox">
       <Row class="margin_top_30">
         <Col span="12">

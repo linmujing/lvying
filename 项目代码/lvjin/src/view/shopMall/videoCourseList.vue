@@ -56,7 +56,7 @@
             <div class="margin_top_10 clearfix">
               <p class="pointer float_left">
 								<Icon type="ios-headset-outline" size="30"/>
-								<span class="font_16 color_666 vertical_middle" @click="jumpDetail(item.productCode)">试听</span>
+								<span class="font_16 color_666 vertical_middle" @click="jumpDetail(item.productCode)">{{typeId == 3 ? '试看' : '试听'}}</span>
 							</p>
               <div class="float_right">
                 <Button type="success" shape="circle" class="bg_title" @click="goBuy(item.productCode)">立即购买</Button>
@@ -93,6 +93,7 @@ export default {
           productList: [],
           catCode: '',
           catName: '',
+          typeId: this.$route.query.typeId
         }
 
     },

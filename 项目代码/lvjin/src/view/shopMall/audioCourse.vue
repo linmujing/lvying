@@ -1,6 +1,6 @@
 <template>
   <div>
-      <NavBar nowIndex="3" :showItem='true' :catCode="typeId"></NavBar>
+      <NavBar nowIndex="3" :showNav="true" :catCode="typeId"></NavBar>
     <!--banner-->
     <div>
       <Carousel  radius-dot v-model="value" autoplay loop>
@@ -27,7 +27,7 @@
                 <img :src="item.productProfileUrl" class="all_width all_height">
               </div>
               <div class="float_left width_290px height_170 padding_left_25">
-                <p class="font_18 font_weight_bold">{{item.productTitle}}</p>
+                <p class="font_18 font_weight_bold text_ellipsis">{{item.productTitle}}</p>
                 <div class="twoline_ellipsis margin_top_10 color_666">{{item.productKeyWord}}</div>
                 <div class="clearfix margin_top_10">
                   <div class="float_left">
@@ -67,11 +67,13 @@
             <img :src="item.productProfileUrl" class="all_width all_height">
           </div>
           <div class="clearfix margin_top_15">
-            <div class="float_left font_weight_bold font_18">{{item.productTitle}}</div>
-            <div class="float_right color_999 line_height_25px text_ellipsis">{{item.lookCount}}人看过</div>
+            <div class="float_left width_70 font_weight_bold font_18 text_ellipsis">{{item.productTitle}}</div>
+            <div class="float_right width_30 color_999 line_height_25px text_ellipsis text_right">
+              <span>{{item.lookCount}}人看过</span>
+            </div>
           </div>
           <div class="all_width twoline_ellipsis color_666 margin_top_10 height_40px">{{item.productKeyWord}}</div>
-          <div class="text_right margin_top_5"><span class="color_title" @click="toDetail(item.productCode)">查看详情》</span></div>
+          <div class="text_right margin_top_5"><span class="color_title pointer" @click="toDetail(item.productCode)">查看详情》</span></div>
           <div class="margin_top_15 clearfix">
             <div class="pointer float_left">
               <p class="float_left inline_block"><span class="font_20 color_title">￥{{item.productPrice}}</span></p>
