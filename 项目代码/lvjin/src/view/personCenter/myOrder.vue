@@ -38,7 +38,7 @@
                 </Row>
             </div>
 
-            <div :class="[ orderData.isScroll ? 'order_scroll':'']">
+            <div  ref="orderBox" :class="[ orderData.isScroll ? 'order_scroll':'']" >
 
                 <!-- 订单list列表 -->
                 <ul class="order_list padding_left_20">
@@ -66,7 +66,10 @@
                                             <!-- 商品行 -->
                                             <div class="height_50px font_12" v-for="(childs, index3) in items.childItem" :key="index3">
                                                 <Row>
-                                                    <Col span="10"> <div class="text_left padding_left_20">
+                                                    <Col span="4" >
+                                                        <p class="img_box" @click="goDetail(childs.productCode, childs.productProperty)"><img :src="childs.productProfileUrl" alt=""></p>
+                                                    </Col>
+                                                    <Col span="6"> <div class="text_left padding_left_20">
                                                         <div class="item_td">
                                                             <p >
                                                                 <span class="twoline_ellipsis" style="color:#666;" :data-product="childs.productCode" >{{childs.title}} </span>    
@@ -139,7 +142,7 @@
                                                             <div v-else>
                                                                 <!-- 评价 普通商品交易成功，每个都有-->
                                                                 <div class="item_td" v-if="lists.orderStatus == '3'"><p>
-                                                                    {{childs.commetStatus == '2' ? '待评价' : '已评价'}}
+                                                                    {{childs.commetStatus == '0' ? '待评价' : '已评价'}}
                                                                 </p></div>
                 
                                                             </div>
@@ -153,9 +156,12 @@
                                                                 <!-- 换货 只要是实质商品都有换货-->
                                                                 <div class="item_td" v-if=" (lists.orderStatus == '1' && childs.productProperty == '1' )|| (lists.orderStatus == '2' && childs.productProperty == '1')"><p>
                                                                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                        @click="productChange(lists.orderCode, childs.productCode)">换货
+                                                                        @click="productChange(lists.orderCode, childs.productCode)" v-if="childs.isExchange == 0">换货</Button>
+                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
+                                                                        @click="$Message.warning('请查看‘售后服务’')" v-if="childs.isExchange != 0">
+                                                                        {{childs.isExchange == 1 ? '换货申请中' : '换货已同意'}}
                                                                     </Button> <br> 
-                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" v-if="lists.orderStatus == '2'"
+                                                                    <Button  shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" v-if="lists.orderStatus == '2'"
                                                                         @click="checkLogistics(lists.orderCode, items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
                                                                     </Button>  
                                                                 </p></div>
@@ -175,16 +181,19 @@
                                                                 <!-- 换货 只要是实质商品都有换货-->
                                                                 <div class="item_td" v-if=" (lists.orderStatus == '1' && childs.productProperty == '1' )||  (lists.orderStatus == '1' && childs.productProperty == '1' )|| (lists.orderStatus == '2' && childs.productProperty == '1')"><p>
                                                                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
-                                                                        @click="productChange(lists.orderCode, childs.productCode)">
-                                                                        {{childs.isExchange == 0 ? '换货' : childs.isExchange == 1 ? '换货申请中' : '换货已同意'}}
+                                                                        @click="productChange(lists.orderCode, childs.productCode)" v-if="childs.isExchange == 0">换货</Button>
+                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
+                                                                        @click="$Message.warning('请查看‘售后服务’')" v-if="childs.isExchange != 0">
+                                                                        {{childs.isExchange == 1 ? '换货申请中' : '换货已同意'}}
                                                                     </Button> <br> 
-                                                                    <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" v-if="lists.orderStatus == '2'"
+
+                                                                    <Button  shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" v-if="lists.orderStatus == '2'"
                                                                         @click="checkLogistics(lists.orderCode, items.itemCode, items.itemTrackNo, childs.productCode)">查看物流
                                                                     </Button>
                                                                 </p></div>
                                                                 
                                                                 <!-- 评价 普通商品交易成功，每个都有评价-->
-                                                                <div class="item_td" v-if="lists.orderStatus == '3' && childs.commetStatus == '2'" ><p>
+                                                                <div class="item_td" v-if="lists.orderStatus == '3' && childs.commetStatus == '0'" ><p>
                                                                         <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
                                                                             @click="goComment(lists.orderCode, childs.productCode)">去评价
                                                                         </Button> <br> 
@@ -240,7 +249,6 @@ export default {
     },
     data() {
         return {
-
             
              /* 订单数据对象 */
             orderData:{
@@ -296,6 +304,61 @@ export default {
         
     },
     methods: {
+
+
+        /*点击打开详情*/
+        //@param code 商品编号
+        //@param attr 商品属性1-实物，2-音频 3-视频 4-文档 包含多个使用逗号链接
+        goDetail(code, attr){
+            console.log(attr)
+          var arr = attr;
+          if(attr.indexOf(',') != -1){ attr = attr.split(',') }
+          // 包含多个跳转到动态管控详情页
+          if(arr.length > 1  || arr == '4'){
+            this.$router.push({
+              path:'/industryDynamicDetail',
+              query: {
+                productCode: code,
+                // hasBuy 购买后跳转过去的状态
+                hasBuy: 1
+              }
+            })
+          }else {
+            // 1-实物，2-音频 3-视频
+            switch (attr) {
+              case '1':
+                this.$router.push({
+                  path:'/bookDetail',
+                  query: {
+                    productCode: code
+                  }
+                })
+                break
+              case '2':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    // typeId 单独只有音频或视频时需传的参数 typeId：4-音频 3-视频
+                    typeId: 4,
+                    hasBuy: 1
+                  }
+                })
+                break
+              case '3':
+                this.$router.push({
+                  path:'/videoCourseDetail',
+                  query: {
+                    productCode: code,
+                    typeId: 3,
+                    hasBuy: 1
+                  }
+                })
+                break
+            }
+          }
+
+        },
 
         /**订单类型切换**/
         //@param index 获取当前点击的元素下标
@@ -446,7 +509,10 @@ export default {
         getOrderList(){
 
             this.$Spin.show()
-              
+
+            // 将订单滚动到顶部
+            this.$refs.orderBox ? this.$refs.orderBox.scrollTop = 0 : '';
+            
             let param = { 
                 'pageNo': this.orderData.pageData.current, 
                 'pageSize': this.orderData.pageData.pageSize,
@@ -522,6 +588,7 @@ export default {
                                     commetStatus: child.commetStatus ,
                                     isExchange: child.isExchange,
                                     productProfileUrl: child.productInfo.productProfileUrl,
+                                    productProperty: child.productProperty,
                                     total: (parseFloat(child.productPrice * 10000) * child.productCount)/10000
                                 })
 
@@ -731,6 +798,7 @@ export default {
                 border-bottom: 1px solid @color_e6e6e6;
                 // background: @color_fafafa; 
                 text-align: center;
+
                 .item_td{
                     display: table;
                     width:100%;
@@ -746,6 +814,27 @@ export default {
                 }
                 .text_left{
                     text-align: left;
+                }
+                // 图片盒子
+                .img_box{
+                    margin-left:20px;
+                    height: 80px;
+                    width: 80px;
+                    border:1px solid @color_e6e6e6;
+                    position: relative;
+                    overflow: hidden;
+                    cursor: pointer;
+
+                    img{
+                        display: block;
+                        width:100%;
+                        margin: auto auto;
+                        position: absolute;
+                        top:0;
+                        bottom:0;
+                        left:0;
+                        right:0;
+                    }
                 }
             }
         }

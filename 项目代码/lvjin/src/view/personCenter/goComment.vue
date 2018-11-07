@@ -12,12 +12,19 @@
                 <div v-for="(item, index) in commentData.list" :key="index">
                     <!-- 评价头部 -->
                     <div class="comment_header padding_left_20 padding_top_40">
-                        <span class="img_box img_middle_center">
-                            <img :src="product.imgsrc" alt="" style="height:100%;">
-                        </span>
-                        <span style="line-height:30px">{{product.name}}</span>
-                        <!-- <span class="comment_type" :class=" [commentData.typeValue == items.value ? 'color_f09105':'' ]"  v-for="(items, index) in commentData.typeList" :key="index"   
-                            @click="commentData.typeValue = items.value" >{{items.text}}</span> -->
+                        <Row>
+                            <Col span="2">
+                                <span class="img_box img_middle_center">
+                                    <img :src="product.imgSrc" alt="" style="height:100%;width:100%;">
+                                </span>
+                            </Col>
+                            <Col span="6">
+                                <div class="padding_left_20">
+                                    <span style="line-height:30px;height:70px;">{{product.name}}</span>
+                                    <div>￥{{product.price}} </div>
+                                </div>
+                            </Col>  
+                        </Row> 
                     </div>
 
                     <!-- 评价内容 -->
@@ -62,13 +69,27 @@
 
                     <!-- 店铺评分 -->
                     <div class="comment_grade padding_left_20 padding_top_40">
-                        <p class="font_16">商品评分</p>
-                        <div class="padding_left_10 padding_top_20">
-                            <span class="padding_right_10" >描述相符</span> <Rate clearable v-model="item.gradeValue1" /> 
-                        </div>
-                        <div class="padding_left_10 padding_top_20">
-                            <span class="padding_right_10">帮助程度</span> <Rate clearable v-model="item.gradeValue2" /> 
-                        </div>
+                        <p class="font_16 margin_bottom_10">商品评分</p>
+                        <Row>
+                            <Col span="2">
+                                <div class="padding_right_10" style="line-height:32px;" >描述相符</div> 
+                            </Col>
+                            <Col span="6">
+                                <div >
+                                    <Rate clearable v-model="item.gradeValue1" /> 
+                                </div>
+                            </Col>  
+                        </Row>
+                        <Row>
+                            <Col span="2">
+                                <div class="padding_right_10" style="line-height:32px;" >帮助程度</div> 
+                            </Col>
+                            <Col span="6">
+                                <div >
+                                    <Rate clearable v-model="item.gradeValue2" /> 
+                                </div>
+                            </Col>  
+                        </Row>
                     </div>
                 </div>
                 
@@ -218,6 +239,9 @@ export default {
                 if(res.data.code == 200){
 
                     this.commentData.modelValue = true;
+
+                    // 订单类型状态更改
+                    this.$store.commit('personCenter/setOrderType', 4);
                    
                 }else{
 
@@ -247,22 +271,19 @@ export default {
 
                 if(res.data.code == 200){
 
-                    let data = res.data.content , arr = [];
+                    let data = res.data.content ;
 
                     this.product = {
                         productCode: data.productCode,
                         price: data.productPrice,
-                        num:  cartNun,
-                        name: data.productName,
+                        num:  1,
+                        name: data.productTitle,
                         describe: data.productDesc,
                         imgSrc: data.productProfileUrl
                     }
-                    
-                    this.$Spin.hide();
 
                 }else{
 
-                    this.$Spin.hide()
                     this.$Message.warning(res.data.message);  
                     
                 }
