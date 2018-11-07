@@ -535,7 +535,7 @@ export default {
           }
           this.audioData = index
           this.showAudio = true
-          this.$refs.myAudio.startPlay();
+          this.$refs.myAudio.clickPlay();
         }
       },
       //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化
