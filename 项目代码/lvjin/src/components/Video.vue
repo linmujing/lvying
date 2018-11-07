@@ -1,5 +1,5 @@
 <template>
-  <div id="container_id" class="container" :class="[videoControl.fullScreen ? 'full_screen' : '']">
+  <div id="container_id" ref="container_id" class="container" :class="[videoControl.fullScreen ? 'full_screen' : '']">
 
     <!-- 视频容器  -->
     <div class="player" @mousemove="onMouseShow"  :class="[videoControl.fullScreen ? 'full_screen_player' : '']">
@@ -151,6 +151,11 @@
 
     </div>
 
+    <!--试看结束-->
+    <div v-show="freeTip" class="video_free_tip">
+      <p class="text_center color_fff font_16" :style="{marginTop: Height/2 + 'px'}">请您购买后再继续观看！</p>
+    </div>
+
   </div>
 </template>
 
@@ -222,7 +227,9 @@ export default {
               lists: []
             },
 
-            curIndex: 0
+            curIndex: 0,
+            Height:  '',
+            freeTip: false
         };
     },
     components: {
@@ -244,7 +251,8 @@ export default {
                 return false;
 
             }
-          console.log(this.activeIndex)
+          // console.log(this.activeIndex)
+          this.freeTip = false
           this.changeItem(this.activeIndex)
           this.player.play();
           this.videoControl.videoOff = false;
@@ -272,11 +280,27 @@ export default {
         // 同步获取视频时间参数 *
         onPlayerTimeupdate(player) {
 
-            // 获取时间进度
-            this.videoControl.timeProgress = (player.currentTime() / player.duration()).toFixed(2)*100;
+          // 获取时间进度
+          this.videoControl.timeProgress = (player.currentTime() / player.duration()).toFixed(2)*100;
 
-            // 获取当前时间
-            this.videoControl.timeDivider = this.changeTimeBox(player.currentTime());
+          // 获取当前时间
+          this.videoControl.timeDivider = this.changeTimeBox(player.currentTime());
+
+          // 监听试看时间
+          var index = 0
+          if(this.curIndex !== ''){
+            index = this.curIndex
+          }
+          var timer = this.videoMenu.lists[index].timer
+          if(timer !== ''){
+            timer = parseInt(this.videoMenu.lists[index].timer) * 60  // 试看时间，以秒为单位
+            if(this.changeTimeBox(player.currentTime()) > this.changeTimeBox(timer)){
+              player.currentTime(0)   // 设置当前时间 清零
+              this.onPlayerPause()    // 暂停播放
+              this.freeTip = true     // 显示提示
+              return false;
+            }
+          }
 
         },
         // 初始设置 *
@@ -337,7 +361,8 @@ export default {
                   type: '',
                   // mp4
                   src: arr[i].videoUrl
-                }
+                },
+                timer: arr[i].videoTime,
               }
               lists.push(obj)
             }
@@ -578,7 +603,7 @@ export default {
     mounted(){
         // 获取视频固定参数
         this.getVideoParam();
-
+        this.Height = this.$refs.container_id.offsetHeight
         // console.log(this.$refs.videoPlayer.player)
 
     },
@@ -777,13 +802,22 @@ export default {
         right:-30%;
     }
     .slider_line{
-        position:absolute;
-        width: 90%;
-        top: 10px;
-        left:5%;
+      position:absolute;
+      width: 90%;
+      top: 10px;
+      left:5%;
 
     }
-
+    // 试看提示
+    .video_free_tip{
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index:8;
+      background: rgba(0,0,0,.7);
+    }
 
 
 </style>

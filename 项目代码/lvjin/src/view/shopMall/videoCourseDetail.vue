@@ -109,11 +109,11 @@
                   </div>
                   <div class="float_right">
                     <span>{{item.videoTime}}</span>
-                    <div v-if="hasBuy == 1" class="inline_block width_100px margin_left_20">
+                    <div v-if="parseInt(item.videoStatus) === 0" class="inline_block width_100px margin_left_20">
                       <Button size="small" type="success" shape="circle" class="bg_title" @click="audition(index)">立即播放</Button>
                     </div>
                     <div v-else class="inline_block width_100px margin_left_20">
-                      <Button v-if="parseInt(item.videoStatus) === 0" size="small" type="warning" shape="circle" style="width: 60px" @click="audition(index)">试看</Button>
+                      <Button v-if="parseInt(item.videoStatus) === 1" size="small" type="warning" shape="circle" style="width: 60px" @click="audition(index)">试看</Button>
                       <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                     </div>
                   </div>
