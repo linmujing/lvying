@@ -10,9 +10,9 @@
                     </Col>
                     <Col span="1">
                         <!-- 上一个-->
-                        <span class="audio_control_icon" @click="previousClick">
-                            <span class="vjs-icon-previous-item"></span>
-                        </span>
+                        <!--<span class="audio_control_icon" @click="previousClick">-->
+                            <!--<span class="vjs-icon-previous-item"></span>-->
+                        <!--</span>-->
                     </Col>
                     <Col span="1">
                         <!-- 开关 -->
@@ -29,9 +29,9 @@
                     </Col>
                     <Col span="1">
                         <!-- 下一个 -->
-                        <span class="audio_control_icon" @click="nextClick">
-                            <span class="vjs-icon-next-item"></span>
-                        </span>
+                        <!--<span class="audio_control_icon" @click="nextClick">-->
+                            <!--<span class="vjs-icon-next-item"></span>-->
+                        <!--</span>-->
                     </Col>
                     <!-- 时间进度条 -->
                     <Col span="12">
@@ -148,28 +148,31 @@ export default {
 
         /** 音频函数 **/
         // 当音频暂停
-        onPause () {
+        onPause (res) {
+          // console.log(res)
         },
         // 当发生错误, 就出现loading状态
         onError () {
-            this.audio.waiting = true
+          this.$Message.warning('你的浏览器不支持该播放器！');
+          this.audio.waiting = true
         },
         // 当音频开始等待
         onWaiting (res) {
 
-            console.log(res)
+            // console.log(res)
 
         },
         // 当音频开始播放
         onPlay (res) {
 
-            console.log(res)
+            // console.log(res)
 
         },
         // 当timeupdate事件大概每秒一次，用来更新音频流的当前播放时间
         onTimeupdate(res) {
 
-            // console.log(res)
+            // console.log(this.audioParams.voiceUrl)
+            // console.log(res.target.currentSrc)
 
             // 获取时间进度
             this.audioControl.timeProgress = (res.target.currentTime / res.target.duration).toFixed(2) * 100  ;
@@ -177,13 +180,25 @@ export default {
             // 获取当前时间
             this.audioControl.timeDivider = this.changeTimeBox(res.target.currentTime);
 
+          // 监听试听时间
+          var timer = this.audioParams.voiceTime
+          if(timer !== ''){
+            timer = parseFloat(this.audioParams.voiceTime) * 60  // 试看时间，以秒为单位
+            if(this.changeTimeBox(res.target.currentTime) > this.changeTimeBox(timer)){
+              this.$refs.audio.currentTime = 0   // 设置当前时间 清零
+              this.pausePlay()    // 暂停播放
+              this.$Message.warning('请您购买后再继续收听！');
+              return false;
+            }
+          }
+
         },
         // 当加载语音流元数据完成后，会触发该事件的回调函数
         // 语音元数据主要是语音的长度之类的数据
         onLoadedmetadata(res) {
 
-            console.log('loadedmetadata')
-            console.log(res)
+            // console.log('loadedmetadata')
+            // console.log(res)
 
             // 获取总时长
             this.audioControl.timesecond = parseInt(res.target.duration) ;
@@ -197,14 +212,17 @@ export default {
         /** 音频控制器函数 **/
         // 开始播放
         startPlay() {
-          console.log(this.audioParams)
+          this.$refs.audio.play()
+          this.audioControl.audioOff = false
+
+        },
+        // 点击页面按钮播放
+        clickPlay() {
           if(!Object.keys(this.audioParams).length == 0){
             this.audioTitle = this.audioParams.sectionName
             this.url = this.audioParams.voiceUrl
           }
-          this.$refs.audio.play()
-          this.audioControl.audioOff = false
-
+          this.pausePlay()
         },
         // 暂停
         pausePlay() {
@@ -284,20 +302,14 @@ export default {
       //监听参数变化
       audioParams: {
         handler(newValue, oldValue) {
-          console.log(newValue)
-          if(!Object.keys(this.audioParams).length == 0){
-            this.audioTitle = this.audioParams.sectionName
-            this.url = this.audioParams.voiceUrl
-          }
+          this.clickPlay()
+          this.$refs.audio.src = newValue.voiceUrl
         },
         deep: true
       }
     },
     mounted(){
-      if(!Object.keys(this.audioParams).length == 0){
-          this.audioTitle = this.audioParams.sectionName
-          this.url = this.audioParams.voiceUrl
-      }
+      this.clickPlay()
 
     },
 };

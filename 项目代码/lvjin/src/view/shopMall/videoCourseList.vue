@@ -55,7 +55,8 @@
             </div>
             <div class="margin_top_10 clearfix">
               <p class="pointer float_left">
-								<Icon type="ios-headset-outline" size="30"/>
+								<Icon v-if="typeId == 4" type="ios-headset-outline" size="30"/>
+                <Icon v-else type="ios-eye-outline" size="30"/>
 								<span class="font_16 color_666 vertical_middle" @click="jumpDetail(item.productCode)">{{typeId == 3 ? '试看' : '试听'}}</span>
 							</p>
               <div class="float_right">

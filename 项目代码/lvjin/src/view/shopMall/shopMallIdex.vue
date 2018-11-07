@@ -41,7 +41,7 @@
 							</div>
 							<div class="margin_top_15 clearfix">
 								<p @click="toDetail(item.productCode,3)" class="pointer float_left">
-									<Icon type="ios-headset-outline" size="30"/>
+                  <Icon type="ios-eye-outline" size="30"/>
 									<span class="font_16 color_666 vertical_middle">试看</span>
 								</p>
 								<div class="float_right">
