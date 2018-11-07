@@ -293,7 +293,7 @@ export default {
           }
           var timer = this.videoMenu.lists[index].timer
           if(timer !== ''){
-            timer = parseInt(this.videoMenu.lists[index].timer) * 60  // 试看时间，以秒为单位
+            timer = parseFloat(this.videoMenu.lists[index].timer) * 60  // 试看时间，以秒为单位
             if(this.changeTimeBox(player.currentTime()) > this.changeTimeBox(timer)){
               player.currentTime(0)   // 设置当前时间 清零
               this.onPlayerPause()    // 暂停播放
