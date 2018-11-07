@@ -305,7 +305,7 @@ export default {
         this.audioData = item
         this.showAudio = true
         this.videoModel = false
-        this.$refs.myAudio.clickPlay();
+        this.$refs.myAudio.startPlay();
       },
       // 查看文字
       openTxt(item){

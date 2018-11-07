@@ -221,8 +221,8 @@ export default {
           if(!Object.keys(this.audioParams).length == 0){
             this.audioTitle = this.audioParams.sectionName
             this.url = this.audioParams.voiceUrl
-            this.startPlay()
           }
+          this.pausePlay()
         },
         // 暂停
         pausePlay() {
@@ -302,21 +302,14 @@ export default {
       //监听参数变化
       audioParams: {
         handler(newValue, oldValue) {
-          if(!Object.keys(this.audioParams).length == 0){
-            this.audioTitle = newValue.sectionName
-            this.url = newValue.voiceUrl
-            this.$refs.audio.src = newValue.voiceUrl
-            this.pausePlay()
-          }
+          this.clickPlay()
+          this.$refs.audio.src = newValue.voiceUrl
         },
         deep: true
       }
     },
     mounted(){
-      if(!Object.keys(this.audioParams).length == 0){
-          this.audioTitle = this.audioParams.sectionName
-          this.url = this.audioParams.voiceUrl
-      }
+      this.clickPlay()
 
     },
 };
