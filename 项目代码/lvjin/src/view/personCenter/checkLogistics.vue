@@ -15,6 +15,8 @@
                         <div class="logistics_detail">
                             <p class="title">物流信息</p>
                             <div class="item_box"><span>物流单号：</span><div>{{logisticsData.id}}</div></div>
+                            <div class="item_box"><span>物流公司：</span><div>{{logisticsData.company}}</div></div>
+                            <div class="item_box"><span>发货日期：</span><div>{{logisticsData.createDate}}</div></div>
                             <div class="item_box"><span>发货地址：</span><div>{{logisticsData.deliveryAddress}}</div></div>
                             <div class="item_box"><span>收货人：</span><div><b>{{logisticsData.person}}</b>  </div></div>
                             <div class="item_box"><span>收货地址：</span><div>{{logisticsData.collectAddress}}</div></div>
@@ -90,6 +92,8 @@ export default {
                         id: res.data.content.trackNo ,
                         deliveryAddress: res.data.content.sendAddressId ,
                         person: res.data.content.signName ,
+                        company: res.data.content.trackName ,
+                        createDate: res.data.content.createDate ,
                         collectAddress: res.data.content.signAddressId ,
                     }
                    
@@ -179,7 +183,6 @@ export default {
             // 物流信息
             .logistics_detail, .order_detail{
                 border:1px solid @color_e6e6e6;
-                height: 234px;
             }
             .logistics_detail{
 
@@ -215,7 +218,6 @@ export default {
             }
         }
 
-        // 普通查看物流
         .store_list{
 
             .store_item{
