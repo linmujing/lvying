@@ -389,7 +389,9 @@ export default {
               result.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = result.productScore
               // 动态管控列表
               this.sectionNav = result.productSectionIndexList
-              this.sectionIndex = result.productSectionIndexList[0].sectionIndex
+              if(result.productSectionIndexList.length > 0){
+                this.sectionIndex = result.productSectionIndexList[0].sectionIndex
+              }
               this.videoData = result.productSectionList
               if(result.productSectionList.length>0){
                 this.audioData = result.productSectionList[0]
