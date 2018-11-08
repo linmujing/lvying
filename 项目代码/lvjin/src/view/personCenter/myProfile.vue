@@ -240,6 +240,7 @@ export default {
             display: inline-block;
             width: 120px;
             text-align: right;
+            vertical-align: top;
         }
 
     }

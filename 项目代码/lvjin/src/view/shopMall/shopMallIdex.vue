@@ -75,7 +75,7 @@
 									<Icon type="ios-headset-outline" size="30"/>
 									<span class="font_16 color_666 vertical_middle">试听</span>
 								</p>
-								<div class="float_right margin_left_20">
+								<div class="float_right margin_left_16">
 									<Button type="warning" shape="circle" @click="addProductCart(item.productCode)">加入购物车</Button>
 									<Button type="success" shape="circle" class="margin_left_10 bg_title" @click="goBuy(item.productCode)">立即购买</Button>
 								</div>
@@ -473,6 +473,9 @@ export default {
   .text_ellipsis,.text_ellipsis p{overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
 </style>
 <style scoped lang='less'>
+  img{
+    cursor: pointer;
+  }
 	.content{
 		width:1200px;margin:0 auto;min-width: 1200px;
 		.width_48{width: 48%;}

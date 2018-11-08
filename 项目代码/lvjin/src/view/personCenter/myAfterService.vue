@@ -20,36 +20,36 @@
          <!-- 售后服务列表 -->
         <div class="list_box padding_left_20 padding_top_30">
             <div class="header">
-                <Col :span="6"><span >商品信息</span></Col>
-                <Col :span="5"><span>金额</span></Col>
-                <Col :span="5"><span>申请类型</span></Col>
-                <Col :span="5"><span>换货状态</span></Col>
+                <Col :span="8"><span >商品信息</span></Col>
+                <Col :span="4"><span>单号</span></Col>
+                <Col :span="6"><span>申请类型</span></Col>
+                <Col :span="4"><span>换货状态</span></Col>
                 <!--<Col :span="3"><span>操作</span></Col>-->
             </div>
             <ul class="list">
                 <li  v-for="(items, index) in serviceData.serviceList" :key="index" >
-                    <Col :span="6">
+                    <Col :span="8">
                         <div class="table_block">
                             <p class="td_block">
                                 <span :title="items.productName">{{items.productName}}</span>
                             </p>
                         </div>
                     </Col>
-                    <Col :span="5">
+                    <Col :span="4">
                         <div class="table_block">
                             <p class="td_block">
-                                <span>{{items.productPrice}}</span>
+                                <span>{{items.orderCode}}</span>
                             </p>
                         </div>
                     </Col>
-                    <Col :span="5">
+                    <Col :span="6">
                         <div class="table_block">
                             <p class="td_block">
                                 <span>换货</span>
                             </p>
                         </div>
                     </Col>
-                    <Col :span="5">
+                    <Col :span="4">
                         <div class="table_block">
                             <p class="td_block">
                                 <span v-if="items.isExchange==1">申请换货中</span>
