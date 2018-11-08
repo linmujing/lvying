@@ -425,6 +425,8 @@ export default {
 
                     this.$Message.warning(res.data.message);
 
+                    this.Coupon.value = '暂无可用优惠券'
+
                 }
 
                 this.$Spin.hide();
