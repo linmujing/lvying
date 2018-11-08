@@ -215,3 +215,7 @@ a:hover{color: #00AA88;}
   width: 100%;
 }
 
+/* 修改elementUI checkbox样式 */
+.el-checkbox__label{
+  display: inline;
+}
