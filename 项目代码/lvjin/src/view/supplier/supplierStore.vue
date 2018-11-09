@@ -1,14 +1,19 @@
 <template>
     <div class="bg_white">
       <!--banner-->
-      <div>
-        <Carousel  radius-dot v-model="value" autoplay loop>
-          <CarouselItem v-for="(item,index) in banner" :key="index">
-            <div class="carousel">
-              <img :src="item.src" class="all_width block" style="max-height: 500px">
-            </div>
-          </CarouselItem>
-        </Carousel>
+      <div v-if="banner.length > 0">
+        <div v-if="banner.length === 1">
+          <img :src="banner[0].src" class="all_width block" style="max-height: 500px">
+        </div>
+        <div v-else>
+          <Carousel radius-dot v-model="value" autoplay loop>
+            <CarouselItem v-for="(item,index) in banner" :key="index">
+              <div class="carousel">
+                <img :src="item.src" class="all_width block" style="max-height: 500px">
+              </div>
+            </CarouselItem>
+          </Carousel>
+        </div>
       </div>
     <div class="box_center_1200">
       <div class="margin_top_20 margin_bottom_30">

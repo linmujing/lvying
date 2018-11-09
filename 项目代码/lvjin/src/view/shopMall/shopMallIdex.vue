@@ -10,13 +10,18 @@
     </div>
       <!--banner-->
     <div v-if="banner.length > 0">
-      <Carousel  radius-dot v-model="value" autoplay loop>
-        <CarouselItem v-for="(item,index) in banner" :key="index">
-          <div class="carousel">
-            <img :src="item.src" class="all_width block" style="max-height: 500px">
-          </div>
-        </CarouselItem>
-      </Carousel>
+      <div v-if="banner.length === 1">
+        <img :src="banner[0].src" class="all_width block" style="max-height: 500px">
+      </div>
+      <div v-else>
+        <Carousel radius-dot v-model="value" autoplay loop>
+          <CarouselItem v-for="(item,index) in banner" :key="index">
+            <div class="carousel">
+              <img :src="item.src" class="all_width block" style="max-height: 500px">
+            </div>
+          </CarouselItem>
+        </Carousel>
+      </div>
     </div>
     <!--视频推荐-->
 		<div class="content">
