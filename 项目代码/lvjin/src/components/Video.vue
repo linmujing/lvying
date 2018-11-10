@@ -21,7 +21,7 @@
                     @error="onError($event)"
 
       >
-        你的浏览器不支持该播放器
+        数据源格式错误！
       </video-player>
     </div>
 
@@ -291,8 +291,10 @@ export default {
           if(this.curIndex !== ''){
             index = this.curIndex
           }
-          var timer = this.videoMenu.lists[index].timer
-          if(timer !== ''){
+          console.log(this.videoMenu.lists)
+
+          if(this.videoMenu.lists[index].timer !== '' && this.videoMenu.lists[index].videoStatus == 0){
+            var timer = this.videoMenu.lists[index].timer
             timer = parseFloat(this.videoMenu.lists[index].timer) * 60  // 试看时间，以秒为单位
             if(this.changeTimeBox(player.currentTime()) > this.changeTimeBox(timer)){
               player.currentTime(0)   // 设置当前时间 清零
@@ -363,6 +365,7 @@ export default {
                   src: arr[i].videoUrl
                 },
                 timer: arr[i].videoTime,
+                videoStatus: arr[i].videoStatus,
               }
               lists.push(obj)
             }
