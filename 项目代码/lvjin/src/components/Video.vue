@@ -592,7 +592,7 @@ export default {
 
             var h = timer > 3600 ? parseInt(timer/3600) : 0;
 
-            var m = (timer- h*3600) > 60 ? parseInt(timer/60) : 0;
+            var m = (timer- h*3600) > 60 ? parseInt((timer- h*3600)/60) : 0;
 
             var s = parseInt(timer - h*3600 - m*60);
 

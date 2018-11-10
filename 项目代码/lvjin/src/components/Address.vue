@@ -11,12 +11,9 @@
             <li v-for="(items, index1) in addressList" :key="index1">
                 <Row>
                     <Col span="19">
-                        <div>
-                            姓名：<span  style="margin-right:100px;">{{items.name}}</span>电话：<span  >{{items.phone}}</span>
-                        </div>
-                        <div>
-                            地址：<span >{{items.province +" " + items.city +" " + items.county +" " + items.addressDetail  }}</span><br/>
-                        </div>  
+                        <div>姓名：<span >{{items.name}}</span > </div>
+                        <div>电话：<span >{{items.phone}}</span ></div>
+                        <div>地址：<span >{{items.province +" " + items.city +" " + items.county +" " + items.addressDetail  }}</span><br/></div>  
                     </Col>
                     <Col span="5">
                         <div class="text_right" style="padding-top:60px;">
