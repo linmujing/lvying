@@ -287,7 +287,7 @@ export default {
 
             var s = parseInt(timer - h*3600 - m*60);
 
-            var now =  ps(h) + p(m) + ":" + p(s);
+            var now =  ps(h) + ":" + p(m) + ":" + p(s);
 
             return now;
 
