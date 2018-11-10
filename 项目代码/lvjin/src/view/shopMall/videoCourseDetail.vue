@@ -128,10 +128,10 @@
                   <div class="float_right">
                     <span>{{item.audioTime}}</span>
                     <div v-if="parseInt(item.voiceStatus) === 0" class="inline_block width_100px margin_left_20">
-                      <Button size="small" type="success" shape="circle" class="bg_title" @click="audition(item)">立即播放</Button>
+                      <Button size="small" type="success" shape="circle" class="bg_title" @click="audition(index)">立即播放</Button>
                     </div>
                     <div v-else class="inline_block width_100px margin_left_20">
-                      <Button v-if="parseInt(item.voiceStatus) === 1" size="small" type="warning" shape="circle" @click="audition(item)">试听</Button>
+                      <Button v-if="parseInt(item.voiceStatus) === 1" size="small" type="warning" shape="circle" @click="audition(index)">试听</Button>
                       <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                     </div>
                   </div>
@@ -400,36 +400,48 @@ export default {
 
               console.log(productSection)
               // 获取视频音频数据
-              var videoSection = []
-              var audioSection = []
-              var videoData = []
-              var audioData = []
+              var videoSection = [];
+              var audioSection = [];
+              var videoData = [];
+              var audioData = [];
+
+              // 初次加载
+              let videoState = 0 , audioState = 0 ;
+
               for (var i=0;i<productSection.length;i++){
 
                 var section = productSection[i]
-                  videoSection.push(section)
-                  audioSection.push(section)
+                videoSection.push(section)
+                audioSection.push(section)
 
-                let videState = 0 ;
                 //获取试用视频音频数据status = 0
+                
                 if(parseInt(section.videoStatus) === 0 || parseInt(section.videoStatus) === 1){
 
                   // 视频下标修改修改 第一次加载
-                  videState == 0 ? this.$store.commit('personCenter/setVideoIndex',  this.allData[i]  ) : '';
-                  videState ++;
+                  if(videoState == 0 ){
+                    this.$store.commit('personCenter/setVideoIndex',  this.allData[i] );
+                    this.$store.commit('personCenter/setVideoState', 0)
+                  }  
+                  videoState ++;
 
                   videoData.push(section)
                 }
+
                 if(parseInt(section.voiceStatus) === 0 || parseInt(section.voiceStatus) === 1){
+
                   audioData.push(section)
                 }
               }
+
               this.productSection.videoSection = videoSection
               this.productSection.audioSection = audioSection
               this.videoData = videoData
+
               if(audioData.length>0){
                 this.audioData = audioData[0]
               }
+
               this.dataStates = true
             }else{
               this.$Spin.hide()
@@ -536,30 +548,34 @@ export default {
       },
       // 试听视频
       audition(index){
+
         this.activeIndex = index
         
         if(this.typeId == 3){
+
           if(this.videoData.length == 0){
             this.$Message.warning('暂无试看课程！');
             return false;
           }
+
           // 视频下标修改修改
           this.$store.commit('personCenter/setVideoIndex', this.allData[index]);
+          this.$store.commit('personCenter/setVideoState', 1)
 
-          // this.$refs.myVideo.onPlayerPlay();
           this.showAudio = false
+
         }else {
-          if(index == undefined || index.voiceUrl == '' || Object.keys(index).length == 0){
-            this.$Message.warning('对不起，当前没有播放源！');
+
+          if(this.allData[index].voiceUrl == ''){
+            this.$Message.warning('暂无可听课程！');
             return false;
           }
 
           // 音频下标修改修改
           this.$store.commit('personCenter/setAudioIndex', this.allData[index]); 
 
-          this.audioData = index
           this.showAudio = true
-          // this.$refs.myAudio.startPlay();
+
         }
       },
       //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化

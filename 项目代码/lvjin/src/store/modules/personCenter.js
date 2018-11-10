@@ -36,6 +36,8 @@
     setOrderType(state, n) {  state.orderType = n  },
     // 记录视频类型状态
     setVideoIndex(state, n) {  state.videoIndex = n  ; },
+    // 记录视频首次播放
+    setVideoState(state, n) {  state.videoState = n  ; },
     // 记录音频类型状态
     setAudioIndex(state, n) {  state.audioIndex = n  ; },
 

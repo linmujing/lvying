@@ -378,8 +378,11 @@ export default {
             this.curIndex = this.videoMenu.lists.indexOf(Obj) ;
             this.curIndex = this.curIndex == -1 ? 0 : this.curIndex ;
 
-            // 播放
-            document.getElementById("videoPause").click();
+            this.onPlayerPause();
+            
+            // 防止初次加载播放
+            if(this.$store.state.personCenter.videoState == 0 ){ return }
+            setTimeout( ()=>{ this.onPlayerPlay(); }, 300) ;
 
         },
         // 时间进度

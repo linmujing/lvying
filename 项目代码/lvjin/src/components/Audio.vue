@@ -35,7 +35,7 @@
                     </Col>
                     <!-- 时间进度条 -->
                     <Col span="12">
-                        <div class="audio_title">{{audioTitle}}</div>
+                        <div class="audio_title"> &nbsp; {{audioTitle}}</div>
                         <div style="padding-top:2px;">
                             <Slider v-model="audioControl.timeProgress"
                                 @on-change="getTimeChange" :tip-format="setTimeTip" >
@@ -138,8 +138,7 @@ export default {
           },
           // 标题
           audioTitle: '',
-          showList: false
-
+          showList: false,
 
         };
     },
@@ -180,17 +179,17 @@ export default {
             // 获取当前时间
             this.audioControl.timeDivider = this.changeTimeBox(res.target.currentTime);
 
-          // 监听试听时间
-          var timer = this.audioParams.voiceTime
-          if(timer !== '' && this.audioParams.voiceStatus == 1){
-            timer = parseFloat(this.audioParams.voiceTime) * 60  // 试看时间，以秒为单位
-            if(this.changeTimeBox(res.target.currentTime) > this.changeTimeBox(timer)){
-              this.$refs.audio.currentTime = 0   // 设置当前时间 清零
-              this.pausePlay()    // 暂停播放
-              this.$Message.warning('请您购买后再继续收听！');
-              return false;
+            // 监听试听时间
+            var timer = this.audioParams.voiceTime
+            if(timer !== '' && this.audioParams.voiceStatus == 1){
+                timer = parseFloat(this.audioParams.voiceTime) * 60  // 试看时间，以秒为单位
+                if(this.changeTimeBox(res.target.currentTime) > this.changeTimeBox(timer)){
+                this.$refs.audio.currentTime = 0   // 设置当前时间 清零
+                this.pausePlay()    // 暂停播放
+                this.$Message.warning('请您购买后再继续收听！');
+                return false;
+                }
             }
-          }
 
         },
         // 当加载语音流元数据完成后，会触发该事件的回调函数
@@ -212,18 +211,12 @@ export default {
         /** 音频控制器函数 **/
         // 开始播放
         startPlay() {
+
           this.$refs.audio.play()
           this.audioControl.audioOff = false
 
         },
-        // 点击页面按钮播放
-        clickPlay() {
-          if(!Object.keys(this.audioParams).length == 0){
-            this.audioTitle = this.audioParams.sectionName
-            this.url = this.audioParams.voiceUrl
-          }
-          this.pausePlay()
-        },
+
         // 暂停
         pausePlay() {
 
@@ -272,6 +265,21 @@ export default {
 
         },
 
+        /**获取音频数据 */
+        getAudioParam(){
+
+            let Obj = this.$store.state.personCenter.audioIndex ;
+            console.log(Obj.sectionName)
+
+            this.url = Obj.voiceUrl ;
+            this.audioTitle = Obj.sectionName ;
+
+            this.pausePlay();
+            this.$refs.audio.currentTime = 0;
+
+            setTimeout( ()=>{ this.startPlay(); }, 300) ;
+
+        },
 
         /** 辅助函数 **/
         // 秒转化器
@@ -295,21 +303,15 @@ export default {
 
     },
     computed: {
-
-
+        // 监听视频下标修改
+        listenVideo() {  return this.$store.state.personCenter.audioIndex  }
     },
     watch: {
-      //监听参数变化
-      audioParams: {
-        handler(newValue, oldValue) {
-          this.clickPlay()
-          this.$refs.audio.src = newValue.voiceUrl
-        },
-        deep: true
-      }
+        // 监听视频下标修改
+        listenVideo:function (val){ this.getAudioParam()  }
     },
     mounted(){
-      this.clickPlay()
+ 
 
     },
 };
