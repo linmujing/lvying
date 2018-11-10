@@ -36,7 +36,7 @@
         </div>
         
         <!-- 订单分页 -->
-        <div class="list_page">
+        <div class="list_page" v-if="total > 6">
         <Page :total="total" :current="page"   :page-size="pageSize"
                 @on-change="changeOrderPage"   show-total show-elevator />
         </div>
