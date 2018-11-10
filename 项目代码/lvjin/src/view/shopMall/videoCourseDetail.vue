@@ -526,7 +526,7 @@ export default {
             this.$Message.warning('暂无试看课程！');
             return false;
           }
-          this.$refs.myVideo.onPlayerPlay();
+          this.$refs.myVideo.clickPlayerPlay();
           this.showAudio = false
         }else {
           if(index == undefined || index.voiceUrl == '' || Object.keys(index).length == 0){

@@ -240,6 +240,23 @@ export default {
     methods: {
 
         /** 视频方法 **/
+        clickPlayerPlay(player) {
+
+          // 没有播放源提示
+          if( this.playerOptions.sources.length == 0 ){
+
+            this.$Message.warning('对不起，当前没有播放源！');
+
+            return false;
+
+          }
+          // console.log(this.activeIndex)
+          this.freeTip = false
+          this.changeItem(this.activeIndex)
+          this.player.play();
+          this.videoControl.videoOff = false;
+
+        },
         // 视频播放 *
         onPlayerPlay(player) {
 
@@ -251,11 +268,8 @@ export default {
                 return false;
 
             }
-          // console.log(this.activeIndex)
-          this.freeTip = false
-          this.changeItem(this.activeIndex)
-          this.player.play();
           this.videoControl.videoOff = false;
+          this.player.play();
 
         },
         // 视频暂停 *
@@ -293,7 +307,7 @@ export default {
           }
           console.log(this.videoMenu.lists)
 
-          if(this.videoMenu.lists[index].timer !== '' && this.videoMenu.lists[index].videoStatus == 0){
+          if(this.videoMenu.lists[index].timer !== '' && this.videoMenu.lists[index].videoStatus == 1){
             var timer = this.videoMenu.lists[index].timer
             timer = parseFloat(this.videoMenu.lists[index].timer) * 60  // 试看时间，以秒为单位
             if(this.changeTimeBox(player.currentTime()) > this.changeTimeBox(timer)){
@@ -374,6 +388,7 @@ export default {
             if(index == '' || index == null || index == undefined){
               this.playerOptions.sources = arr[0].videoUrl;
             }else {
+              debugger
               this.playerOptions.sources = arr[index].videoUrl;
             }
             console.log(this.activeIndex)
@@ -600,7 +615,7 @@ export default {
     watch: {
       activeIndex(val, oldVal){
         console.log(val)
-        this.onPlayerPlay()
+        this.clickPlayerPlay()
       }
     },
     mounted(){
