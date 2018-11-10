@@ -276,7 +276,10 @@ export default {
           cuponList: [],
           // 已经购买
           hasBuy: 0,
-          activeIndex: ''
+          activeIndex: '',
+
+          // 最新所有数据
+          allData: []
         }
 
     },
@@ -292,6 +295,7 @@ export default {
       },
     },
     mounted(){
+
       if(!this.$route.query.hasBuy == ''){
         this.hasBuy = 1
       }
@@ -390,6 +394,10 @@ export default {
               result.productScore == null ? this.valueCustomText = 0 : this.valueCustomText = res.data.content.productScore
               // 课程目录
               var productSection = eval(result.productSection)
+
+              // 最新所有数据灌入
+              this.allData = eval(result.productSection);
+
               console.log(productSection)
               // 获取视频音频数据
               var videoSection = []
@@ -397,11 +405,19 @@ export default {
               var videoData = []
               var audioData = []
               for (var i=0;i<productSection.length;i++){
+
                 var section = productSection[i]
                   videoSection.push(section)
                   audioSection.push(section)
+
+                let videState = 0 ;
                 //获取试用视频音频数据status = 0
                 if(parseInt(section.videoStatus) === 0 || parseInt(section.videoStatus) === 1){
+
+                  // 视频下标修改修改 第一次加载
+                  videState == 0 ? this.$store.commit('personCenter/setVideoIndex',  this.allData[i]  ) : '';
+                  videState ++;
+
                   videoData.push(section)
                 }
                 if(parseInt(section.voiceStatus) === 0 || parseInt(section.voiceStatus) === 1){
@@ -521,21 +537,29 @@ export default {
       // 试听视频
       audition(index){
         this.activeIndex = index
+        
         if(this.typeId == 3){
           if(this.videoData.length == 0){
             this.$Message.warning('暂无试看课程！');
             return false;
           }
-          this.$refs.myVideo.onPlayerPlay();
+          // 视频下标修改修改
+          this.$store.commit('personCenter/setVideoIndex', this.allData[index]);
+
+          // this.$refs.myVideo.onPlayerPlay();
           this.showAudio = false
         }else {
           if(index == undefined || index.voiceUrl == '' || Object.keys(index).length == 0){
             this.$Message.warning('对不起，当前没有播放源！');
             return false;
           }
+
+          // 音频下标修改修改
+          this.$store.commit('personCenter/setAudioIndex', this.allData[index]); 
+
           this.audioData = index
           this.showAudio = true
-          this.$refs.myAudio.startPlay();
+          // this.$refs.myAudio.startPlay();
         }
       },
       //时间格式化函数，此处仅针对yyyy-MM-dd hh:mm:ss 的格式进行格式化

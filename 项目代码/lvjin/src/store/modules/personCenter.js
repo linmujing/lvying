@@ -8,7 +8,11 @@
     addressState: 0,
     // 记录订单类型状态
     orderType: 0,
-
+    // 记录视频播放下标
+    videoIndex: '',
+    // 记录音频播放下标
+    audioIndex: '',
+    videoState: 0,
   }
   
   // getters
@@ -30,6 +34,10 @@
     setAddressState(state, n) {  state.addressState = n  },
     // 记录订单类型状态
     setOrderType(state, n) {  state.orderType = n  },
+    // 记录视频类型状态
+    setVideoIndex(state, n) {  state.videoIndex = n  ; },
+    // 记录音频类型状态
+    setAudioIndex(state, n) {  state.audioIndex = n  ; },
 
   }
   

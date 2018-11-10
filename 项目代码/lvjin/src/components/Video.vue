@@ -2,8 +2,10 @@
   <div id="container_id" ref="container_id" class="container" :class="[videoControl.fullScreen ? 'full_screen' : '']">
 
     <!-- 视频容器  -->
-    <div class="player" @mousemove="onMouseShow"  :class="[videoControl.fullScreen ? 'full_screen_player' : '']">
+    <div class="player" @mousemove="onMouseShow"  :class="[videoControl.fullScreen ? 'full_screen_player' : '']" 
+        :style="{height: videoControl.fullScreen ? videoHeight  : 'auto'}">
       <video-player class="video-player vjs-custom-skin"
+                    id="videoPlayer"
                     ref="videoPlayer"
                     :playsinline="true"
                     :options="playerOptions"
@@ -28,7 +30,7 @@
     <div style="position:absolute;">
 
         <!-- 开关 -->
-        <span class="video_control_icon"
+        <span class="video_control_icon" 
             @click="onPlayerPause"
             v-show="!videoControl.videoOff">
             <span class="vjs-icon-pause"></span>
@@ -52,17 +54,18 @@
                         <span class="video_control_icon" @click="previousClick">
                             <span class="vjs-icon-previous-item"></span>
                         </span>
+
                     </Col>
                     <Col span="8">
                     <!-- 开关 -->
-                        <span class="video_control_icon"
+                        <span class="video_control_icon" id="videoPause"
                             @click="onPlayerPause"
                             v-show="!videoControl.videoOff">
                             <span class="vjs-icon-pause"></span>
                         </span>
                     </Col>
                     <Col span="8">
-                        <span class="video_control_icon"
+                        <span class="video_control_icon" id="videoPlay"
                             @click="onPlayerPlay"
                             v-show="videoControl.videoOff">
                             <span class="vjs-icon-play"></span>
@@ -142,7 +145,7 @@
                             <!--v-for="(item, index2) in items.items"-->
                             <!--:key="index2" @click="changeItem(index, index2)">{{item.text}}-->
                         <!--</div>-->
-                      <div class="item" :class='{active: index == curIndex}' @click="changeItem(index)">{{item.name}}
+                      <div class="item" :class='{active: index == curIndex}' @click="changeItem(index)">{{item.sectionName}}
                       </div>
                     </div>
                 </li>
@@ -178,13 +181,8 @@ export default {
                 language: "zh-CN",
                 aspectRatio: "16:9", // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
                 fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-                sources: [
-                    // {
-                    //     type: "video/mp4",
-                    //     // mp4
-                    //     src: "http://vjs.zencdn.net/v/oceans.mp4"
-                    // }
-                ],
+                // 视频资源 {type: '' , src: ''}
+                sources: [],
                 poster: this.imgUrl, //你的封面地址
                 width: document.documentElement.clientWidth,
                 notSupportedMessage: "此视频暂无法播放，请稍后再试" ,//允许覆盖Video.js无法播放媒体源时显示的默认信息。
@@ -229,7 +227,8 @@ export default {
 
             curIndex: 0,
             Height:  '',
-            freeTip: false
+            freeTip: false,
+            videoHeight: 0
         };
     },
     components: {
@@ -251,15 +250,17 @@ export default {
                 return false;
 
             }
-          // console.log(this.activeIndex)
-          this.freeTip = false
-          this.changeItem(this.activeIndex)
-          this.player.play();
-          this.videoControl.videoOff = false;
+
+            this.freeTip = false
+
+            this.player.play();
+            
+            this.videoControl.videoOff = false;
 
         },
         // 视频暂停 *
         onPlayerPause(player) {
+
           this.videoControl.videoOff = true;
 
           this.player.pause();
@@ -280,29 +281,25 @@ export default {
         // 同步获取视频时间参数 *
         onPlayerTimeupdate(player) {
 
-          // 获取时间进度
-          this.videoControl.timeProgress = (player.currentTime() / player.duration()).toFixed(2)*100;
+            // 获取时间进度
+            this.videoControl.timeProgress = (player.currentTime() / player.duration()).toFixed(2)*100;
 
-          // 获取当前时间
-          this.videoControl.timeDivider = this.changeTimeBox(player.currentTime());
+            // 获取当前时间
+            this.videoControl.timeDivider = this.changeTimeBox(player.currentTime());
 
-          // 监听试看时间
-          var index = 0
-          if(this.curIndex !== ''){
-            index = this.curIndex
-          }
-          console.log(this.videoMenu.lists)
-
-          if(this.videoMenu.lists[index].timer !== '' && this.videoMenu.lists[index].videoStatus == 0){
-            var timer = this.videoMenu.lists[index].timer
-            timer = parseFloat(this.videoMenu.lists[index].timer) * 60  // 试看时间，以秒为单位
-            if(this.changeTimeBox(player.currentTime()) > this.changeTimeBox(timer)){
-              player.currentTime(0)   // 设置当前时间 清零
-              this.onPlayerPause()    // 暂停播放
-              this.freeTip = true     // 显示提示
-              return false;
+            // 当前视频资源
+            let  sources = this.$store.state.personCenter.videoIndex ;
+            
+            if(sources.videoStatus == '1'){
+                // 监听试看时间
+                var timer =  parseFloat(sources.videoTime) * 60 ; // 试看时间，以秒为单位
+                if(this.changeTimeBox(player.currentTime()) > this.changeTimeBox(timer)){
+                    player.currentTime(0)   // 设置当前时间 清零
+                    this.onPlayerPause()    // 暂停播放
+                    this.freeTip = true     // 显示提示
+                    return false;
+                }
             }
-          }
 
         },
         // 初始设置 *
@@ -338,7 +335,7 @@ export default {
         },
         //  or listen state event
         playerStateChanged(player) {
-      //change
+        //change
 
         },
 
@@ -346,38 +343,27 @@ export default {
         /** 控制器方法 **/
         // 获取视频固定参数
         getVideoParam(){
-            // 设置默认播放源
-            // if(this.videoMenu.lists[0].items[0].videoSource.length > 0 ){
-            //
-            //     this.playerOptions.sources = this.videoMenu.lists[0].items[0].videoSource;
-            //
-            // }
-          var lists = []
-          var arr = this.videoParams
-          console.log(arr)
-          if(arr.length > 0){
-            for(var i=0;i<arr.length;i++){
-              var obj = {
-                name: arr[i].sectionName,
-                videoSource: {
-                  type: '',
-                  // mp4
-                  src: arr[i].videoUrl
-                },
-                timer: arr[i].videoTime,
-                videoStatus: arr[i].videoStatus,
-              }
-              lists.push(obj)
-            }
-            this.videoMenu.lists = lists
-            var index = this.activeIndex
-            if(index == '' || index == null || index == undefined){
-              this.playerOptions.sources = arr[0].videoUrl;
-            }else {
-              this.playerOptions.sources = arr[index].videoUrl;
-            }
-            console.log(this.activeIndex)
-          }
+
+            this.videoMenu.lists = this.videoParams;
+            console.log(this.videoParams)
+
+            let Obj = this.$store.state.personCenter.videoIndex ;
+            console.log(Obj)
+            
+            let obj = {                   
+                'type': "video/mp4",
+                'src': Obj.videoUrl
+            };
+
+            this.playerOptions.sources = [];
+            this.playerOptions.sources.push(obj);
+
+            this.curIndex = this.videoMenu.lists.indexOf(Obj) ;
+            this.curIndex = this.curIndex == -1 ? 0 : this.curIndex ;
+
+            // 播放
+            document.getElementById("videoPause").click();
+
         },
         // 时间进度
         getTimeChange(e){
@@ -410,32 +396,21 @@ export default {
             // 重置播放键
             this.videoControl.videoOff = true;
 
-            let index1 = this.videoControl.videoIndex1;
-            let index2 = this.videoControl.videoIndex2;
+            let index = this.curIndex;
 
-            // 先判断视频地址是否还存在
-            if( index2 > 0 ){
+            if(index > 0){
 
-                this.videoControl.videoIndex2--;
-
-            }
-            else if( index1 > 0 )
-            {
-
-                this.videoControl.videoIndex1--;
-
-                this.videoControl.videoIndex2 = this.videoMenu.lists[this.videoControl.videoIndex1].items.length-1;
+                index -- ;
+                console.log(index)
+                
+                // 视频下标修改修改
+                this.$store.commit('personCenter/setVideoIndex', this.videoMenu.lists[index]);
 
             }else{
 
-                this.$Message.warning('没有了');
+                this.$Message.warning('已经是第一集了');
 
-                return false;
             }
-
-            // 压入视频
-            // this.changeItem(this.videoControl.videoIndex1, this.videoControl.videoIndex2)
-            this.changeItem(this.videoControl.videoIndex1)
 
         },
         // 下一集
@@ -444,32 +419,21 @@ export default {
             // 重置播放键
             this.videoControl.videoOff = true;
 
-            let index1 = this.videoControl.videoIndex1;
-            let index2 = this.videoControl.videoIndex2;
+            let index = this.curIndex;
 
-            // 先判断视频地址是否还存在
-            if( index2 < this.videoMenu.lists[index1].items.length-1 ){
+            if(this.videoMenu.lists.length-1 > index ){
 
-                this.videoControl.videoIndex2++;
-
-            }
-            else if( index1 < this.videoMenu.lists.length-1 )
-            {
-
-                this.videoControl.videoIndex1++;
-
-                this.videoControl.videoIndex2 = 0;
+                index ++ ;
+                console.log(index)
+                
+                // 视频下标修改修改
+                this.$store.commit('personCenter/setVideoIndex', this.videoMenu.lists[index]);
 
             }else{
 
-                this.$Message.warning('没有了');
+                this.$Message.warning('已经是最后一集了');
 
-                return false;
             }
-
-            // 压入视频
-            // this.changeItem(this.videoControl.videoIndex1, this.videoControl.videoIndex2)
-            this.changeItem(this.videoControl.videoIndex1)
 
         },
         // 监听鼠标悬停事件
@@ -531,20 +495,23 @@ export default {
             elem.msRequestFullscreen();
             }
 
+            this.videoHeight = parseFloat(window.screen.height )  * 9/16 + 'px';
+            console.log( this.videoHeight )
+
         },
         // 退出全屏
         exitFullscreen() { 
 
             if (document.exitFullscreen) {
-            document.exitFullscreen();
+                document.exitFullscreen();
             }
             //FireFox
             else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
+                document.mozCancelFullScreen();
             }
             //Chrome等
             else if (document.webkitCancelFullScreen) {
-            document.webkitCancelFullScreen();
+                document.webkitCancelFullScreen();
             }
             //IE11
             else if (document.msExitFullscreen) {
@@ -557,14 +524,16 @@ export default {
         /** 侧边栏 **/
         // 切换视频
         //@param index 大列表下标
-        //@param index2 小列表下标
         changeItem(index){
-          this.curIndex = index
-          if(this.videoMenu.lists.length > 1){
-            // 压入视频
-            this.playerOptions.sources = this.videoMenu.lists[index].videoSource;
-            console.log(this.videoMenu.lists[index].videoSource)
-          }
+
+            this.curIndex = index
+
+            if(this.videoMenu.lists.length > 1){
+
+                // 视频下标修改修改
+                this.$store.commit('personCenter/setVideoIndex', this.videoMenu.lists[index]);
+
+            }
         },
 
         /** 辅助函数 **/
@@ -591,23 +560,23 @@ export default {
     computed: {
         // 监听视频开关
         player() {
-
             return this.$refs.videoPlayer.player;
-
-        }
+        },
+        // 监听视频下标修改
+        listenVideo() {  return this.$store.state.personCenter.videoIndex  }
 
     },
     watch: {
-      activeIndex(val, oldVal){
-        console.log(val)
-        this.onPlayerPlay()
-      }
+        activeIndex(val, oldVal){ this.onPlayerPlay()  },
+        // 监听视频下标修改
+        listenVideo:function (val){ this.getVideoParam();  }
     },
     mounted(){
+
         // 获取视频固定参数
         this.getVideoParam();
+
         this.Height = this.$refs.container_id.offsetHeight
-        // console.log(this.$refs.videoPlayer.player)
 
     },
 };
