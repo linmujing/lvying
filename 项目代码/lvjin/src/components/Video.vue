@@ -327,7 +327,7 @@ export default {
         // 播放错误
         onError(e){
 
-             this.$Message.warning('对不起，当前没有播放源');
+             // this.$Message.warning('对不起，当前没有播放源');
 
         },
         onPlayerEnded(player) {
@@ -388,7 +388,6 @@ export default {
             if(index == '' || index == null || index == undefined){
               this.playerOptions.sources = arr[0].videoUrl;
             }else {
-              debugger
               this.playerOptions.sources = arr[index].videoUrl;
             }
             console.log(this.activeIndex)
@@ -615,7 +614,7 @@ export default {
     watch: {
       activeIndex(val, oldVal){
         console.log(val)
-        this.clickPlayerPlay()
+        this.curIndex = val
       }
     },
     mounted(){

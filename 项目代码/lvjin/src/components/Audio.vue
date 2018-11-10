@@ -153,7 +153,7 @@ export default {
         },
         // 当发生错误, 就出现loading状态
         onError () {
-          this.$Message.warning('数据源格式错误！');
+          // this.$Message.warning('数据源格式错误！');
           this.audio.waiting = true
         },
         // 当音频开始等待
