@@ -615,41 +615,20 @@ export default {
         border-top: 2px solid #585858;
         display: none;
     }
-    .ivu-slider-button{
-        border: 0;
-        background-color: #fff;
-    }
-    .ivu-slider-wrap {
-        background-color: #ccc;
-        height:2px;
-    }
-    .ivu-slider-bar{
-        background: #059E7F;
-        height: 2px;
-        border-radius: 2px;
-    }
-    .ivu-slider-button{
-        width: 8px;
-        height: 8px;
-    }
-    .slider_line .ivu-slider-button-wrap{
-        top: -6px;
-    }
     .vjs-custom-skin > .video-js .vjs-big-play-button {
         font-size: 2em;
         line-height: 1.9em !important;
     }
     .video-js .vjs-big-play-button{
-      /*
-       播放按钮换成圆形
-      */
-      height: 2em;
-      width: 2em;
-      line-height: 2em;
-      border-radius: 1em;
-      outline: none;
+    /*
+    播放按钮换成圆形
+    */
+    height: 2em;
+    width: 2em;
+    line-height: 2em;
+    border-radius: 1em;
+    outline: none;
     }
-
 </style>
 <style scoped lang='less'>
 

@@ -12,10 +12,83 @@
     border-color: #00aa88;
     background-color: #00aa88;
 }
+/* ivu slider调整 */
+.ivu-slider-button{
+    border: 0;
+    background-color: #fff;
+}
+.ivu-slider-wrap {
+    background-color: #ccc;
+    height:2px;
+}
+.ivu-slider-bar{
+    background: #059E7F;
+    height: 2px;
+    border-radius: 2px;
+}
+.ivu-slider-button{
+    width: 8px;
+    height: 8px;
+}
+.ivu-slider-button-wrap{
+    top: -8px;
+}
+.ivu-slider-wrap {
+    margin: 10px 0;
+}
+
+.ivu-slider-button{
+    border: 0;
+    background-color: #fff;
+}
+.ivu-slider-wrap {
+    background-color: #ccc;
+    height:2px;
+}
+.ivu-slider-bar{
+    background: #059E7F;
+    height: 2px;
+    border-radius: 2px;
+}
+.ivu-slider-button{
+    width: 8px;
+    height: 8px;
+}
+.slider_line .ivu-slider-button-wrap{
+    top: -6px;
+}
+
+/* video audio调整 */
+.vjs-custom-skin > .video-js .vjs-big-play-button {
+    font-size: 2em;
+    line-height: 1.9em !important;
+}
+/*播放按钮换成圆形*/
+.video-js .vjs-big-play-button{
+
+  height: 2em;
+  width: 2em;
+  line-height: 2em;
+  border-radius: 1em;
+  outline: none;
+}
+.vjs-custom-skin > .video-js .vjs-control-bar{
+    color: #ccc;
+    border-top: 2px solid #585858;
+    display: none;
+}
+.vjs-custom-skin > .audio-js .vjs-control-bar{
+    color: #ccc;
+    border-top: 2px solid #585858;
+    display: none;
+}
 
 
-/* 多选checkbox */
+/* 修改elementUI checkbox样式 */
 .el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
     background-color: #00aa88;
     border-color: #00aa88;
+}
+.el-checkbox__label{
+    display: inline;
 }
