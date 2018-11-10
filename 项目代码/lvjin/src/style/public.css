@@ -214,8 +214,3 @@ a:hover{color: #00AA88;}
 .classImg img{
   width: 100%;
 }
-
-/* 修改elementUI checkbox样式 */
-.el-checkbox__label{
-  display: inline;
-}

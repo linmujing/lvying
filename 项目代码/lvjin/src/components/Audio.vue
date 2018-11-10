@@ -320,29 +320,6 @@ export default {
         border-top: 2px solid #585858;
         display: none;
     }
-    .ivu-slider-button{
-        border: 0;
-        background-color: #fff;
-    }
-    .ivu-slider-wrap {
-        background-color: #ccc;
-        height:2px;
-    }
-    .ivu-slider-bar{
-        background: #059E7F;
-        height: 2px;
-        border-radius: 2px;
-    }
-    .ivu-slider-button{
-        width: 8px;
-        height: 8px;
-    }
-    .ivu-slider-button-wrap{
-        top: -8px;
-    }
-    .ivu-slider-wrap {
-        margin: 10px 0;
-    }
 </style>
 <style scoped lang='less'>
 
