@@ -107,7 +107,7 @@ export default {
         return {
 
         //   url: this.theUrl || 'https://wdd.js.org/element-audio/static/falling-star.mp3',
-        //   url: require('../assets/music/a1.wav'),
+        //   url: require('../assets/music/a1.wav'),http://lvyingjiaoyu-prod.oss-cn-zhangjiakou.aliyuncs.com/ticymce/audio/2018/11/7/7cf35b610388dcc623e4330e63844ea5.mp3
           url:'',
           audio: {
             preload: 'auto'
@@ -283,11 +283,11 @@ export default {
 
             var h = timer > 3600 ? parseInt(timer/3600) : 0;
 
-            var m = (timer- h*3600) > 60 ? parseInt(timer/60) : 0;
+            var m = (timer- h*3600) > 60 ? parseInt((timer- h*3600)/60) : 0;
 
             var s = parseInt(timer - h*3600 - m*60);
 
-            var now =  ps(h) + ":" + p(m) + ":" + p(s);
+            var now =  ps(h) + p(m) + ":" + p(s);
 
             return now;
 
