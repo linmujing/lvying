@@ -20,13 +20,15 @@
                   </div>
 
                   <div v-show="thirdNavTitle.length > 0">
-                    <div v-show="showBox" class="itemBox bg_white" :style="{minHeight: listBoxHeight + 'px'}">
+                    <div v-show="showBox" class="itemBox bg_white" :class="{width_400px: fourNavTitle.length > 2}" :style="{minHeight: listBoxHeight + 'px'}">
                       <div v-for="(itemss,index2) in thirdNavTitle" :key="index2">
-                        <!--<div @click="jumpDown(2)" class="font_18 pointer hover_title">{{itemss.catName}}</div>-->
+                        <div @mouseenter="thirMouseOver(itemss.id, index2)" @click="jumpDown(itemss.id,itemss.catName)" class="font_18 pointer hover_title margin_top_10 text_ellipsis">{{itemss.catName}}</div>
 
-                        <ul class="list_unstyled ul_inline clearfix margin_bottom_10">
-                          <li @click="jumpDown(itemss.id,itemss.catName)" class="margin_top_5 margin_right_30 pointer hover_title text_ellipsis width_180px">{{itemss.catName}}</li>
-                        </ul>
+                        <div style="min-height: 26px">
+                          <ul v-show="fourIndex == index2" class="list_unstyled ul_inline clearfix margin_bottom_10">
+                            <li v-for="(itemsss,index3) in fourNavTitle" :key="index3" @click="jumpDown(itemsss.id,itemsss.catName)" class="margin_top_5 margin_right_20 pointer hover_title text_ellipsis">{{itemsss.catName}}</li>
+                          </ul>
+                        </div>
 
                       </div>
                     </div>
@@ -57,6 +59,8 @@
         curIndex: this.nowIndex,
         // 二级标题悬停
         itemsIndex:0,
+        // 三级标题悬停
+        fourIndex:0,
         /*导航栏数据模型*/
         navDataModel:[],
         navTitle: [
@@ -67,6 +71,7 @@
         ],
         secondNavTitle: [],
         thirdNavTitle: [],
+        fourNavTitle: [],
         goodsCode: '',
         listBoxHeight: '',
         left: 0,
@@ -103,6 +108,10 @@
                   break
                 case 3:
                   this.thirdNavTitle = res.data.content
+                  break
+                case 4:
+                  this.fourNavTitle = res.data.content
+                  // console.log(res.data.content)
                   break
               }
 
@@ -146,6 +155,7 @@
       // 一级导航悬停
       tabHover(id, index){
         // console.log(id)
+        this.secondNavTitle = []
         this.getSecondNavTitle(id, 2)
         this.left = 180 * index;
         this.showBox = false;
@@ -153,11 +163,19 @@
       },
       // 二级导航鼠标悬停
       boxMouseOver(id, index){
+        this.thirdNavTitle = []
+        this.fourNavTitle = []
 				this.showBox = true;
         this.itemsIndex = index;
         this.listBoxHeight= this.$refs.listBox.offsetHeight;
         this.getSecondNavTitle(id, 3)
 			},
+      // 三级导航鼠标悬停
+      thirMouseOver(id, index){
+        this.fourNavTitle = []
+        this.fourIndex = index
+        this.getSecondNavTitle(id, 4)
+      },
 			//鼠标移除
 			boxMouseOut(){
         this.showBox = false
@@ -219,6 +237,7 @@
       .listItem{background: rgba(0,0,0,0.5);width:180px;}
       .listItem:hover{background: #00aa88}
       .itemBox{position: absolute;top:0;left:180px;padding: 10px;width: 100%;min-height: 200px}
+      .width_400px{width: 400px}
     }
   }
   .show {

@@ -153,7 +153,7 @@ export default {
         },
         // 当发生错误, 就出现loading状态
         onError () {
-          this.$Message.warning('数据源格式错误！');
+          // this.$Message.warning('数据源格式错误！');
           this.audio.waiting = true
         },
         // 当音频开始等待
@@ -182,7 +182,7 @@ export default {
 
           // 监听试听时间
           var timer = this.audioParams.voiceTime
-          if(timer !== ''){
+          if(timer !== '' && this.audioParams.voiceStatus == 1){
             timer = parseFloat(this.audioParams.voiceTime) * 60  // 试看时间，以秒为单位
             if(this.changeTimeBox(res.target.currentTime) > this.changeTimeBox(timer)){
               this.$refs.audio.currentTime = 0   // 设置当前时间 清零

@@ -290,7 +290,7 @@ export default {
         this.videoModel = true
         this.showAudio = false
         this.curIndex = index
-        this.$refs.myVideo.onPlayerPlay();
+        this.$refs.myVideo.clickPlayerPlay();
       },
       // 收听音频
       playerAudio(item){

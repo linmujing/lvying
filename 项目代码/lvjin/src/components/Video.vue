@@ -239,6 +239,23 @@ export default {
     methods: {
 
         /** 视频方法 **/
+        clickPlayerPlay(player) {
+
+          // 没有播放源提示
+          if( this.playerOptions.sources.length == 0 ){
+
+            this.$Message.warning('对不起，当前没有播放源！');
+
+            return false;
+
+          }
+          // console.log(this.activeIndex)
+          this.freeTip = false
+          this.changeItem(this.activeIndex)
+          this.player.play();
+          this.videoControl.videoOff = false;
+
+        },
         // 视频播放 *
         onPlayerPlay(player) {
 
@@ -310,7 +327,7 @@ export default {
         // 播放错误
         onError(e){
 
-             this.$Message.warning('对不起，当前没有播放源');
+             // this.$Message.warning('对不起，当前没有播放源');
 
         },
         onPlayerEnded(player) {
