@@ -373,7 +373,7 @@ export default {
       getProductInfo(productCode){
         this.$Spin.show()
         // 查看产品详情
-        this.$api.getProductInfo( this.$Qs.stringify({'productCode': productCode}) )
+        this.$api.getProductInfo( this.$Qs.stringify({'productCode': productCode, 'ciCode': this.$store.state.userData.cicode}) )
 
           .then( (res) => {
             // console.log(res);
@@ -415,14 +415,14 @@ export default {
                 audioSection.push(section)
 
                 //获取试用视频音频数据status = 0
-                
+
                 if(parseInt(section.videoStatus) === 0 || parseInt(section.videoStatus) === 1){
 
                   // 视频下标修改修改 第一次加载
                   if(videoState == 0 ){
                     this.$store.commit('personCenter/setVideoIndex',  this.allData[i] );
                     this.$store.commit('personCenter/setVideoState', 0)
-                  }  
+                  }
                   videoState ++;
 
                   videoData.push(section)
@@ -550,7 +550,7 @@ export default {
       audition(index){
 
         this.activeIndex = index
-        
+
         if(this.typeId == 3){
 
           if(this.videoData.length == 0){
@@ -572,7 +572,7 @@ export default {
           }
 
           // 音频下标修改修改
-          this.$store.commit('personCenter/setAudioIndex', this.allData[index]); 
+          this.$store.commit('personCenter/setAudioIndex', this.allData[index]);
 
           this.showAudio = true
 

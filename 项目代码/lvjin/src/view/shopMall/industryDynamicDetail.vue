@@ -107,8 +107,8 @@
                     <Button v-if="hasBuy == 0" size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                   </div>
                   <div v-show="detailId === 2">
-                    <Button @click="playerVideo(index,item)" size="small" type="success" ghost shape="circle" class="button_title">视频</Button>
-                    <Button @click="playerAudio(item)" size="small" type="success" ghost shape="circle" class="button_title">音频</Button>
+                    <Button @click="playerVideo(index)" size="small" type="success" ghost shape="circle" class="button_title">视频</Button>
+                    <Button @click="playerAudio(index)" size="small" type="success" ghost shape="circle" class="button_title">音频</Button>
                     <Button @click="openTxt(item)" size="small" type="success" ghost shape="circle" class="button_title">文字</Button>
                     <Button v-show="parseInt(item.docStatus) === 0" @click="downloadDoc(item.docUrl)" size="small" type="success" shape="circle" class="bg_title width_60px">预览</Button>
                     <Button v-show="parseInt(item.docStatus) === 0" @click="downloadDoc(item.docUrl)" size="small" type="success" shape="circle" class="bg_title width_60px">下载</Button>
@@ -243,7 +243,9 @@ export default {
           sectionCont: 0,
           sectionIndex: 0,
           dataStates: false,
-          curIndex: 0
+          curIndex: 0,
+          // 最新所有数据
+          allData: []
         }
 
     },
@@ -278,37 +280,45 @@ export default {
         this.visible = false;
       },
       // 查看视频
-      playerVideo(index, item){
-        if(!parseInt(item.videoStatus) == 0 && !parseInt(item.videoStatus) == 1){
-          this.$Message.warning('对不起，您需要购买后才能观看！');
-          return ;
+      playerVideo(index){
+        console.log(this.allData[index])
+        if(this.allData[index].length === 0){
+          this.$Message.warning('暂无可看课程！');
+          return false;
         }
-        if(item.videoUrl == ''){
-          this.$Message.warning('对不起，当前没有播放源！');
-          return ;
+        if(this.allData[index].videoUrl == ''){
+          this.$Message.warning('暂无可看课程！');
+          return false;
         }
+
+        // 视频下标修改修改
+        this.$store.commit('personCenter/setVideoIndex', this.allData[index]);
+        this.$store.commit('personCenter/setVideoState', 1)
         this.videoModel = true
         this.showAudio = false
-        this.curIndex = index
-        this.$refs.myVideo.clickPlayerPlay();
       },
       // 收听音频
-      playerAudio(item){
-        if(!parseInt(item.voiceStatus) == 0 && !parseInt(item.voiceStatus) == 1){
-          this.$Message.warning('对不起，您需要购买后才能收听！');
-          return ;
+      playerAudio(index){
+        if(this.allData[index].length === 0){
+          this.$Message.warning('暂无可听课程！');
+          return false;
         }
-        if(item.voiceUrl == ''){
-          this.$Message.warning('对不起，当前没有播放源！');
-          return ;
+        if(this.allData[index].voiceUrl == ''){
+          this.$Message.warning('暂无可听课程！');
+          return false;
         }
-        this.audioData = item
-        this.showAudio = true
+
+        // 音频下标修改修改
+        this.$store.commit('personCenter/setAudioIndex', this.allData[index]);
         this.videoModel = false
-        this.$refs.myAudio.startPlay();
+        this.showAudio = true
       },
       // 查看文字
       openTxt(item){
+        if(item.length === 0){
+          this.$Message.warning('暂无可看课程！');
+          return false;
+        }
         if(item.txtUrl === ''){
           this.$Message.warning('对不起，暂无数据！');
           return ;
@@ -374,7 +384,7 @@ export default {
       getProductInfo(productCode){
         this.$Spin.show()
         // 查看产品详情
-        this.$api.getProductInfo( this.$Qs.stringify({'productCode': productCode}) )
+        this.$api.getProductInfo( this.$Qs.stringify({'productCode': productCode, 'ciCode': this.$store.state.userData.cicode}) )
 
           .then( (res) => {
             console.log(res);
@@ -402,6 +412,9 @@ export default {
               this.sectionList = result.productSectionList
               // 课程目录
               this.productSection = result.productSection
+              // 最新所有数据灌入
+              this.allData = result.productSectionList
+
 
             }else {
               this.$Spin.hide()
@@ -451,8 +464,9 @@ export default {
               this.sectionList = arr
               this.sectionCont = result.count
               console.log(arr)
-
-            }else if (res.data.code == 500){
+              // 最新所有数据灌入
+              this.allData = arr
+            }else{
 
               this.$Message.warning(res.data.message);
 
