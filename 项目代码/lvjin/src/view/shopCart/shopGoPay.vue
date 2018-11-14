@@ -133,7 +133,7 @@ export default {
                 //全部列表状态
                 listState: false,
                 //总价格
-                listTotal: 0.00,
+                listTotal: this.$route.params.listTotal,
                 //大列表
                 cartList:[]
             }, 
@@ -378,9 +378,6 @@ export default {
                     // 计算小计与合计
                     this.calculatePrice();
 
-                    // 获取订单详情 获取订单金额
-                    this.getOrderDetail();
-
                 }else{
 
                     this.$Message.warning(res.data.message);
@@ -398,26 +395,26 @@ export default {
             });
         },
         // 获取订单金额
-        getOrderDetail(){
+        // getOrderDetail(){
 
-            this.$api.getOrderInfo( this.$Qs.stringify({'orderCode': this.$route.query.orderCode }) )
+        //     this.$api.getOrderInfo( this.$Qs.stringify({'orderCode': this.$route.params.orderCode }) )
 
-            .then( (res) => {
+        //     .then( (res) => {
 
-                console.log(res)
+        //         console.log(res)
 
-                if(res.data.code == 200){
+        //         if(res.data.code == 200){
 
-                    this.cartDate.listTotal = (res.data.content.orderPayAmount).toFixed(2);
+        //             this.cartDate.listTotal = (res.data.content.orderPayAmount).toFixed(2);
 
-                }else{
+        //         }else{
 
-                    this.$Message.warning(res.data.message);
+        //             this.$Message.warning(res.data.message);
 
-                }
+        //         }
 
-            })
-        },
+        //     })
+        // },
 
         /**支付**/
         // 阿里支付
@@ -426,9 +423,9 @@ export default {
             this.$Spin.show();
 
             let param = this.$Qs.stringify({ 
-                'orderCode': this.$route.query.orderCode , 
+                'orderCode': this.$route.params.orderCode , 
                 'ciCode': this.userData.cicode , 
-                'truePayMoney': '0.01', //this.cartDate.listTotal,
+                'truePayMoney': '0.01', //this.$route.params.listTotal,
                 'payCommet': '支付备注'
              }) ;
 
@@ -476,9 +473,9 @@ export default {
             this.$Spin.show();
 
             let param = this.$Qs.stringify({ 
-                'orderCode': this.$route.query.orderCode , 
+                'orderCode': this.$route.params.orderCode , 
                 'ciCode': this.userData.cicode , 
-                'truePayMoney': '0.01', //this.cartDate.listTotal,
+                'truePayMoney': '0.01', //this.$route.params.listTotal,
                 'payCommet': '支付备注'
                 }) ;
 
@@ -549,7 +546,7 @@ export default {
 
             this.payTimer = false;
 
-            this.$api.getOrderInfo( this.$Qs.stringify({ 'orderCode': this.$route.query.orderCode })  )
+            this.$api.getOrderInfo( this.$Qs.stringify({ 'orderCode': this.$route.params.orderCode })  )
 
             .then( (res) => {
 
@@ -611,7 +608,7 @@ export default {
     mounted(){
 
         // 获取订单详情
-        this.getOrderProduct(this.$route.query.orderCode);
+        this.getOrderProduct(this.$route.params.orderCode);
 
     }  
     

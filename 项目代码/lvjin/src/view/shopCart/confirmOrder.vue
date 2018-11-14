@@ -117,6 +117,8 @@ export default {
                 listState: false,
                 // 全部删除状态
                 listDeleteState: false,
+                // 不可变价格
+                listTotal2: 0.00,
                 // 总价格
                 listTotal: 0.00,
                 // 大列表
@@ -194,7 +196,7 @@ export default {
         submitOrderClick(){
 
             // 去结算页面
-            this.$router.push({ path: '/shopGoPay', query: { orderCode: this.$route.query.orderCode} })
+            this.$router.push({ name: 'shopGoPay', params: { orderCode: this.$route.query.orderCode, listTotal: this.cartDate.listTotal } })
 
         },
 
@@ -361,6 +363,7 @@ export default {
                 if(res.data.code == 200){
 
                     this.cartDate.listTotal = (res.data.content.orderPayAmount).toFixed(2);
+                    this.cartDate.listTotal2 = (res.data.content.orderPayAmount).toFixed(2);
 
                     // 获取订单可用优惠券
                     this.getOrderCoupon();
@@ -419,13 +422,15 @@ export default {
 
                     let data = res.data.content ;
 
-                    this.cartDate.listTotal = (res.data.content.orderPayAmount).toFixed(2);
+                    this.cartDate.listTotal = (res.data.content).toFixed(2);
 
                 }else{
 
                     this.$Message.warning(res.data.message);
 
                     this.Coupon.value = '暂无可用优惠券'
+
+                    this.cartDate.listTotal =this.cartDate.listTotal2;
 
                 }
 
