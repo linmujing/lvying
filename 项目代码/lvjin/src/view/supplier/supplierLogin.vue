@@ -81,43 +81,69 @@ export default {
       }
     },
     methods: {
+      // 判断手机号是否已注册
+      isRegister(){
+
+      },
     	//登录
       submit (name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
-            let params = this.$Qs.stringify({ 'merchantPhone': this.formRight.phone, 'passWord': this.formRight.pwd });
-            this.$Spin.show()
-            // 商户登陆
-            this.$api.merchantLogin( params )
+
+            this.$api.verifyMerchantPhone( this.$Qs.stringify({ 'merchantPhone':  this.formRight.phone }) )
 
               .then( (res) => {
 
-                console.log(res)
+                // console.log(res)
 
                 if(res.data.code == 200){
-                  this.$Spin.hide()
-                  this.$Message.success(res.data.message);
-                  // 存储用户信息
-                  sessionStorage.setItem("SupplierData", JSON.stringify(res.data.content));
-                  // this.$store.commit('userData/saveSupplierData', res.data.content);
-                  // console.log(this.$store.state.userData.SupplierData)
-                  // this.$router.push({ name: '', params: {id: id}})
 
-                  //跳转函数*************************************************
-                  window.location.href = this.GLOBAL.supplier_url
+                  let params = this.$Qs.stringify({ 'merchantPhone': this.formRight.phone, 'passWord': this.formRight.pwd });
+                  this.$Spin.show()
+                  // 商户登陆
+                  this.$api.merchantLogin( params )
+
+                    .then( (res) => {
+
+                      console.log(res)
+
+                      if(res.data.code == 200){
+                        this.$Spin.hide()
+                        this.$Message.success(res.data.message);
+                        // 存储用户信息
+                        sessionStorage.setItem("SupplierData", JSON.stringify(res.data.content));
+                        // this.$store.commit('userData/saveSupplierData', res.data.content);
+                        // console.log(this.$store.state.userData.SupplierData)
+                        // this.$router.push({ name: '', params: {id: id}})
+
+                        //跳转函数*************************************************
+                        window.location.href = this.GLOBAL.supplier_url
+                      }else{
+                        this.$Spin.hide()
+                        this.$Message.warning(res.data.message);
+
+                      }
+
+                    })
+                    .catch((error) => {
+
+                      this.$Spin.hide()
+                      console.log('发生错误！', error);
+
+                    });
+
                 }else{
-                  this.$Spin.hide()
-                  this.$Message.warning(res.data.message);
 
+                  this.$Message.warning(res.data.message);
                 }
 
               })
               .catch((error) => {
 
-                this.$Spin.hide()
                 console.log('发生错误！', error);
 
               });
+
           }
         })
       },
