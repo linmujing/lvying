@@ -109,15 +109,28 @@ export default {
 
                       if(res.data.code == 200){
                         this.$Spin.hide()
-                        this.$Message.success(res.data.message);
                         // 存储用户信息
                         sessionStorage.setItem("SupplierData", JSON.stringify(res.data.content));
-                        // this.$store.commit('userData/saveSupplierData', res.data.content);
-                        // console.log(this.$store.state.userData.SupplierData)
-                        // this.$router.push({ name: '', params: {id: id}})
+                        // 审核通过
+                        if(res.data.content.merchantStatus == 1){
+                          this.$Message.success(res.data.message);
+                          //跳转函数*************************************************
+                          window.location.href = this.GLOBAL.supplier_url
+                        }else {
+                          // 审核没通过
+                          this.$Message.info({
+                            render: h => {
+                              return h('span', [
+                                '您好，您所提交的认证信息正在审核中或审核未通过！'
+                              ])
+                            },
+                            duration: 3
+                          });
+                          this.$router.push({
+                            path:'approverStatus'
+                          })
+                        }
 
-                        //跳转函数*************************************************
-                        window.location.href = this.GLOBAL.supplier_url
                       }else{
                         this.$Spin.hide()
                         this.$Message.warning(res.data.message);
