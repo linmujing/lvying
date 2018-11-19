@@ -4,7 +4,7 @@
         <div class="box_center_1200" v-show="!addressData.addressPageShow">
 
             <!-- 订单地址 #submitType#-->
-            <div class="order_address" >
+            <div class="order_address" v-if="addressData.hasStore" >
 
                 <!-- 添加地址 地址列表为空时展示-->
                 <div class="address_add" v-if="addressData.addressList.length == 0"><span class="address_btn" @click="addressData.addressPageShow = true"> <img src="../../assets/images/icon/address_add.png" alt=""> <i>添加收货地址</i> </span></div>
@@ -222,6 +222,9 @@ export default {
             //  true  : 去结算提交  解释：当页面为去结算提交时，可以修改数量，可以选择优惠券
             //  false : 去结算后修改状态  解释：不可以修改数量，不可以选择优惠券，但是可以选择地址
             submitType: false,
+            
+            // 石是否存在实物商品
+            hasStore: false,
 
             /*订单数据*/
             cartDate:{
@@ -625,6 +628,11 @@ export default {
 
                     let data = res.data.content , arr = [];
 
+                    // productType为1时，商品存在实物，实物才有地址选择
+                    if(data.productType.indexOf('1') != -1){
+                        this.addressData.hasStore = true;
+                    }
+
                     // 单个商品
                     if(data.productType != '2'){
 
@@ -702,7 +710,6 @@ export default {
             let cartString = productCode.split(','), cartCode = [], cartNun = [], codeStr = '';
 
             for(let item of cartString){
-
                 cartCode.push(item.split('-')[0]);
                 cartNun.push(item.split('-')[1]);
                 codeStr += codeStr== '' ? item.split('-')[0] : ',' + item.split('-')[0];
@@ -726,6 +733,10 @@ export default {
                     for(let i = 0 ; i < Data.length; i++){
 
                         let child = Data[i];
+                        
+                        if(child.productType.indexOf('1') != -1){
+                            this.addressData.hasStore = true;
+                        }
 
                         let childIndex = merchantArr2.indexOf(child.merchantCode);
 
@@ -816,6 +827,10 @@ export default {
                             let arr2 = [], merchantArr2 = [] ;
 
                             for(let child of Data){
+
+                                if(child.productType.indexOf('1') != -1){
+                                    this.addressData.hasStore = true;
+                                }
 
                                 let childIndex = merchantArr2.indexOf(child.merchantCode);
 
@@ -1007,7 +1022,6 @@ export default {
             });
 
         },
-
 
     },
 

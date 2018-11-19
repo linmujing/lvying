@@ -4,7 +4,7 @@
 
         <!-- 课程标题    -->
         <div class="order_title font_16 border_bottom_1">
-            <span>我的课程</span>
+            <span>我的购买</span>
         </div>
 
          <!-- 课程列表 -->

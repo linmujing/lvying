@@ -154,7 +154,7 @@
                                                             <!-- 组合包 -->
                                                             <div  v-if="lists.isCombination != '0'">
                                                                 <!-- 换货 只要是实质商品都有换货-->
-                                                                <div class="item_td" v-if=" (lists.orderStatus == '1' && childs.productProperty == '1' )|| (lists.orderStatus == '2' && childs.productProperty == '1')"><p>
+                                                                <div class="item_td" v-if=" lists.orderStatus == '2' && childs.productProperty == '1'"><p>
                                                                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
                                                                         @click="productChange(lists.orderCode, childs.productCode)" v-if="childs.isExchange == 0">换货</Button>
                                                                     <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
@@ -179,7 +179,7 @@
                                                             <!-- 针对于单个商品 -->
                                                             <div  v-else>
                                                                 <!-- 换货 只要是实质商品都有换货-->
-                                                                <div class="item_td" v-if=" (lists.orderStatus == '1' && childs.productProperty == '1' )||  (lists.orderStatus == '1' && childs.productProperty == '1' )|| (lists.orderStatus == '2' && childs.productProperty == '1')"><p>
+                                                                <div class="item_td" v-if=" lists.orderStatus == '2' && childs.productProperty == '1' "><p>
                                                                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
                                                                         @click="productChange(lists.orderCode, childs.productCode)" v-if="childs.isExchange == 0">换货</Button>
                                                                     <Button type="text" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 

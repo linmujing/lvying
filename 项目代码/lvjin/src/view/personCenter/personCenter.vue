@@ -50,7 +50,7 @@ export default {
                 navIndex: 0,
                 // 导航栏
                 personNav:[
-                    { text: '我的课程', url: 'myCourse'},
+                    { text: '我的购买', url: 'myCourse'},
                     { text: '我的资料', url: 'myProfile'},
                     { text: '我的优惠券', url: 'myCoupon'},
                     { text: '我的订单', url: 'myOrder'},
