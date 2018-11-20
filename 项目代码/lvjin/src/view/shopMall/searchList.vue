@@ -10,7 +10,7 @@
                 <img :src="item.productProfileUrl" class="all_width all_height">
               </div>
               <div class="float_left width_290px height_170 padding_left_25">
-                <p class="font_18 font_weight_bold">{{item.productTitle}}</p>
+                <p class="font_18 font_weight_bold pointer" @click="toDetail(item.productCode)">{{item.productTitle}}</p>
                 <div class="twoline_ellipsis margin_top_10 color_666">{{item.productKeyWord}}</div>
                 <div class="clearfix margin_top_10">
                   <div class="float_left">

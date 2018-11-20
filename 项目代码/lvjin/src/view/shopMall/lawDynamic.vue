@@ -32,7 +32,7 @@
                 <img :src="item.productProfileUrl" class="all_width all_height">
               </div>
               <div class="float_left width_290px height_170 padding_left_25">
-                <p class="font_18 font_weight_bold text_ellipsis">{{item.productTitle}}</p>
+                <p class="font_18 font_weight_bold text_ellipsis pointer" @click="toDetail(item.productCode)">{{item.productTitle}}</p>
                 <div class="twoline_ellipsis margin_top_10 color_666">{{item.productKeyWord}}</div>
                 <div class="text_right margin_top_5">
                   <span class="color_title pointer" @click="toDetail(item.productCode)">查看详情》</span>
@@ -69,7 +69,7 @@
             <img :src="item.productProfileUrl" class="all_width all_height">
           </div>
           <div class="clearfix margin_top_15">
-            <div class="float_left width_70 font_weight_bold font_18 text_ellipsis">{{item.productTitle}}</div>
+            <div class="float_left width_70 font_weight_bold font_18 text_ellipsis pointer" @click="toDetail(item.productCode)">{{item.productTitle}}</div>
             <div class="float_right width_30 color_999 line_height_25px text_ellipsis text_right">
               <span>{{item.lookCount}}人看过</span>
             </div>

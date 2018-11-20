@@ -33,7 +33,7 @@
           <div class="text_center" @click="jumpDetail(item.productCode)">
             <img :src="item.productProfileUrl" class="all_width" height="280">
           </div>
-          <div class="font_18 text_ellipsis margin_top_20">{{item.productTitle}}</div>
+          <div class="font_18 text_ellipsis margin_top_20 pointer" @click="jumpDetail(item.productCode)">{{item.productTitle}}</div>
           <div class="color_666 text_ellipsis margin_top_10 clearfix">
             <div class="float_left width_50">{{item.productKeyWord}}</div>
             <div class="float_right">{{item.saleCount}}人购买过</div>

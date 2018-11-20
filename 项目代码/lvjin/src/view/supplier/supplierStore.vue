@@ -51,7 +51,7 @@
                       <div class="sort_txt">{{index + 1}}</div>
                     </div>
                     <div class="margin_left_10 margin_right_10 margin_top_15">
-                      <div class="font_18 text_ellipsis">{{item.productTitle}}</div>
+                      <div class="font_18 text_ellipsis pointer" @click="jumpDetail(item.productCode)">{{item.productTitle}}</div>
                       <div class="color_666 text_ellipsis margin_top_10 clearfix">
                         <div class="float_left">{{item.createBy}}</div>
                         <div class="float_right text_ellipsis">{{item.lookCount}}人看过</div>
@@ -84,7 +84,7 @@
                       <img :src="item.productProfileUrl" class="all_width" height="210">
                     </div>
                     <div class="margin_left_10 margin_right_10 margin_top_10">
-                      <div class="font_18 text_ellipsis">{{item.productTitle}}</div>
+                      <div class="font_18 text_ellipsis pointer" @click="jumpDetail(item.productCode)">{{item.productTitle}}</div>
                       <div class="color_666 margin_top_5 clearfix">
                         <div class="float_left color_999 width_50 text_ellipsis">{{item.productKeyWord}}</div>
                         <div class="float_right text_ellipsis">{{item.saleCount}}人购买过</div>
