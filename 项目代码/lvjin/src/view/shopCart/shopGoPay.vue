@@ -429,7 +429,7 @@ export default {
                 'payCommet': '支付备注'
              }) ;
 
-            const newTab = window.open();
+            
 
             this.$api.aliPayRequest( param )
 
@@ -440,13 +440,14 @@ export default {
 
                 if(res.data.code == 200){
                     
-                    this.alipay = true;
-                    this.wxpay = false;
-                    this.payModel = true;
-                    this.payType = '请用支付宝进行支付';
+                    // this.alipay = true;
+                    // this.wxpay = false;
+                    // this.payModel = true;
+                    // this.payType = '请用支付宝进行支付';
 
-                    this.alipayUrl = res.data.content;
+                    // this.alipayUrl = res.data.content;
 
+                    const newTab = window.open();
                     const div = document.createElement('div');
                     div.innerHTML = res.data.content; // html code
                     newTab.document.body.appendChild(div);

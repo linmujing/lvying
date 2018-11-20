@@ -34,7 +34,7 @@
 	        						<p class="font_16">使用合作账号登录</p>
 	        					</div>
 	        					<div class="margin_top_20">
-	    							<div class="pointer">
+	    							<div class="pointer" @click="wxLogin">
 	    								<img src="../../assets/images/icon/wx.png"/>
 	    								<p class="font_18">微信</p>
 	    							</div>
@@ -45,6 +45,18 @@
 	        	</div>
 	        </div>
 	    </div>
+
+			<!--扫码登录弹框 -->
+			<Modal v-model="loginModel"  width="680" footer-hide >
+					<p slot="header" >
+							<span class="font_18" style="font-weight:400;">微信登录</span>
+					</p>
+					<div style="width:648px;height:450px;position:relative;">
+							<div  style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:300px;height:450px;" >
+									<iframe :src="loginUrl"  height="450" frameborder="0" ></iframe>
+							</div>
+					</div>
+			</Modal>
 
     	<Footer></Footer>
 
@@ -61,7 +73,9 @@ export default {
     data() {
         return {
           show: true,
-          name: ''
+					name: '',
+					loginModel: false,
+					loginUrl:'https://open.weixin.qq.com/connect/qrconnect?appid=wxf3264a02ac5f662f&redirect_uri=http://flgk.yohez.com/user/userLogin&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect'
         }
 
     },
@@ -75,10 +89,63 @@ export default {
       },
     },
     mounted(){
-      this.show = this.$route.name !== 'userRegister';
+
+			this.show = this.$route.name !== 'userRegister';
+			
+			if(this.GetQueryString('code')){
+				this.codeLogin();
+			}
+
     },
     methods: {
 
+			// 威信登陆
+			wxLogin(){
+					this.loginModel = true;
+			},
+
+			// 获取地址栏参数
+			GetQueryString(name){
+		　　var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		　　var r = window.location.search.substr(1).match(reg);
+		　　if(r!=null)return unescape(r[2]);
+				return null;
+			},
+
+			// 通过code登录
+			codeLogin(){
+				console.log(this.GetQueryString('code'))
+				this.$Spin.show();
+
+				let param = this.$Qs.stringify({ 
+            'code': this.GetQueryString('code') 
+				}) ;
+				
+				this.$api.pcUserInfo( param )
+
+            .then( (res) => {
+
+                console.log(res)
+
+                if(res.data.code == 200){
+
+                    // 存储用户信息
+                    this.$store.commit('userData/saveUserData', res.data.content);
+
+                    //跳转函数*************************************************
+										this.$router.push({ name: 'shopMallIdex'})
+										
+                }else{
+                    this.$Message.warning(res.data.message);
+								}
+								this.$Spin.hide();
+
+            })
+            .catch((error) => {
+							this.$Spin.hide();
+              console.log('发生错误！', error);
+            });
+			}
     }
 }
 </script>
