@@ -176,6 +176,11 @@
 				            	<div class="float_right color_999 line_height_30px">{{item.createDate}}</div>
 			            	</div>
 			            	<div class="margin_top_10 text_justify" v-html="item.commentDesc"></div>
+                    <div v-if="!item.commentPicUrl == ''" class="margin_top_10">
+                      <div>
+                        <img :src="item.commentPicUrl" width="80" height="80" class="pointer" @click="clickPic(item.commentPicUrl)">
+                      </div>
+                    </div>
 			            </Col>
 			          </Row>
 			    	</div>
@@ -233,6 +238,16 @@
       	</Col>
       </Row>
     </div>
+    <!--图片弹窗-->
+    <Modal
+      v-model="picModel"
+      :footer-hide="true"
+      width="70%"
+      :mask-closable="false">
+      <div class="text_center">
+        <img :src="picUrl" >
+      </div>
+    </Modal>
 	</div>
 </template>
 <script>
@@ -258,6 +273,8 @@ export default {
           evaluateList: [],
           total: 0,
           pageSize: 3,
+          picModel: false,
+          picUrl: '',
           // 课程目录
           productSection: {
             videoSection: [],
@@ -318,6 +335,11 @@ export default {
       },
       handleClose () {
         this.visible = false;
+      },
+      // 查看图片
+      clickPic(url){
+        this.picModel = true
+        this.picUrl = url
       },
       // 选择优惠券
       selectCoupon(couponCode){
