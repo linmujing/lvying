@@ -16,13 +16,14 @@
          <!-- 评论列表 -->
         <div class="list_box padding_left_20 padding_right_20 padding_top_30">
             <div class="header padding_left_20">
-                <Col :span="10"><span class="" style="text-align: left; ">评论</span></Col>
+                <Col :span="6"><span class="" style="text-align: left; ">评论</span></Col>
+                <Col :span="5"><span>图片</span></Col>
                 <Col :span="4"><span>单号</span></Col>
-                <Col :span="10"><span>商品信息</span></Col>
+                <Col :span="5"><span>商品信息</span></Col>
             </div>
             <ul class="list">
                 <li class="padding_left_20" v-for="(items, index) in commentData.commentList" :key="index" >
-                    <Col :span="10">
+                    <Col :span="6">
                         <div class="table_block">
                             <p class="td_block" style="text-align:left;position:relative;">
                                  <Tooltip placement="top-start" >
@@ -36,6 +37,17 @@
                             </p>
                         </div>
                     </Col>
+                    <Col :span="5">
+                        <div class="table_block">
+                            <div class="td_block flex" >
+                                <!-- v-for="(item, index2) in items.commentPicUrl" :key="index2" -->
+                                <div class="img_middle_center pointer" style="width:60px;height:60px;overflow:hidden;border:1px solid #f5f5f5;display:inline-block" 
+                                     @click="clickImg(items.commentPicUrl)" v-if="items.commentPicUrl"> 
+                                    <img :src="items.commentPicUrl" alt="" >
+                                </div>
+                            </div>
+                        </div>
+                    </Col>
                     <Col :span="4">
                         <div class="table_block">
                             <p class="td_block">
@@ -43,7 +55,7 @@
                             </p>
                         </div>
                     </Col>
-                    <Col :span="10">
+                    <Col :span="5">
                         <div class="table_block">
                             <p class="td_block">
                                 <span :data-productCode="items.productCode">{{items.productName}}</span>
@@ -64,7 +76,11 @@
         <div class="order_has_not color_ccc" v-if="commentData.commentList.length == 0 ">
             暂无评论
         </div>
-
+        
+        <!-- 查看图片 -->
+        <Modal title="查看图片" v-model="visible">
+            <img :src="imgSrc" v-if="visible" style="width: 100%">
+        </Modal>
     </div>
 </template>
 <script>
@@ -86,6 +102,10 @@ export default {
             pageSize: 5,
             // 搜索值
             commentValue: '',
+
+            // 查看图片
+            visible: false,
+            imgSrc: ''
 
         }
 
@@ -148,6 +168,13 @@ export default {
 
         },
 
+        /*查看图片*/
+        //@param imgSrc 商品编号
+        clickImg(imgSrc){
+            this.imgSrc = imgSrc;
+            this.visible = true;
+        },
+
         /**分页**/
         //@param value 返回当前页码
         changeOrderPage(value){
@@ -168,6 +195,7 @@ export default {
               if(res.data.code == 200){
                 var result = res.data.content
                 this.commentData.commentList = result.list
+
                 this.total = result.count
               }else {
                 this.$Message.warning(res.data.message);

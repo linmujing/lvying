@@ -50,9 +50,17 @@ const router = new Router({
         {
           path: 'shopGoPay',
           name: 'shopGoPay',
-          component:resolve => require(['@/view/shopCart/shopGoPay'],resolve),
+          component:resolve => require(['@/view/shopCart/shopGoPay'], resolve),
           meta:{
             title:'去支付',
+          },
+        },
+        {
+          path: 'payBack',
+          name: 'payBack',
+          component:resolve => require(['@/view/shopCart/payBack'], resolve),
+          meta:{
+            title:'支付返回',
           },
         },
 

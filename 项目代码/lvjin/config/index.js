@@ -13,7 +13,8 @@ module.exports = {
     proxyTable: {
       '/api': { 
           // target: 'http://www.luyingjiaoyu.com/law-web-api/',//设置你调用的接口域名和端口号
-          target: 'http://114.115.133.96:8899/law-web-api/',//设置你调用的接口域名和端口号 
+          // target: 'http://114.115.133.96:8899/law-web-api/',//设置你调用的接口域名和端口号 
+          target: 'http://flgk.yohez.com/law-web-api/',//设置你调用的接口域名和端口号 
           changeOrigin: true,     //跨域                                
           pathRewrite: {                                             
             '^/api': '/'  

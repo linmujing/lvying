@@ -101,7 +101,7 @@
                     <span class="font_18" style="font-weight:400;">扫码支付</span>
                 </p>
                 <div style="width:648px;height:270px;position:relative;">
-                    <div v-show="alipay" style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;" >
+                    <div v-show="alipay" style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;" v-html="alipayHtml">
                         <!-- <iframe :src="alipayUrl" width="250" height="250" frameborder="0" scrolling="auto"></iframe> -->
                     </div>
                     <div v-show="wxpay" style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;">
@@ -155,6 +155,7 @@ export default {
             payModel: false,
             // 阿里支付链接
             alipayUrl:'',
+            alipayHtml:'',
             // 支付提示
             payType: '',
             // 订单轮询定时器
@@ -162,6 +163,7 @@ export default {
             myInterval: null,
             // 二维码盒子
             codeBox: null,
+
 
             // 二维码显示隐藏
             alipay: 'false',
@@ -425,11 +427,9 @@ export default {
             let param = this.$Qs.stringify({ 
                 'orderCode': this.$route.params.orderCode , 
                 'ciCode': this.userData.cicode , 
-                'truePayMoney': '0.01', //this.$route.params.listTotal,
+                'truePayMoney': '1', //this.$route.params.listTotal,
                 'payCommet': '支付备注'
              }) ;
-
-            
 
             this.$api.aliPayRequest( param )
 
@@ -440,20 +440,16 @@ export default {
 
                 if(res.data.code == 200){
                     
-                    // this.alipay = true;
-                    // this.wxpay = false;
-                    // this.payModel = true;
-                    // this.payType = '请用支付宝进行支付';
+                    this.alipay = true;
+                    this.wxpay = false;
+                    this.payModel = true;
+                    this.payType = '请用支付宝进行支付';
 
-                    // this.alipayUrl = res.data.content;
+                    this.alipayHtml = res.data.content;
 
-                    const newTab = window.open();
-                    const div = document.createElement('div');
-                    div.innerHTML = res.data.content; // html code
-                    newTab.document.body.appendChild(div);
-                    newTab.document.forms.punchout_form.submit();
+                    setTimeout(()=>{document.forms.punchout_form.submit();},1000)
             
-                    this.payTimer ?  this.myInterval = setInterval(this.getOrderState, 3000) : '';
+                    // this.payTimer ?  this.myInterval = setInterval(this.getOrderState, 3000) : '';
 
                 }else{
                     this.$Message.warning(res.data.message);

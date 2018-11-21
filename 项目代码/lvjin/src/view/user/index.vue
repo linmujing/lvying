@@ -90,25 +90,28 @@ export default {
     },
     mounted(){
 
-			this.show = this.$route.name !== 'userRegister';
-			
-			if(this.GetQueryString('code')){
-				this.codeLogin();
-			}
+		this.show = this.$route.name !== 'userRegister';
+		
+		if(this.GetQueryString('code')){
+			this.codeLogin();
+		}
 
     },
     methods: {
 
-			// 威信登陆
+			// 微信信登陆
 			wxLogin(){
-					this.loginModel = true;
+				this.loginModel = true;
 			},
 
 			// 获取地址栏参数
 			GetQueryString(name){
-		　　var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-		　　var r = window.location.search.substr(1).match(reg);
-		　　if(r!=null)return unescape(r[2]);
+			　　var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+			　　var r = window.location.search.substr(1).match(reg);
+			　　if(r!=null)
+				{
+					return unescape(r[2]);
+				}
 				return null;
 			},
 
@@ -118,33 +121,34 @@ export default {
 				this.$Spin.show();
 
 				let param = this.$Qs.stringify({ 
-            'code': this.GetQueryString('code') 
+					'code': this.GetQueryString('code') 
 				}) ;
-				
+					
 				this.$api.pcUserInfo( param )
 
-            .then( (res) => {
+				.then( (res) => {
 
-                console.log(res)
+					console.log(res)
+					this.$Spin.hide();
 
-                if(res.data.code == 200){
+					if(res.data.code == 200){
 
-                    // 存储用户信息
-                    this.$store.commit('userData/saveUserData', res.data.content);
+						// 存储用户信息
+						this.$store.commit('userData/saveUserData', res.data.content);
 
-                    //跳转函数*************************************************
-										this.$router.push({ name: 'shopMallIdex'})
-										
-                }else{
-                    this.$Message.warning(res.data.message);
-								}
-								this.$Spin.hide();
+						//跳转函数*************************************************
+						this.$router.push({ name: 'shopMallIdex'})
+											
+					}else{
+						this.$Message.warning(res.data.message);
+					}
+					
 
-            })
-            .catch((error) => {
-							this.$Spin.hide();
-              console.log('发生错误！', error);
-            });
+				})
+				.catch((error) => {
+					this.$Spin.hide();
+					console.log('发生错误！', error);
+				});
 			}
     }
 }

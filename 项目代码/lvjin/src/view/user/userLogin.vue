@@ -138,7 +138,6 @@ export default {
                     return;
 
                 }else if (res.data.code == 200){
-                    this.$Spin.hide()
 
                     if(isPassWord){
 
@@ -174,6 +173,7 @@ export default {
             .then( (res) => {
 
                 console.log(res)
+                this.$Spin.hide();
 
                 if(res.data.code == 200){
 
@@ -194,7 +194,7 @@ export default {
 
                 }
 
-                this.$Spin.hide();
+                
 
             })
             .catch((error) => {
