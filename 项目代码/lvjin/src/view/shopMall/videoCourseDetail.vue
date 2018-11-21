@@ -177,8 +177,8 @@
 			            	</div>
 			            	<div class="margin_top_10 text_justify" v-html="item.commentDesc"></div>
                     <div v-if="!item.commentPicUrl == ''" class="margin_top_10">
-                      <div>
-                        <img :src="item.commentPicUrl" width="80" height="80" class="pointer" @click="clickPic(item.commentPicUrl)">
+                      <div v-for="val in item.commentPicUrl.split(',')" class="inline_block margin_right_10">
+                        <img :src="val" width="80" height="80" class="pointer" @click="clickPic(val)">
                       </div>
                     </div>
 			            </Col>

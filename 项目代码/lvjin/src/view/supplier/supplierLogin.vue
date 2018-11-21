@@ -33,7 +33,7 @@
 					    	<span class="line"></span>
 					    </div>
 					    <div class="margin_top_10">
-							<div class="pointer text_center">
+							<div class="pointer text_center" @click="loginModel = true">
 								<img src="../../assets/images/icon/wx.png" width="30" height="30"/>
 								<p class="color_999">微信</p>
 							</div>
@@ -42,6 +42,17 @@
         		</div>
         	</div>
         </div>
+      <!--扫码登录弹框 -->
+      <Modal v-model="loginModel"  width="680" footer-hide >
+        <p slot="header" >
+          <span class="font_18" style="font-weight:400;">微信登录</span>
+        </p>
+        <div style="width:648px;height:450px;position:relative;">
+          <div  style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:300px;height:450px;" >
+            <iframe :src="loginUrl"  height="450" frameborder="0" ></iframe>
+          </div>
+        </div>
+      </Modal>
     </div>
 </template>
 <script>
@@ -78,13 +89,11 @@ export default {
             { required: true, message: '密码不能为空', trigger: 'blur' }
           ]
         },
+        loginModel: false,
+        loginUrl:'https://open.weixin.qq.com/connect/qrconnect?appid=wxf3264a02ac5f662f&redirect_uri=http://flgk.yohez.com/supplier/supplierLogin&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect'
       }
     },
     methods: {
-      // 判断手机号是否已注册
-      isRegister(){
-
-      },
     	//登录
       submit (name) {
         this.$refs[name].validate((valid) => {
@@ -160,9 +169,75 @@ export default {
           }
         })
       },
+      // 获取地址栏参数
+      GetQueryString(name){
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)
+        {
+          return unescape(r[2]);
+        }
+        return null;
+      },
+
+      // 通过code登录
+      codeLogin(){
+        console.log(this.GetQueryString('code'))
+        this.$Spin.show();
+
+        let param = this.$Qs.stringify({
+          'code': this.GetQueryString('code')
+        }) ;
+
+        this.$api.pcMerchantInfo( param )
+
+          .then( (res) => {
+
+            console.log(res)
+
+            if(res.data.code == 200){
+              this.$Spin.hide();
+              // 存储用户信息
+              sessionStorage.setItem("SupplierData", JSON.stringify(res.data.content));
+
+              // 审核通过
+              if(res.data.content.merchantStatus == 1){
+                this.$Message.success(res.data.message);
+                //跳转函数*************************************************
+                window.location.href = this.GLOBAL.supplier_url
+              }else {
+                // 审核没通过
+                this.$Message.info({
+                  render: h => {
+                    return h('span', [
+                      '您好，您所提交的认证信息正在审核中或审核未通过！'
+                    ])
+                  },
+                  duration: 3
+                });
+                this.$router.push({
+                  path:'approverStatus'
+                })
+              }
+
+            }else{
+              this.$Spin.hide();
+              this.$Message.warning(res.data.message);
+            }
+            this.$Spin.hide();
+
+          })
+          .catch((error) => {
+            this.$Spin.hide();
+            console.log('发生错误！', error);
+          });
+      }
     },
     mounted(){
 
+      if(this.GetQueryString('code')){
+        this.codeLogin();
+      }
     }
 }
 </script>
