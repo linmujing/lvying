@@ -18,8 +18,10 @@ export const addUser = params => { return instance.get(`/xxx/xxx`, params ); };
 /** 微信登录 **/
 //微信网页授权登录（用户）
 export const pcUserInfo = params => { return instance.post(`wechat/login/pc/customer/userInfo`, params ); };
-//微信网页授权登录（用户）
+//微信网页授权登录（销售商）
 export const pcMerchantInfo = params => { return instance.post(`wechat/login/pc/merchant/userInfo`, params ); };
+//微信网页授权登录（公众号）
+export const oaUserInfo = params => { return instance.post(`wechat/login/oa/customer/userInfo`, params ); };
 
 /** 会员信息 **/
 //会员注册

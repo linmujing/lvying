@@ -18,7 +18,7 @@
         </div>
 
          <!-- 售后服务列表 -->
-        <div class="list_box padding_left_20 padding_top_30">
+        <div class="list_box padding_20">
             <div class="header">
                 <Col :span="8"><span >商品信息</span></Col>
                 <Col :span="4"><span>单号</span></Col>
