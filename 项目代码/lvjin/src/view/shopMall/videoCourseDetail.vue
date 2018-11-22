@@ -108,13 +108,16 @@
                     <span>{{item.sectionName}}</span>
                   </div>
                   <div class="float_right">
-                    <span>{{item.videoTime}}</span>
+                    <!--<span>{{item.videoTime}}</span>-->
                     <div v-if="parseInt(item.videoStatus) === 0" class="inline_block width_100px margin_left_20">
                       <Button size="small" type="success" shape="circle" class="bg_title" @click="audition(index)">立即播放</Button>
                     </div>
+                    <div v-else-if="parseInt(item.videoStatus) === 1" class="inline_block width_100px margin_left_20">
+                      <Button size="small" type="warning" shape="circle" style="width: 60px" @click="audition(index)">试看</Button>
+                    </div>
+                    <div v-else-if="item.videoStatus == ''" class="inline_block width_100px margin_left_20"></div>
                     <div v-else class="inline_block width_100px margin_left_20">
-                      <Button v-if="parseInt(item.videoStatus) === 1" size="small" type="warning" shape="circle" style="width: 60px" @click="audition(index)">试看</Button>
-                      <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
+                      <Button size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                     </div>
                   </div>
                 </div>
@@ -130,9 +133,12 @@
                     <div v-if="parseInt(item.voiceStatus) === 0" class="inline_block width_100px margin_left_20">
                       <Button size="small" type="success" shape="circle" class="bg_title" @click="audition(index)">立即播放</Button>
                     </div>
+                    <div v-else-if="parseInt(item.voiceStatus) === 1" class="inline_block width_100px margin_left_20">
+                      <Button size="small" type="warning" shape="circle" @click="audition(index)">试听</Button>
+                    </div>
+                    <div v-else-if="item.voiceStatus == ''" class="inline_block width_100px margin_left_20"></div>
                     <div v-else class="inline_block width_100px margin_left_20">
-                      <Button v-if="parseInt(item.voiceStatus) === 1" size="small" type="warning" shape="circle" @click="audition(index)">试听</Button>
-                      <Button v-else size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
+                      <Button size="small" type="success" shape="circle" class="bg_title" @click="goBuy(dataDetail.productCode)">立即购买</Button>
                     </div>
                   </div>
                 </div>
