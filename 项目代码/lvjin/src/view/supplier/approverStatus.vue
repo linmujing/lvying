@@ -24,11 +24,15 @@
         					<p class="margin_top_30">证件号： {{SupplierData.lawerRegistrationNo}}</p>
         					<div class="margin_top_30">
         						<span>执业证扫描件：</span>
-        						<img :src="SupplierData.materialUrl" width="300" height="200" style="vertical-align: top;"/>
+        						<div v-if="!SupplierData.materialUrl == ''">
+                      <div v-for="item in SupplierData.materialUrl.split(',')" class="inline_block">
+                        <img :src="item" width="300" height="200" style="vertical-align: top;"/>
+                      </div>
+                    </div>
         					</div>
-                  <div v-if="!SupplierData.personIntroduce == ''" class="margin_top_30">
+                  <div class="margin_top_30">
                     <span>个人资料：</span>
-                    <img :src="SupplierData.personIntroduce" width="300" height="200" style="vertical-align: top;"/>
+                    <span>{{SupplierData.personIntroduce}}</span>
                   </div>
         					<div class="margin_top_30">
 		        				<Button @click="edit" size="large" type="success" shape="circle" class="all_width bg_title margin_top_10" style="width: 200px">修改认证资料</Button>

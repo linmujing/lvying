@@ -41,43 +41,52 @@
 					            	<span class="font_12 color_999">律师身份请填写执业证号</span>
 					            </div>
 					        </el-form-item>
-					        <el-form-item label="资质扫描件" style="width: 450px">
-                    <Upload v-if="showMaterial"
+					        <el-form-item label="证件扫描件" style="width: 450px">
+                    <Upload
                             :action="BASE_URL"
                             :format="['jpg','gif','png']"
                             :show-upload-list="false"
                             :on-format-error="handleFormatError"
                             :on-exceeded-size="handleMaxSize"
                             :on-success="materialUrlSuccess"
+                            multiple
                             :max-size="10240">
                       <Button>点击上传</Button>
                     </Upload>
-                    <div v-else class="relative inline_block">
-                      <img :src="materialUrl" width="100" @click="seeImg(materialUrl)" class="pointer">
-                      <Icon type="ios-close-circle-outline" color="#00AA88" class="del" @click="delMaterialUrl"/>
+                    <div class="margin_top_10">
+                      <div v-for="(item, index) in materialUrl" :key="index" class="relative inline_block margin_right_20">
+                        <img :src="item" width="100" height="100" @click="seeImg(item)" class="pointer">
+                        <Icon type="ios-close-circle-outline" color="#00AA88" class="del" @click="delMaterialUrl(index)"/>
+                      </div>
                     </div>
 							    <div>
-							    	<span class="font_12 color_999">扫描件要清晰，支持jpg，png，gif格式，最大不超过10M</span>
+							    	<span class="font_12 color_999">律师职业资格证，身份证，正反面。支持jpg，png，gif格式，最大不超过10M</span>
 							    </div>
 					        </el-form-item>
 					        <el-form-item label="个人资料" style="width: 420px">
-                    <Upload v-if="showInfo"
-                            :action="BASE_URL"
-                            :format="['jpg','gif','png']"
-                            :show-upload-list="false"
-                            :on-format-error="handleFormatError"
-                            :on-exceeded-size="handleMaxSize"
-                            :on-success="infoUrlSuccess"
-                            :max-size="10240">
-                      <Button>点击上传</Button>
-                    </Upload>
-                    <div v-else class="relative inline_block">
-                      <img :src="personIntroduce" width="100" @click="seeImg(personIntroduce)" class="pointer">
-                      <Icon type="ios-close-circle-outline" color="#00AA88" class="del" @click="delInfoUrl"/>
-                    </div>
-							    <div>
-							    	<span class="font_12 color_999">您可上传个人资料，以便我们更好的了解您</span>
-							    </div>
+                    <!--<Upload v-if="showInfo"-->
+                            <!--:action="BASE_URL"-->
+                            <!--:format="['jpg','gif','png']"-->
+                            <!--:show-upload-list="false"-->
+                            <!--:on-format-error="handleFormatError"-->
+                            <!--:on-exceeded-size="handleMaxSize"-->
+                            <!--:on-success="infoUrlSuccess"-->
+                            <!--:max-size="10240">-->
+                      <!--<Button>点击上传</Button>-->
+                    <!--</Upload>-->
+                    <!--<div v-else class="relative inline_block">-->
+                      <!--<img :src="personIntroduce" width="100" @click="seeImg(personIntroduce)" class="pointer">-->
+                      <!--<Icon type="ios-close-circle-outline" color="#00AA88" class="del" @click="delInfoUrl"/>-->
+                    <!--</div>-->
+							    <!--<div>-->
+							    	<!--<span class="font_12 color_999">您可上传个人资料，以便我们更好的了解您</span>-->
+							    <!--</div>-->
+                    <el-input
+                      type="textarea"
+                      :rows="4"
+                      placeholder="请输入您的个人资料"
+                      v-model="formRight.personIntroduce">
+                    </el-input>
 					        </el-form-item>
 					        <el-form-item>
 					        	<div>
@@ -95,7 +104,7 @@
       <!--查看照片-->
       <Modal title="查看照片" v-model="viewModal">
         <div class="text_center">
-          <img :src="viewUrl"/>
+          <img :src="viewUrl" class="all_width"/>
         </div>
         <div slot="footer">
           <Button  type="primary" @click="viewModal = false">关闭</Button>
@@ -190,7 +199,8 @@ export default {
             orgName: '',
             orgTel: '',
             orgAddr: '',
-            idcard: ''
+            idcard: '',
+            personIntroduce: ''
         },
         //资料验证
         ruleValidate: {
@@ -237,7 +247,7 @@ export default {
         // 商户资料
         SupplierData: {},
         // 资质扫描件
-        materialUrl: '',
+        materialUrl: [],
         showMaterial: true,
         // 个人资料
         personIntroduce: '',
@@ -271,19 +281,20 @@ export default {
         data.orgTel !== '' ? this.formRight.orgTel = data.orgTel : this.formRight.orgTel = ''
         data.orgAddress !== '' ? this.formRight.orgAddr = data.orgAddress : this.formRight.orgAddr = ''
         data.lawerRegistrationNo !== '' ? this.formRight.idcard = data.lawerRegistrationNo : this.formRight.idcard = ''
+        data.personIntroduce !== '' ? this.formRight.personIntroduce = data.personIntroduce : this.formRight.personIntroduce = ''
 
         if(!data.orgRegin == ''){
           this.formRight.addr = data.orgRegin.split(' ')
           console.log(this.addr)
         }
         if(!data.materialUrl == '' || !data.materialUrl == null || !data.materialUrl == undefined){
-          this.materialUrl = data.materialUrl
-          this.showMaterial = false
+          this.materialUrl = data.materialUrl.split(',')
+          // this.showMaterial = false
         }
-        if(!data.personIntroduce == '' || !data.personIntroduce == null || !data.personIntroduce == undefined){
-          this.personIntroduce = data.personIntroduce
-          this.showInfo = false
-        }
+        // if(!data.personIntroduce == '' || !data.personIntroduce == null || !data.personIntroduce == undefined){
+        //   this.personIntroduce = data.personIntroduce
+        //   this.showInfo = false
+        // }
       },
     	//提交
 		  submit (name) {
@@ -297,13 +308,13 @@ export default {
 
             }
             // 资质扫描件验证
-            if( this.materialUrl === '' ){
+            if( this.materialUrl.length === 0 ){
 
               this.$Message.error('请上传资质扫描件验证');
               return;
 
             }
-            let params = this.$Qs.stringify({ 'merchantCode': this.SupplierData.merchantCode, 'realName': this.formRight.name, 'merchantNm': this.formRight.merchantName, 'email': this.formRight.email, 'orgTel': this.formRight.orgTel, 'orgName': this.formRight.orgName, 'orgRegin': this.formRight.orgRegin, 'orgAddress': this.formRight.orgAddr, 'lawerRegistrationNo': this.formRight.idcard, 'materialUrl': this.materialUrl, 'personIntroduce': this.personIntroduce });
+            let params = this.$Qs.stringify({ 'merchantCode': this.SupplierData.merchantCode, 'realName': this.formRight.name, 'merchantNm': this.formRight.merchantName, 'email': this.formRight.email, 'orgTel': this.formRight.orgTel, 'orgName': this.formRight.orgName, 'orgRegin': this.formRight.orgRegin, 'orgAddress': this.formRight.orgAddr, 'lawerRegistrationNo': this.formRight.idcard, 'materialUrl': this.materialUrl.toString(), 'personIntroduce': this.formRight.personIntroduce });
             this.$Spin.show()
             // 商户资料完善
             this.$api.saveMerchantInfo( params )
@@ -349,13 +360,14 @@ export default {
       },
       //图片上传成功
       materialUrlSuccess (res, file) {
-        this.materialUrl = res.content
-        this.showMaterial = false
+        this.materialUrl.push(res.content)
+        console.log(this.materialUrl)
+        // this.showMaterial = false
       },
       // 删除图片
-      delMaterialUrl(){
-        this.materialUrl = ''
-        this.showMaterial = true
+      delMaterialUrl(index){
+        this.materialUrl.splice(index, 1)
+        // this.showMaterial = true
       },
       // 查看图片
       seeImg(url){
