@@ -113,7 +113,7 @@ export default {
                   this.$api.merchantLogin( params )
 
                     .then( (res) => {
-
+debugger
                       console.log(res)
 
                       if(res.data.code == 200){
@@ -124,7 +124,7 @@ export default {
                         if(res.data.content.merchantStatus == 1){
                           this.$Message.success(res.data.message);
                           //跳转函数*************************************************
-                          window.location.href = this.GLOBAL.supplier_url
+                          window.location.href = this.GLOBAL.supplier_url + res.data.content.accessToken
                         }else {
                           // 审核没通过
                           this.$Message.info({
