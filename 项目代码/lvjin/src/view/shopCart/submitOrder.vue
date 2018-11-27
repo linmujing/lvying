@@ -524,7 +524,7 @@ export default {
         /*订单提交 生成订单*/   
         submitOrderClick(){   
             
-            if(this.addressData.addressList.length == 0){
+            if(this.hasStore  && this.addressData.addressList.length == 0){
                 
                 this.$Message.warning("请先填写好订单地址！");
                 return;
@@ -541,6 +541,7 @@ export default {
             .then( (res) => {
 
                 console.log(res)
+                this.$Spin.hide()
 
                 if(res.data.code == 200){
 
@@ -553,8 +554,6 @@ export default {
                     this.$Message.warning(res.data.message);  
                     
                 }
-
-                this.$Spin.hide()
 
             })
             .catch((error) => {
@@ -587,15 +586,20 @@ export default {
 
             }
 
+            // 如果没有实物商品，则不需要写地址
+            let addressCode = this.hasStore ? this.addressData.addressList[0].addressCode : '';
+            
+            // orderForm 下单入口 0-购物车 1-非购物车
+            // orderSource 订单来源 1 - PC商城 2 - 公众号 3 - 小程序
             let param = {
                 ciCode: this.userData.ciCode,
                 ciName: this.userData.name,
                 orderSource: 1,
                 orderForm: this.$route.query.sourceType != 'cart' ? 1:0,
                 productCodeAndCount: productCodeAndCount,
-                addressCode: this.addressData.addressList[0].addressCode,
+                addressCode: addressCode
             }
-
+            
             return param;
             
         },
@@ -629,8 +633,8 @@ export default {
                     let data = res.data.content , arr = [];
 
                     // productType为1时，商品存在实物，实物才有地址选择
-                    if(data.productType.indexOf('1') != -1){
-                        this.addressData.hasStore = true;
+                    if(data.productProperty.indexOf('1') != -1){
+                        this.hasStore  = true;
                     }
 
                     // 单个商品
@@ -734,8 +738,8 @@ export default {
 
                         let child = Data[i];
                         
-                        if(child.productType.indexOf('1') != -1){
-                            this.addressData.hasStore = true;
+                        if(child.productProperty.indexOf('1') != -1){
+                            this.hasStore  = true;
                         }
 
                         let childIndex = merchantArr2.indexOf(child.merchantCode);
@@ -828,8 +832,8 @@ export default {
 
                             for(let child of Data){
 
-                                if(child.productType.indexOf('1') != -1){
-                                    this.addressData.hasStore = true;
+                                if(child.productProperty.indexOf('1') != -1){
+                                    this.hasStore  = true;
                                 }
 
                                 let childIndex = merchantArr2.indexOf(child.merchantCode);

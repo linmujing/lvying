@@ -113,10 +113,6 @@ export default {
 
             /*订单数据*/
             cartDate:{
-                // 全部列表状态
-                listState: false,
-                // 全部删除状态
-                listDeleteState: false,
                 // 不可变价格
                 listTotal2: 0.00,
                 // 总价格
