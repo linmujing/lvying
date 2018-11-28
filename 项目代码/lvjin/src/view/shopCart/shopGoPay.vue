@@ -100,6 +100,9 @@
                     <div v-show="wxpay" style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;">
                         <div id="qrcode" style="width:250px;height:250px;"></div>
                     </div>
+                    <div v-show="unionpay" style="position:absolute;top:0;bottom:0;left:0;right:0;margin:auto;width:250px;height:250px;" v-html="unionpayHtml">
+                        <!-- <iframe :src="alipayUrl" width="250" height="250" frameborder="0" scrolling="auto"></iframe> -->
+                    </div>
                 </div>
                 <div class="text_center font_14">
                     {{payType}}
@@ -159,8 +162,13 @@ export default {
 
 
             // 二维码显示隐藏
-            alipay: 'false',
-            wxpay: 'false',
+            alipay: false,
+            wxpay: false,
+            unionpay: false,
+
+            // 银联表单html
+            unionpayHtml: '',
+
 
             /*个人信息*/
             userData: {
@@ -274,7 +282,10 @@ export default {
                     case 1:
                     this.wxPayRequest();
                     break;
-
+                    // 银联支付
+                    case 2:
+                    this.unionPayRequest();
+                    break;
                 }
 
             }else{
@@ -290,6 +301,7 @@ export default {
             this.payModel = false ;
             this.alipay = false;
             this.wxpay = false;
+            this.unionpay = false;
 
         },
 
@@ -414,9 +426,10 @@ export default {
                     
                     this.alipay = true;
                     this.wxpay = false;
+                    this.unionpay = false;
                     this.payModel = true;
                     this.payType = '请用支付宝进行支付';
-
+                    this.unionpayHtml = '';
                     this.alipayHtml = res.data.content;
 
                     setTimeout(()=>{document.forms.punchout_form.submit();},1000)
@@ -459,6 +472,7 @@ export default {
 
                     this.wxpay = true;
                     this.alipay = false;
+                    this.unionpay = false;
                     this.payModel = true;
                     this.payType = '请用微信进行支付';
 
@@ -486,29 +500,50 @@ export default {
 
             });
         },
-        // 微信回调
-        wxPayback(){
+        // 银联支付
+        unionPayRequest(){
+
+            this.$Spin.show();
 
             let param = this.$Qs.stringify({ 
+                'orderCode': this.$route.params.orderCode , 
+                'ciCode': this.userData.cicode , 
+                'truePayMoney': '0.01', //this.$route.params.listTotal,
+                'payCommet': '支付备注'
                 }) ;
 
-            this.$api.payBack( param )
+            this.$api.unionPayRequest( param )
 
             .then( (res) => {
 
                 console.log(res)
+                
 
                 if(res.data.code == 200){
+                    
+                    this.alipay = false;
+                    this.wxpay = false;
+                    this.unionpay = true;
+                    this.payType = '请用银联进行支付';
+                    this.alipayHtml = '';
+                    this.unionpayHtml = res.data.content;
 
-                    //location.href = res.data.content;
+                    setTimeout(()=>{document.forms.pay_form.submit();this.$Spin.hide();},1000)
 
                 }else{
-
+                    
+                    this.$Spin.hide();
                     this.$Message.warning(res.data.message);
 
                 }
 
             })
+             .catch((error) => {
+
+                this.$Spin.hide();
+                console.log('发生错误！', error);
+
+            });
         },
         // 查询订单状态
         getOrderState(){
