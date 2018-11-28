@@ -512,7 +512,7 @@ export default {
                 'payCommet': '支付备注'
                 }) ;
             
-            const newTab = window.open();
+            // const newTab = window.open();
 
             this.$api.unionPayRequest( param )
 
@@ -531,7 +531,7 @@ export default {
 
                     this.unionpayHtml = res.data.content;
 
-                    // setTimeout(()=>{document.forms.pay_form.submit();this.$Spin.hide();},1000)
+                    setTimeout(()=>{document.forms.pay_form.submit();this.$Spin.hide();},1000)
                     // const div = document.createElement('div');
                     // div.innerHTML =res.data.content; // html code
                     // newTab.document.body.appendChild(div);
