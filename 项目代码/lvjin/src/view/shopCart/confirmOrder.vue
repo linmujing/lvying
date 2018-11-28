@@ -113,8 +113,8 @@ export default {
 
             /*订单数据*/
             cartDate:{
-                // 不可变价格
-                listTotal2: 0.00,
+                // 固定价格
+                allTotal: 0.00,
                 // 总价格
                 listTotal: 0.00,
                 // 大列表
@@ -359,7 +359,7 @@ export default {
                 if(res.data.code == 200){
 
                     this.cartDate.listTotal = (res.data.content.orderPayAmount).toFixed(2);
-                    this.cartDate.listTotal2 = (res.data.content.orderPayAmount).toFixed(2);
+                    this.cartDate.allTotal = (res.data.content.orderPayAmount).toFixed(2);
 
                     // 获取订单可用优惠券
                     this.getOrderCoupon();
@@ -375,7 +375,7 @@ export default {
         // 获取订单可用优惠券
         getOrderCoupon(){
 
-            let param = this.$Qs.stringify({ 'ciCode': this.userData.ciCode, 'orderCode': this.$route.query.orderCode ,'orderAmount': this.cartDate.listTotal }) ;
+            let param = this.$Qs.stringify({ 'ciCode': this.userData.ciCode, 'orderCode': this.$route.query.orderCode ,'orderAmount': this.cartDate.allTotal }) ;
 
             this.$api.getOrderCoupon( param )
 
@@ -426,7 +426,7 @@ export default {
 
                     this.Coupon.value = '暂无可用优惠券'
 
-                    this.cartDate.listTotal =this.cartDate.listTotal2;
+                    this.cartDate.listTotal =this.cartDate.allTotal;
 
                 }
 

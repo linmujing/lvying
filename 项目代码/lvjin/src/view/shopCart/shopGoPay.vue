@@ -64,13 +64,6 @@
 
                     <!-- 其他操作-->
                     <div class="list_operate padding_left_14 line_height_50px" v-if="hideShowDetail">
-                        <div class="item_shipping_methods padding_left_14" >
-                            <span style="display:inline-block;width:100px;"> 配送方式： </span>快递包邮
-                        </div>
-                        <div class="item_shipping_methods padding_left_14" >
-                            <span style="display:inline-block;width:100px;"> 优惠券：</span>活动活动
-                        </div>
-
                         <div class="all_total padding_right_24">
                             <h4>总计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
                         </div>
@@ -396,27 +389,6 @@ export default {
 
             });
         },
-        // 获取订单金额
-        // getOrderDetail(){
-
-        //     this.$api.getOrderInfo( this.$Qs.stringify({'orderCode': this.$route.params.orderCode }) )
-
-        //     .then( (res) => {
-
-        //         console.log(res)
-
-        //         if(res.data.code == 200){
-
-        //             this.cartDate.listTotal = (res.data.content.orderPayAmount).toFixed(2);
-
-        //         }else{
-
-        //             this.$Message.warning(res.data.message);
-
-        //         }
-
-        //     })
-        // },
 
         /**支付**/
         // 阿里支付
@@ -427,7 +399,7 @@ export default {
             let param = this.$Qs.stringify({ 
                 'orderCode': this.$route.params.orderCode , 
                 'ciCode': this.userData.cicode , 
-                'truePayMoney': '1', //this.$route.params.listTotal,
+                'truePayMoney': '0.01', //this.$route.params.listTotal,
                 'payCommet': '支付备注'
              }) ;
 
