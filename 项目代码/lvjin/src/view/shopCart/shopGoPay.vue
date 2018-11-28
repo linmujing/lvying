@@ -427,7 +427,7 @@ export default {
                     this.alipay = true;
                     this.wxpay = false;
                     this.unionpay = false;
-                    this.payModel = true;
+                    // this.payModel = true;
                     this.payType = '请用支付宝进行支付';
                     this.unionpayHtml = '';
                     this.alipayHtml = res.data.content;
@@ -511,6 +511,8 @@ export default {
                 'truePayMoney': '0.01', //this.$route.params.listTotal,
                 'payCommet': '支付备注'
                 }) ;
+            
+            const newTab = window.open();
 
             this.$api.unionPayRequest( param )
 
@@ -526,9 +528,14 @@ export default {
                     this.unionpay = true;
                     this.payType = '请用银联进行支付';
                     this.alipayHtml = '';
+
                     this.unionpayHtml = res.data.content;
 
-                    setTimeout(()=>{document.forms.pay_form.submit();this.$Spin.hide();},1000)
+                    // setTimeout(()=>{document.forms.pay_form.submit();this.$Spin.hide();},1000)
+                    // const div = document.createElement('div');
+                    // div.innerHTML =res.data.content; // html code
+                    // newTab.document.body.appendChild(div);
+                    // newTab.document.all.pay_form.submit();
 
                 }else{
                     
