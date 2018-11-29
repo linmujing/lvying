@@ -242,7 +242,7 @@ export default {
           picModel: false,
           picUrl: '',
           // 课程目录
-          productSection: [],
+          productSection: '',
           detailId: 1,
           visible: false,
           cuponList: [],
@@ -472,22 +472,21 @@ export default {
       },
       // 获取动态管控列表
       getSectionIndex(sectionIndex){
-        let params = this.$Qs.stringify({'pageNo': 1, 'pageSize': this.sectionSize,'productSectionIndex': sectionIndex, 'productSection': this.productSection});
-        this.$api.getProductCommentList( params )
+        let params = this.$Qs.stringify({'productSectionIndex': sectionIndex, 'productSection': this.productSection});
+        this.$api.getSectionIndex( params )
 
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
               var result = res.data.content
-              var arr = []
-              for (var i = 0; i < result.list.length; i++) {
-                arr.push(result.list[i].productInfo.productSectionList)
-              }
-              this.sectionList = arr
-              this.sectionCont = result.count
-              console.log(arr)
+              // var arr = []
+              // for (var i = 0; i < result.list.length; i++) {
+              //   arr.push(result.list[i].productInfo.productSectionList)
+              // }
+              this.sectionList = result
+              this.sectionCont = result.length
               // 最新所有数据灌入
-              this.allData = arr
+              this.allData = result
             }else{
 
               this.$Message.warning(res.data.message);
