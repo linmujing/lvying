@@ -24,7 +24,7 @@
                       <div v-for="(itemss,index2) in thirdNavTitle" :key="index2">
                         <div @mouseenter="thirMouseOver(itemss.id, index2)" @click="jumpDown(itemss.id,itemss.catName)" class="font_18 pointer hover_title margin_top_10 text_ellipsis">{{itemss.catName}}</div>
 
-                        <div style="min-height: 26px">
+                        <div>
                           <ul v-show="fourIndex == index2" class="list_unstyled ul_inline clearfix margin_bottom_10">
                             <li v-for="(itemsss,index3) in fourNavTitle" :key="index3" @click="jumpDown(itemsss.id,itemsss.catName)" class="margin_top_5 margin_right_20 pointer hover_title text_ellipsis">{{itemsss.catName}}</li>
                           </ul>
