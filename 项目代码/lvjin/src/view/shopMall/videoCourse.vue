@@ -4,13 +4,13 @@
     <!--banner-->
     <div v-if="banner.length > 0">
       <div v-if="banner.length === 1">
-        <img :src="banner[0].src" class="all_width block" style="max-height: 500px">
+        <img :src="banner[0].src" @click="toLink(banner[0].forwordUrl)" class="all_width block" style="max-height: 500px">
       </div>
       <div v-else>
         <Carousel radius-dot v-model="value" autoplay loop>
           <CarouselItem v-for="(item,index) in banner" :key="index">
             <div class="carousel">
-              <img :src="item.src" class="all_width block" style="max-height: 500px">
+              <img :src="item.src" @click="toLink(item.forwordUrl)" class="all_width block" style="max-height: 500px">
             </div>
           </CarouselItem>
         </Carousel>
@@ -231,6 +231,10 @@ export default {
             typeId: this.typeId
           }
         })
+      },
+      // 轮播跳转
+      toLink(link){
+        window.location.href = link
       },
       /** 数据 **/
       // 添加商品到购物车 MT

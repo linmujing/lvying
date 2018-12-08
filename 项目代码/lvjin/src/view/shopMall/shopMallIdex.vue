@@ -11,13 +11,13 @@
       <!--banner-->
     <div v-if="banner.length > 0">
       <div v-if="banner.length === 1">
-        <img :src="banner[0].src" class="all_width block" style="max-height: 500px">
+        <img :src="banner[0].src" @click="toLink(banner[0].forwordUrl)" class="all_width block" style="max-height: 500px">
       </div>
       <div v-else>
         <Carousel radius-dot v-model="value" autoplay loop>
           <CarouselItem v-for="(item,index) in banner" :key="index">
             <div class="carousel">
-              <img :src="item.src" class="all_width block" style="max-height: 500px">
+              <img :src="item.src" @click="toLink(item.forwordUrl)" class="all_width block" style="max-height: 500px">
             </div>
           </CarouselItem>
         </Carousel>
@@ -91,7 +91,7 @@
 			</div>
 		</div>
 		<div>
-      <img :src="bgUrl" class="block all_width" style="max-height: 300px">
+      <img :src="bgUrl.src" @click="toLink(bgUrl.forwordUrl)" class="block all_width" style="max-height: 300px">
     </div>
     <!--行业动态管控-->
 		<div class="content padding_top_30 padding_bottom_30">
@@ -250,7 +250,7 @@ export default {
             // 保存轮播数据
             this.banner = eval(res.data.content[6].caseUrl)
             var bgUrl = eval(res.data.content[3].caseUrl)
-            this.bgUrl = bgUrl[0].src
+            this.bgUrl = bgUrl[0]
             sessionStorage.setItem("Banner", JSON.stringify(eval(res.data.content[6].caseUrl)));
             for(let item of content){
               if(item.caseName=="视频推荐"){
@@ -440,6 +440,10 @@ export default {
             })
             break
         }
+      },
+      // 轮播跳转
+      toLink(link){
+        window.location.href = link
       },
       /** 数据 **/
       // 添加商品到购物车 MT
