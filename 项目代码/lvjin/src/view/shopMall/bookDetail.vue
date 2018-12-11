@@ -277,13 +277,13 @@ export default {
             // console.log(res);
             if(res.data.code == 200){
               var arr = res.data.content.list
-              // var list = []
-              // for(var i=0;i<arr.length;i++){
-              //   if(arr[i].couponEffectiveType == 1){
-              //     list.push(arr[i])
-              //   }
-              // }
-              this.cuponList = arr
+              var list = []
+              for(var i=0;i<arr.length;i++){
+                if(arr[i].couponCount > 0){
+                  list.push(arr[i])
+                }
+              }
+              this.cuponList = list
             }else if (res.data.code == 500){
               this.$Message.warning(res.data.message);
             }
