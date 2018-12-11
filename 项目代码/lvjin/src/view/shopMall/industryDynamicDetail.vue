@@ -380,22 +380,22 @@ export default {
       },
       // 获取优惠券列表
       getProductCoupon(productCode, merchantCode){
-        let params = this.$Qs.stringify({'pageNo': 1, 'pageSize': 100, 'productCode': productCode, 'merchantCode': merchantCode});
+        let params = this.$Qs.stringify({'pageNo': 1, 'pageSize': 10000, 'productCode': productCode, 'merchantCode': merchantCode});
         this.$api.getProductCoupon( params )
 
           .then( (res) => {
             console.log(res);
             if(res.data.code == 200){
               var arr = res.data.content.list
-              // var list = []
-              // for(var i=0;i<arr.length;i++){
-              //   if(arr[i].couponEffectiveType == 1){
-              //     list.push(arr[i])
-              //   }
-              // }
-              this.cuponList = arr
+              var list = []
+              for(var i=0;i<arr.length;i++){
+                if(arr[i].couponCount > 0){
+                  list.push(arr[i])
+                }
+              }
+              this.cuponList = list
             }else if (res.data.code == 500){
-              this.$Message.warning(res.data.message);
+              // this.$Message.warning(res.data.message);
             }
           })
           .catch((error) => {

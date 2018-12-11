@@ -74,6 +74,8 @@ export const sendSms = params => { return instance.post(`system/sms/sendSms`, pa
 export const getShowCaseList = params => { return instance.post(`system/showCase/getShowCaseList`, params ); };
 //获取橱窗详情
 export const getShowCase = params => { return instance.post(`system/showCase/getShowCase`, params ); };
+//获取广告位
+export const getAdvertising = params => { return instance.get(`system/navigation/getAdvertising`, params ); };
 //获取导航列表
 export const getNavigationList = params => { return instance.post(`system/navigation/getNavigationList`, params ); };
 

@@ -224,7 +224,7 @@ export default {
       },
       // 轮播跳转
       toLink(link){
-        window.location.href = link
+        window.open(link, '_blank');
       },
       /** 数据 **/
       // 添加商品到购物车 MT
