@@ -146,6 +146,11 @@ export default {
             console.log(headImg)
             headImg =  headImg != null && headImg != undefined && headImg != 'null'? headImg : '';
 
+            if(  this.profileData.name == "" || this.profileData.sex == "" || this.profileData.personal == ""  ){
+                 this.$Message.warning("个人信息不能为空！");
+                 return
+            }
+
             let param = this.$Qs.stringify({
                 'ciCode': this.$store.state.userData.cicode,
                 'ciName': this.profileData.name,

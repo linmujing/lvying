@@ -23,7 +23,10 @@
         <div class="coupon_list padding_left_20 padding_top_30" v-if="couponData.couponList.length > 0 ">
             <div class="coupon_item"  v-for="(items, index) in couponData.couponList" :key="index">
                 <div class="item_top" :style="{background: returnType(items.couponStatus) }">
-                    <p style="line-height:40px;height:50px;"><b class="font_22">￥{{items.couponInfo.couponValuePrice }}</b></p>
+                    <p style="line-height:40px;height:50px;">
+                        <b class="font_22" v-if="items.couponInfo.couponType != '3'" >￥{{items.couponInfo.couponValuePrice }}</b>
+                         <b class="font_22" v-if="items.couponInfo.couponType == '3'" >{{items.couponInfo.couponValueDiscount }}折</b>
+                    </p>
                     <p :title="items.couponInfo.couponTitle ">使用条件：{{items.couponInfo.couponTitle }}</p>
                     <p>使用时间：{{dateFormat(items.couponInfo.couponStartTime)}} - {{dateFormat(items.couponInfo.couponEndTime)}}</p>
                     <div class="dashed_line"></div>
