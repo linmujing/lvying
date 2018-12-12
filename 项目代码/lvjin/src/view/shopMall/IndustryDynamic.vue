@@ -146,15 +146,14 @@ export default {
           if(res.data.code == 200){
             this.$Spin.hide()
             let {content}=res.data;
-            // 保存轮播数据
-            if(!res.data.content[2].caseUrl == null || !res.data.content[2].caseUrl == ''){
-              this.banner = eval(res.data.content[2].caseUrl)
-            }
             for(let item of content){
               if(item.caseName=="劳动推荐"){
                 this.getProductShowCase(item.productCode, item.productSortBy, 1)
               }else if(item.caseName=="热门推荐"){
                 this.getProductShowCase(item.productCode, item.productSortBy, 2)
+              }else if(item.caseName=="轮播图banner"){
+                // 保存轮播数据
+                this.banner = eval(item.caseUrl)
               }
             }
           }else{
