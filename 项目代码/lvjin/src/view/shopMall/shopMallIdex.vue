@@ -196,13 +196,15 @@
 			</div>
 		</div>
     <!--合作伙伴-->
-    <div class="bg_f5">
+    <div v-if="AdList.length>0" class="bg_f5">
       <div class="content partner">
         <div class="color_666 font_18 text_center">合作伙伴</div>
         <div class="color_999 margin_top_10 text_center">我们具有充分的实力，为客户提供高效快捷优质，公平公正的法律服务，以最诚恳和严谨的态度为客户提供专业化的法律服务。​</div>
         <div class="margin_top_30">
           <ul class="list_unstyled ul_inline clearfix">
-            <li v-for="(item,index) in 5" class="width_230px height_88px border margin_right_10"></li>
+            <li v-for="(item,index) in AdList" class="width_230px height_88px border margin_right_10 margin_top_10">
+              <img :src="item.imgUrl" class="all_width all_height" @click="toLink(item.linkUrl)">
+            </li>
           </ul>
         </div>
       </div>
@@ -229,6 +231,7 @@ export default {
 					logicArr:[],
           lvyingArr:[],
           banner: [],
+          AdList: [],
           bgUrl: '',
           value: 0
         }
@@ -237,6 +240,7 @@ export default {
     mounted(){
       this.getNavTitle()
 			this.getCaseProduct()
+			this.getAdvertising()
     },
     methods: {
 			//获取橱窗对象
@@ -247,11 +251,6 @@ export default {
           if(res.data.code == 200){
             this.$Spin.hide()
             let {content}=res.data;
-            // 保存轮播数据
-            this.banner = eval(res.data.content[6].caseUrl)
-            var bgUrl = eval(res.data.content[3].caseUrl)
-            this.bgUrl = bgUrl[0]
-            sessionStorage.setItem("Banner", JSON.stringify(eval(res.data.content[6].caseUrl)));
             for(let item of content){
               if(item.caseName=="视频推荐"){
                 this.getProductShowCase(item.productCode, item.productSortBy, 1)
@@ -263,6 +262,13 @@ export default {
                 this.getProductShowCase(item.productCode, item.productSortBy, 4)
               }else if(item.caseName=="律赢商城" || item.caseName=="律瀛商城"){
                 this.getProductShowCase(item.productCode, item.productSortBy, 5)
+              }else if(item.caseName=="轮播图banner"){
+                // 保存轮播数据
+                this.banner = eval(item.caseUrl)
+                sessionStorage.setItem("Banner", JSON.stringify(eval(item.caseUrl)));
+              }else if(item.caseName=="banner"){
+                var bgUrl = eval(item.caseUrl)
+                this.bgUrl = bgUrl[0]
               }
             }
           }else{
@@ -441,9 +447,30 @@ export default {
             break
         }
       },
+      // 获取广告位
+      getAdvertising(){
+        this.$api.getAdvertising()
+
+          .then( (res) => {
+
+            if(res.data.code == 200){
+
+              this.AdList = res.data.content
+
+            }else{
+
+              this.$Message.warning(res.data.message);
+
+            }
+          })
+          .catch((error) => {
+
+            console.log('发生错误！', error);
+          });
+      },
       // 轮播跳转
       toLink(link){
-        window.location.href = link
+        window.open(link, '_blank');
       },
       /** 数据 **/
       // 添加商品到购物车 MT
@@ -506,7 +533,7 @@ export default {
 		}
 		.width_900px{width: 900px;}
     .width_230px{width: 230px;}
-		.border{border:1px solid #999999;}
+		.border{border:1px solid #ccc;}
 		.mallBox{width: 275px;height: 450px;border: 1px solid #efefef;}
     /*商城模块*/
     .title{color: #00AA88;font-size: 18px;border-left: 3px solid #00AA88; padding-left: 10px;}
