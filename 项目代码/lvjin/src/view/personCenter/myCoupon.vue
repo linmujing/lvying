@@ -28,7 +28,7 @@
                          <b class="font_22" v-if="items.couponInfo.couponType == '3'" >{{items.couponInfo.couponValueDiscount }}折</b>
                     </p>
                     <p :title="items.couponInfo.couponTitle ">使用条件：{{items.couponInfo.couponTitle }}</p>
-                    <p>使用时间：{{dateFormat(items.couponInfo.couponStartTime)}} - {{dateFormat(items.couponInfo.couponEndTime)}}</p>
+                    <p>使用时间：{{(items.couponInfo.couponStartTime).split(" ")[0]}} - {{(items.couponInfo.couponEndTime).split(" ")[0]}}</p>
                     <div class="dashed_line"></div>
                 </div>
                 <div class="item_bottom">
@@ -66,9 +66,9 @@ export default {
                 // 优惠券类型
                 couponType:[
                     { text:'全部', value:'' },
-                    { text:'可使用', value:'1' },
-                    { text:'已使用', value:'2' },
-                    { text:'已过期', value:'0' },
+                    { text:'未使用', value:'0' },
+                    { text:'已使用', value:'1' },
+                    { text:'已过期', value:'2' },
                 ],
                 // 平台
                 platformItems:[{
@@ -131,11 +131,10 @@ export default {
                 'pageNo': this.page,
                 'pageSize': this.pageSize,
                 'ciCode': this.userData.ciCode ,
-                'couponStatus': this.couponData.couponIndex,
                 'couponForm': this.couponData.couponValue
                 } ;
 
-            // this.couponData.couponIndex != '' ? param.couponStatus = this.couponData.couponIndex : '';
+            this.couponData.couponIndex != '' ? param.couponStatus = this.couponData.couponIndex : '';
 
             this.$api.getCouponList( this.$Qs.stringify(param) )
 
