@@ -21,7 +21,7 @@
 		data() {
 			return {
                 payModel: true,//弹框
-                paystate: 0 , //支付状态 0 ：支付失败 ，其他：支付成功
+                paystate: '' , //支付状态 0 ：支付失败 ，其他：支付成功
 			}
 		},
 		mounted(){
@@ -63,7 +63,7 @@
                         }
 
                     }else{
-
+                        this.paystate = 0;
                         this.$Message.warning(res.data.message);
 
                     }
