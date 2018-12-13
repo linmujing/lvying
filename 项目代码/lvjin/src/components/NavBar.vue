@@ -9,32 +9,33 @@
 	        </ul>
 
 	          <div v-if="showNav">
-              <div v-show="showItem" ref="listBox" class="listBox" :style="{left: left + 'px'}">
-
-                <div v-for="(items,index1) in secondNavTitle" :key="index1">
-
-                  <div @mouseenter="boxMouseOver(items.id, index1)" @click="jumpDown(items.id,items.catName)"
-                      class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
-                    <span class="float_left color_fff font_18 inline_block text_ellipsis" style="width: 120px">{{items.catName}}</span>
-                    <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
-                  </div>
-
-                  <div v-show="thirdNavTitle.length > 0">
-                    <div v-show="showBox" class="itemBox bg_white" :class="{width_400px: fourNavTitle.length > 2}" :style="{minHeight: listBoxHeight + 'px'}">
-                      <div v-for="(itemss,index2) in thirdNavTitle" :key="index2">
-                        <div @mouseenter="thirMouseOver(itemss.id, index2)" @click="jumpDown(itemss.id,itemss.catName)" class="font_18 pointer hover_title margin_top_10 text_ellipsis">{{itemss.catName}}</div>
-
-                        <div>
-                          <ul v-show="fourIndex == index2" class="list_unstyled ul_inline clearfix margin_bottom_10">
-                            <li v-for="(itemsss,index3) in fourNavTitle" :key="index3" @click="jumpDown(itemsss.id,itemsss.catName)" class="margin_top_5 margin_right_20 pointer hover_title text_ellipsis">{{itemsss.catName}}</li>
-                          </ul>
-                        </div>
-
-                      </div>
+              <div ref="listBox" class="listBox" :style="{left: left + 'px'}">
+                <div class="listItemBox" :class='{scroll: secondNavTitle.length>6}'>
+                  <div v-for="(items,index1) in secondNavTitle" :key="index1">
+                    <div @mouseenter="boxMouseOver(items.id, index1)" @click="jumpDown(items.id,items.catName)"
+                         class="listItem pointer padding_top_20 padding_bottom_20 padding_left_20 padding_right_10 clearfix">
+                      <span class="float_left color_fff font_18 inline_block text_ellipsis" style="width: 120px">{{items.catName}}</span>
+                      <Icon class="float_right" type="ios-arrow-forward" size="27" color="#fff"/>
                     </div>
                   </div>
-
                 </div>
+
+                <div v-show="showBox">
+                  <div class="itemBox bg_white" :class="{width_400px: fourNavTitle.length > 2}">
+                    <div v-for="(itemss,index2) in thirdNavTitle" :key="index2" class="float_left width_33 relative" style="height: 76px">
+                      <div @mouseenter="thirMouseOver(itemss.id, index2)" @click="jumpDown(itemss.id,itemss.catName)" class="font_16 pointer hover_title margin_top_10 text_ellipsis">{{itemss.catName}}</div>
+
+                      <div style="position: absolute;top: 35px;left: 0;z-index: 100" class="bg_white">
+                        <ul v-show="fourIndex == index2" class="list_unstyled ul_inline clearfix margin_bottom_10">
+                          <li v-for="(itemsss,index3) in fourNavTitle" :key="index3" @click="jumpDown(itemsss.id,itemsss.catName)" class="margin_top_5 margin_right_20 pointer hoverTT text_ellipsis font_14">{{itemsss.catName}}</li>
+                        </ul>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+
 
               </div>
             </div>
@@ -155,9 +156,9 @@
       // 一级导航悬停
       tabHover(id, index){
         // console.log(id)
-        this.secondNavTitle = []
+        // this.secondNavTitle = []
         this.getSecondNavTitle(id, 2)
-        this.left = 180 * index;
+        // this.left = 180 * index;
         this.showBox = false;
         this.showItem = true;
       },
@@ -167,12 +168,13 @@
         this.fourNavTitle = []
 				this.showBox = true;
         this.itemsIndex = index;
+        this.showItem = true;
         this.listBoxHeight= this.$refs.listBox.offsetHeight;
         this.getSecondNavTitle(id, 3)
 			},
       // 三级导航鼠标悬停
       thirMouseOver(id, index){
-        this.fourNavTitle = []
+        // this.fourNavTitle = []
         this.fourIndex = index
         this.getSecondNavTitle(id, 4)
       },
@@ -221,26 +223,31 @@
   .navbar .cur{
     background: #F09105;
   }
+  .scroll{overflow-y: scroll}
   .nav{
     background: #00AA88;height: 67px;
     .center{
       width:1200px;margin:0 auto;background: #00AA88;
-      .navbar>li{
-        width: 180px;text-align: center;
-        >span{width:100%;line-height: 67px;display: inline-block;}
-        >span:hover{background: #f09105;}
+      .navbar{
+        >li{
+          width: 180px;text-align: center;line-height: 67px;
+        }
+        >li:hover{background: #f09105;}
       }
       .width_180px{width: 180px}
     }
     .listBox{
       position: absolute;top: 67px;left: 0;z-index: 99;
-      .listItem{background: rgba(0,0,0,0.5);width:180px;}
+      .listItemBox{background: rgba(0,0,0,0.5);height: 500px;}
+      .listItem{width:180px;}
       .listItem:hover{background: #00aa88}
-      .itemBox{position: absolute;top:0;left:180px;padding: 10px;width: 100%;min-height: 200px}
+      .itemBox{position: absolute;top:0;left:180px;padding: 10px;width: 1020px;height: 500px;}
       .width_400px{width: 400px}
     }
   }
   .show {
       transition: all 0.5s;
    }
+  .hoverTT{color: #999}
+  .hoverTT:hover{color: #00AA88}
 </style>
