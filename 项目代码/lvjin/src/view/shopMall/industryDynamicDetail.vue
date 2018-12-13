@@ -157,7 +157,7 @@
 	            		<div class="float_left">
                     <Rate allow-half disabled v-model="item.productScore == null ? 0 : item.productScore"></Rate>
 		            	</div>
-		            	<div class="float_right color_999 line_height_30px">{{item.createDate}}</div>
+		            	<div class="float_right color_999 line_height_30px">{{item.commetTime}}</div>
 	            	</div>
                 <div class="margin_top_10 text_justify" v-html="item.commentDesc"></div>
                 <div v-if="!item.commentPicUrl == ''" class="margin_top_10">
