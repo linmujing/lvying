@@ -37,6 +37,11 @@ export const saveCustomerInfo = params => { return instance.post(`customer/info/
 export const verifyCiPhone = params => { return instance.post(`customer/info/verifyCiPhone`, params ); };
 // 会员课程
 export const getmyCourseList = params => { return instance.post(`/customer/course/getCourseList`, params ); };
+// 会员账号绑定手机号
+export const bindingCustomerInfo = params => { return instance.post(`customer/info/bindingCustomerInfo`, params ); };
+// 获取会员信息
+export const getCustomerInfo = params => { return instance.post(`customer/info/getCustomerInfo`, params ); };
+
 /** 商户信息 **/
 //商户注册
 export const addMerchantInfo = params => { return instance.post(`merchant/info/addMerchantInfo`, params ); };

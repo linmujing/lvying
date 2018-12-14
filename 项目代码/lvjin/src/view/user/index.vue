@@ -59,23 +59,27 @@
 			</Modal>
 
     	<Footer></Footer>
+		<Bindphone></Bindphone>
 
     </div>
 </template>
 <script>
 import Header from '../../components/Header.vue'
 import Footer from '../../components/Footer.vue'
+import Bindphone from '../../components/Bindphone.vue'
 export default {
     components : {
         Header,
-        Footer,
+		Footer,
+		Bindphone
     },
     data() {
+
         return {
-          show: true,
-					name: '',
-					loginModel: false,
-					loginUrl:'https://open.weixin.qq.com/connect/qrconnect?appid=wxf3264a02ac5f662f&redirect_uri=http://flgk.yohez.com/user/userLogin&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect'
+          	show: true,
+			name: '',
+			loginModel: false,
+			loginUrl:'https://open.weixin.qq.com/connect/qrconnect?appid=wxf3264a02ac5f662f&redirect_uri=http://flgk.yohez.com/user/userLogin&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect',
         }
 
     },
@@ -99,57 +103,59 @@ export default {
     },
     methods: {
 
-			// 微信信登陆
-			wxLogin(){
-				this.loginModel = true;
-			},
+		// 微信信登陆
+		wxLogin(){
+			this.loginModel = true;
+		},
 
-			// 获取地址栏参数
-			GetQueryString(name){
-			　　var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
-			　　var r = window.location.search.substr(1).match(reg);
-			　　if(r!=null)
-				{
-					return unescape(r[2]);
-				}
-				return null;
-			},
-
-			// 通过code登录
-			codeLogin(){
-				console.log(this.GetQueryString('code'))
-				this.$Spin.show();
-
-				let param = this.$Qs.stringify({ 
-					'code': this.GetQueryString('code') 
-				}) ;
-					
-				this.$api.pcUserInfo( param )
-
-				.then( (res) => {
-
-					console.log(res)
-					this.$Spin.hide();
-
-					if(res.data.code == 200){
-
-						// 存储用户信息
-						this.$store.commit('userData/saveUserData', res.data.content);
-
-						//跳转函数*************************************************
-						this.$router.push({ name: 'shopMallIdex'})
-											
-					}else{
-						this.$Message.warning(res.data.message);
-					}
-					
-
-				})
-				.catch((error) => {
-					this.$Spin.hide();
-					console.log('发生错误！', error);
-				});
+		// 获取地址栏参数
+		GetQueryString(name){
+		　　var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+		　　var r = window.location.search.substr(1).match(reg);
+		　　if(r!=null)
+			{
+				return unescape(r[2]);
 			}
+			return null;
+		},
+
+		// 通过code登录
+		codeLogin(){
+			console.log(this.GetQueryString('code'))
+			this.$Spin.show();
+
+			let param = this.$Qs.stringify({ 
+				'code': this.GetQueryString('code') 
+			}) ;
+				
+			this.$api.pcUserInfo( param )
+
+			.then( (res) => {
+
+				console.log(res)
+				this.$Spin.hide();
+
+				if(res.data.code == 200){
+
+					// 存储用户信息
+					this.$store.commit('userData/saveUserData', res.data.content);
+
+					//跳转函数*************************************************
+					this.$router.push({ name: 'shopMallIdex'})
+										
+				}else{
+					this.$Message.warning(res.data.message);
+				}
+				
+
+			})
+			.catch((error) => {
+				this.$Spin.hide();
+				console.log('发生错误！', error);
+			});
+		},
+
+
     }
 }
 </script>
