@@ -3,8 +3,8 @@
 	    <div class="nav" style="position:relative;z-index:11;">
 	      <div class="center relative">
 					<ul class="list_unstyled ul_inline clearfix font_18 navbar">
-	          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navTitle" :key="index" @click='tabClick(item.id,index)'>
-	            <span @mouseenter="tabHover(item.id,index)" class="color_fff tabHover">{{item.name}}</span>
+	          <li class="pointer" :class='{cur: index == curIndex}' v-for="(item,index) in navTitle" :key="index" @click='tabClick(item.id,index)' @mouseenter="tabHover(item.id,index)">
+	            <span class="color_fff tabHover">{{item.name}}</span>
 	          </li>
 	        </ul>
 
