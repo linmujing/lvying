@@ -2,6 +2,10 @@
 /* 用户数据存储 */
 
   const state = {
+    // 微信登录 appid
+    appid:'wxf3264a02ac5f662f', //测试
+    // appid:'wx628cdd1c88e826cf', //正式环境
+
     // 用户数据
     ciphone: localStorage.getItem("ciphone"),
     cicode: localStorage.getItem("cicode"),

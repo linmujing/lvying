@@ -4,7 +4,6 @@
     	<Header :isLogin='2'></Header>
     	
     	<router-view></router-view>
-	    
     	<Footer></Footer>
 		
     </div>

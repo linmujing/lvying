@@ -59,7 +59,7 @@
 			</Modal>
 
     	<Footer></Footer>
-		<Bindphone></Bindphone>
+		 <Bindphone v-if="bindModel" :unionId="unionId"></Bindphone>
 
     </div>
 </template>
@@ -70,17 +70,23 @@ import Bindphone from '../../components/Bindphone.vue'
 export default {
     components : {
         Header,
-		Footer,
-		Bindphone
+				Footer,
+				Bindphone
     },
     data() {
 
         return {
-          	show: true,
-			name: '',
-			loginModel: false,
-			loginUrl:'https://open.weixin.qq.com/connect/qrconnect?appid=wxf3264a02ac5f662f&redirect_uri=http://flgk.yohez.com/user/userLogin&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect',
-        }
+					// 是否有账号
+					show: true,
+					name: '',
+					loginModel: false,
+					// 微信登录授权地址
+					loginUrl:'https://open.weixin.qq.com/connect/qrconnect?appid='+this.$store.state.userData.appid+'&redirect_uri=http://flgk.yohez.com/user/userLogin&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect',
+					// 绑定手机号弹框
+					bindModel: false,
+					// 微信唯一标识(用来绑定微信手机号)
+					unionId:'',
+				}
 
     },
     watch: {
@@ -137,11 +143,20 @@ export default {
 
 				if(res.data.code == 200){
 
-					// 存储用户信息
-					this.$store.commit('userData/saveUserData', res.data.content);
+					// 查看用户是否绑定了手机号
+					if(res.data.content.ciPhone != "" || res.data.content.ciPhone != null){
+						// 存储用户信息
+						this.$store.commit('userData/saveUserData', res.data.content);
+						//跳转函数*************************************************
+						this.$router.push({ name: 'shopMallIdex'})
+					}else{
+						// 进行手机号绑定
+						this.bindModel = true;
+						// 获取微信唯一值
+						this.unionId = res.data.content.unionLongId ;
+					}
 
-					//跳转函数*************************************************
-					this.$router.push({ name: 'shopMallIdex'})
+					
 										
 				}else{
 					this.$Message.warning(res.data.message);
