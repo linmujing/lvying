@@ -618,8 +618,10 @@ export default {
     },
     mounted(){
 
+        this.listTotal = localStorage.getItem("listTotal");
+
         // 获取订单详情
-        this.getOrderProduct(this.$route.params.orderCode);
+        this.getOrderProduct(localStorage.getItem("orderCode"));
 
     }  
     
