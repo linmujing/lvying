@@ -21,7 +21,7 @@
                 </div>
 
                 <div v-show="showBox">
-                  <div class="itemBox bg_white" :class="{width_400px: fourNavTitle.length > 2}">
+                  <div class="itemBox bg_white">
                     <div v-for="(itemss,index2) in thirdNavTitle" :key="index2" class="float_left width_33 relative" style="height: 76px">
                       <div @mouseenter="thirMouseOver(itemss.id, index2)" @click="jumpDown(itemss.id,itemss.catName)" class="font_16 pointer hover_title margin_top_10 text_ellipsis">{{itemss.catName}}</div>
 
