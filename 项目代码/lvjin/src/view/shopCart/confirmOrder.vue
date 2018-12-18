@@ -7,24 +7,90 @@
             <div class="shopping_cart_container" style="position:relative;">
                 <div class="list_box" >
 
-                    <!-- 订单列表头部 #submitType#-->
-                    <div class="list_header padding_left_14" :style="{background: submitType ? '#fafafa':''}">
+                    <!-- 订单列表头部 -->
+                    <div class="list_header padding_left_14" >
                         <Row>
                             <Col span="4"><div style="height:1px;"></div></Col>
-                            <Col span="7"><span>课程名称</span></Col>
+                            <Col span="7"><span>商品名称</span></Col>
                             <Col span="5"><span class="block_center">单价（元）</span></Col>
                             <Col span="6"><span class="block_center">数量</span></Col>
                             <Col span="2"><span class="block_center">小计（元）</span></Col>
                         </Row>
                     </div>
+                    <!-- 当组合包存在时 -->
+                    <ul class="list_content item_list" v-if="isCombination" style="line-height:140px;">
+                        <!-- 列表 -->
+                        <li class="padding_left_14" >
+                            <Row>
+                                <Col span="4">
+                                    <span class="item_list_img pointer" @click="goDetail(combinationObj.productCode, combinationObj.productProperty)">
+                                        <img :src="combinationObj.productProfileUrl">
+                                    </span>
+                                </Col>
+                                <Col span="7">
+                                    <Row>
+                                        <Col span="24">
+                                            <div class="item_list_describe">
+                                                <p>{{combinationObj.productTitle}}</p>
+                                            </div>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col span="5"><span class="block_center">¥ {{combinationObj.productPrice}}</span></Col>
+                                <Col span="6"><span class="block_center">× 1 </span></Col>
+                                <!-- 小计 -->
+                                <Col span="2"><span class="block_center">¥ {{ (combinationObj.productPrice).toFixed(2) }}</span></Col>
+                            </Row>
+                        </li>
+                    </ul>
+                    <!-- 组合包关联商品 -->
+                    <div v-if="isCombination">
+                        <div class="border_top_1 border_bottom_1 block_center" style="padding-left:42px;line-height:40px" v-if="showCombination">组合包详情</div>
+                        <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="index1" v-if="showCombination">
+                            <li>
+                                <div class="item_title padding_left_14"> {{items.itemTitle}} </div>
+                                <ul class="item_list border_bottom_1">
+                                    <!-- 列表 -->
+                                    <li class="padding_left_14" v-for="(item, index2) in items.items" :key="index2">
+                                        <Row>
+                                            <Col span="4">
+                                                <span class="item_list_img pointer" @click="goDetail(item.productCode, item.productProperty)">
+                                                    <img :src="item.imgSrc">
+                                                </span>
+                                            </Col>
+                                            <Col span="7">
+                                                <Row>
+                                                    <Col span="24">
+                                                        <div class="item_list_describe">
+                                                            <p>{{item.productTitle}}</p>
+                                                            <p v-html="item.describe"></p>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                            <Col span="5"><span class="block_center">¥ {{item.price}}</span></Col>
+                                            <Col span="6"><span class="block_center">×{{item.num}}</span></Col>
+                                            <!-- 小计 -->
+                                            <Col span="2"><span class="block_center">¥ {{ (item.num * item.price).toFixed(2)  }}</span></Col>
+                                        </Row>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <div  style="width:100%;height:20px;text-align:center;" class="text_hover_color" title="查看组合包内容" @click="showCombination = !showCombination">
+                            <Icon type="ios-arrow-down" v-if="!showCombination"/>
+                            <Icon type="ios-arrow-up" v-if="showCombination"/>
+                        </div>
+                        <div class="item_total padding_right_24 text_right line_height_60px">小计： ¥ {{ (combinationObj.productPrice).toFixed(2) }}</div>
+                    </div>
 
                     <!-- 订单列表 -->
-                    <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="index1">
+                    <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="index1" v-if="!isCombination">
                         <li>
                             <div class="item_title padding_left_14"> {{items.itemTitle}} </div>
                             <ul class="item_list">
-                                <!-- 列表 #submitType# 调整背景色-->
-                                <li class="padding_left_14" v-for="(item, index2) in items.items" :key="index2" v-bind:class="[ submitType ? '':'active']">
+                                <!-- 列表 -->
+                                <li class="padding_left_14" v-for="(item, index2) in items.items" :key="index2">
                                     <Row>
                                         <Col span="4">
                                             <span class="item_list_img pointer" @click="goDetail(item.productCode, item.productProperty)">
@@ -48,36 +114,40 @@
                                     </Row>
                                 </li>
                             </ul>
-                            <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： ¥ {{items.itemTotal}}</div>
-                            <!-- 其他操作  -->
-                            <div class="item_shipping_methods padding_left_14" >
-                                <span style="display:inline-block;width:100px;">配送方式：</span>
-                                <span>
-                                    <el-select v-model="shippingMethods.value" size="mini" placeholder="请选择">
-                                        <el-option
-                                        v-for="(item, index) in shippingMethods.options"
-                                        :key="index"
-                                        :label="item.label"
-                                        :value="item.value">
-                                        </el-option>
-                                    </el-select>
-                                </span>
-                            </div>
+                            <div class="item_total padding_right_24">小计： ¥ {{items.itemTotal}}</div>
                         </li>
                     </ul>
+
+ 
+                    <!-- 其他操作  -->
+                    <div class="item_shipping_methods padding_left_14" >
+                        <span style="display:inline-block;width:100px;">配送方式：</span>
+                        <span>
+                            <el-select v-model="shippingMethods.value" size="mini" placeholder="请选择">
+                                <el-option
+                                v-for="(item, index) in shippingMethods.options"
+                                :key="index"
+                                :label="item.label"
+                                :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </span>
+                    </div>
 
                     <!-- 组合包优惠券 -->
                     <div class="item_shipping_methods padding_left_14" >
 
-                        <span style="display:inline-block;width:100px;">优惠券：</span>   
-                        <el-select v-model="Coupon.value"  size="mini" :placeholder="Coupon.options.length > 0 ? '请选择' : '没有优惠券'"  @change="onCouponChange"  :disabled='Coupon.options.length > 0 ? false : true' >
-                            <el-option
-                            v-for="(item,index) in Coupon.options"
-                            :key="index"
-                            :label="item.label"
-                            :value="item.value">
-                            </el-option>
-                        </el-select>
+                        <span style="display:inline-block;width:100px;">优惠券：</span>  
+                        <span>
+                            <el-select v-model="Coupon.value"  size="mini" :placeholder="Coupon.options.length > 0 ? '请选择' : '没有优惠券'"  @change="onCouponChange"   >
+                                <el-option
+                                v-for="(item,index) in Coupon.options"
+                                :key="index"
+                                :label="item.label"
+                                :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </span> 
                     </div>
 
                     <!-- 其他操作 -->
@@ -106,11 +176,6 @@ export default {
     data() {
         return {
 
-            /*提交订单页面类型*/
-            //  true  :  确定订单页面 解释：当页面为去结算提交时，可以修改数量，可以选择地址
-            //  false :   解释：可以选择优惠券
-            submitType: false,
-
             /*订单数据*/
             cartDate:{
                 // 固定价格
@@ -120,6 +185,14 @@ export default {
                 // 大列表
                 cartList: []
             },
+
+            // 组合包商品
+            combinationObj:{
+            },
+            // 是否存在组合包
+            isCombination: false,
+            // 组合包显示隐藏
+            showCombination: false,
 
             // 配送方式
             shippingMethods:{
@@ -190,7 +263,7 @@ export default {
         },
         /*订单提交*/
         submitOrderClick(){
-
+            console.log(this.cartDate.listTotal)
             localStorage.setItem("orderCode", this.$route.query.orderCode );
             localStorage.setItem("listTotal", this.cartDate.listTotal );
             // 去结算页面
@@ -320,6 +393,18 @@ export default {
                                 imgSrc: data[i].productInfo.productProfileUrl
                             })
 
+                        }
+
+                        // 添加组合包商品
+                        if(data[0].combineProductInfo != null ){
+                            this.combinationObj = {
+                                productProfileUrl: data[0].combineProductInfo.productProfileUrl,
+                                productCode: data[0].combineProductInfo.productCode,
+                                productTitle: data[0].combineProductInfo.productTitle,
+                                productPrice: data[0].combineProductInfo.productPrice,
+                                productProperty: data[0].combineProductInfo.productProperty,
+                            }
+                            this.isCombination = true;
                         }
 
                     }
@@ -536,7 +621,7 @@ export default {
 
     /**订单容器**/
     .shopping_cart_container{
-        margin-top:20px;
+        padding-top:20px;
         background:#fff;
 
         //  订单盒子
@@ -547,6 +632,7 @@ export default {
             .list_header{
                 height: 60px;
                 line-height: 60px;
+                background:#fafafa;
 
                 *{
                     color: @color_666;
@@ -592,29 +678,24 @@ export default {
                         line-height:1.5;
                     }
                 }
-                .item_total{
-                    height:60px;
-                    line-height: 60px;
-                    text-align: right;
-                    border:1px solid @color_e6e6e6;
-                    background:#fafafa;
-                }
-                .item_total.active{
-                    border:0;
-                    border-bottom:1px solid @color_e6e6e6;
-                    background:#fff;
-                }
-                .item_coupon{
-                    color: @color_f09105;
-                }
-                .item_shipping_methods{
-                    height: 60px;
-                    line-height: 60px;
-                    border-bottom:1px solid @color_e6e6e6;
-                }
                 *{
                     color: @color_333;
                 }
+            }
+           .item_coupon{
+                color: @color_f09105;
+            }
+            .item_shipping_methods{
+                height: 60px;
+                line-height: 60px;
+                border-bottom:1px solid @color_e6e6e6;
+            }
+            .item_total{
+                height:60px;
+                line-height: 60px;
+                text-align: right;
+                border:1px solid @color_e6e6e6;
+                background:#fafafa;
             }
 
             //  订单列表操作

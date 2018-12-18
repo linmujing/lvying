@@ -16,27 +16,94 @@
                         </div>
                         <p class="font_16 pointer" style="line-height:80px;position:relative;" @click="hideShowDetail = !hideShowDetail">订单详情 <i :class="[hideShowDetail ? 'triangle_up':'triangle_down']"></i></p>
                     </div>
+                    <!-- 订单详情 -->
+                    <div v-if="hideShowDetail">
+                        <!-- 订单列表头部-->
+                        <div class="list_header padding_left_14" style="background:#fafafa;" >
+                            <Row>
+                                <Col span="4"><div style="height:1px;"></div></Col>
+                                <Col span="7"><span>商品名称</span></Col>
+                                <Col span="6"  class="block_center"><span>价格（元）</span></Col>
+                                <Col span="5"><span class="block_center">数量</span></Col>
+                                <Col span="2"><span class="block_center">小计（元）</span></Col>
+                            </Row>
+                        </div>
+                        
+                        <!-- 当组合包存在时 -->
+                        <ul class="list_content item_list" v-if="isCombination" style="line-height:140px;">
+                            <!-- 列表 -->
+                            <li class="padding_left_14" >
+                                <Row>
+                                    <Col span="4">
+                                        <span class="item_list_img pointer" @click="goDetail(combinationObj.productCode, combinationObj.productProperty)">
+                                            <img :src="combinationObj.productProfileUrl">
+                                        </span>
+                                    </Col>
+                                    <Col span="7">
+                                        <Row>
+                                            <Col span="24">
+                                                <div class="item_list_describe">
+                                                    <p>{{combinationObj.productTitle}}</p>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                    <Col span="5"><span class="block_center">¥ {{combinationObj.productPrice}}</span></Col>
+                                    <Col span="6"><span class="block_center">× 1 </span></Col>
+                                    <!-- 小计 -->
+                                    <Col span="2"><span class="block_center">¥ {{ (combinationObj.productPrice).toFixed(2)  }}</span></Col>
+                                </Row>
+                            </li>
+                        </ul>
+                        <!-- 组合包关联商品 -->
+                        <div v-if="isCombination">
+                            <div class="border_top_1 border_bottom_1 block_center" style="padding-left:42px;line-height:40px" v-if="showCombination">组合包详情</div>
+                            <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="index1" v-if="showCombination">
+                                <li>
+                                    <div class="item_title padding_left_14"> {{items.itemTitle}} </div>
+                                    <ul class="item_list border_bottom_1">
+                                        <!-- 列表 -->
+                                        <li class="padding_left_14" v-for="(item, index2) in items.items" :key="index2">
+                                            <Row>
+                                                <Col span="4">
+                                                    <span class="item_list_img pointer" @click="goDetail(item.productCode, item.productProperty)">
+                                                        <img :src="item.imgSrc">
+                                                    </span>
+                                                </Col>
+                                                <Col span="7">
+                                                    <Row>
+                                                        <Col span="24">
+                                                            <div class="item_list_describe">
+                                                                <p>{{item.productTitle}}</p>
+                                                                <p v-html="item.describe"></p>
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                </Col>
+                                                <Col span="5"><span class="block_center">¥ {{item.price}}</span></Col>
+                                                <Col span="6"><span class="block_center">×{{item.num}}</span></Col>
+                                                <!-- 小计 -->
+                                                <Col span="2"><span class="block_center">¥ {{ (item.num * item.price).toFixed(2)  }}</span></Col>
+                                            </Row>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <div  style="width:100%;height:20px;text-align:center;" class="text_hover_color" title="查看组合包内容" @click="showCombination = !showCombination">
+                                <Icon type="ios-arrow-down" v-if="!showCombination"/>
+                                <Icon type="ios-arrow-up" v-if="showCombination"/>
+                            </div>
+                        </div>
 
-                    <!-- 订单列表头部-->
-                    <div class="list_header padding_left_14" style="background:#fafafa;" v-if="hideShowDetail" >
-                        <Row>
-                            <Col span="4"><div style="height:1px;"></div></Col>
-                            <Col span="7"><span>商品名称</span></Col>
-                            <Col span="6"  class="block_center"><span>价格（元）</span></Col>
-                            <Col span="5"><span class="block_center">数量</span></Col>
-                            <Col span="2"><span class="block_center">小计（元）</span></Col>
-                        </Row>
-                    </div>
-                    
-                    <!-- 订单列表 -->
-                    <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="index1" v-if="hideShowDetail">
-                        <li>
-                            <div class="item_title padding_left_14"> {{items.itemTitle}} </div>
-                            <ul class="item_list">
-                                <!-- 列表-->
-                                <li class="padding_left_14" v-for="(item, index2) in items.items" :key="item.id" >
-                                    <Row>
-                                        <Col span="4">
+                        <!-- 订单列表 -->
+                        <ul class="list_content" v-for="(items, index1) in cartDate.cartList" :key="index1" v-if="!isCombination">
+                            <li>
+                                <div class="item_title padding_left_14"> {{items.itemTitle}} </div>
+                                <ul class="item_list">
+                                    <!-- 列表 -->
+                                    <li class="padding_left_14" v-for="(item, index2) in items.items" :key="index2">
+                                        <Row>
+                                            <Col span="4">
                                             <span class="item_list_img pointer" @click="goDetail(item.productCode, item.productProperty)">
                                                 <img :src="item.imgSrc">
                                             </span>
@@ -46,27 +113,28 @@
                                                 <Col span="24">
                                                     <div class="item_list_describe">
                                                         <p>{{item.productTitle}}</p>
+                                                        <p v-html="item.describe"></p>
                                                     </div>
                                                 </Col>
                                             </Row>
                                         </Col>
-                                        <Col span="6"><span class="block_center">{{item.price}}</span></Col>
-                                        <Col span="5"><span class="block_center">×{{item.num}}</span></Col>
-                                       
+                                        <Col span="5"><span class="block_center">¥ {{item.price}}</span></Col>
+                                        <Col span="6"><span class="block_center">×{{item.num}}</span></Col>
                                         <!-- 小计 -->
-                                        <Col span="2"><span class="block_center">{{ (item.num * item.price).toFixed(2) }}</span></Col>
+                                        <Col span="2"><span class="block_center">¥ {{ (item.num * item.price).toFixed(2)  }}</span></Col>
                                     </Row>
                                 </li>
                             </ul>
-                            <div class="item_total padding_right_24" >小计： {{items.itemTotal}}</div>
+                            <div class="item_total padding_right_24">小计： ¥ {{items.itemTotal}}</div>
                         </li>
                     </ul>
 
                     <!-- 其他操作-->
-                    <div class="list_operate padding_left_14 line_height_50px" v-if="hideShowDetail">
+                    <div class="list_operate padding_left_14 line_height_50px">
                         <div class="all_total padding_right_24">
-                            <h4>总计：<b class="font_16"> {{cartDate.listTotal}} </b></h4>
+                            <h4>总计：<b class="font_16"> ￥{{cartDate.listTotal}} </b></h4>
                         </div>
+                    </div>
                     </div>
 
                     <!-- 支付方式 -->
@@ -129,10 +197,19 @@ export default {
                 //全部列表状态
                 listState: false,
                 //总价格
-                listTotal: this.$route.params.listTotal,
+                listTotal: 0,
                 //大列表
                 cartList:[]
             }, 
+
+            // 组合包商品
+            combinationObj:{
+                productPrice:0
+            },
+            // 是否存在组合包
+            isCombination: false,
+            // 组合包显示隐藏
+            showCombination: false,
             
             // 是否隐藏商品详情
             hideShowDetail: false,
@@ -377,6 +454,18 @@ export default {
 
                         }
 
+                        // 添加组合包商品
+                        if(data[0].combineProductInfo != null){
+                            this.combinationObj = {
+                                productProfileUrl: data[0].combineProductInfo.productProfileUrl,
+                                productCode: data[0].combineProductInfo.productCode,
+                                productTitle: data[0].combineProductInfo.productTitle,
+                                productPrice: data[0].combineProductInfo.productPrice,
+                                productProperty: data[0].combineProductInfo.productProperty,
+                            }
+                            this.isCombination = true;
+                        }
+
                     }
 
                     // 压入到购物车
@@ -618,7 +707,8 @@ export default {
     },
     mounted(){
 
-        this.listTotal = localStorage.getItem("listTotal");
+
+        this.cartDate.listTotal = localStorage.getItem("listTotal");
 
         // 获取订单详情
         this.getOrderProduct(localStorage.getItem("orderCode"));
