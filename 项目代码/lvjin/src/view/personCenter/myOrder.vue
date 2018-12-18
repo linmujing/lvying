@@ -51,9 +51,10 @@
                                 <span>{{lists.orderTime}} </span>
                                 
                                 <span >订单金额：<i class="color_f09105">¥&nbsp;{{lists.orderPayAmount}}</i></span> 
-                                <span  v-if="lists.isCombination == '1'">组合包</span>
+                                <span  v-if="lists.combinationProduct">{{lists.combinationProduct.productTitle}}</span>
                             </div>
-                            <div v-for="(items, index2) in lists.orderItem" :key="index2" v-if="items.childItem.length > 0">
+
+                            <div v-for="(items, index2) in lists.orderItem" :key="index2" >
                                 <Row>
                                     <Col span="16">
                                         <div >
@@ -64,7 +65,50 @@
                                                 <span>订单金额：<i>¥&nbsp;{{items.itemAmount}}</i></span> 
                                             </div>
                                             <!-- 商品行 -->
-                                            <div class="height_50px font_12" v-for="(childs, index3) in items.childItem" :key="index3">
+                                            <div class="height_50px font_12" v-if="items.combinationProduct != undefined">
+                                                <Row>
+                                                    <Col span="4" >
+                                                        <p class="img_box" @click="goDetail(items.combinationProduct.productCode, items.combinationProduct.productProperty)"><img :src="items.combinationProduct.productProfileUrl" alt=""></p>
+                                                    </Col>
+                                                    <Col span="6"> <div class="text_left padding_left_20">
+                                                        <div class="item_td">
+                                                            <p >
+                                                                <span class="twoline_ellipsis" style="color:#666;" :data-product="items.combinationProduct.productCode" >{{items.combinationProduct.productTitle}} </span>    
+                                                            </p>
+                                                        </div>
+                                                    </div> </Col>
+                                                    <Col span="5"> <div class="item_td"><p>&nbsp; ￥{{ items.combinationProduct.productPrice }}</p></div></Col>
+                                                    <Col span="4"> <div class="item_td"><p>&nbsp; X 1</p></div></Col>
+                                                    <Col span="5"> <div class="item_td"><p>&nbsp; ￥{{ items.combinationProduct.productPrice }}</p></div></Col>
+                                                </Row>
+                                                <div class="border_top_1 border_bottom_1 block_center" style="padding-left:42px;line-height:40px" v-if="items.combinationShow">组合包详情</div>
+                                                <!-- 商品行 -->
+                                                <div class="height_50px padding_top_20 font_12" v-for="(childs, index3) in items.childItem" :key="index3" v-if="items.combinationShow">
+                                                    <Row>
+                                                        <Col span="4" >
+                                                            <p class="img_box" @click="goDetail(childs.productCode, childs.productProperty)"><img :src="childs.productProfileUrl" alt=""></p>
+                                                        </Col>
+                                                        <Col span="6"> <div class="text_left padding_left_20">
+                                                            <div class="item_td">
+                                                                <p >
+                                                                    <span class="twoline_ellipsis" style="color:#666;" :data-product="childs.productCode" >{{childs.title}} </span>    
+                                                                </p>
+                                                            </div>
+                                                        </div> </Col>
+                                                        <Col span="5"> <div class="item_td"><p>&nbsp; {{ lists.isCombination != '1' ? '￥'+childs.price : ''}}</p></div></Col>
+                                                        <Col span="4"> <div class="item_td"><p>&nbsp;{{ 'X'+childs.num }}</p></div></Col>
+                                                        <Col span="5"> <div class="item_td"><p>&nbsp;{{ lists.isCombination != '1' ? '￥'+childs.total : ''}}</p></div></Col>
+                                                    </Row>
+                                                </div>
+                                                <div  style="width:100%;height:20px;text-align:center;position:relative;top:-20px;right:-130px;" class="text_hover_color" title="查看组合包内容" @click="items.combinationShow = !items.combinationShow">
+                                                    <Icon type="ios-arrow-down" v-if="!items.combinationShow"/>
+                                                    <Icon type="ios-arrow-up" v-if="items.combinationShow"/>
+                                                </div>
+                                            </div>
+
+                                            
+                                            <!-- 商品行 -->
+                                            <div class="height_50px font_12" v-for="(childs, index3) in items.childItem" :key="index3" v-if="items.combinationProduct == undefined">
                                                 <Row>
                                                     <Col span="4" >
                                                         <p class="img_box" @click="goDetail(childs.productCode, childs.productProperty)"><img :src="childs.productProfileUrl" alt=""></p>
@@ -172,7 +216,6 @@
                                                                             @click="goComment(lists.orderCode, childs.productCode)">去评价
                                                                         </Button> <br> 
                                                                 </p></div>
-
                                          
                                                             </div>
 
@@ -210,7 +253,10 @@
                                     </Col>
                                 </Row>
                             </div>
-                        </div>    
+
+ 
+
+                        </div>                           
                     </li>
                 </ul>
             </div>
@@ -555,20 +601,36 @@ export default {
                             orderItem:[]
                         })
 
-                        // 子订单
+                        // 子订单  combinationProduct:组合包商品
                         for( let x = 0 ; x < lists.orderMerchantList.length; x++){
 
                             let childItem = [];
-                            let items = lists.orderMerchantList[x];
+                            let items = lists.orderMerchantList[0];
+ 
+                            // 判断是否存在组合包商品
+                            if(lists.orderMerchantList[0].combinationProduct.productType == '2'){
 
-                            orderItem.push({
-                                itemTime: items.createDate,
-                                itemCode: items.orderMerchantCode,
-                                itemAmount: items.orderAmount,
-                                itemName: items.merchantCode,
-                                itemTrackNo: items.trackNo,
-                                childItem:[]
-                            })
+                                orderItem.push({
+                                    itemTime: items.createDate,
+                                    itemCode: items.orderMerchantCode,
+                                    itemAmount: items.orderAmount,
+                                    itemName: items.merchantCode,
+                                    itemTrackNo: items.trackNo,
+                                    combinationProduct: lists.orderMerchantList[0].combinationProduct,
+                                    combinationShow: false,
+                                    childItem:[]
+                                })
+                            }else{
+                                orderItem.push({
+                                    itemTime: items.createDate,
+                                    itemCode: items.orderMerchantCode,
+                                    itemAmount: items.orderAmount,
+                                    itemName: items.merchantCode,
+                                    itemTrackNo: items.trackNo,
+                                    childItem:[]
+                                })                             
+                            }
+
 
                             // 子订单商品
                             for( let z = 0 ; z < items.orderProductList.length; z++){
@@ -600,6 +662,7 @@ export default {
 
                         arr[i].orderItem = orderItem;
                    }
+                   console.log(arr)
 
                    this.orderData.orderList = arr;
 
