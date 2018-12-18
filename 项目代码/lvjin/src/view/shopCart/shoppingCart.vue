@@ -705,6 +705,7 @@ export default {
                                 itemTitle: data[i].productInfo.productTitle,
                                 itemTotal: 0.00,
                                 productCode: data[i].productCode,
+                                price: data[i].productInfo.productPrice,
                                 num: 1,
                                 productSubCode: data[i].productInfo.productSubCode,
                                 //小列表
