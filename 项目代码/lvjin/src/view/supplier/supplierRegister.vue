@@ -36,16 +36,36 @@
 	        			<Col span="10">
 	        				<div class="padding_left_20 padding_right_20">
 
-	        					<div v-for="item in 3" class="margin_top_10">
+	        					<div class="margin_top_10">
 	        						<Row class="font_weight_bold">
 		        						<Col span="3">问：</Col>
-		        						<Col span="21">XXXXXXXXXXXXXX？</Col>
+		        						<Col span="21">成为提供商有什么要求？</Col>
 		        					</Row>
 		        					<Row class="margin_top_5">
 		        						<Col span="3">答：</Col>
-		        						<Col span="21">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aeneaneuismod bibendum laoreet. Proin gravida dolor sit amet lacus </Col>
+		        						<Col span="21">提供商一般是执业经验丰富的律师、法务、其他从事法律工作的人员。对某一法律领域有丰富的实战经验，能够为国家机关、企事业单位和个人提供合法的、准确的、深度的法律风险防控系统全面的知识、技巧、技能；能够有一定的时间和精力按照平台的要求从事法律产品的研发；能够同意和接受《提供商注册协议》全部内容 </Col>
 		        					</Row>
 	        					</div>
+                    <div class="margin_top_10">
+                      <Row class="font_weight_bold">
+                        <Col span="3">问：</Col>
+                        <Col span="21">提供商需要向平台提供什么法律产品？</Col>
+                      </Row>
+                      <Row class="margin_top_5">
+                        <Col span="3">答：</Col>
+                        <Col span="21">提供商可以向平台提供音频课程、视频课程，全程动态某一行业法律风险管控系统，某一法律关系、某一风险点的全程动态管控系统。</Col>
+                      </Row>
+                    </div>
+                    <div class="margin_top_10">
+                      <Row class="font_weight_bold">
+                        <Col span="3">问：</Col>
+                        <Col span="21">成为提供商享有哪些权利义务？</Col>
+                      </Row>
+                      <Row class="margin_top_5">
+                        <Col span="3">答：</Col>
+                        <Col span="21">权利义务请详细查看<span class="pointer" @click="modal1 = true">《提供商注册协议》</span>。</Col>
+                      </Row>
+                    </div>
 
 	        				</div>
 	        			</Col>
