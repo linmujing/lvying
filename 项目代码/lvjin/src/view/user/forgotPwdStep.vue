@@ -195,15 +195,15 @@ export default {
             .then( (res) => {
 
                 // console.log(res)
+                this.$Spin.hide()
 
                 if(res.data.code == 500){
-                    this.$Spin.hide()
+                    
                     this.$Message.error('该帐号还未注册!');
                     return;
 
                 }else if(res.data.code == 200){
                     
-                    this.$Spin.hide()
                     // 发送验证码
                     this.$api.sendSms( this.$Qs.stringify({ 'phoneNo': this.formRight.phone, 'type': '2' }) )
 
@@ -220,8 +220,6 @@ export default {
                     })
 
                 }
-
-                this.$Spin.hide();
 
             })
             .catch((error) => {
@@ -273,6 +271,7 @@ export default {
             .then( (res) => {
 
                 console.log(res)
+                this.$Spin.hide();
 
                 if(res.data.code == 200){
 
@@ -290,9 +289,7 @@ export default {
                     this.$Message.warning(res.data.message);
 
                 }
-
-                this.$Spin.hide();
-
+                
             })
             .catch((error) => {
 
