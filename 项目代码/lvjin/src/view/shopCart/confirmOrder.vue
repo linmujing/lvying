@@ -191,8 +191,10 @@ export default {
         /*订单提交*/
         submitOrderClick(){
 
+            localStorage.setItem("orderCode", this.$route.query.orderCode );
+            localStorage.setItem("listTotal", this.cartDate.listTotal );
             // 去结算页面
-            this.$router.push({ name: 'shopGoPay', params: { orderCode: this.$route.query.orderCode, listTotal: this.cartDate.listTotal } })
+            this.$router.push({ name: 'shopGoPay' })
 
         },
 

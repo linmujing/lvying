@@ -79,8 +79,35 @@
                                     <span class="padding_left_5"> 组合包 {{items.itemTitle}} </span>
                                 </el-checkbox>
                             </div>
+                            <!-- 组合包商品 -->
+                            <ul class="item_list">
+                                <li class="padding_left_14" >
+                                    <Row>
+                                        <Col span="5">
+                                            <span class="item_list_img pointer" style="padding-left:16px;" @click="goDetail(items.productCode, items.productProperty)">
+                                                <img :src="items.imgSrc">
+                                            </span>
+                                        </Col>
+                                        <Col span="9">
+                                            <Row>
+                                                <Col span="6"></Col>
+                                                <Col span="18">
+                                                    <div class="item_list_describe">
+                                                        <p > {{items.itemTitle}} </span></p>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        </Col>
+                                        <Col span="4"><span  class="block_center">¥ {{items.price}}</span></Col>
+                                        <Col span="4"><span  class="block_center">{{items.num}} </span></Col>
+                                        <!-- 删除单个 -->
+                                        <Col span="2">   &nbsp;</Col>
+                                    </Row>
+                                </li>
+                            </ul>                            
                             <!-- 组合包商家分类 -->
-                            <div v-for="(item, index2) in items.items" :key="index2">
+                            <div class="border_top_1 block_center" style="padding-left:42px;line-height:40px" v-if="items.itemsShow">组合包详情</div>
+                            <div class="border_top_1"  v-for="(item, index2) in items.items" :key="index2" v-if="items.itemsShow">
                                 <div style="padding-left:42px;line-height:40px;">{{item.itemTitle}}</div>
                                 <ul class="item_list">
                                     <li class="padding_left_14" v-for="(child, index3) in item.items" :key="index3">
@@ -100,13 +127,17 @@
                                                     </Col>
                                                 </Row>
                                             </Col>
-                                            <Col span="4"><span  class="block_center">¥ {{child.price}}</span></Col>
-                                            <Col span="4"><span  class="block_center">{{child.num}} </span></Col>
+                                            <Col span="4"><span  class="block_center">¥ {{child.price}} </span></Col>
+                                            <Col span="4"><span  class="block_center"> {{child.num}} </span></Col>
                                             <!-- 删除单个 -->
                                             <Col span="2">   &nbsp;</Col>
                                         </Row>
                                     </li>
                                 </ul>
+                            </div>
+                            <div  style="width:100%;height:20px;text-align:center;border-left: 1px solid #e6e6e6;border-right: 1px solid #e6e6e6;" class="text_hover_color" title="查看组合包内容" @click="items.itemsShow = !items.itemsShow">
+                                <Icon type="ios-arrow-down" v-if="!items.itemsShow"/>
+                                <Icon type="ios-arrow-up" v-if="items.itemsShow"/>
                             </div>
                             <div class="item_total padding_right_24">该组合包小计：¥ {{items.itemTotal}}</div>
 
@@ -387,22 +418,10 @@ export default {
 
                     //重置小计
                     this.cartList[x].itemTotal = 0;
-
+                    console.log(this.cartList[x].price)
                     if(this.cartList[x].itemState){
 
-                        for(let i = 0 ; i < n ; i++){
-
-                            let item = this.cartList[x].items[i];
-
-                            for(let child of item.items){
-
-                                this.cartList[x].itemTotal += child.num * (child.price * 10000);
-
-                            }
-
-                        }
-
-                        this.cartList[x].itemTotal = (this.cartList[x].itemTotal / 10000).toFixed(2);
+                        this.cartList[x].itemTotal = (this.cartList[x].price).toFixed(2);
                     }
 
                 }
@@ -705,9 +724,12 @@ export default {
                                 itemTitle: data[i].productInfo.productTitle,
                                 itemTotal: 0.00,
                                 productCode: data[i].productCode,
+                                productProperty :  data[i].productInfo.productProperty ,
                                 price: data[i].productInfo.productPrice,
                                 num: 1,
+                                imgSrc: data[i].productInfo.productProfileUrl,
                                 productSubCode: data[i].productInfo.productSubCode,
+                                itemsShow: false,
                                 //小列表
                                 items:[]
                             });
@@ -920,15 +942,14 @@ export default {
                 background: #fafafa;
                 height: 50px;
                 line-height: 50px;
+                color: @color_666;
 
-                *{
-                    color: @color_666;
-                }
             }
 
             // 购物车列表
             .list_content{
                 padding-top:10px;
+                color: @color_333;
 
                 .item_title{
                     height: 40px;
@@ -973,9 +994,7 @@ export default {
                     border:1px solid @color_e6e6e6;
                     background:#fafafa;
                 }
-                *{
-                    color: @color_333;
-                }
+   
             }
 
             // 购物车列表操作

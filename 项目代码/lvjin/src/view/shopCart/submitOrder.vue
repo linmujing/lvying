@@ -4,7 +4,7 @@
         <div class="box_center_1200" v-show="!addressData.addressPageShow">
 
             <!-- 订单地址 #submitType#-->
-            <div class="order_address" v-if="addressData.hasStore" >
+            <div class="order_address" v-if="hasStore" >
 
                 <!-- 添加地址 地址列表为空时展示-->
                 <div class="address_add" v-if="addressData.addressList.length == 0"><span class="address_btn" @click="addressData.addressPageShow = true"> <img src="../../assets/images/icon/address_add.png" alt=""> <i>添加收货地址</i> </span></div>
@@ -138,45 +138,72 @@
                             <div class="item_shipping_methods padding_left_14" v-if="!submitType">配送方式： {{items.shippingMethods}}</div>
                         </li>
                     </ul>
-
-                    <!-- 订单列表  组合单 -->
-                    <ul class="list_content" v-for="(lists, index1) in cartDate.cartList" :key="index1" v-if="isGroup">
-                        <li class="padding_left_14" style="line-height:48px;">我是一个组合包</li>
-                        <li v-for="(items, index2) in lists.items" :key="index2">
-                            <div v-if="submitType" class="item_title padding_left_14"> {{items.itemTitle}} </div>
-                            <ul class="item_list">
-                                <!-- 列表 #submitType# 调整背景色-->
-                                <li class="padding_left_14" v-for="(item, index3) in items.items" :key="index3" v-bind:class="[ submitType ? '':'active']">
-                                    <Row>
-                                        <Col span="4">
-                                            <span class="item_list_img pointer" @click="goDetail(item.productCode, item.productProperty)">
-                                                <img :src="item.imgSrc">
-                                            </span>
-                                        </Col>
-                                        <Col span="7">
-                                            <Row>
-                                                <Col span="24">
-                                                    <div class="item_list_describe">
-                                                        <p v-html="item.describe"></p>
-                                                    </div>
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                        <Col span="5"><span class="block_center">¥ {{item.price}}</span></Col>
-                                        <Col span="6"><span class="block_center">×{{item.num}}</span></Col>
-                                        <!-- 优惠券  #submitType#-->
-                                        <Col span="0">
-                                        </Col>
-                                        <!-- 小计 -->
-                                        <Col span="2"><span class="block_center">¥ {{item.price}}</span></Col>
-                                    </Row>
-                                </li>
-                            </ul>
-                            <div class="item_total padding_right_24" v-bind:class="[ submitType ? '':'active']">小计： ¥ {{items.itemTotal}}</div>
-                            <!-- 其他操作  #submitType#-->
-                            <div class="item_shipping_methods padding_left_14" v-if="!submitType">配送方式： {{items.shippingMethods}}</div>
-                        </li>
-                    </ul>
+                    
+                    <div v-if="isGroup">
+                        <!-- 订单列表  组合单 -->
+                        <ul class="list_content" v-for="(lists, index1) in cartDate.cartList" :key="index1" >
+                            <li class="padding_left_14" style="line-height:48px;">组合包</li>
+                            <!-- 列表 -->
+                            <li class="padding_left_14"  style="line-height:140px;" >
+                                <Row>
+                                    <Col span="4">
+                                        <span class="item_list_img pointer" @click="goDetail(lists.productCode, lists.productProperty)">
+                                            <img :src="lists.imgSrc">
+                                        </span>
+                                    </Col>
+                                    <Col span="7">
+                                        <Row>
+                                            <Col span="24">
+                                                <div class="item_list_describe">
+                                                    <p v-html="lists.describe"></p>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                    <Col span="5"><span class="block_center">¥ {{lists.price}}</span></Col>
+                                    <Col span="6"><span class="block_center">×{{lists.num}}</span></Col>
+                                    <!-- 小计 -->
+                                    <Col span="2"><span class="block_center">¥ {{lists.price}}</span></Col>
+                                </Row>
+                                
+                            </li>
+                            <div class="border_top_1 border_bottom_1 block_center" style="padding-left:42px;line-height:40px" v-if="lists.itemsShow">组合包详情</div>
+                            <li v-for="(items, index2) in lists.items" :key="index2" v-if="lists.itemsShow">
+                                <div v-if="submitType" class="item_title padding_left_14"> {{items.itemTitle}} </div>
+                                <ul class="item_list border_bottom_1">
+                                    <!-- 列表-->
+                                    <li class="padding_left_14" v-for="(item, index3) in items.items" :key="index3" v-bind:class="[ submitType ? '':'active']">
+                                        <Row>
+                                            <Col span="4">
+                                                <span class="item_list_img pointer" @click="goDetail(item.productCode, item.productProperty)">
+                                                    <img :src="item.imgSrc">
+                                                </span>
+                                            </Col>
+                                            <Col span="7">
+                                                <Row>
+                                                    <Col span="24">
+                                                        <div class="item_list_describe">
+                                                            <p v-html="item.describe"></p>
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+                                            </Col>
+                                            <Col span="5"><span class="block_center">¥ {{item.price}}</span></Col>
+                                            <Col span="6"><span class="block_center">×{{item.num}}</span></Col>
+                                        </Row>
+                                    </li>
+                                </ul>
+                            </li>
+                            <div  style="width:100%;height:20px;text-align:center; " class="text_hover_color" title="查看组合包内容" @click="lists.itemsShow = !lists.itemsShow">
+                                <Icon type="ios-arrow-down" v-if="!lists.itemsShow"/>
+                                <Icon type="ios-arrow-up" v-if="lists.itemsShow"/>
+                            </div>
+                            <div class="item_total padding_right_24" >小计： ¥ {{lists.price}}</div>
+                                <!-- 其他操作  #submitType#-->
+                            <div class="item_shipping_methods padding_left_14" v-if="!submitType">配送方式： {{lists.shippingMethods}}</div>
+                        </ul>
+  
+                    </div>
 
                     <!-- 其他操作 #submitType#-->
                     <div class="list_operate padding_left_14" v-if="!submitType">
@@ -365,21 +392,7 @@ export default {
             }else{
 
                 // 组合包
-                for(let lists of this.cartDate.cartList){
-
-                    for(let items of lists.items){
-
-                        for(let item of items.items){
-                            
-                            items.itemTotal += item.num * (item.price * 10000);
-                        }
-
-                        this.cartDate.listTotal += items.itemTotal;
-                        items.itemTotal = (items.itemTotal/10000).toFixed(2);
-
-                    }
-
-                }
+                this.cartDate.listTotal = this.cartDate.cartList[0].price*10000
 
             }
 
@@ -658,7 +671,7 @@ export default {
                             state: false,
                             price: data.productPrice,
                             num:  cartNun,
-                            name: data.productName,
+                            productTitle: data.productTitle,
                             describe: data.productDesc,
                             productProperty :  data.productProperty ,
                             imgSrc: data.productProfileUrl
@@ -675,15 +688,20 @@ export default {
                             itemTitle: data.productTitle,
                             itemTotal: 0.00,
                             productCode: data.productCode,
+                            price: data.productPrice,
                             num: cartNun,
+                            imgSrc: data.productProfileUrl,
                             productSubCode: data.productSubCode,
+                            productProperty :  data.productProperty ,
+                            itemsShow: false,
                             //小列表
                             items:[]
+
                         });
 
                         // 是否为组合包
                         this.isGroup = true;
-
+                        console.log(arr)
                     }
 
                     // 压入到商品列表
