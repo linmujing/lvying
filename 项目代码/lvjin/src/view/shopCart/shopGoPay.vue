@@ -202,6 +202,9 @@ export default {
                 cartList:[]
             }, 
 
+            // 订单编号
+            orderCode: "",
+
             // 组合包商品
             combinationObj:{
                 productPrice:0
@@ -498,7 +501,7 @@ export default {
             this.$Spin.show();
 
             let param = this.$Qs.stringify({ 
-                'orderCode': this.$route.params.orderCode , 
+                'orderCode': this.orderCode , 
                 'ciCode': this.userData.cicode , 
                 'truePayMoney': '0.01', //this.$route.params.listTotal,
                 'payCommet': '支付备注'
@@ -544,7 +547,7 @@ export default {
             this.$Spin.show();
 
             let param = this.$Qs.stringify({ 
-                'orderCode': this.$route.params.orderCode , 
+                'orderCode': this.orderCode , 
                 'ciCode': this.userData.cicode , 
                 'truePayMoney': '0.01', //this.$route.params.listTotal,
                 'payCommet': '支付备注'
@@ -595,7 +598,7 @@ export default {
             this.$Spin.show();
 
             let param = this.$Qs.stringify({ 
-                'orderCode': this.$route.params.orderCode , 
+                'orderCode': this.orderCode , 
                 'ciCode': this.userData.cicode , 
                 'truePayMoney': '0.01', //this.$route.params.listTotal,
                 'payCommet': '支付备注'
@@ -646,7 +649,7 @@ export default {
 
             this.payTimer = false;
 
-            this.$api.getOrderInfo( this.$Qs.stringify({ 'orderCode': this.$route.params.orderCode })  )
+            this.$api.getOrderInfo( this.$Qs.stringify({ 'orderCode': this.orderCode })  )
 
             .then( (res) => {
 
@@ -708,10 +711,11 @@ export default {
     mounted(){
 
 
-        this.cartDate.listTotal = localStorage.getItem("listTotal");
+        this.cartDate.listTotal = localStorage.getItem("paylistTotal");
+        this.orderCode = localStorage.getItem("payorderCode");
 
         // 获取订单详情
-        this.getOrderProduct(localStorage.getItem("orderCode"));
+        this.getOrderProduct(this.orderCode);
 
     }  
     

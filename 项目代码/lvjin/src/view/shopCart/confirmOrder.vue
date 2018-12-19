@@ -187,8 +187,7 @@ export default {
             },
 
             // 组合包商品
-            combinationObj:{
-            },
+            combinationObj:{},
             // 是否存在组合包
             isCombination: false,
             // 组合包显示隐藏
@@ -264,8 +263,8 @@ export default {
         /*订单提交*/
         submitOrderClick(){
             console.log(this.cartDate.listTotal)
-            localStorage.setItem("orderCode", this.$route.query.orderCode );
-            localStorage.setItem("listTotal", this.cartDate.listTotal );
+            localStorage.setItem("payorderCode", this.$route.query.orderCode );
+            localStorage.setItem("paylistTotal", this.cartDate.listTotal );
             // 去结算页面
             this.$router.push({ name: 'shopGoPay' })
 

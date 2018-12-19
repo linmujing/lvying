@@ -606,6 +606,7 @@ export default {
 
                             let childItem = [];
                             let items = lists.orderMerchantList[0];
+                            let itemName = items.orderProductList.length > 0 ? items.orderProductList[0].merchantInfo.merchantNm : '';
  
                             // 判断是否存在组合包商品
                             if(lists.orderMerchantList[0].combinationProduct.productType == '2'){
@@ -614,7 +615,7 @@ export default {
                                     itemTime: items.createDate,
                                     itemCode: items.orderMerchantCode,
                                     itemAmount: items.orderAmount,
-                                    itemName: items.merchantCode,
+                                    itemName: itemName,
                                     itemTrackNo: items.trackNo,
                                     combinationProduct: lists.orderMerchantList[0].combinationProduct,
                                     combinationShow: false,
@@ -625,7 +626,7 @@ export default {
                                     itemTime: items.createDate,
                                     itemCode: items.orderMerchantCode,
                                     itemAmount: items.orderAmount,
-                                    itemName: items.merchantCode,
+                                    itemName: itemName,
                                     itemTrackNo: items.trackNo,
                                     childItem:[]
                                 })                             

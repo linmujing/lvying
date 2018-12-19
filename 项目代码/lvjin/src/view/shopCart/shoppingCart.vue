@@ -507,7 +507,7 @@ export default {
             this.modelDate.deleteType = 'b';
 
         },
-        //弹框确定
+        //商品删除弹框确定
         deleteModelOk(){
 
             //a 为删除单个
@@ -528,6 +528,9 @@ export default {
                 this.deleteCartItemData(this.cartId);
 
             }
+
+            // 获取购物车列表
+            this.getCartListData();
 
         },
 
