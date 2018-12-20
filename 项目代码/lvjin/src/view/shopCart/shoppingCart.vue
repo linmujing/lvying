@@ -529,9 +529,6 @@ export default {
 
             }
 
-            // 获取购物车列表
-            this.getCartListData();
-
         },
 
          /*点击打开详情*/
@@ -649,13 +646,11 @@ export default {
                 console.log(res)
 
                 if(res.data.code == 200){
-                  this.$Spin.hide()
+                    this.$Spin.hide()
                     let data = res.data.content.list ;
 
                     // 购物车商品商户分类
                     let arr = [], merchantArr = [];
-
-                    if (data == null || data.length == 0) { return ;}
 
                     for(let i = 0 ; i < data.length; i++){
 
@@ -743,6 +738,7 @@ export default {
 
                     // 压入到购物车
                     this.cartList = arr;
+                    console.log(this.cartList)
 
                     this.merchantAllArr=merchantArr;
 

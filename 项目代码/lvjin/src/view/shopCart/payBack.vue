@@ -25,7 +25,7 @@
 			}
 		},
 		mounted(){
-            if(this.GetQueryString(orderCode) ){
+            if(this.GetQueryString("orderCode") ){
                 this.getOrderState();
             }
 		},
@@ -42,7 +42,7 @@
 
                 this.payTimer = false;
 
-                this.$api.getOrderInfo( this.$Qs.stringify({ 'orderCode': this.GetQueryString(orderCode) })  )
+                this.$api.getOrderInfo( this.$Qs.stringify({ 'orderCode': this.GetQueryString("orderCode") })  )
 
                 .then( (res) => {
 

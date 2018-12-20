@@ -95,9 +95,9 @@
                                                                 </p>
                                                             </div>
                                                         </div> </Col>
-                                                        <Col span="5"> <div class="item_td"><p>&nbsp; {{ lists.isCombination != '1' ? '￥'+childs.price : ''}}</p></div></Col>
+                                                        <Col span="5"> <div class="item_td"><p>&nbsp; {{ '￥'+childs.price}}</p></div></Col>
                                                         <Col span="4"> <div class="item_td"><p>&nbsp;{{ 'X'+childs.num }}</p></div></Col>
-                                                        <Col span="5"> <div class="item_td"><p>&nbsp;{{ lists.isCombination != '1' ? '￥'+childs.total : ''}}</p></div></Col>
+                                                        <Col span="5"> <div class="item_td"><p>&nbsp;{{ '￥'+childs.total }}</p></div></Col>
                                                     </Row>
                                                 </div>
                                                 <div  style="width:100%;height:20px;text-align:center;position:relative;top:-20px;right:-130px;" class="text_hover_color" title="查看组合包内容" @click="items.combinationShow = !items.combinationShow">
@@ -120,9 +120,9 @@
                                                             </p>
                                                         </div>
                                                     </div> </Col>
-                                                    <Col span="5"> <div class="item_td"><p>&nbsp; {{ lists.isCombination != '1' ? '￥'+childs.price : ''}}</p></div></Col>
+                                                    <Col span="5"> <div class="item_td"><p>&nbsp; {{ '￥'+childs.price }}</p></div></Col>
                                                     <Col span="4"> <div class="item_td"><p>&nbsp;{{ 'X'+childs.num }}</p></div></Col>
-                                                    <Col span="5"> <div class="item_td"><p>&nbsp;{{ lists.isCombination != '1' ? '￥'+childs.total : ''}}</p></div></Col>
+                                                    <Col span="5"> <div class="item_td"><p>&nbsp;{{  '￥'+childs.total }}</p></div></Col>
                                                 </Row>
                                             </div>
                                         </div>
@@ -174,7 +174,7 @@
                                                         <Col span="12">
 
                                                             <!-- 组合包 -->
-                                                            <div v-if="lists.isCombination != '0'">
+                                                            <div v-if="items.combinationProduct != undefined">
                                                                 <!-- 评价 组合包交易成功只有一个评价 -->
                                                                 <div class="item_td" v-if="lists.orderStatus == '3' && index2 == 0 && index3 == 0"><p>
                                                                     {{ lists.orderCommetStatus == 0 ? '待评价' : '已评价' }}
@@ -196,7 +196,7 @@
                                                         <Col span="12">
 
                                                             <!-- 组合包 -->
-                                                            <div  v-if="lists.isCombination != '0'">
+                                                            <div  v-if="items.combinationProduct != undefined">
                                                                 <!-- 换货 只要是实质商品都有换货-->
                                                                 <div class="item_td" v-if=" lists.orderStatus == '2' && childs.productProperty == '1'"><p>
                                                                     <Button type="success" shape="circle" style="width:80px;height:26px;line-height:5px;padding:0" 
